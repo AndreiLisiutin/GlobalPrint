@@ -14,6 +14,7 @@ namespace GlobalPrint.ClientWeb
         {
             return View();
         }
+
         public ActionResult GetPrinters()
         {
             List<Printer> printers = new HomeBll().GetPrinters();

@@ -138,6 +138,8 @@
     <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.min.js" />
     <Content Include="Resources\Scripts\home.js" />
     <Content Include="Resources\Scripts\home\index.js" />
+    <Content Include="Resources\Scripts\login\register.js" />
+    <Content Include="Resources\Scripts\login\login.js" />
     <Content Include="Resources\Stylesheets\login\login.css" />
     <Content Include="Resources\Stylesheets\base.css" />
     <Content Include="Web.config" />
@@ -162,6 +164,7 @@
     <Content Include="Views\Shared\_NavigationLayout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
+    <Content Include="Views\Login\Register.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
