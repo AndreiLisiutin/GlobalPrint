@@ -8,9 +8,34 @@
     <script src="~/Resources/Scripts/home.js"></script>
     <script src="~/Resources/Scripts/home/index.js"></script>
 }
+@section Stylesheets {
+    <link href="~/Resources/Stylesheets/home/index.css" rel="stylesheet" />
+}
 
 <div class="home_index">
-    <div id="googlemaps" class="googlemaps">
+
+    <div id="wrapper" class="toggled">
+
+        <div id="sidebar-wrapper">
+            <div id="printer-info">
+
+            </div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a href="/Printer/Print" class="btn btn-default" id="print-printer-info">Печать</a>
+            }
+            else
+            {
+                //Добавить id принтера
+                <a href="/Login/LoginAndPrint" class="btn btn-default" id="print-printer-info">Печать</a>
+            }
+            <a href="#" class="btn btn-default" id="close-printer-info">Закрыть</a>
+        </div>
+
+        <div id="page-content-wrapper">
+            <div id="googlemaps" class="googlemaps">
+            </div>
+        </div>
 
     </div>
 </div>

@@ -31,6 +31,7 @@ CREATE TABLE public.printer
   user_id integer NOT NULL,
   latitude numeric(10,7) NOT NULL,
   longtitude numeric(10,7) NOT NULL,
+  black_white_print_price numeric(10,2) NOT NULL,
   CONSTRAINT printer_pkey PRIMARY KEY (printer_id),
   CONSTRAINT printer_user_id_fkey FOREIGN KEY (user_id)
       REFERENCES public."user" (user_id) MATCH SIMPLE
@@ -52,7 +53,7 @@ CREATE TABLE public.print_order
   document text NOT NULL,
   ordered_on timestamp with time zone NOT NULL,
   printed_on timestamp with time zone,
-  price numeric(7,2) NOT NULL,
+  price numeric(10,2) NOT NULL,
   CONSTRAINT print_order_pkey PRIMARY KEY (print_order_id),
   CONSTRAINT print_order_printer_id_fkey FOREIGN KEY (printer_id)
       REFERENCES public.printer (printer_id) MATCH SIMPLE
@@ -66,3 +67,10 @@ WITH (
 );
 ALTER TABLE public.print_order
   OWNER TO postgres;
+  
+INSERT INTO public.printer(printer_id, name, location, user_id, latitude, longtitude, black_white_print_price)
+    VALUES (2, 'Принтер 1', 'ул. Мусина, 61Г, Казань, Республика Татарстан', 2, 55.8342410, 49.1215810, 5);
+
+INSERT INTO public.printer(printer_id, name, location, user_id, latitude, longtitude, black_white_print_price)
+    VALUES (4, 'Принтер 2', 'ул. Максима Горького, 19, Казань, Республика Татарстан', 2, 55.7939614, 49.1328013, 10);
+

@@ -3,6 +3,8 @@ home.index = home.index || (function () {
 
     var _map = null;
     var _markersArray = [];
+    var _currentPrinterID = null;
+    var _lastState = null;
 
     var init = function () {
         loadMap();
@@ -28,24 +30,48 @@ home.index = home.index || (function () {
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         _map = new google.maps.Map($("#googlemaps")[0], mapOptions);
-        _map.addListener('idle', function () {
+        google.maps.event.addListenerOnce(_map, 'idle', function () {
             loadPrinters();
         });
+        google.maps.event.addListener(_map, 'click', closePrinterInfo);
     };
 
-    var _addMarker = function (latitude, longtitude, info) {
+    var closePrinterInfo = function() {
+        if (_currentPrinterID) {
+            _currentPrinterID = null;
+            $("#wrapper").toggleClass("toggled");
+            _map.setZoom(_lastState.zoom);
+            _map.setCenter(_lastState.center);
+            _lastState = null;
+        }
+    };
+
+    var _addMarker = function (info) {
         var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(latitude, longtitude),
+            position: new google.maps.LatLng(info.Latitude, info.Longtitude),
             map: _map,
-            title: info
+            title: info.Name
         });
 
-        var contentString = '<div id="content">' + info + '</div>';
-        var infowindow = new google.maps.InfoWindow({
-            content: contentString
-        });
+        var printerInfo = info;
         google.maps.event.addListener(marker, 'click', function () {
-            infowindow.open(_map, marker);
+            //infowindow.open(_map, marker);
+            $("#printer-info").html("Информация о принтере:<br><br>" +
+                "Название: " + printerInfo.Name + "<br><br>" +
+                "Расположение: " + printerInfo.Location + "<br><br>" +
+                "Цена ч/б печати(стр): " + printerInfo.BlackWhitePrintPrice + "руб.<br><br>");
+            if (!_currentPrinterID) {
+                $("#wrapper").toggleClass("toggled");
+                _lastState = {
+                    zoom: _map.getZoom(),
+                    center: _map.getCenter()
+                };
+            }
+            _currentPrinterID = printerInfo.PrinterID;
+
+
+            _map.setZoom(16);
+            _map.setCenter(marker.getPosition());
         });
         _markersArray.push(marker);
     };
@@ -58,7 +84,7 @@ home.index = home.index || (function () {
             _markersArray.length = 0;
         }
     }
-    
+
     var loadPrinters = function () {
         var lat0 = _map.getBounds().getNorthEast().lat();
         var lat1 = _map.getBounds().getSouthWest().lat();
@@ -87,8 +113,7 @@ home.index = home.index || (function () {
 
             deleteAllMarkers();
             $.each(json, function (index, e) {
-                var url = "/Printer/Details/" + e.PrinterID;
-                _addMarker(e.Latitude, e.Longtitude, "<a href=\"" + url + "\">Printer " + e.Name + "</a>");
+                _addMarker(e);
             });
         }).fail(function () {
             console.log('Error: ajax call failed.');
@@ -96,10 +121,14 @@ home.index = home.index || (function () {
     };
 
     return {
-        init: init
+        init: init,
+        closePrinterInfo: closePrinterInfo
     };
 }());
 
 $(document).ready(function () {
     home.index.init();
+    $("#close-printer-info").click(function () {
+        home.index.closePrinterInfo();
+    });
 });
