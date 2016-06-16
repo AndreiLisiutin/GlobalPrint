@@ -138,11 +138,13 @@
     <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.min.js" />
     <Content Include="Resources\Scripts\home.js" />
     <Content Include="Resources\Scripts\home\index.js" />
+    <Content Include="Resources\Stylesheets\login\login.css" />
     <Content Include="Resources\Stylesheets\base.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -159,6 +161,7 @@
     <Content Include="Views\Shared\_BaseLayout.cshtml" />
     <Content Include="Views\Shared\_NavigationLayout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
