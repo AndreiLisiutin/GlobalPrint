@@ -189,9 +189,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Auth\AccountViewModels.cs" />
+    <Compile Include="Models\Auth\IdentityModels.cs" />
+    <Compile Include="Models\Auth\IdentityUser.cs" />
+    <Compile Include="Models\Auth\UserStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +209,8 @@
     <Content Include="Views\Printer\Print.cshtml" />
     <None Include="Properties\PublishProfiles\Package.pubxml" />
     <Content Include="Views\Printer\PrintConfirmation.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <None Include="Properties\PublishProfiles\GlobalPrint.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
