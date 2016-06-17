@@ -11,8 +11,9 @@ namespace GlobalPrint.Server
     {
         static DB()
         {
-            Database.SetInitializer<DB>(null);
+            Database.SetInitializer<DB>(new NullDatabaseInitializer<DB>());
         }
+
         public DB() : base("GlobalPrint")
         {
 

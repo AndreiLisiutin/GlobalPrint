@@ -1,0 +1,40 @@
+﻿@using GlobalPrint.ClientWeb
+@model LoginViewModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+
+@section Stylesheets {
+    <link rel="stylesheet" href="~/Resources/Stylesheets/account/login.css">
+}
+
+@section Scripts {
+    <script src="~/Resources/Scripts/account/login.js"></script>
+}
+
+<div class="container">
+    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <h2 class="form-signin-heading">Please Login</h2>
+        <label for="inputEmail" class="sr-only">Email address</label>
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "inputEmail", @type = "email", @placeholder = "Email address", @required = "true", @autofocus = true })
+        <label for="inputPassword" class="sr-only">Password</label>
+        @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @id = "inputPassword", @type = "password", @placeholder = "Password", @required = "true" })
+
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+
+        <div class="checkbox">
+            <label>
+                @Html.CheckBoxFor(m => m.RememberMe) Remember me
+            </label>
+        </div>
+
+        <button class="btn btn-default btn-primary btn-block" type="submit">Login</button>
+        <div class="main-page">
+            @Html.ActionLink("www.globalprint.online.ru", "Index", "Home")
+        </div>
+    }
+</div> <!-- /container -->

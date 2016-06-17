@@ -1,13 +1,8 @@
-﻿onRegisterUser = function () {
-    var name = $(document)[0].getElementById('inputName').value;
+﻿onCheckLogin = function () {
     var login = $(document)[0].getElementById('inputEmail').value;
     var password = $(document)[0].getElementById('inputPassword').value;
-    var confirmPassword = $(document)[0].getElementById('inputConfirmPassword').value;
-    if (!name || !login || !password || !confirmPassword) {
+    if (!login || !password) {
         return;
-    }
-    if (password != confirmPassword) {
-        alert('Different passwords');
     }
 
     $.ajax({
@@ -18,14 +13,14 @@
             login: login,
             password: password
         },
-        url: '/Login/RegisterUser'
+        url: '/Account/CheckLogin'
     }).done(function (json) {
         if (!json) {
             console.log('Error: ajax response is empty.');
             return;
         }
         if (!(json instanceof Array) || json.length == 0) {
-            alert('User with login ' + login + ' alerady exists');
+            alert('Failure');
             return;
         } else {
             alert('Success');
