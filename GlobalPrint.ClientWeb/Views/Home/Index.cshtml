@@ -22,12 +22,11 @@
             </div>
             @if (User.Identity.IsAuthenticated)
             {
-                <a href="/Printer/Print" class="btn btn-default" id="print-printer-info">Печать</a>
+                <a href="/Printer/Print/{PrinterID}" class="btn btn-default" id="printer-print">Печать</a>
             }
             else
             {
-                //Добавить id принтера
-                <a href="/Login/LoginAndPrint" class="btn btn-default" id="print-printer-info">Печать</a>
+                <a href="/Login/LoginAndPrint/{PrinterID}" class="btn btn-default" id="login-loginandprint">Печать</a>
             }
             <a href="#" class="btn btn-default" id="close-printer-info">Закрыть</a>
         </div>

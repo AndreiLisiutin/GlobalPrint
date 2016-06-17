@@ -34,9 +34,12 @@ home.index = home.index || (function () {
             loadPrinters();
         });
         google.maps.event.addListener(_map, 'click', closePrinterInfo);
+        $("#googlemaps").on("heightChange", function () {
+            google.maps.event.trigger(_map, "resize");
+        });
     };
 
-    var closePrinterInfo = function() {
+    var closePrinterInfo = function () {
         if (_currentPrinterID) {
             _currentPrinterID = null;
             $("#wrapper").toggleClass("toggled");
@@ -60,20 +63,30 @@ home.index = home.index || (function () {
                 "Название: " + printerInfo.Name + "<br><br>" +
                 "Расположение: " + printerInfo.Location + "<br><br>" +
                 "Цена ч/б печати(стр): " + printerInfo.BlackWhitePrintPrice + "руб.<br><br>");
+
+            $("#printer-print").prop("href", "/Printer/Print/" + printerInfo.PrinterID);
+            $("#login-loginandprint").prop("href", "/Login/LoginAndPrint/" + printerInfo.PrinterID);
             if (!_currentPrinterID) {
-                $("#wrapper").toggleClass("toggled");
                 _lastState = {
                     zoom: _map.getZoom(),
                     center: _map.getCenter()
                 };
+
+                $("#wrapper").toggleClass("toggled");
+                setTimeout(function () {
+                    _zoomMarker(marker);
+                }, 600);
+            } else {
+                _zoomMarker(marker);
             }
             _currentPrinterID = printerInfo.PrinterID;
-
-
-            _map.setZoom(16);
-            _map.setCenter(marker.getPosition());
         });
         _markersArray.push(marker);
+    };
+
+    var _zoomMarker = function (marker) {
+        _map.setZoom(16);
+        _map.setCenter(marker.getPosition());
     };
 
     function deleteAllMarkers() {
@@ -120,9 +133,18 @@ home.index = home.index || (function () {
         });
     };
 
+    var setMapFullScreen = function () {
+        var winHeight = $(window).height();
+        var navheight = $(".main-navbar").height();
+        $('#googlemaps').height(winHeight - navheight);
+        $('#googlemaps').trigger("heightChange");
+        $('#sidebar-wrapper').height(winHeight - navheight);
+    };
+
     return {
         init: init,
-        closePrinterInfo: closePrinterInfo
+        closePrinterInfo: closePrinterInfo,
+        setMapFullScreen: setMapFullScreen
     };
 }());
 
@@ -131,4 +153,10 @@ $(document).ready(function () {
     $("#close-printer-info").click(function () {
         home.index.closePrinterInfo();
     });
+
+    $(window).resize(function () {
+        home.index.setMapFullScreen();
+    });
+
+    home.index.setMapFullScreen();
 });
