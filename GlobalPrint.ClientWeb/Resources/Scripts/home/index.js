@@ -12,12 +12,22 @@ home.index = home.index || (function () {
 
     var loadMap = function () {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
+
+            navigator.geolocation.getCurrentPosition(
+            function (position) {
                 var location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 _createMap(location);
+            },
+            function (error) {
+                var location = new google.maps.LatLng(55.828345, 49.125938);
+                _createMap(location);
+            }, {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
             });
         } else {
-            var location = new google.maps.LatLng(51.0532, 31.83);
+            var location = new google.maps.LatLng(55.828345, 49.125938);
             _createMap(location);
         }
     };

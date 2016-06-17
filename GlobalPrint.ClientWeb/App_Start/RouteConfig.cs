@@ -14,8 +14,8 @@ namespace GlobalPrint.ClientWeb
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
                 name: "Printer",
-                url: "Printer/{action}/{printerID}",
-                defaults: new { controller = "Printer", action = "Print", printerID = UrlParameter.Optional },
+                url: "Printer/Print/{printerID}",
+                defaults: new { controller = "Printer", action = "Print" },
                 constraints: new { printerID = @"\d+" }
             );
 

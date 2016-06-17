@@ -26,6 +26,13 @@ namespace GlobalPrint.Server
         public float Longtitude { get; set; }
         [Column("black_white_print_price")]
         public decimal BlackWhitePrintPrice { get; set; }
-
+        [NotMapped]
+        public string BlackWhitePrintPriceInCurrency 
+        {
+            get
+            {
+                return this.BlackWhitePrintPrice.ToString() + " руб.";
+            }
+        }
     }
 }
