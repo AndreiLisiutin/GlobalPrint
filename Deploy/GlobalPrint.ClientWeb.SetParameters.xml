@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <setParameter name="IIS Web Application Name" value="GlobalPrint" />
+  <setParameter name="GlobalPrint-Web.config Connection String" value="Server=127.0.0.1;User Id=postgres;Password=erwinrommel7;Port=5432;Database=global_print;" />
+</parameters>
