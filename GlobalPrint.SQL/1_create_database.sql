@@ -8,7 +8,7 @@ CREATE DATABASE global_print
 
 CREATE TABLE public."user"
 (
-  user_id integer NOT NULL DEFAULT nextval('user_user_id_seq'::regclass),
+  user_id serial NOT NULL,
   name text NOT NULL,
   email text,
   phone text,
@@ -25,7 +25,7 @@ ALTER TABLE public."user"
 
 CREATE TABLE public.printer
 (
-  printer_id integer NOT NULL DEFAULT nextval('printer_printer_id_seq'::regclass),
+  printer_id serial NOT NULL,
   name text NOT NULL,
   location text NOT NULL,
   user_id integer NOT NULL,
@@ -47,7 +47,7 @@ ALTER TABLE public.printer
 
 CREATE TABLE public.print_order
 (
-  print_order_id integer NOT NULL DEFAULT nextval('print_order_print_order_id_seq'::regclass),
+  print_order_id serial NOT NULL,
   user_id integer NOT NULL,
   printer_id integer NOT NULL,
   document text NOT NULL,
@@ -67,6 +67,9 @@ WITH (
 );
 ALTER TABLE public.print_order
   OWNER TO postgres;
+  
+INSERT INTO public.user(user_id, name, email, phone, login, password)
+    VALUES (2, 'Андрей Лисютин', NULL, NULL, 'andrei.lisiutin', 'andrei.lisiutin');
   
 INSERT INTO public.printer(printer_id, name, location, user_id, latitude, longtitude, black_white_print_price)
     VALUES (2, 'Принтер 1', 'ул. Мусина, 61Г, Казань, Республика Татарстан', 2, 55.8342410, 49.1215810, 5);
