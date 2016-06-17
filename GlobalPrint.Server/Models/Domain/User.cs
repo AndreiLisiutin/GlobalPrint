@@ -24,5 +24,7 @@ namespace GlobalPrint.Server
         public string Login { get; set; }
         [Column("password")]
         public string Password { get; set; }
+        [Column("password_hash")]
+        public string PasswordHash { get; set; }
     }
 }

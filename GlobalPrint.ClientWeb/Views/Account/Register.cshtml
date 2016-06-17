@@ -1,4 +1,6 @@
-﻿@{
+﻿@using GlobalPrint.ClientWeb
+@model RegisterViewModel
+@{
     ViewBag.Title = "Register";
     Layout = "~/Views/Shared/_BaseLayout.cshtml";
 }
@@ -12,21 +14,29 @@
 }
 
 <div class="container">
-
-    <form class="form-signin">
+    @using (Html.BeginForm("Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
         <h2 class="form-signin-heading">Please Register</h2>
         <label for="inputName" class="sr-only">Full name</label>
-        <input type="text" id="inputName" class="form-control" placeholder="Full name" required autofocus>
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @id = "inputName", @type = "text", @placeholder = "Full name", @required = "true", @autofocus = true })
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required>
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "inputEmail", @type = "email", @placeholder = "Email address", @required = "true" })
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @id = "inputPassword", @type = "password", @placeholder = "Password", @required = "true" })
         <label for="inputConfirmPassword" class="sr-only">Confirm Password</label>
-        <input type="password" id="inputConfirmPassword" class="form-control" placeholder="Confirm Password" required>
-        <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="onRegisterUser()">Register</button>
-        <div class="main-page">
-            <a href="/Home/Index">www.globalprint.online.ru</a>
-        </div>
-    </form>
+        @Html.TextBoxFor(m => m.ConfirmPassword, new { @class = "form-control", @id = "inputConfirmPassword", @type = "password", @placeholder = "Confirm Password", @required = "true" })
 
+        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+        @Html.ValidationMessage("", new { @class = "text-danger" });
+
+        <button class="btn btn-default btn-primary btn-block" type="submit">Register</button>
+       
+         <div class="main-page">
+            @Html.ActionLink("www.globalprint.online.ru", "Index", "Home")
+        </div>
+    }
 </div> <!-- /container -->

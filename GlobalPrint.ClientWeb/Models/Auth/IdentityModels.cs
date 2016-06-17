@@ -2,9 +2,9 @@
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
-using GlobalPrint.Identity;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -24,12 +24,22 @@ namespace GlobalPrint.ClientWeb
         public ApplicationDbContext()
             : base("GlobalPrint")
         {
-
+            Database.SetInitializer<ApplicationDbContext>(null);
         }
 
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelbuilder)
+        {
+            modelbuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
+            // Example of controlling TPH iheritance:
+            modelbuilder.Entity<IUser<int>>()
+                    .Map<IdentityUser>(m => m.Requires("MyType").HasValue("U"));
+            
         }
 
         public DbSet<IdentityUser> Users { get; set; }
