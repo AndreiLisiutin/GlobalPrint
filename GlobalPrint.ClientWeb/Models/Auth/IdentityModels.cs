@@ -32,16 +32,6 @@ namespace GlobalPrint.ClientWeb
             return new ApplicationDbContext();
         }
 
-        protected override void OnModelCreating(DbModelBuilder modelbuilder)
-        {
-            modelbuilder.Conventions.Remove<PluralizingTableNameConvention>();
-
-            // Example of controlling TPH iheritance:
-            modelbuilder.Entity<IUser<int>>()
-                    .Map<IdentityUser>(m => m.Requires("MyType").HasValue("U"));
-            
-        }
-
         public DbSet<IdentityUser> Users { get; set; }
     }
 

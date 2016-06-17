@@ -219,10 +219,6 @@
     <Folder Include="Content\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GlobalPrint.Identity\GlobalPrint.Identity.csproj">
-      <Project>{26c46668-ec00-4161-b6f3-b1da5a6a3e63}</Project>
-      <Name>GlobalPrint.Identity</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GlobalPrint.Server\GlobalPrint.Server.csproj">
       <Project>{302b8ec3-f93f-41e9-916b-773fd6b430fa}</Project>
       <Name>GlobalPrint.Server</Name>
