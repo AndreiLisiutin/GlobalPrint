@@ -171,9 +171,11 @@
     <Content Include="Resources\Scripts\home\index.js" />
     <Content Include="Resources\Scripts\account\register.js" />
     <Content Include="Resources\Scripts\account\login.js" />
+    <Content Include="Resources\Scripts\printer\print.js" />
     <Content Include="Resources\Stylesheets\account\login.css" />
     <Content Include="Resources\Stylesheets\home\index.css" />
     <Content Include="Resources\Stylesheets\base.css" />
+    <Content Include="Resources\Stylesheets\login\login.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +206,8 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Printer\Print.cshtml" />
+    <None Include="Properties\PublishProfiles\Package.pubxml" />
+    <Content Include="Views\Printer\PrintConfirmation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

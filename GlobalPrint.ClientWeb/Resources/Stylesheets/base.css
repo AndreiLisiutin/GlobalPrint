@@ -2,3 +2,9 @@
   min-height: 2000px;
   padding-top: 51px;
 }
+.form-horizontal .control-label.text-left{
+    text-align: left;
+}
+.margin-top-20 {
+    margin-top:20px;
+}

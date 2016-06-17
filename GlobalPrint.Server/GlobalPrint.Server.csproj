@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="BLL\LoginBll.cs" />
     <Compile Include="BLL\HomeBll.cs" />
+    <Compile Include="BLL\PrinterBll.cs" />
     <Compile Include="DAL\EF\PrintDbContext.cs" />
     <Compile Include="Models\Domain\PrintOrder.cs" />
     <Compile Include="Models\Domain\Printer.cs" />
