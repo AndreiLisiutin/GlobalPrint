@@ -75,5 +75,13 @@ namespace GlobalPrint.Server
                 return order;
             }
         }
+
+        public List<Printer> GetUserPrinterList(int UserID)
+        {
+            using (var db = new DB())
+            {
+                return db.Printers.Where(e => e.UserID == UserID).ToList();
+            }
+        }
     }
 }

@@ -68,7 +68,7 @@ namespace GlobalPrint.ClientWeb
             return RedirectToAction("Index", "Home");
         }
         #endregion
-        
+
         // GET: Account/Login
         [HttpGet]
         [AllowAnonymous]
@@ -102,7 +102,7 @@ namespace GlobalPrint.ClientWeb
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Некорректно введен логин/пароль.");
                     return View(model);
             }
         }
@@ -114,7 +114,7 @@ namespace GlobalPrint.ClientWeb
         {
             return View();
         }
-        
+
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
@@ -151,9 +151,9 @@ namespace GlobalPrint.ClientWeb
             {
                 ModelState.AddModelError("", error);
             }
-                return View(model);
+            return View(model);
         }
-        
+
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -17,8 +17,10 @@ namespace GlobalPrint.Server
         [Column("name")]
         public string Name { get; set; }
         [Column("email")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [Column("phone")]
+        [DataType(DataType.PhoneNumber, ErrorMessage = "Телефонный номер введен некорректно")]
         public string Phone { get; set; }
         [Column("login")]
         public string Login { get; set; }

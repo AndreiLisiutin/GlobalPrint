@@ -1,0 +1,48 @@
+﻿@using GlobalPrint.Server
+@using GlobalPrint.Server.Utilities
+@model List<PrintOrderInfo>
+@{
+    ViewBag.Title = "Принятые Заказы";
+    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+}
+
+<div class="container">
+    @using (Html.BeginForm(new { @class = "form-horizontal", role = "form" }))
+    {
+        if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger container margin-top-20">
+                <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                @Html.ValidationSummary(false, "Ошибки: ")
+            </div>
+        }
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="col-md-1">№</th>
+                    <th class="col-md-2">Принтер</th>
+                    <th class="col-md-2">Расположение</th>
+                    <th class="col-md-2">Документ</th>
+                    <th class="col-md-2">Дата заказа</th>
+                    <th class="col-md-1">Цена заказа</th>
+                    <th class="col-md-2">Дата выполнения заказа</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (PrintOrderInfo printOrder in Model)
+                {
+                    <tr>
+                        <td scope="row">@Html.DisplayFor(c => Array.IndexOf(Model.ToArray(), printOrder) + 1)</td>
+                        <td>@Html.DisplayFor(c => printOrder.Printer.Name)</td>
+                        <td>@Html.DisplayFor(c => printOrder.Printer.Location)</td>
+                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.Document)</td>
+                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn.ToDMY())</td>
+                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.Price.ToString("0.00"))</td>
+                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.PrintedOn.ToDMYOrEmpty())</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
