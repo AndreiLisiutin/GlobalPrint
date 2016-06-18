@@ -43,6 +43,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AberrantSMPP, Version=1.0.65.47, Culture=neutral, PublicKeyToken=5862ba86bb7d23a0, processorArchitecture=MSIL">
+      <HintPath>..\packages\AberrantSMPP.1.0.65.47\lib\NET40\AberrantSMPP.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.2.0.0\lib\2.0\Common.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -53,6 +61,10 @@
     </Reference>
     <Reference Include="EntityFramework6.Npgsql, Version=3.1.0.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework6.Npgsql.3.1.0\lib\net45\EntityFramework6.Npgsql.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.0.1011, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -197,6 +209,9 @@
     <Compile Include="Models\Auth\IdentityModels.cs" />
     <Compile Include="Models\Auth\IdentityUser.cs" />
     <Compile Include="Models\Auth\UserStore.cs" />
+    <Compile Include="Models\Printer\PreparedOrder.cs" />
+    <Compile Include="Models\Printer\Printer_PrintConfirmationViewModel.cs" />
+    <Compile Include="Models\Printer\Printer_PrintViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -215,6 +230,7 @@
     <Content Include="Views\Printer\PrintConfirmation.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <None Include="Properties\PublishProfiles\GlobalPrint.pubxml" />
+    <Content Include="Views\Printer\OrderCompleted.cshtml" />
     <Content Include="Views\UserAccount\UserAccount.cshtml" />
     <Content Include="Views\UserAccountPrinterList\UserAccountPrinterList.cshtml" />
     <Content Include="Views\UserPrintOrderList\UserPrintOrderList.cshtml" />

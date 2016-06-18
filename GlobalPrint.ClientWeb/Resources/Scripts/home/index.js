@@ -75,7 +75,7 @@ home.index = home.index || (function () {
                 "Цена ч/б печати(стр): " + printerInfo.BlackWhitePrintPrice + "руб.<br><br>");
 
             $("#printer-print").prop("href", "/Printer/Print/" + printerInfo.PrinterID);
-            $("#login-loginandprint").prop("href", "/Login/LoginAndPrint/" + printerInfo.PrinterID);
+            $("#login-loginandprint").prop("href", "/Account/LoginAndPrint/" + printerInfo.PrinterID);
             if (!_currentPrinterID) {
                 _lastState = {
                     zoom: _map.getZoom(),
@@ -89,7 +89,7 @@ home.index = home.index || (function () {
             } else {
                 _zoomMarker(marker);
             }
-            _currentPrinterID = printerInfo.PrinterID;
+            _currentPrinterID = printerInfo.PrinterID; 
         });
         _markersArray.push(marker);
     };

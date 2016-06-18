@@ -16,6 +16,9 @@ namespace GlobalPrint.ClientWeb
     {
         #region Helpers
 
+        // Used for XSRF protection when adding external logins
+        private const string XsrfKey = "XsrfId";
+
         private IAuthenticationManager AuthenticationManager
         {
             get
@@ -55,6 +58,13 @@ namespace GlobalPrint.ClientWeb
             {
                 return Redirect(returnUrl);
             }
+
+            string printerID = Session["Account_PrinterID"] as string;
+            if (printerID != null)
+            {
+                Session["Account_PrinterID"] = null;
+                return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
+            }
             return RedirectToAction("Index", "Home");
         }
         #endregion
@@ -84,6 +94,7 @@ namespace GlobalPrint.ClientWeb
             switch (result)
             {
                 case SignInStatus.Success:
+
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -128,6 +139,12 @@ namespace GlobalPrint.ClientWeb
                 // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                 // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                 // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                string printerID = Session["Account_PrinterID"] as string;
+                if (printerID != null)
+                {
+                    Session["Account_PrinterID"] = null;
+                    return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
+                }
 
                 return RedirectToAction("Index", "Home");
             }
@@ -167,5 +184,14 @@ namespace GlobalPrint.ClientWeb
             base.Dispose(disposing);
         }
 
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult LoginAndPrint(int printerID)
+        {
+            Session["Account_PrinterID"] = printerID.ToString();
+            return View("Login");
+        }
     }
 }

@@ -10,7 +10,7 @@
                 @Html.ActionLink("Мои Принтеры", "UserAccountPrinterList", "UserAccountPrinterList", new { UserID = User.Identity.GetUserId() }, new { })
             </li>
             <li>
-                @Html.ActionLink("Мои заказы", "UserPrintOrderList", "UserPrintOrderList", new { UserID = User.Identity.GetUserId() }, new { })
+                @Html.ActionLink("Мои заказы", "UserPrintOrderList", "UserPrintOrderList", new { }, new { })
             </li>
             <li>
                 @Html.ActionLink("Входящие заказы", "UserRecievedPrintOrderList", "UserRecievedPrintOrderList", new { UserID = User.Identity.GetUserId() }, new { })

@@ -30,6 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AberrantSMPP, Version=1.0.65.47, Culture=neutral, PublicKeyToken=5862ba86bb7d23a0, processorArchitecture=MSIL">
+      <HintPath>..\packages\AberrantSMPP.1.0.65.47\lib\NET40\AberrantSMPP.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.2.0.0\lib\2.0\Common.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -58,20 +66,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\PrintOrderBll.cs" />
-    <Compile Include="BLL\UserBll.cs" />
     <Compile Include="BLL\LoginBll.cs" />
     <Compile Include="BLL\HomeBll.cs" />
     <Compile Include="BLL\PrinterBll.cs" />
+    <Compile Include="BLL\UserBll.cs" />
     <Compile Include="DAL\EF\PrintDbContext.cs" />
     <Compile Include="Models\Business\PrintOrderInfo.cs" />
+    <Compile Include="Models\Business\PrinterInfo.cs" />
+    <Compile Include="Models\Domain\PrinterSchedule.cs" />
     <Compile Include="Models\Domain\PrintOrder.cs" />
     <Compile Include="Models\Domain\Printer.cs" />
     <Compile Include="Models\Domain\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Extension\StringExtension.cs" />
+    <Compile Include="Utilities\SmsUtility.cs" />
     <Compile Include="Utilities\Extension\DateTimeExtension.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

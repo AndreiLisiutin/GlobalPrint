@@ -24,6 +24,8 @@ namespace GlobalPrint.Server
         public float Latitude { get; set; }
         [Column("longtitude")]
         public float Longtitude { get; set; }
+        [Column("phone")]
+        public string Phone { get; set; }
         [Column("black_white_print_price")]
         public decimal BlackWhitePrintPrice { get; set; }
         [NotMapped]
