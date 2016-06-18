@@ -16,9 +16,6 @@ namespace GlobalPrint.ClientWeb
     {
         #region Helpers
 
-        // Used for XSRF protection when adding external logins
-        private const string XsrfKey = "XsrfId";
-
         private IAuthenticationManager AuthenticationManager
         {
             get
@@ -61,7 +58,7 @@ namespace GlobalPrint.ClientWeb
             return RedirectToAction("Index", "Home");
         }
         #endregion
-        
+
         // GET: Account/Login
         [HttpGet]
         [AllowAnonymous]
@@ -106,7 +103,7 @@ namespace GlobalPrint.ClientWeb
         {
             return View();
         }
-        
+
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
@@ -137,9 +134,9 @@ namespace GlobalPrint.ClientWeb
             {
                 ModelState.AddModelError("", error);
             }
-                return View(model);
+            return View(model);
         }
-        
+
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -168,6 +165,6 @@ namespace GlobalPrint.ClientWeb
 
             base.Dispose(disposing);
         }
-        
+
     }
 }

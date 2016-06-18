@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BLL\UserBll.cs" />
     <Compile Include="BLL\LoginBll.cs" />
     <Compile Include="BLL\HomeBll.cs" />
     <Compile Include="BLL\PrinterBll.cs" />
