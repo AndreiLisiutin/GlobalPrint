@@ -15,5 +15,13 @@ namespace GlobalPrint.Server
                 return db.Printers.First(e => e.PrinterID == printerID);
             }
         }
+
+        public List<Printer> GetUserPrinterList(int UserID)
+        {
+            using (var db = new DB())
+            {
+                return db.Printers.Where(e => e.UserID == UserID).ToList();
+            }
+        }
     }
 }

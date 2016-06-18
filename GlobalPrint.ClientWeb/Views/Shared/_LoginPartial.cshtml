@@ -7,7 +7,16 @@
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink(User.Identity.GetUserName(), "UserAccount", "UserAccount", new { UserID = User.Identity.GetUserId() }, htmlAttributes: new { title = "Manage" })
+                @Html.ActionLink("Мои Принтеры", "UserAccountPrinterList", "UserAccountPrinterList", new { UserID = User.Identity.GetUserId() }, new { })
+            </li>
+            <li>
+                @Html.ActionLink("Мои заказы", "UserPrintOrderList", "UserPrintOrderList", new { UserID = User.Identity.GetUserId() }, new { })
+            </li>
+            <li>
+                @Html.ActionLink("Входящие заказы", "UserRecievedPrintOrderList", "UserRecievedPrintOrderList", new { UserID = User.Identity.GetUserId() }, new { })
+            </li>
+            <li>
+                @Html.ActionLink(User.Identity.GetUserName(), "UserAccount", "UserAccount", new { UserID = User.Identity.GetUserId() }, new { })
             </li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a></li>
         </ul>
@@ -16,7 +25,11 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Зарегистрироваться", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Войти", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        <li>
+            @Html.ActionLink("Зарегистрироваться", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+        </li>
+        <li>
+            @Html.ActionLink("Войти", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+        </li>
     </ul>
 }

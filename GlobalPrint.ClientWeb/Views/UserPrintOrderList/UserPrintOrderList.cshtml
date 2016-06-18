@@ -1,0 +1,46 @@
+﻿@using GlobalPrint.Server
+@using GlobalPrint.Server.Utilities
+@model List<PrintOrder>
+@{
+    ViewBag.Title = "Мои Заказы";
+    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+}
+
+<div class="container">
+    @using (Html.BeginForm(new { @class = "form-horizontal", role = "form" }))
+    {
+        if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger container margin-top-20">
+                <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                @Html.ValidationSummary(false, "Ошибки: ")
+            </div>
+        }
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="col-md-1">№</th>
+                    <th class="col-md-2">Принтер</th>
+                    <th class="col-md-3">Документ</th>
+                    <th class="col-md-2">Дата заказа</th>
+                    <th class="col-md-2">Цена заказа</th>
+                    <th class="col-md-2">Дата выполнения заказа</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (PrintOrder printOrder in Model)
+                {
+                    <tr>
+                        <td scope="row">@Html.DisplayFor(c => Array.IndexOf(Model.ToArray(), printOrder) + 1)</td>
+                        <td>@Html.DisplayFor(c => printOrder.PrinterID)</td>
+                        <td>@Html.DisplayFor(c => printOrder.Document)</td>
+                        <td>@Html.DisplayFor(c => printOrder.OrderedOn.ToDMY())</td>
+                        <td>@Html.DisplayFor(c => printOrder.Price.ToString("0.00"))</td>
+                        <td>@Html.DisplayFor(c => printOrder.PrintedOn.ToDMYOrEmpty())</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
