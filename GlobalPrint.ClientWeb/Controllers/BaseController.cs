@@ -1,16 +1,31 @@
-﻿using System;
+﻿using GlobalPrint.Server;
+using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb
 {
     public class BaseController : Controller
     {
-        public new JsonResult Json(object data)
+        protected new JsonResult Json(object data)
         {
             return base.Json(data, JsonRequestBehavior.AllowGet);
         }
+
+        protected SmsUtility.Parameters GetSmsParams()
+        {
+            return new SmsUtility.Parameters()
+            {
+                Host = WebConfigurationManager.AppSettings["SmppHost"],
+                Login = WebConfigurationManager.AppSettings["SmppLogin"],
+                Password = WebConfigurationManager.AppSettings["SmppPassword"],
+                Port = WebConfigurationManager.AppSettings["SmppPort"],
+            };
+        }
+        
     }
 }

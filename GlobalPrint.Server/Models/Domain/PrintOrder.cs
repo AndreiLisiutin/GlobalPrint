@@ -26,5 +26,32 @@ namespace GlobalPrint.Server
         public DateTime? PrintedOn { get; set; }
         [Column("price")]
         public decimal Price { get; set; }
+        [Column("pages_count")]
+        public int PagesCount { get; set; }
+        [Column("secret_code")]
+        public string SecretCode { get; set; }
+        [Column("format")]
+        public string Format { get; set; }
+        [Column("is_both_sides_print")]
+        public bool IsBothSidesPrint { get; set; }
+        [Column("print_order_status_id")]
+        public int PrintOrderStatusID { get; set; }
+
+        [NotMapped]
+        public string PriceInCurrency
+        {
+            get
+            {
+                return this.Price.ToString() + " руб.";
+            }
+        }
+    }
+
+    public enum PrintOrderStatusEnum
+    {
+        Waiting = 1,
+        Accepted = 2,
+        Printed = 3,
+        Rejected = 4
     }
 }

@@ -18,6 +18,12 @@ namespace GlobalPrint.ClientWeb
                 defaults: new { controller = "Printer", action = "Print" },
                 constraints: new { printerID = @"\d+" }
             );
+            routes.MapRoute(
+                name: "LoginAndPrint",
+                url: "Account/LoginAndPrint/{printerID}",
+                defaults: new { controller = "Account", action = "LoginAndPrint" },
+                constraints: new { printerID = @"\d+" }
+            );
 
             routes.MapRoute(
                 name: "Default",

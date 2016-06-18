@@ -22,5 +22,6 @@ namespace GlobalPrint.Server
         public DbSet<User> Users { get; set; }
         public DbSet<Printer> Printers { get; set; }
         public DbSet<PrintOrder> PrintOrders { get; set; }
+        public DbSet<PrinterSchedule> PrintSchedules { get; set; }
     }
 }
