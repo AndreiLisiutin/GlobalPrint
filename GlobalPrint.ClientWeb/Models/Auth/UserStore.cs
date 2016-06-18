@@ -18,12 +18,10 @@ namespace GlobalPrint.ClientWeb
         where TUser : IdentityUser
     {
         private ApplicationDbContext _proxyContext { get; set; }
-        private DB _context { get; set; }
 
         public UserStore(ApplicationDbContext context)
         {
             this._proxyContext = context;
-            this._context = new DB();
         }
 
         #region IUserStore
@@ -39,10 +37,14 @@ namespace GlobalPrint.ClientWeb
             userToAdd.Login = userToAdd.Name;
             userToAdd.Phone = "";
 
-            var addedUser = IdentityUser.FromDbUser(_context.Users.Add(userToAdd));
-            _context.SaveChanges();
+            using (var _context = new DB())
+            {
+                var savedUser = _context.Users.Add(userToAdd);
+                _context.SaveChanges();
 
-            return Task.FromResult<object>(addedUser);
+                var addedUser = IdentityUser.FromDbUser(savedUser);
+                return Task.FromResult<object>(addedUser);
+            }                
         }
 
         public Task DeleteAsync(TUser user)
@@ -52,13 +54,17 @@ namespace GlobalPrint.ClientWeb
                 throw new ArgumentNullException("Null or empty argument: user");
             }
 
-            var userToRemove = _context.Users.SingleOrDefault(x => x.UserID == user.Id);
-            if (userToRemove != null)
-            {
-                _context.Users.Remove(userToRemove);
-            }
 
-            return Task.FromResult<object>(null);
+            using (var _context = new DB())
+            {
+                var userToRemove = _context.Users.SingleOrDefault(x => x.UserID == user.Id);
+                if (userToRemove != null)
+                {
+                    _context.Users.Remove(userToRemove);
+                }
+
+                return Task.FromResult<object>(null);
+            }
         }
 
         public Task<TUser> FindByIdAsync(int userId)
@@ -68,13 +74,17 @@ namespace GlobalPrint.ClientWeb
                 throw new ArgumentException("Empty argument: userId");
             }
 
-            var result = IdentityUser.FromDbUser(_context.Users.SingleOrDefault(x => x.UserID == userId)) as TUser;
-            if (result != null)
-            {
-                return Task.FromResult<TUser>(result);
-            }
 
-            return Task.FromResult<TUser>(null);
+            using (var _context = new DB())
+            {
+                var result = IdentityUser.FromDbUser(_context.Users.SingleOrDefault(x => x.UserID == userId)) as TUser;
+                if (result != null)
+                {
+                    return Task.FromResult<TUser>(result);
+                }
+
+                return Task.FromResult<TUser>(null);
+            }
         }
 
         public Task<TUser> FindByNameAsync(string userName)
@@ -83,15 +93,18 @@ namespace GlobalPrint.ClientWeb
             {
                 throw new ArgumentException("Null or empty argument: userName");
             }
-            
-            var temp = _context.Users.SingleOrDefault(x => x.Login == userName || x.Email == userName);
-            var result = IdentityUser.FromDbUser(temp) as TUser;
-            if (result != null)
-            {
-                return Task.FromResult<TUser>(result);
-            }
 
-            return Task.FromResult<TUser>(null);
+            using (var _context = new DB())
+            {
+                var temp = _context.Users.SingleOrDefault(x => x.Login == userName || x.Email == userName);
+                var result = IdentityUser.FromDbUser(temp) as TUser;
+                if (result != null)
+                {
+                    return Task.FromResult<TUser>(result);
+                }
+
+                return Task.FromResult<TUser>(null);
+            }
         }
 
         public Task UpdateAsync(TUser user)
@@ -101,22 +114,22 @@ namespace GlobalPrint.ClientWeb
                 throw new ArgumentNullException("Null or empty argument: user");
             }
 
-            var original = _context.Users.SingleOrDefault(x => x.UserID == user.Id);
-            if (original != null)
+            using (var _context = new DB())
             {
-                _context.Entry(original).CurrentValues.SetValues(user);
-                _context.SaveChanges();
-            }
+                var original = _context.Users.SingleOrDefault(x => x.UserID == user.Id);
+                if (original != null)
+                {
+                    _context.Entry(original).CurrentValues.SetValues(user);
+                    _context.SaveChanges();
+                }
 
-            return Task.FromResult<object>(user);
+                return Task.FromResult<object>(user);
+            }
         }
 
         public void Dispose()
         {
-            if (_context != null)
-            {
-                _context.Dispose();
-            }
+
         }
 
         #endregion
@@ -174,12 +187,15 @@ namespace GlobalPrint.ClientWeb
                 throw new ArgumentException("Empty argument: user");
             }
 
-            var result = IdentityUser.FromDbUser(_context.Users.SingleOrDefault(x => x.UserID == user.Id)) as TUser;
-            if (result != null)
+            using (var _context = new DB())
             {
-                return Task.FromResult<string>(result.PasswordHash);
+                var result = IdentityUser.FromDbUser(_context.Users.SingleOrDefault(x => x.UserID == user.Id)) as TUser;
+                if (result != null)
+                {
+                    return Task.FromResult<string>(result.PasswordHash);
+                }
+                return Task.FromResult<string>(null);
             }
-            return Task.FromResult<string>(null);
         }
 
         public Task<bool> HasPasswordAsync(TUser user)
@@ -189,10 +205,13 @@ namespace GlobalPrint.ClientWeb
                 throw new ArgumentException("Empty argument: user");
             }
 
-            var result = IdentityUser.FromDbUser(_context.Users.SingleOrDefault(x => x.UserID == user.Id)) as TUser;
-            var hasPassword = !string.IsNullOrEmpty(result.PasswordHash);
+            using (var _context = new DB())
+            {
+                var result = IdentityUser.FromDbUser(_context.Users.SingleOrDefault(x => x.UserID == user.Id)) as TUser;
+                var hasPassword = !string.IsNullOrEmpty(result.PasswordHash);
 
-            return Task.FromResult<bool>(hasPassword);
+                return Task.FromResult<bool>(hasPassword);
+            }
         }
 
         #endregion

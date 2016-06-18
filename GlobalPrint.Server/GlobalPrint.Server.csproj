@@ -78,6 +78,7 @@
     <Compile Include="Models\Domain\Printer.cs" />
     <Compile Include="Models\Domain\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\Extension\StringExtension.cs" />
     <Compile Include="Utilities\SmsUtility.cs" />
     <Compile Include="Utilities\Extension\DateTimeExtension.cs" />
   </ItemGroup>

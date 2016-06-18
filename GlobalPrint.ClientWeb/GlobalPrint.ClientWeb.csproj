@@ -205,6 +205,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Attributes\MultipleButtonAttribute.cs" />
     <Compile Include="Models\Auth\AccountViewModels.cs" />
     <Compile Include="Models\Auth\IdentityModels.cs" />
     <Compile Include="Models\Auth\IdentityUser.cs" />
@@ -235,6 +236,7 @@
     <Content Include="Views\UserAccountPrinterList\UserAccountPrinterList.cshtml" />
     <Content Include="Views\UserPrintOrderList\UserPrintOrderList.cshtml" />
     <Content Include="Views\UserRecievedPrintOrderList\UserRecievedPrintOrderList.cshtml" />
+    <Content Include="Views\UserAccount\FillUpBalance.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

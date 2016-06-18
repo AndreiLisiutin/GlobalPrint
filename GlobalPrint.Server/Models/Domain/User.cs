@@ -30,5 +30,6 @@ namespace GlobalPrint.Server
         public string PasswordHash { get; set; }
         [Column("amount_of_money")]
         public decimal AmountOfMoney { get; set; }
+
     }
 }
