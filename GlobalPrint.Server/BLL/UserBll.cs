@@ -33,5 +33,24 @@ namespace GlobalPrint.Server
                 }
             }
         }
+
+        public User FillUpBalance(User user, decimal upSumm)
+        {
+            using (var db = new DB())
+            {
+                User originalUser = db.Users.SingleOrDefault(x => x.UserID == user.UserID);
+                if (originalUser != null)
+                {
+                    originalUser.AmountOfMoney += upSumm;
+                    db.Entry(originalUser).CurrentValues.SetValues(originalUser);
+                    db.SaveChanges();
+                    return originalUser;
+                }
+                else
+                {
+                    throw new Exception("Не найден пользователь [ID=" + user.UserID + "]");
+                }
+            }
+        }
     }
 }

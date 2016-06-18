@@ -28,5 +28,9 @@ namespace GlobalPrint.Server
         public string Password { get; set; }
         [Column("password_hash")]
         public string PasswordHash { get; set; }
+        [Column("amount_of_money")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:c}")]
+        public decimal AmountOfMoney { get; set; }
+
     }
 }
