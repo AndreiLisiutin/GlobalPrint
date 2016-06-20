@@ -188,6 +188,7 @@
     <Content Include="Resources\Stylesheets\account\login.css" />
     <Content Include="Resources\Stylesheets\home\index.css" />
     <Content Include="Resources\Stylesheets\base.css" />
+    <Content Include="Resources\Stylesheets\userAccount\userAccount.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

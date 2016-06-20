@@ -18,9 +18,10 @@ namespace GlobalPrint.ClientWeb
     {
         // GET: UserAccount/UserAccount
         [HttpGet]
-        public ActionResult UserAccount(int UserID)
+        public ActionResult UserAccount()
         {
-            var user = new UserBll().GetUserByID(UserID);
+            int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
+            var user = new UserBll().GetUserByID(userID);
             return View(user);
         }
 
@@ -47,15 +48,11 @@ namespace GlobalPrint.ClientWeb
 
         [HttpPost]
         [MultipleButton(Name = "action", Argument = "FillUpBalance")]
-        public ActionResult FillUpBalance(User model, string upSumm)
+        public ActionResult FillUpBalance(string upSumm)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("UserAccount", model);
-            }
-
             try
             {
+                int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
                 decimal decimalUpSumm;
                 try
                 {
@@ -66,13 +63,13 @@ namespace GlobalPrint.ClientWeb
                     throw new Exception("Некорректно введена ссума пополнения", ex);
                 }
 
-                new UserBll().FillUpBalance(model, decimalUpSumm);
-                return RedirectToAction("UserAccount", new { UserID = model.UserID });
+                new UserBll().FillUpBalance(userID, decimalUpSumm);
+                return RedirectToAction("UserAccount", new { UserID = userID });
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
-                return View("UserAccount", model);
+                return View("UserAccount");
             }
         }
     }
