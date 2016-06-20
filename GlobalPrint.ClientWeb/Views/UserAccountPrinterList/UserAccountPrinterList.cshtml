@@ -4,7 +4,7 @@
     ViewBag.Title = "Принтеры";
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
-
+@{int rowNo = 0;}
 <div class="container">
     @using (Html.BeginForm(new { @class = "form-horizontal", role = "form" }))
     {
@@ -29,7 +29,7 @@
                 @foreach (Printer printer in Model)
                 {
                     <tr>
-                        <td scope="row">@Html.DisplayFor(c => Array.IndexOf(Model.ToArray(), printer) + 1)</td>
+                        <td scope="row">@(rowNo += 1)</td>
                         <td>@Html.DisplayFor(c => printer.Name)</td>
                         <td>@Html.DisplayFor(c => printer.Location)</td>
                         <td>@Html.DisplayFor(c => printer.BlackWhitePrintPriceInCurrency)</td>

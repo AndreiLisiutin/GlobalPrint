@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GlobalPrint.Server
@@ -14,10 +15,15 @@ namespace GlobalPrint.Server
     {
         public class Parameters
         {
+            public Parameters()
+            {
+
+            }
             public string Login { get; set; }
             public string Password { get; set; }
             public string Host { get; set; }
             public string Port { get; set; }
+            public bool Enabled { get; set; }
 
         }
         public SmsUtility(Parameters param)
@@ -27,6 +33,10 @@ namespace GlobalPrint.Server
         Parameters _param;
         private SMPPCommunicator _CreateSmppClient()
         {
+            if (!this._param.Enabled)
+            {
+                return null;
+            }
             try
             {
                 string login = _param.Login;
@@ -55,45 +65,50 @@ namespace GlobalPrint.Server
             }
         }
 
-        public string Send(string phone, string messageText)
+        public void Send(string phone, string messageText)
         {
-            try
+            if (!this._param.Enabled)
             {
-                using (var smppClient = this._CreateSmppClient())
+                return;
+            }
+            ThreadPool.QueueUserWorkItem((o) =>
+            {
+                try
                 {
-                    phone = this.ExtractValidPhone(phone);
-
-                    var smppRequest = new SmppSubmitSm();
-                    smppRequest.SourceAddressTon = Pdu.TonType.Alphanumeric;
-                    smppRequest.SourceAddressNpi = Pdu.NpiType.ISDN;
-                    smppRequest.DestinationAddressTon = Pdu.TonType.International;
-                    smppRequest.DestinationAddressNpi = Pdu.NpiType.ISDN;
-
-
-                    smppRequest.AlertOnMsgDelivery = 0x1;
-                    smppRequest.DataCoding = DataCoding.UCS2;
-                    smppRequest.SourceAddress = "Soft_3784";
-                    smppRequest.DestinationAddress = phone;
-                    smppRequest.ValidityPeriod = "000000235959000R"; //YYMMDDhhmmsstnnR
-                    smppRequest.LanguageIndicator = LanguageIndicator.Unspecified;
-                    smppRequest.ShortMessage = messageText;
-                    smppRequest.PriorityFlag = Pdu.PriorityType.Highest;
-                    //smppRequest.RegisteredDelivery = (Pdu.RegisteredDeliveryType)0x1e;
-                    smppRequest.RegisteredDelivery = Pdu.RegisteredDeliveryType.OnSuccessOrFailure;
-
-                    SmppSubmitSmResp smppResponse = smppClient.SendRequest(smppRequest) as SmppSubmitSmResp;
-
-                    if (smppResponse.CommandStatus != CommandStatus.ESME_ROK || smppResponse.MessageId == null)
+                    using (var smppClient = this._CreateSmppClient())
                     {
-                        return null;
+                        phone = this.ExtractValidPhone(phone);
+
+                        var smppRequest = new SmppSubmitSm();
+                        smppRequest.SourceAddressTon = Pdu.TonType.Alphanumeric;
+                        smppRequest.SourceAddressNpi = Pdu.NpiType.ISDN;
+                        smppRequest.DestinationAddressTon = Pdu.TonType.International;
+                        smppRequest.DestinationAddressNpi = Pdu.NpiType.ISDN;
+
+
+                        smppRequest.AlertOnMsgDelivery = 0x1;
+                        smppRequest.DataCoding = DataCoding.UCS2;
+                        smppRequest.SourceAddress = "Soft_3784";
+                        smppRequest.DestinationAddress = phone;
+                        smppRequest.ValidityPeriod = "000000235959000R"; //YYMMDDhhmmsstnnR
+                        smppRequest.LanguageIndicator = LanguageIndicator.Unspecified;
+                        smppRequest.ShortMessage = messageText;
+                        smppRequest.PriorityFlag = Pdu.PriorityType.Highest;
+                        //smppRequest.RegisteredDelivery = (Pdu.RegisteredDeliveryType)0x1e;
+                        smppRequest.RegisteredDelivery = Pdu.RegisteredDeliveryType.OnSuccessOrFailure;
+
+                        SmppSubmitSmResp smppResponse = smppClient.SendRequest(smppRequest) as SmppSubmitSmResp;
+
+                        //if (smppResponse.CommandStatus != CommandStatus.ESME_ROK || smppResponse.MessageId == null)
+                        //{
+                        //}
                     }
-                    return smppResponse.MessageId;
                 }
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+                catch (Exception ex)
+                {
+                    return;
+                }
+            });
         }
 
         public string ExtractValidPhone(string phone)

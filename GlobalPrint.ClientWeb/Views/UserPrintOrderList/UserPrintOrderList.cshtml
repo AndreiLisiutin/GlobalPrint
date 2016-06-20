@@ -1,6 +1,6 @@
 ﻿@using GlobalPrint.Server
 @using GlobalPrint.Server.Utilities
-@model List<PrintOrder>
+@model List<PrintOrderInfo>
 @{
     ViewBag.Title = "Мои Заказы";
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
@@ -25,19 +25,19 @@
                     <th class="col-md-3">Документ</th>
                     <th class="col-md-2">Дата заказа</th>
                     <th class="col-md-2">Цена заказа</th>
-                    <th class="col-md-2">Дата выполнения заказа</th>
+                    <th class="col-md-2">Статус</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (PrintOrder printOrder in Model)
+                @foreach (PrintOrderInfo printOrder in Model)
                 {
                     <tr>
                         <td scope="row">@(rowNo += 1)</td>
-                        <td>@Html.DisplayFor(c => printOrder.PrinterID)</td>
-                        <td>@Html.DisplayFor(c => printOrder.Document)</td>
-                        <td>@Html.DisplayFor(c => printOrder.OrderedOn, "{0:dd.MM.yyyy HH:mm:ss}")</td>
-                        <td>@Html.DisplayFor(c => printOrder.Price, "{0:0.00}")</td>
-                        <td>@Html.DisplayFor(c => printOrder.PrintedOn, "{0:dd.MM.yyyy HH:mm:ss}")</td>
+                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.PrinterID)</td>
+                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>
+                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, "{0:dd.MM.yyyy HH:mm:ss}")</td>
+                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.Price, "{0:0.00}")</td>
+                        <td>@Html.DisplayFor(c => printOrder.Status.Status)</td>
                     </tr>
                 }
             </tbody>

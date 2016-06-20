@@ -238,6 +238,7 @@
     <Content Include="Views\UserRecievedPrintOrderList\UserRecievedPrintOrderList.cshtml" />
     <Content Include="Views\UserAccount\FillUpBalance.cshtml" />
     <Content Include="Views\Account\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\UserRecievedPrintOrderList\ConfirmPrintOrder.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

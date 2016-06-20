@@ -25,7 +25,8 @@ namespace GlobalPrint.Server
         {
             using (var db = new DB())
             {
-                var printerInfos = db.Printers.Join(db.PrintSchedules, e => e.PrinterID, e => e.PrinterID,
+                var printerInfos = db.Printers.Where(e => e.PrinterID == printerID)
+                    .Join(db.PrintSchedules, e => e.PrinterID, e => e.PrinterID,
                     (p, s) => new PrinterScheduleJoin() { printer = p, schedule = s }).ToList();
                 if (printerInfos.Count == 0)
                 {
@@ -67,7 +68,7 @@ namespace GlobalPrint.Server
                 client.AmountOfMoney -= order.Price;
                 db.SaveChanges();
 
-                if (false && !string.IsNullOrEmpty(printerOwner.Phone))
+                if (!string.IsNullOrEmpty(printerOwner.Phone))
                 {
                     string message = "Поступил новый заказ №" + order.PrintOrderID + ".";
                     new SmsUtility(smsParams).Send(printerOwner.Phone, message);

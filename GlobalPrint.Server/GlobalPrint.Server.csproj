@@ -76,6 +76,7 @@
     <Compile Include="Models\Domain\PrinterSchedule.cs" />
     <Compile Include="Models\Domain\PrintOrder.cs" />
     <Compile Include="Models\Domain\Printer.cs" />
+    <Compile Include="Models\Domain\PrintOrderStatus.cs" />
     <Compile Include="Models\Domain\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Extension\StringExtension.cs" />

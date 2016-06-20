@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,6 +44,14 @@ namespace GlobalPrint.Server
             get
             {
                 return this.Price.ToString() + " руб.";
+            }
+        }
+        [NotMapped]
+        public string DocumentName
+        {
+            get
+            {
+                return this.Document == null ? null : new FileInfo(this.Document).Name;
             }
         }
     }
