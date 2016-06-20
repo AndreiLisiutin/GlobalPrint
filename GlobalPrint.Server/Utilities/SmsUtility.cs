@@ -162,7 +162,7 @@ namespace GlobalPrint.Server
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
                 parameters.Add("user", this._param.Login);
                 parameters.Add("password", this.CreateMD5(this._param.Password));
-                parameters.Add("to", this.ExtractValidPhone(phone));
+                parameters.Add("to", SmsUtility.ExtractValidPhone(phone));
                 parameters.Add("text", messageText);
                 parameters.Add("from", this._param.Sender);
 

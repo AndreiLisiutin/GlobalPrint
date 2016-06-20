@@ -132,7 +132,7 @@ namespace GlobalPrint.ClientWeb
             }
 
             var password = smsUtility.GetneratePassword(6);
-            //smsUtility.Send(model.Phone, "Ваш пароль: " + password);
+            smsUtility.Send(model.Phone, "Ваш пароль: " + password);
             this.Session["SmsValidationPassword"] = password;
 
             return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = phoneNumber, FromRegistration = true });
@@ -191,7 +191,7 @@ namespace GlobalPrint.ClientWeb
             }
 
             var password = smsUtility.GetneratePassword(6);
-            //smsUtility.Send(model.Phone, "Ваш пароль: " + password);
+            smsUtility.Send(model.Phone, "Ваш пароль: " + password);
             this.Session["SmsLoginValidationPassword"] = password;
 
             return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Phone, FromRegistration = false });
