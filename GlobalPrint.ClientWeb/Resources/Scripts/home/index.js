@@ -3,12 +3,76 @@ home.index = home.index || (function () {
 
     var _map = null;
     var _markersArray = [];
+    var _markersCurrentArray = [];
     var _currentPrinterID = null;
     var _lastState = null;
 
     var init = function () {
         loadMap();
     };
+
+
+   function CenterControl(controlDiv, map) {
+
+     // Set CSS for the control border.
+     var controlUI = document.createElement('div');
+     controlUI.style.backgroundColor = '#fff';
+     controlUI.style.border = '2px solid #fff';
+     controlUI.style.borderRadius = '3px';
+     controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+     controlUI.style.cursor = 'pointer';
+     controlUI.style.marginBottom = '22px';
+     controlUI.style.textAlign = 'center';
+     controlUI.title = 'Click to recenter the map';
+     controlDiv.appendChild(controlUI);
+
+     // Set CSS for the control interior.
+     var controlText = document.createElement('div');
+     controlText.style.color = 'rgb(25,25,25)';
+     controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+     controlText.style.fontSize = '16px';
+     controlText.style.lineHeight = '38px';
+     controlText.style.paddingLeft = '5px';
+     controlText.style.paddingRight = '5px';
+     controlText.innerHTML = 'Где я?';
+     controlUI.appendChild(controlText);
+
+     // Setup the click event listeners: simply set the map to Chicago.
+     controlUI.addEventListener('click', function() {
+
+        if (navigator.geolocation) {
+
+            navigator.geolocation.getCurrentPosition(
+            function (position) {
+		
+		deleteAllMarkersCurrent();
+
+                var location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                _map.setCenter(location);
+                _map.setZoom(15);
+
+                var marker = new google.maps.Marker({
+                    position: location,
+                    map: _map,
+                    title: "Ваше текущее положение"
+                });
+
+		_markersCurrentArray.push(marker);
+            },
+            function (error) {
+	            alert("Ошибка определения текущего положения." + error.message);
+            }, {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            });
+        } else {
+            alert("Отключено определение текущего положения.");
+        }
+
+     });
+
+   }
 
     var loadMap = function () {
         if (navigator.geolocation) {
@@ -35,7 +99,7 @@ home.index = home.index || (function () {
     var _createMap = function (location) {
         var mapOptions = {
             //minZoom: 10,
-            zoom: 13,
+            zoom: 4,
             center: location,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
@@ -47,6 +111,16 @@ home.index = home.index || (function () {
         $("#googlemaps").on("heightChange", function () {
             google.maps.event.trigger(_map, "resize");
         });
+
+        // Create the DIV to hold the control and call the CenterControl() constructor
+        // passing in this DIV.
+        var centerControlDiv = document.createElement('div');
+        var centerControl = new CenterControl(centerControlDiv, _map);
+
+        centerControlDiv.index = 1;
+        _map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
+
     };
 
     var closePrinterInfo = function () {
@@ -105,6 +179,15 @@ home.index = home.index || (function () {
                 _markersArray[i].setMap(null);
             }
             _markersArray.length = 0;
+        }
+    }
+
+    function deleteAllMarkersCurrent() {
+        if (_markersCurrentArray) {
+            for (i in _markersCurrentArray) {
+                _markersCurrentArray[i].setMap(null);
+            }
+            _markersCurrentArray.length = 0;
         }
     }
 
