@@ -12,6 +12,7 @@ namespace GlobalPrint.ClientWeb
     {
         [Required]
         public PrinterInfo printer { get; set; }
+        public User user { get; set; }
         public List<SelectListItem> formatStore { get; set; }
     }
     public class Printer_PrintPostModel

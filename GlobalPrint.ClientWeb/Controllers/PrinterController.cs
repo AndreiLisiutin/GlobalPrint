@@ -29,6 +29,12 @@ namespace GlobalPrint.ClientWeb
         private Printer_PrintViewModel _CreatePrintViewModel(int printerID, HttpPostedFileBase fileToPrint, PrintOrder order)
         {
             PrinterInfo printer = new PrinterBll().GetPrinterInfoByID(printerID);
+            int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
+            User user = new UserBll().GetUserByID(userID);
+            if (user.AmountOfMoney <= 0)
+            {
+                ModelState.AddModelError("", "Нет средств на счете");
+            }
             if (order == null)
             {
                 var rnd = new Random();
@@ -60,7 +66,8 @@ namespace GlobalPrint.ClientWeb
                 printer = printer,
                 order = order,
                 fileToPrint = fileToPrint,
-                formatStore = formatStore
+                formatStore = formatStore,
+                user = user
             };
             return model;
         }
@@ -91,8 +98,14 @@ namespace GlobalPrint.ClientWeb
                 var printerModel = this._CreatePrintViewModel(model.order.PrinterID, model.fileToPrint, model.order);
                 return View("Print", printerModel);
             }
-
             int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
+            User user = new UserBll().GetUserByID(userID);
+            if (user.AmountOfMoney <= 0)
+            {
+                var printerModel = this._CreatePrintViewModel(model.order.PrinterID, model.fileToPrint, model.order);
+                return View("Print", printerModel);
+            }
+
             string app_data = HttpContext.Server.MapPath("~/App_Data");
             string usersFolder = Path.Combine(app_data, userID.ToString());
             string pathFoFile = Path.Combine(usersFolder, model.fileToPrint.FileName);
