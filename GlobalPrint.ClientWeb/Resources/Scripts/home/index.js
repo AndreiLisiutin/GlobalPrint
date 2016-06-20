@@ -34,7 +34,7 @@ home.index = home.index || (function () {
 
     var _createMap = function (location) {
         var mapOptions = {
-            minZoom: 10,
+            //minZoom: 10,
             zoom: 13,
             center: location,
             mapTypeId: google.maps.MapTypeId.ROADMAP
