@@ -42,8 +42,8 @@ namespace GlobalPrint.ClientWeb
                 var savedUser = _context.Users.Add(userToAdd);
                 _context.SaveChanges();
 
-                var addedUser = IdentityUser.FromDbUser(savedUser);
-                return Task.FromResult<object>(addedUser);
+                user.Id = savedUser.UserID;
+                return Task.FromResult<object>(user);
             }                
         }
 

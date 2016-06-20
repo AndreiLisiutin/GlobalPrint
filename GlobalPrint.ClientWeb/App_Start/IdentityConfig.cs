@@ -22,7 +22,26 @@ namespace GlobalPrint.ClientWeb
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            return new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
+            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
+
+            // Configure validation logic for usernames
+            manager.UserValidator = new UserValidator<ApplicationUser, int>(manager)
+            {
+                AllowOnlyAlphanumericUserNames = false,
+                //RequireUniqueEmail = true
+            };
+
+            // Configure validation logic for passwords
+            manager.PasswordValidator = new PasswordValidator
+            {
+                RequiredLength = 3,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
+            };
+
+            return manager;
         }
     }
 
