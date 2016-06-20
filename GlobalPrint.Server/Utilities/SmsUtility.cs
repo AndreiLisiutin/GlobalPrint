@@ -14,10 +14,15 @@ namespace GlobalPrint.Server
     {
         public class Parameters
         {
+            public Parameters()
+            {
+
+            }
             public string Login { get; set; }
             public string Password { get; set; }
             public string Host { get; set; }
             public string Port { get; set; }
+            public bool Enabled { get; set; }
 
         }
         public SmsUtility(Parameters param)
@@ -27,6 +32,10 @@ namespace GlobalPrint.Server
         Parameters _param;
         private SMPPCommunicator _CreateSmppClient()
         {
+            if (!this._param.Enabled)
+            {
+                return null;
+            }
             try
             {
                 string login = _param.Login;
@@ -57,6 +66,10 @@ namespace GlobalPrint.Server
 
         public string Send(string phone, string messageText)
         {
+            if (!this._param.Enabled)
+            {
+                return null;
+            }
             try
             {
                 using (var smppClient = this._CreateSmppClient())

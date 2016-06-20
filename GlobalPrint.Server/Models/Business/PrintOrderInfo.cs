@@ -20,5 +20,6 @@ namespace GlobalPrint.Server
 
         public PrintOrder PrintOrder { get; set; }
         public Printer Printer { get; set; }
+        public PrintOrderStatus Status { get; set; }
     }
 }
