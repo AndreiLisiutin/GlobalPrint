@@ -24,6 +24,7 @@ namespace GlobalPrint.ClientWeb
                 Login = WebConfigurationManager.AppSettings["SmppLogin"],
                 Password = WebConfigurationManager.AppSettings["SmppPassword"],
                 Port = WebConfigurationManager.AppSettings["SmppPort"],
+                Sender = WebConfigurationManager.AppSettings["SmppSender"],
                 Enabled = WebConfigurationManager.AppSettings["SmppEnabled"] == "1",
             };
         }

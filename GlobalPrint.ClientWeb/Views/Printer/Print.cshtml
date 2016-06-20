@@ -6,6 +6,25 @@
 @section Scripts{
     <script src="~/Resources/Libraries/bootstrap.file-input/fileinput.js"></script>
     <script src="~/Resources/Scripts/printer/print.js"></script>
+    <script>
+        var progress = (function () {
+            var pleaseWaitDiv = $('<div class="modal hide" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false"><div class="modal-header"><h1>Загрузка файла...</h1></div><div class="modal-body"><div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div></div></div>');
+            return {
+                showPleaseWait: function () {
+                    pleaseWaitDiv.modal();
+                },
+                hidePleaseWait: function () {
+                    pleaseWaitDiv.modal('hide');
+                }
+            };
+        })();
+
+        $(document).ready(function () {
+            $("#printButton").click(function () {
+                progress.showPleaseWait();
+            });
+        });
+    </script>
 }
 @section Stylesheets {
 }
@@ -65,9 +84,16 @@
         </div>
         <div class="form-group">
             <div class="col-sm-2">
-                <input type="submit" value="Печать" class="btn btn-default" />
-            </div>
+            @if (Model.user.AmountOfMoney <= 0)
+            {
+                <input type="submit" id="printButton" value="Печать" disabled="disabled" class="btn btn-default" />
+            }
+            else
+            {
+                <input type="submit" id="printButton" value="Печать" class="btn btn-default" />
+            }
         </div>
+    </div>
     }
 </div>
 
