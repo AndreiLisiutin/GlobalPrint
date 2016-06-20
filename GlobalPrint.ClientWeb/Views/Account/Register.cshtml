@@ -13,30 +13,96 @@
     <script src="~/Resources/Scripts/account/register.js"></script>
 }
 
-<div class="container">
-    @using (Html.BeginForm("Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin", role = "form" }))
-    {
-        @Html.AntiForgeryToken()
+<div class="container form-signin">
+    <div class="main-page">
         <h2 class="form-signin-heading">Регистрация</h2>
-        <label for="inputName" class="sr-only">Полное имя</label>
-        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @id = "inputName", @type = "text", @placeholder = "Полное имя", @required = "true", @autofocus = true })
-        <label for="inputEmail" class="sr-only">Email</label>
-        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "inputEmail", @type = "email", @placeholder = "Email", @required = "true" })
-        <label for="inputPassword" class="sr-only">Пароль</label>
-        @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @id = "inputPassword", @type = "password", @placeholder = "Пароль", @required = "true" })
-        <label for="inputConfirmPassword" class="sr-only">Подтвердите пароль</label>
-        @Html.TextBoxFor(m => m.ConfirmPassword, new { @class = "form-control", @id = "inputConfirmPassword", @type = "password", @placeholder = "Подтвердите пароль", @required = "true" })
+    </div>
 
-        @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
-        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
-        @Html.ValidationMessage("", new { @class = "text-danger" });
+    <div class="bs-example bs-example-tabs">
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active"><a href="#emailregister" data-toggle="tab">Через Email</a></li>
+            <li class=""><a href="#smsregister" data-toggle="tab">Через SMS</a></li>
+        </ul>
+    </div>
+    <div id="myTabContent" class="tab-content">
+        <!-- Через Email -->
+        <div class="tab-pane fade active in" id="emailregister">
+            @using (Html.BeginForm("Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <label for="inputName" class="sr-only">Полное имя</label>
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @id = "inputName", @type = "text", @placeholder = "Полное имя", @required = "true", @autofocus = true })
+                <label for="inputEmail" class="sr-only">Email</label>
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "inputEmail", @type = "email", @placeholder = "Email", @required = "true" })
+                <label for="inputPassword" class="sr-only">Пароль</label>
+                    @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @id = "inputPassword", @type = "password", @placeholder = "Пароль", @required = "true" })
+                    <label for="inputConfirmPassword" class="sr-only">Подтвердите пароль</label>
+                    @Html.TextBoxFor(m => m.ConfirmPassword, new { @class = "form-control", @id = "inputConfirmPassword", @type = "password", @placeholder = "Подтвердите пароль", @required = "true" })
 
-        <button class="btn btn-default btn-primary btn-block" type="submit">Зарегистрироваться</button>
-       
-         <div class="main-page">
-            @Html.ActionLink("www.globalprint.online.ru", "Index", "Home")
+                    @Html.HiddenFor(m => m.Phone, new { @value = "" })
+
+                    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                    @Html.ValidationMessage("", new { @class = "text-danger" });
+
+                <button class="btn btn-default btn-primary btn-block" type="submit">Зарегистрироваться</button>
+            }
         </div>
-    }
+
+        <!-- Через SMS -->
+        <div class="tab-pane fade" id="smsregister">
+            @using (Html.BeginForm("RegisterFromPhone", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <label for="inputPhone" class="sr-only">Телефон</label>
+                @Html.TextBoxFor(m => Model.Phone, new { @class = "form-control", @id = "inputPhone", @type = "phone", @placeholder = "Телефон", @required = "true" })
+                @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "text-danger" })
+                @Html.ValidationMessage("", new { @class = "text-danger" });
+
+                @Html.HiddenFor(m => m.Email, new { @value = "" })
+                @Html.HiddenFor(m => m.ConfirmPassword, new { @value = "" })
+                @Html.HiddenFor(m => m.Name, new { @value = "" })
+
+                @*<div class="modal fade" id="GetPhoneCodeModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-sm" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="exampleModalLabel">Введите полученный пароль</h4>
+                            </div>
+                            <div class="modal-body">
+                                @using (Html.BeginForm(new { @class = "form-horizontal", role = "form" }))
+                                {
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label text-left">Пароль</label>
+                                        <div class="col-sm-7">
+                                            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @id = "inputPassword", @type = "text", @placeholder = "Пароль", @required = "true" })
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary" value="FillUpBalance" name="action:FillUpBalance">ОК</button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="#GetPhoneCodeModal" class="btn btn-default btn-block" data-toggle="modal">Зарегистрироваться</a>*@
+                <button class="btn btn-default btn-primary btn-block" type="submit">Зарегистрироваться</button>
+            }
+        </div>
+
+    </div> <!-- /tabpanel -->
+
+    <div class="main-page">
+        Есть аккаунт? @Html.ActionLink("Войдите", "Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, new { })
+    </div>
+
+    <div class="main-page">
+        @Html.ActionLink("www.globalprint.online.ru", "Index", "Home")
+    </div>
+
 </div> <!-- /container -->

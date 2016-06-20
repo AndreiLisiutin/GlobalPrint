@@ -35,7 +35,7 @@ namespace GlobalPrint.ClientWeb
 
             var userToAdd = user.ToDbUser();
             userToAdd.Login = userToAdd.Name;
-            userToAdd.Phone = "";
+            userToAdd.Phone = userToAdd.Phone ?? "";
 
             using (var _context = new DB())
             {

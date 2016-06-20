@@ -25,9 +25,13 @@ namespace GlobalPrint.ClientWeb
         public string Name { get; set; }
 
         [Required]
-        [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Required]
+        [Phone]
+        [Display(Name = "Phone")]
+        public string Phone { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "Минимальная длина пароля - {2} символов.", MinimumLength = 6)]
@@ -39,5 +43,17 @@ namespace GlobalPrint.ClientWeb
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
+    }
+
+    public class VerifyPhoneNumberViewModel
+    {
+        [Required]
+        [Display(Name = "Code")]
+        public string Code { get; set; }
+
+        [Required]
+        [Phone]
+        [Display(Name = "Phone Number")]
+        public string PhoneNumber { get; set; }
     }
 }

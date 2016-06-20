@@ -115,5 +115,15 @@ namespace GlobalPrint.Server
             return numbers.Length == 11 ? numbers : null;
         }
 
+        public string GetneratePassword(int charsCount)
+        {
+            string pass = "";
+            Random r = new Random();
+            for (int i = 0; i < charsCount; i++)
+            {
+                pass += r.Next(0, 9);
+            }
+            return pass;
+        }
     }
 }

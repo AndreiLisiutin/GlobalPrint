@@ -124,10 +124,10 @@ namespace GlobalPrint.ClientWeb
             // If we got this far, something failed, redisplay form
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View("Register", model);
             }
 
-            var user = new ApplicationUser { UserName = model.Name, Email = model.Email };
+            var user = new ApplicationUser { UserName = model.Name, Email = model.Email, Phone = model.Phone ?? "" };
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
@@ -152,8 +152,64 @@ namespace GlobalPrint.ClientWeb
             {
                 ModelState.AddModelError("", error);
             }
-            return View(model);
+            return View("Register", model);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult RegisterFromPhone(RegisterViewModel model)
+        {
+            var smsUtility = new SmsUtility(this.GetSmsParams());
+            var phoneNumber = smsUtility.ExtractValidPhone(model.Phone);
+            if (phoneNumber == null)
+            {
+                return View("Register", model);
+            }
+
+            var password = smsUtility.GetneratePassword(6);
+            //smsUtility.Send(model.Phone, "Ваш пароль: " + password);
+            this.Session["SmsValidationPassword"] = password;
+
+            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = phoneNumber });
+        }
+
+        public ActionResult VerifyPhoneNumber(string phoneNumber)
+        {
+            return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            string password = this.Session["SmsValidationPassword"].ToString();
+            // Костыль пока
+            model.Code = password;
+            if (model.Code != password)
+            {
+                ModelState.AddModelError("", "Введен некорректный пароль");
+                return View(model);
+            }
+            else
+            {
+                this.Session["SmsValidationPassword"] = null;
+                RegisterViewModel userModel = new RegisterViewModel()
+                {
+                    Name = model.PhoneNumber,
+                    Email = model.PhoneNumber,
+                    Password = model.Code,
+                    ConfirmPassword = model.Code,
+                    Phone = model.PhoneNumber
+                };
+                return await this.Register(userModel);
+            }
+        }
+        
 
         // POST: /Account/LogOff
         [HttpPost]

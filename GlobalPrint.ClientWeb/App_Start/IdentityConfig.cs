@@ -40,7 +40,7 @@ namespace GlobalPrint.ClientWeb
                 RequireLowercase = false,
                 RequireUppercase = false,
             };
-
+            
             return manager;
         }
     }
@@ -61,6 +61,15 @@ namespace GlobalPrint.ClientWeb
         public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
         {
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
+        }
+    }
+
+    public class SmsService : IIdentityMessageService
+    {
+        public Task SendAsync(IdentityMessage message)
+        {
+            // Plug in your sms service here to send a text message.
+            return Task.FromResult(0);
         }
     }
 }

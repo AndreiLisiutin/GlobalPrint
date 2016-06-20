@@ -1,0 +1,31 @@
+﻿@using GlobalPrint.ClientWeb
+@model VerifyPhoneNumberViewModel
+@{
+    ViewBag.Title = "Подтверждение по СМС";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+
+@section Stylesheets {
+    <link rel="stylesheet" href="~/Resources/Stylesheets/account/login.css">
+}
+
+<div class="container">
+    @using (Html.BeginForm("VerifyPhoneNumber", "Account", FormMethod.Post, new { @class = "form-horizontal form-signin", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("phoneNumber", @Model.PhoneNumber)
+        <h4>Введите пароль</h4>
+        <hr />
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">Пароль</label>
+            <div class="col-sm-7">
+                @Html.TextBoxFor(m => m.Code, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Code, "", new { @class = "text-danger" })
+                @Html.ValidationMessage("", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">ОК</button>
+        </div>
+    }
+</div> <!-- /container -->
