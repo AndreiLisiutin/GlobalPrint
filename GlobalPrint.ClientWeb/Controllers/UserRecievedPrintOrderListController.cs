@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.IO;
+using System.Collections.Generic;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -19,9 +20,14 @@ namespace GlobalPrint.ClientWeb
         [HttpGet]
         public ActionResult UserRecievedPrintOrderList()
         {
-            int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            var printOrderList = new PrintOrderBll().GetUserRecievedPrintOrderList(userID);
+            var printOrderList = _GetViewModel();
             return View(printOrderList);
+        }
+
+        private List<PrintOrderInfo> _GetViewModel()
+        {
+            int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
+            return new PrintOrderBll().GetUserRecievedPrintOrderList(userID);
         }
 
         [HttpPost]
@@ -39,10 +45,28 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpPost]
-        public ActionResult PrintOrder(int printOrderID)
+        public ActionResult PrintOrder(int printOrderID, string secretCode)
         {
+            var order = new PrinterBll().GetPrintOrderByID(printOrderID);
+            if (order.SecretCode.ToUpper() != (secretCode ?? "").ToUpper())
+            {
+                ModelState.AddModelError("", "Некорректный секретный код");
+                var vm = ViewModelConfirmPrintOrder(printOrderID);
+                return View("ConfirmPrintOrder", vm);
+            }
             new PrintOrderBll().UpdateStatus(printOrderID, PrintOrderStatusEnum.Printed, this.GetSmsParams());
             return RedirectToAction("UserRecievedPrintOrderList");
+        }
+        private PrintOrderInfo ViewModelConfirmPrintOrder(int printOrderID)
+        {
+            return new PrintOrderBll().GetPrintOrderInfoByID(printOrderID);
+        }
+
+        [HttpPost]
+        public ActionResult ConfirmPrintOrder(int printOrderID)
+        {
+            var vm = ViewModelConfirmPrintOrder(printOrderID);
+            return View(vm);
         }
 
         [HttpGet]

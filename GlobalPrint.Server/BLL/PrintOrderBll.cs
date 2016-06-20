@@ -22,6 +22,20 @@ namespace GlobalPrint.Server
                 return printOrderList.ToList();
             }
         }
+        public PrintOrderInfo GetPrintOrderInfoByID(int printOrderID)
+        {
+            using (var db = new DB())
+            {
+                var printOrderList =
+                    from PrintOrder in db.PrintOrders
+                    join Printer in db.Printers on PrintOrder.PrinterID equals Printer.PrinterID
+                    join Status in db.PrintOrderStatuses on PrintOrder.PrintOrderStatusID equals Status.PrintOrderStatusID
+                    where PrintOrder.PrintOrderID == printOrderID
+                    orderby PrintOrder.OrderedOn descending
+                    select new PrintOrderInfo() { PrintOrder = PrintOrder, Printer = Printer, Status = Status };
+                return printOrderList.First();
+            }
+        }
 
         public List<PrintOrderInfo> GetUserRecievedPrintOrderList(int UserID)
         {

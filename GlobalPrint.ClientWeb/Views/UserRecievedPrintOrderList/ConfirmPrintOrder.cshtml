@@ -1,0 +1,64 @@
+﻿@model PrintOrderInfo
+@{
+    ViewBag.Title = "Печать заказа";
+    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+}
+<div class="container">
+    @using (Html.BeginForm("PrintOrder", "UserRecievedPrintOrderList", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger container margin-top-20">
+                <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                @Html.ValidationSummary(false, "Ошибки: ")
+            </div>
+        }
+        <h2>Введите секретный код</h2>
+        @Html.Hidden("printOrderID",  Model.PrintOrder.PrintOrderID)
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">Секретный код</label>
+            <div class="col-sm-9">
+                @Html.TextBox("secretCode", null, new { @class = "form-control" })
+            </div>
+        </div>
+        <h2>Данные о заказе</h2>
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">Номер заказа</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(e => e.PrintOrder.PrintOrderID, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">Название принтера</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(e => e.Printer.Name, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">Расположение принтера</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(e => e.Printer.Location, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">Файл</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(e => e.PrintOrder.DocumentName, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">Стоимость</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(e => e.PrintOrder.PriceInCurrency, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <input type="submit" value="Распечатать" class="btn btn-default" />
+            </div>
+        </div>
+    }
+</div>
+
+
+

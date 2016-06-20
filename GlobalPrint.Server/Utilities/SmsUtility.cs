@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GlobalPrint.Server
@@ -64,49 +65,50 @@ namespace GlobalPrint.Server
             }
         }
 
-        public string Send(string phone, string messageText)
+        public void Send(string phone, string messageText)
         {
             if (!this._param.Enabled)
             {
-                return null;
+                return;
             }
-            try
+            ThreadPool.QueueUserWorkItem((o) =>
             {
-                using (var smppClient = this._CreateSmppClient())
+                try
                 {
-                    phone = this.ExtractValidPhone(phone);
-
-                    var smppRequest = new SmppSubmitSm();
-                    smppRequest.SourceAddressTon = Pdu.TonType.Alphanumeric;
-                    smppRequest.SourceAddressNpi = Pdu.NpiType.ISDN;
-                    smppRequest.DestinationAddressTon = Pdu.TonType.International;
-                    smppRequest.DestinationAddressNpi = Pdu.NpiType.ISDN;
-
-
-                    smppRequest.AlertOnMsgDelivery = 0x1;
-                    smppRequest.DataCoding = DataCoding.UCS2;
-                    smppRequest.SourceAddress = "Soft_3784";
-                    smppRequest.DestinationAddress = phone;
-                    smppRequest.ValidityPeriod = "000000235959000R"; //YYMMDDhhmmsstnnR
-                    smppRequest.LanguageIndicator = LanguageIndicator.Unspecified;
-                    smppRequest.ShortMessage = messageText;
-                    smppRequest.PriorityFlag = Pdu.PriorityType.Highest;
-                    //smppRequest.RegisteredDelivery = (Pdu.RegisteredDeliveryType)0x1e;
-                    smppRequest.RegisteredDelivery = Pdu.RegisteredDeliveryType.OnSuccessOrFailure;
-
-                    SmppSubmitSmResp smppResponse = smppClient.SendRequest(smppRequest) as SmppSubmitSmResp;
-
-                    if (smppResponse.CommandStatus != CommandStatus.ESME_ROK || smppResponse.MessageId == null)
+                    using (var smppClient = this._CreateSmppClient())
                     {
-                        return null;
+                        phone = this.ExtractValidPhone(phone);
+
+                        var smppRequest = new SmppSubmitSm();
+                        smppRequest.SourceAddressTon = Pdu.TonType.Alphanumeric;
+                        smppRequest.SourceAddressNpi = Pdu.NpiType.ISDN;
+                        smppRequest.DestinationAddressTon = Pdu.TonType.International;
+                        smppRequest.DestinationAddressNpi = Pdu.NpiType.ISDN;
+
+
+                        smppRequest.AlertOnMsgDelivery = 0x1;
+                        smppRequest.DataCoding = DataCoding.UCS2;
+                        smppRequest.SourceAddress = "Soft_3784";
+                        smppRequest.DestinationAddress = phone;
+                        smppRequest.ValidityPeriod = "000000235959000R"; //YYMMDDhhmmsstnnR
+                        smppRequest.LanguageIndicator = LanguageIndicator.Unspecified;
+                        smppRequest.ShortMessage = messageText;
+                        smppRequest.PriorityFlag = Pdu.PriorityType.Highest;
+                        //smppRequest.RegisteredDelivery = (Pdu.RegisteredDeliveryType)0x1e;
+                        smppRequest.RegisteredDelivery = Pdu.RegisteredDeliveryType.OnSuccessOrFailure;
+
+                        SmppSubmitSmResp smppResponse = smppClient.SendRequest(smppRequest) as SmppSubmitSmResp;
+
+                        //if (smppResponse.CommandStatus != CommandStatus.ESME_ROK || smppResponse.MessageId == null)
+                        //{
+                        //}
                     }
-                    return smppResponse.MessageId;
                 }
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+                catch (Exception ex)
+                {
+                    return;
+                }
+            });
         }
 
         public string ExtractValidPhone(string phone)
