@@ -14,21 +14,23 @@ namespace GlobalPrint.ClientWeb
         [DataType(DataType.Password)]
         [StringLength(100, ErrorMessage = "Минимальная длина пароля - {2} символов.", MinimumLength = 6)]
         public string Password { get; set; }
+        
+        [Phone]
+        [Display(Name = "Phone")]
+        public string Phone { get; set; }
 
         public bool RememberMe { get; set; }
     }
 
     public class RegisterViewModel
     {
-        [Required]
         [Display(Name = "Name")]
         public string Name { get; set; }
 
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
-
-        [Required]
+        
         [Phone]
         [Display(Name = "Phone")]
         public string Phone { get; set; }

@@ -77,7 +77,7 @@ namespace GlobalPrint.Server
                 {
                     using (var smppClient = this._CreateSmppClient())
                     {
-                        phone = this.ExtractValidPhone(phone);
+                        phone = SmsUtility.ExtractValidPhone(phone);
 
                         var smppRequest = new SmppSubmitSm();
                         smppRequest.SourceAddressTon = Pdu.TonType.Alphanumeric;
@@ -111,7 +111,7 @@ namespace GlobalPrint.Server
             });
         }
 
-        public string ExtractValidPhone(string phone)
+        public static string ExtractValidPhone(string phone)
         {
             if (string.IsNullOrEmpty(phone))
             {

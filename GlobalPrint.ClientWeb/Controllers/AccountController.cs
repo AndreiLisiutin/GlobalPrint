@@ -69,43 +69,7 @@ namespace GlobalPrint.ClientWeb
         }
         #endregion
 
-        // GET: Account/Login
-        [HttpGet]
-        [AllowAnonymous]
-        public ActionResult Login()
-        {
-            return View();
-        }
-
-        // POST: /Account/Login
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Некорректно введен логин/пароль.");
-                    return View(model);
-            }
-        }
+        #region Register
 
         // GET: Account/Register
         [HttpGet]
@@ -121,6 +85,7 @@ namespace GlobalPrint.ClientWeb
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            model.Name = model.Email ?? model.Phone;
             // If we got this far, something failed, redisplay form
             if (!ModelState.IsValid)
             {
@@ -160,7 +125,7 @@ namespace GlobalPrint.ClientWeb
         public ActionResult RegisterFromPhone(RegisterViewModel model)
         {
             var smsUtility = new SmsUtility(this.GetSmsParams());
-            var phoneNumber = smsUtility.ExtractValidPhone(model.Phone);
+            var phoneNumber = SmsUtility.ExtractValidPhone(model.Phone);
             if (phoneNumber == null)
             {
                 return View("Register", model);
@@ -170,24 +135,86 @@ namespace GlobalPrint.ClientWeb
             //smsUtility.Send(model.Phone, "Ваш пароль: " + password);
             this.Session["SmsValidationPassword"] = password;
 
-            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = phoneNumber });
+            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = phoneNumber, FromRegistration = true });
         }
 
-        public ActionResult VerifyPhoneNumber(string phoneNumber)
+        #endregion
+        
+        #region Login
+
+        // GET: Account/Login
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult Login()
         {
+            return View();
+        }
+
+        // POST: /Account/Login
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Login", model);
+            }
+
+            // This doesn't count login failures towards account lockout
+            // To enable password failures to trigger account lockout, change to shouldLockout: true
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            switch (result)
+            {
+                case SignInStatus.Success:
+                    return RedirectToLocal(returnUrl);
+                case SignInStatus.LockedOut:
+                    return View("Lockout");
+                case SignInStatus.RequiresVerification:
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                case SignInStatus.Failure:
+                default:
+                    ModelState.AddModelError("", "Некорректно введен логин/пароль.");
+                    return View("Login", model);
+            }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> LoginFromPhone(LoginViewModel model)
+        {
+            var smsUtility = new SmsUtility(this.GetSmsParams());
+            model.Phone = SmsUtility.ExtractValidPhone(model.Phone);
+            if (string.IsNullOrEmpty(model.Phone))
+            {
+                return View("Login", model);
+            }
+
+            var password = smsUtility.GetneratePassword(6);
+            //smsUtility.Send(model.Phone, "Ваш пароль: " + password);
+            this.Session["SmsLoginValidationPassword"] = password;
+
+            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Phone, FromRegistration = false });
+        }
+        
+        #endregion
+        
+        public ActionResult VerifyPhoneNumber(string phoneNumber, bool FromRegistration)
+        {
+            ViewBag.FromRegistration = FromRegistration;
             return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
+        public async Task<ActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model, bool fromRegistration)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            string password = this.Session["SmsValidationPassword"].ToString();
+            string password = fromRegistration ? this.Session["SmsValidationPassword"] as string : this.Session["SmsLoginValidationPassword"] as string; 
             // Костыль пока
             model.Code = password;
             if (model.Code != password)
@@ -197,19 +224,45 @@ namespace GlobalPrint.ClientWeb
             }
             else
             {
-                this.Session["SmsValidationPassword"] = null;
-                RegisterViewModel userModel = new RegisterViewModel()
+                if (fromRegistration)
                 {
-                    Name = model.PhoneNumber,
-                    Email = model.PhoneNumber,
-                    Password = model.Code,
-                    ConfirmPassword = model.Code,
-                    Phone = model.PhoneNumber
-                };
-                return await this.Register(userModel);
+                    this.Session["SmsValidationPassword"] = null;
+                    RegisterViewModel userModel = new RegisterViewModel()
+                    {
+                        Name = model.PhoneNumber,
+                        Email = model.PhoneNumber,
+                        Password = model.Code,
+                        ConfirmPassword = model.Code,
+                        Phone = model.PhoneNumber
+                    };
+                    return await this.Register(userModel);
+                }
+                else
+                {
+                    this.Session["SmsLoginValidationPassword"] = null;
+
+                    var currentUser = await UserManager.FindByNameAsync(model.PhoneNumber);
+                    if (currentUser != null)
+                    {
+                        currentUser.Password = model.Code;
+                        currentUser.PasswordHash = UserManager.PasswordHasher.HashPassword(password);
+                        await UserManager.UpdateAsync(currentUser);
+
+                        LoginViewModel userModel = new LoginViewModel()
+                        {
+                            Email = model.PhoneNumber,
+                            Password = model.Code,
+                            Phone = model.PhoneNumber
+                        };
+                        return await this.Login(userModel, null);
+                    }
+                }
             }
+
+            ModelState.AddModelError("", "Не найден пользователь");
+            return View(fromRegistration ? "Register" : "Login");
         }
-        
+
 
         // POST: /Account/LogOff
         [HttpPost]

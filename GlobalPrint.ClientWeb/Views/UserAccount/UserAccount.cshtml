@@ -32,13 +32,13 @@
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">Email</label>
             <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @id = "inputEmail", @type = "email", @placeholder = "Email", @required = "true" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @readonly = "true", @id = "inputEmail", @type = "email", @placeholder = "Email", @required = "true" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">Телефон</label>
             <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", @id = "inputPhone", @type = "phone", @placeholder = "Телефон", @required = "false" })
+                @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", @readonly = "true", @id = "inputPhone", @type = "phone", @placeholder = "Телефон", @required = "false" })
             </div>
         </div>
         <div class="form-group">

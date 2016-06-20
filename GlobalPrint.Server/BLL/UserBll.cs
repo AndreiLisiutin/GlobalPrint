@@ -16,6 +16,15 @@ namespace GlobalPrint.Server
             }
         }
 
+        public User GetUserByPhone(string phone)
+        {
+            string formattedPhone = SmsUtility.ExtractValidPhone(phone);
+            using (var db = new DB())
+            {
+                return db.Users.SingleOrDefault(x => x.Phone == formattedPhone);
+            }
+        }
+
         public User SaveUser(User user)
         {
             using (var db = new DB())

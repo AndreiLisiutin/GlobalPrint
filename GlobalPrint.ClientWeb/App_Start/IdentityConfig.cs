@@ -24,6 +24,8 @@ namespace GlobalPrint.ClientWeb
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
 
+            manager.PasswordHasher = new CustomPasswordHasher();
+
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<ApplicationUser, int>(manager)
             {
@@ -40,7 +42,7 @@ namespace GlobalPrint.ClientWeb
                 RequireLowercase = false,
                 RequireUppercase = false,
             };
-            
+
             return manager;
         }
     }
@@ -61,6 +63,22 @@ namespace GlobalPrint.ClientWeb
         public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
         {
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
+        }
+    }
+
+    public class CustomPasswordHasher : IPasswordHasher
+    {
+        public string HashPassword(string password)
+        {
+            return password;
+        }
+
+        public PasswordVerificationResult VerifyHashedPassword(string hashedPassword, string providedPassword)
+        {
+            if (hashedPassword.Equals(providedPassword))
+                return PasswordVerificationResult.Success;
+            else
+                return PasswordVerificationResult.Failed;
         }
     }
 

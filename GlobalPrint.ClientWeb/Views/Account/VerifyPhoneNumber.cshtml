@@ -10,7 +10,7 @@
 }
 
 <div class="container">
-    @using (Html.BeginForm("VerifyPhoneNumber", "Account", FormMethod.Post, new { @class = "form-horizontal form-signin", role = "form" }))
+    @using (Html.BeginForm("VerifyPhoneNumber", "Account", new { FromRegistration = ViewBag.FromRegistration }, FormMethod.Post, new { @class = "form-horizontal form-signin", role = "form" }))
     {
         @Html.AntiForgeryToken()
         @Html.Hidden("phoneNumber", @Model.PhoneNumber)
