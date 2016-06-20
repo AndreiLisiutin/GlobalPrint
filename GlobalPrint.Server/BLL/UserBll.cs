@@ -34,11 +34,11 @@ namespace GlobalPrint.Server
             }
         }
 
-        public User FillUpBalance(User user, decimal upSumm)
+        public User FillUpBalance(int userID, decimal upSumm)
         {
             using (var db = new DB())
             {
-                User originalUser = db.Users.SingleOrDefault(x => x.UserID == user.UserID);
+                User originalUser = db.Users.SingleOrDefault(x => x.UserID == userID);
                 if (originalUser != null)
                 {
                     originalUser.AmountOfMoney += upSumm;
@@ -48,7 +48,7 @@ namespace GlobalPrint.Server
                 }
                 else
                 {
-                    throw new Exception("Не найден пользователь [ID=" + user.UserID + "]");
+                    throw new Exception("Не найден пользователь [ID=" + userID + "]");
                 }
             }
         }

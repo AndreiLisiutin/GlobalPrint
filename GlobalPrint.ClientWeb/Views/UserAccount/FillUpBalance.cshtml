@@ -5,21 +5,21 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="exampleModalLabel">Пополнение баланса</h4>
             </div>
-            <div class="modal-body">
-                @using (Html.BeginForm("UserAccount", "UserAccount", new { @class = "form-horizontal", role = "form" }))
-                {
+            @using (Html.BeginForm("UserAccount", "UserAccount", new { @class = "form-horizontal", role = "form" }))
+            {
+                <div class="modal-body" id="modal-body">
                     <div class="form-group">
                         <label class="col-sm-3 control-label text-left">Сумма</label>
                         <div class="col-sm-7">
-                            <input class="form-control currency" id="summ" name="upSumm" type="number" value="1" min="1" step="any" max="100000">
+                            <input class="form-control currency bottom-component" id="summ" name="upSumm" type="number" value="1" min="1" step="any" max="100000">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" value="FillUpBalance" name="action:FillUpBalance">Пополнить</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-                    </div>
-                }
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" value="FillUpBalance" name="action:FillUpBalance">Пополнить</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                </div>
+            }
         </div>
     </div>
 </div>
