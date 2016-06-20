@@ -31,10 +31,13 @@ namespace GlobalPrint.ClientWeb
             PrinterInfo printer = new PrinterBll().GetPrinterInfoByID(printerID);
             if (order == null)
             {
+                var rnd = new Random();
                 order = new PrintOrder()
                 {
                     PrinterID = printerID,
-                    Format = "A4"
+                    Format = "A4",
+                    SecretCode = new string(rnd.Next(1, 9).ToString()[0], 2)
+                        + new string(rnd.Next(1, 9).ToString()[0], 2)
                 };
             }
             List<string> formats = new List<string>()
@@ -124,7 +127,6 @@ namespace GlobalPrint.ClientWeb
         {
             int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
             User user = new UserBll().GetUserByID(userID);
-
             var model = new Printer_PrintConfirmationViewModel()
             {
                 order = order,
