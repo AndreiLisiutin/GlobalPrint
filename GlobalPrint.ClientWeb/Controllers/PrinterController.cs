@@ -198,6 +198,33 @@ namespace GlobalPrint.ClientWeb
             return View("AddPrinter", printer);
         }
 
+        [HttpGet]
+        [MultipleButton(Name = "action", Argument = "DelPrinter")]
+        public ActionResult DelPrinter(int PrinterID)
+        {
+            var printer = new PrinterBll().GetPrinterByID(PrinterID);
+
+            printer.UserID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("UserAccountPrinterList", "UserAccountPrinterList");
+            }
+
+            try
+            {
+                if (printer.PrinterID > 0)
+                {
+                    new PrinterBll().DelPrinter(printer);
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            return RedirectToAction("UserAccountPrinterList", "UserAccountPrinterList");
+        }
+
         [HttpPost]
         public ActionResult AddPrinter(Printer model)
         {
@@ -225,5 +252,6 @@ namespace GlobalPrint.ClientWeb
                 return View(model);
             }
         }
+
     }
 }

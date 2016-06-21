@@ -123,6 +123,32 @@ namespace GlobalPrint.Server
                 return printer;
             }
         }
+
+        public Printer DelPrinter(Printer printer)
+        {
+
+            using (var db = new DB())
+            {
+                var original = db.Printers.SingleOrDefault(x => x.PrinterID == printer.PrinterID);
+                if (original != null)
+                {
+                    var printSchedules = db.PrintSchedules.Where(e => e.PrinterID == printer.PrinterID).ToList();
+
+
+                    db.PrintSchedules.RemoveRange(printSchedules);
+                    db.SaveChanges();
+                    db.Printers.Remove(original);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Не найден принтер");
+                }
+                return printer;
+            }
+        }
+
+
         public List<Printer> GetUserPrinterList(int UserID)
         {
             using (var db = new DB())
