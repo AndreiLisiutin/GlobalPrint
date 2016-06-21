@@ -143,10 +143,10 @@ home.index = home.index || (function () {
         var printerInfo = info;
         google.maps.event.addListener(marker, 'click', function () {
             //infowindow.open(_map, marker);
-            $("#printer-info").html("Информация о принтере:<br><br>" +
-                "Название: " + printerInfo.Name + "<br><br>" +
-                "Расположение: " + printerInfo.Location + "<br><br>" +
-                "Цена ч/б печати(стр): " + printerInfo.BlackWhitePrintPrice + "руб.<br><br>");
+            $("#printer-info").html(
+                printerInfo.Name + "<br>" +
+                "Адрес: " + printerInfo.Location + "<br>" +
+                "Цена ч/б печати(стр): " + printerInfo.BlackWhitePrintPrice + "руб.<br>");
 
             $("#printer-print").prop("href", "/Printer/Print/" + printerInfo.PrinterID);
             $("#login-loginandprint").prop("href", "/Account/LoginAndPrint/" + printerInfo.PrinterID);
