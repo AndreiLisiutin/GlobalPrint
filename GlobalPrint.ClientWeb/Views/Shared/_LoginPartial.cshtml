@@ -5,7 +5,7 @@
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-        <ul class="nav navbar-nav navbar-right">
+        <ul id="main-nav-right" class="nav navbar-nav navbar-right">
             @Html.AntiForgeryToken()
 
             <li>

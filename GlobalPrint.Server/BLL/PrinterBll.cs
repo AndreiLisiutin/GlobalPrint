@@ -62,6 +62,52 @@ namespace GlobalPrint.Server
                 return printer;
             }
         }
+        public Printer EditPrinter(Printer printer)
+        {
+            if (string.IsNullOrEmpty(printer.Name))
+            {
+                throw new Exception("Не указано название принтера");
+            }
+            if (string.IsNullOrEmpty(printer.Location))
+            {
+                throw new Exception("Не указано расположение принтера");
+            }
+            if (printer.UserID <= 0)
+            {
+                throw new Exception("Не указан владелец принтера");
+            }
+            if (printer.Latitude <= 0)
+            {
+                throw new Exception("Не указана долгота расположения принтера");
+            }
+            if (printer.Longtitude <= 0)
+            {
+                throw new Exception("Не указана широта расположения принтера");
+            }
+            if (string.IsNullOrEmpty(printer.Phone))
+            {
+                throw new Exception("Не указан телефон принтера");
+            }
+            if (printer.BlackWhitePrintPrice <= 0)
+            {
+                throw new Exception("Не указана стоимость распечатки");
+            }
+
+            using (var db = new DB())
+            {
+                var original = db.Printers.SingleOrDefault(x => x.PrinterID == printer.PrinterID);
+                if (original != null)
+                {
+                    db.Entry(original).CurrentValues.SetValues(printer);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Не найден принтер");
+                }
+                return printer;
+            }
+        }
         public List<Printer> GetUserPrinterList(int UserID)
         {
             using (var db = new DB())

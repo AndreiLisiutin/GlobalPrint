@@ -181,11 +181,21 @@ namespace GlobalPrint.ClientWeb
             var order = new PrinterBll().GetPrintOrderByID(printOrderID);
             return View(order);
         }
-        
+
         [HttpGet]
+        [MultipleButton(Name = "action", Argument = "AddPrinter")]
         public ActionResult AddPrinter()
         {
-            return View(new Printer());
+            var printer = new Printer();
+            return View(printer);
+        }
+
+        [HttpGet]
+        [MultipleButton(Name = "action", Argument = "EditPrinter")]
+        public ActionResult EditPrinter(int PrinterID)
+        {
+            var printer = new PrinterBll().GetPrinterByID(PrinterID);
+            return View("AddPrinter", printer);
         }
 
         [HttpPost]
@@ -199,10 +209,17 @@ namespace GlobalPrint.ClientWeb
 
             try
             {
-                new PrinterBll().AddPrinter(model);
+                if (model.PrinterID > 0)
+                {
+                    new PrinterBll().EditPrinter(model);
+                }
+                else
+                {
+                    new PrinterBll().AddPrinter(model);
+                }
                 return RedirectToAction("UserAccountPrinterList", "UserAccountPrinterList");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
                 return View(model);
