@@ -16,7 +16,7 @@ namespace GlobalPrint.Server
         }
 
         #region Printer
-        
+
         public Printer GetPrinterByID(int printerID)
         {
             using (var db = new DB())
@@ -55,9 +55,24 @@ namespace GlobalPrint.Server
                 throw new Exception("Не указана стоимость распечатки");
             }
 
+
+
             using (var db = new DB())
             {
                 db.Printers.Add(printer);
+                db.SaveChanges();
+                List<PrinterSchedule> schedule = new List<PrinterSchedule>();
+                for (int i = 1; i <= 7; i++)
+                {
+                    schedule.Add(new PrinterSchedule()
+                    {
+                        CloseTime = new TimeSpan(18, 0, 0),
+                        DayOfWeek = i,
+                        OpenTime = new TimeSpan(9, 0, 0),
+                        PrinterID = printer.PrinterID
+                    });
+                }
+                db.PrintSchedules.AddRange(schedule);
                 db.SaveChanges();
                 return printer;
             }
