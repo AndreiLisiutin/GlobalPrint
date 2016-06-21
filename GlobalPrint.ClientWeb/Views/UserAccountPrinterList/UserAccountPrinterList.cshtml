@@ -6,7 +6,7 @@
 }
 @{int rowNo = 0;}
 <div class="container">
-    @using (Html.BeginForm(new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("AddPrinter", "Printer", FormMethod.Get, new { @class = "form-horizontal", role = "form" }))
     {
         if (!ViewData.ModelState.IsValid)
         {
@@ -37,5 +37,11 @@
                 }
             </tbody>
         </table>
+
+        <div class="form-group">
+            <div class="col-sm-10">
+                <button class="btn btn-default" type="submit">Добавить</button>
+            </div>
+        </div>
     }
 </div>

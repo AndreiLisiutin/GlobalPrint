@@ -23,6 +23,9 @@
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
     background-color: white;
+}
+
+.printer-info-wrapper {
     padding-left: 10px;
     padding-top: 10px;
 }

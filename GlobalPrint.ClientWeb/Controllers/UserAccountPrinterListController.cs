@@ -16,8 +16,9 @@ namespace GlobalPrint.ClientWeb
     {
         // GET: UserAccountPrinterList/UserAccountPrinterList
         [HttpGet]
-        public ActionResult UserAccountPrinterList(int UserID)
+        public ActionResult UserAccountPrinterList()
         {
+            int UserID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
             var printerList = new PrinterBll().GetUserPrinterList(UserID);
             return View(printerList);
         }

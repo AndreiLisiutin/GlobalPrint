@@ -14,6 +14,9 @@ namespace GlobalPrint.Server
             public Printer printer { get; set; }
             public PrinterSchedule schedule { get; set; }
         }
+
+        #region Printer
+        
         public Printer GetPrinterByID(int printerID)
         {
             using (var db = new DB())
@@ -21,6 +24,56 @@ namespace GlobalPrint.Server
                 return db.Printers.First(e => e.PrinterID == printerID);
             }
         }
+        public Printer AddPrinter(Printer printer)
+        {
+            if (string.IsNullOrEmpty(printer.Name))
+            {
+                throw new Exception("Не указано название принтера");
+            }
+            if (string.IsNullOrEmpty(printer.Location))
+            {
+                throw new Exception("Не указано расположение принтера");
+            }
+            if (printer.UserID <= 0)
+            {
+                throw new Exception("Не указан владелец принтера");
+            }
+            if (printer.Latitude <= 0)
+            {
+                throw new Exception("Не указана долгота расположения принтера");
+            }
+            if (printer.Longtitude <= 0)
+            {
+                throw new Exception("Не указана широта расположения принтера");
+            }
+            if (string.IsNullOrEmpty(printer.Phone))
+            {
+                throw new Exception("Не указан телефон принтера");
+            }
+            if (printer.BlackWhitePrintPrice <= 0)
+            {
+                throw new Exception("Не указана стоимость распечатки");
+            }
+
+            using (var db = new DB())
+            {
+                db.Printers.Add(printer);
+                db.SaveChanges();
+                return printer;
+            }
+        }
+        public List<Printer> GetUserPrinterList(int UserID)
+        {
+            using (var db = new DB())
+            {
+                return db.Printers.Where(e => e.UserID == UserID).ToList();
+            }
+        }
+
+        #endregion
+
+        #region PrinterOrder
+
         public PrinterInfo GetPrinterInfoByID(int printerID)
         {
             using (var db = new DB())
@@ -77,12 +130,7 @@ namespace GlobalPrint.Server
             }
         }
 
-        public List<Printer> GetUserPrinterList(int UserID)
-        {
-            using (var db = new DB())
-            {
-                return db.Printers.Where(e => e.UserID == UserID).ToList();
-            }
-        }
+        #endregion
+
     }
 }

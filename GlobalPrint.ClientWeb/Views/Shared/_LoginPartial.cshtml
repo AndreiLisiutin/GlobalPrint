@@ -1,11 +1,11 @@
 ﻿@using Microsoft.AspNet.Identity
 
-<ul class="nav navbar-nav navbar-right">
 
-    @if (Request.IsAuthenticated)
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-        {
+        <ul class="nav navbar-nav navbar-right">
             @Html.AntiForgeryToken()
 
             <li>
@@ -18,25 +18,30 @@
                 @Html.ActionLink("Входящие заказы", "UserRecievedPrintOrderList", "UserRecievedPrintOrderList", new { UserID = User.Identity.GetUserId() }, new { })
             </li>
             <li>
-                @Html.ActionLink(User.Identity.GetUserName(), "UserAccount", "UserAccount", new { UserID = User.Identity.GetUserId() }, new { })
+                @Html.ActionLink(User.Identity.GetUserName(), "UserAccount", "UserAccount", new { UserID = User.Identity.GetUserId() }, new { @class = "font-bold" })
             </li>
             <li>
-                <a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a>
+                <a href="javascript:document.getElementById('logoutForm').submit()" class="font-bold">Выйти</a>
             </li>
-        }
+            <li>
+                @Html.ActionLink("О нас", "Team", "Team")
+            </li>
+        </ul>
     }
-    else
-    {
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Зарегистрироваться", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+            @Html.ActionLink("Зарегистрироваться", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "font-bold", id = "registerLink" })
         </li>
         <li>
-            @Html.ActionLink("Войти", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+            @Html.ActionLink("Войти", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "font-bold", id = "loginLink" })
         </li>
-    }
+        <li>
+            @Html.ActionLink("О нас", "Team", "Team")
+        </li>
+    </ul>
+}
 
-    <li>
-        @Html.ActionLink("О нас", "Team", "Team")
-    </li>
 
-</ul>

@@ -181,5 +181,32 @@ namespace GlobalPrint.ClientWeb
             var order = new PrinterBll().GetPrintOrderByID(printOrderID);
             return View(order);
         }
+        
+        [HttpGet]
+        public ActionResult AddPrinter()
+        {
+            return View(new Printer());
+        }
+
+        [HttpPost]
+        public ActionResult AddPrinter(Printer model)
+        {
+            model.UserID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                new PrinterBll().AddPrinter(model);
+                return RedirectToAction("UserAccountPrinterList", "UserAccountPrinterList");
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+        }
     }
 }

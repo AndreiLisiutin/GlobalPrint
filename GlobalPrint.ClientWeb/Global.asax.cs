@@ -13,6 +13,8 @@ namespace GlobalPrint.ClientWeb
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            ModelBinders.Binders.Add(typeof(float?), new FloatModelBinder());
+            ModelBinders.Binders.Add(typeof(float), new FloatModelBinder());
         }
     }
 }

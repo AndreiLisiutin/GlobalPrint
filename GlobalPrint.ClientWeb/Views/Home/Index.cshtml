@@ -17,18 +17,22 @@
     <div id="wrapper" class="toggled">
 
         <div id="sidebar-wrapper">
-            <div id="printer-info">
+            <div class="printer-info-wrapper">
+                <div id="printer-info">
 
+                </div>
+
+
+                @if (User.Identity.IsAuthenticated)
+            {
+                    <a href="/Printer/Print/{PrinterID}" class="btn btn-default" id="printer-print">Печать</a>
+                }
+                else
+                {
+                    <a href="/Account/LoginAndPrint/{PrinterID}" class="btn btn-default" id="login-loginandprint">Печать</a>
+                }
+                <a href="#" class="btn btn-default" id="close-printer-info">Закрыть</a>
             </div>
-            @if (User.Identity.IsAuthenticated)
-            {
-                <a href="/Printer/Print/{PrinterID}" class="btn btn-default" id="printer-print">Печать</a>
-            }
-            else
-            {
-                <a href="/Account/LoginAndPrint/{PrinterID}" class="btn btn-default" id="login-loginandprint">Печать</a>
-            }
-            <a href="#" class="btn btn-default" id="close-printer-info">Закрыть</a>
         </div>
 
         <div id="page-content-wrapper">
