@@ -177,6 +177,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Resources\Documents\TeamPhoto\Andrei Z.jpg" />
+    <Content Include="Resources\Documents\TeamPhoto\Andrei.jpg" />
+    <Content Include="Resources\Documents\TeamPhoto\Beer.jpg" />
+    <Content Include="Resources\Documents\TeamPhoto\Ilya.jpg" />
+    <Content Include="Resources\Documents\TeamPhoto\Sergei.jpg" />
+    <Content Include="Resources\Documents\TeamPhoto\Viktor.jpg" />
     <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.js" />
     <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.min.js" />
     <Content Include="Resources\Libraries\bootstrap.file-input\fileinput.js" />
@@ -188,6 +194,7 @@
     <Content Include="Resources\Stylesheets\account\login.css" />
     <Content Include="Resources\Stylesheets\home\index.css" />
     <Content Include="Resources\Stylesheets\base.css" />
+    <Content Include="Resources\Stylesheets\team\team.css" />
     <Content Include="Resources\Stylesheets\userAccount\userAccount.css" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -195,6 +202,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\Team\TeamController.cs" />
     <Compile Include="Controllers\UserPrintOrderListController.cs" />
     <Compile Include="Controllers\UserRecievedPrintOrderListController.cs" />
     <Compile Include="Controllers\UserAccountPrinterListController.cs" />
@@ -240,6 +248,7 @@
     <Content Include="Views\UserAccount\FillUpBalance.cshtml" />
     <Content Include="Views\Account\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\UserRecievedPrintOrderList\ConfirmPrintOrder.cshtml" />
+    <Content Include="Views\Team\Team.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

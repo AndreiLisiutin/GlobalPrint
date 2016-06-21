@@ -1,11 +1,13 @@
 ﻿@using Microsoft.AspNet.Identity
-@if (Request.IsAuthenticated)
-{
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-        @Html.AntiForgeryToken()
 
-        <ul class="nav navbar-nav navbar-right">
+<ul class="nav navbar-nav navbar-right">
+
+    @if (Request.IsAuthenticated)
+    {
+        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+        {
+            @Html.AntiForgeryToken()
+
             <li>
                 @Html.ActionLink("Мои Принтеры", "UserAccountPrinterList", "UserAccountPrinterList", new { UserID = User.Identity.GetUserId() }, new { })
             </li>
@@ -18,18 +20,23 @@
             <li>
                 @Html.ActionLink(User.Identity.GetUserName(), "UserAccount", "UserAccount", new { UserID = User.Identity.GetUserId() }, new { })
             </li>
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a></li>
-        </ul>
+            <li>
+                <a href="javascript:document.getElementById('logoutForm').submit()">Выйти</a>
+            </li>
+        }
     }
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
+    else
+    {
         <li>
             @Html.ActionLink("Зарегистрироваться", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
         </li>
         <li>
             @Html.ActionLink("Войти", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
         </li>
-    </ul>
-}
+    }
+
+    <li>
+        @Html.ActionLink("О нас", "Team", "Team")
+    </li>
+
+</ul>
