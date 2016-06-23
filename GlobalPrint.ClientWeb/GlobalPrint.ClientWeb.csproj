@@ -177,6 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Resources\Documents\Logo\main_logo.png" />
     <Content Include="Resources\Documents\TeamPhoto\Andrei Z.jpg" />
     <Content Include="Resources\Documents\TeamPhoto\Andrei.jpg" />
     <Content Include="Resources\Documents\TeamPhoto\Beer.jpg" />
