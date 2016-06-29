@@ -54,6 +54,8 @@ home.index = home.index || (function () {
                     var marker = new google.maps.Marker({
                         position: location,
                         map: _map,
+			animation: google.maps.Animation.DROP,
+			label: "Я",
                         title: "Ваше текущее положение"
                     });
 
@@ -133,10 +135,16 @@ home.index = home.index || (function () {
         }
     };
 
+
+
+    var image = "/Resources/Images/printer_on.png";
+
     var _addMarker = function (info) {
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(info.Latitude, info.Longtitude),
             map: _map,
+            icon: image,
+  
             title: info.Name
         });
 
