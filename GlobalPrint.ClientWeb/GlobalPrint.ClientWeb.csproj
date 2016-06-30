@@ -184,6 +184,9 @@
     <Content Include="Resources\Documents\TeamPhoto\Ilya.jpg" />
     <Content Include="Resources\Documents\TeamPhoto\Sergei.jpg" />
     <Content Include="Resources\Documents\TeamPhoto\Viktor.jpg" />
+    <Content Include="Resources\Images\printer_offline.png" />
+    <Content Include="Resources\Images\printer_online.png" />
+    <Content Include="Resources\Images\printer__deactive.png" />
     <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.js" />
     <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.min.js" />
     <Content Include="Resources\Libraries\bootstrap.file-input\fileinput.js" />

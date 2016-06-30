@@ -137,7 +137,7 @@ home.index = home.index || (function () {
 
 
 
-    var image = "/Resources/Images/printer_on.png";
+    var image = "/Resources/Images/printer_online.png";
 
     var _addMarker = function (info) {
         var marker = new google.maps.Marker({
