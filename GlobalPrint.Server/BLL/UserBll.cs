@@ -21,7 +21,7 @@ namespace GlobalPrint.Server
             string formattedPhone = SmsUtility.ExtractValidPhone(phone);
             using (var db = new DB())
             {
-                return db.Users.SingleOrDefault(x => x.Phone == formattedPhone);
+                return db.Users.SingleOrDefault(x => x.PhoneNumber == formattedPhone);
             }
         }
 

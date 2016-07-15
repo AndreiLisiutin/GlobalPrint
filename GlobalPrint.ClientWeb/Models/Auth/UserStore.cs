@@ -14,7 +14,9 @@ namespace GlobalPrint.ClientWeb
     public class UserStore<TUser> : IUserStore<TUser, int>,
         IUserLockoutStore<TUser, int>,
         IUserPasswordStore<TUser, int>,
-        IUserTwoFactorStore<TUser, int>
+        IUserTwoFactorStore<TUser, int>,
+        IUserPhoneNumberStore<TUser, int>,
+        IUserEmailStore<TUser, int>
         where TUser : IdentityUser
     {
         private ApplicationDbContext _proxyContext { get; set; }
@@ -28,32 +30,20 @@ namespace GlobalPrint.ClientWeb
 
         public Task CreateAsync(TUser user)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException("Null or empty argument: user");
-            }
-
-            var userToAdd = user.ToDbUser();
-            userToAdd.Login = userToAdd.Name;
-            userToAdd.Phone = userToAdd.Phone ?? "";
+            if (user == null) throw new ArgumentNullException("user");
 
             using (var _context = new DB())
             {
-                var savedUser = _context.Users.Add(userToAdd);
+                var savedUser = _context.Users.Add(user);
                 _context.SaveChanges();
 
-                user.Id = savedUser.UserID;
                 return Task.FromResult<object>(user);
-            }                
+            }
         }
 
         public Task DeleteAsync(TUser user)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException("Null or empty argument: user");
-            }
-
+            if (user == null) throw new ArgumentNullException("user");
 
             using (var _context = new DB())
             {
@@ -69,50 +59,37 @@ namespace GlobalPrint.ClientWeb
 
         public Task<TUser> FindByIdAsync(int userId)
         {
-            if (userId <= 0)
-            {
-                throw new ArgumentException("Empty argument: userId");
-            }
+            if (userId <= 0) throw new ArgumentException("userId");
 
+            var result = _proxyContext.Users.SingleOrDefault(x => x.UserID == userId) as TUser;
+            return Task.FromResult<TUser>(result);
 
             using (var _context = new DB())
             {
-                var result = IdentityUser.FromDbUser(_context.Users.SingleOrDefault(x => x.UserID == userId)) as TUser;
-                if (result != null)
-                {
-                    return Task.FromResult<TUser>(result);
-                }
-
-                return Task.FromResult<TUser>(null);
+                result = _context.Users.SingleOrDefault(x => x.UserID == userId) as TUser;
+                return Task.FromResult<TUser>(result);
             }
         }
 
         public Task<TUser> FindByNameAsync(string userName)
         {
-            if (string.IsNullOrEmpty(userName))
-            {
-                throw new ArgumentException("Null or empty argument: userName");
-            }
+            if (string.IsNullOrEmpty(userName)) throw new ArgumentException("userName");
+
+            var result = _proxyContext.Users.SingleOrDefault(x => x.Email == userName) as TUser;
+            return Task.FromResult<TUser>(result);
 
             using (var _context = new DB())
             {
-                var temp = _context.Users.SingleOrDefault(x => x.Login == userName || x.Email == userName);
-                var result = IdentityUser.FromDbUser(temp) as TUser;
-                if (result != null)
-                {
-                    return Task.FromResult<TUser>(result);
-                }
+                var phone = SmsUtility.ExtractValidPhone(userName);
+                result = _context.Users.SingleOrDefault(x => x.Email == userName || x.PhoneNumber == phone && x.PhoneNumber != null) as TUser;
 
-                return Task.FromResult<TUser>(null);
+                return Task.FromResult<TUser>(result);
             }
         }
 
         public Task UpdateAsync(TUser user)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException("Null or empty argument: user");
-            }
+            if (user == null) throw new ArgumentNullException("user");
 
             using (var _context = new DB())
             {
@@ -135,6 +112,7 @@ namespace GlobalPrint.ClientWeb
         #endregion
 
         #region LockoutStore
+
         public Task<int> GetAccessFailedCountAsync(TUser user)
         {
             return Task.FromResult(0);
@@ -182,14 +160,11 @@ namespace GlobalPrint.ClientWeb
 
         public Task<string> GetPasswordHashAsync(TUser user)
         {
-            if (user == null)
-            {
-                throw new ArgumentException("Empty argument: user");
-            }
+            if (user == null) throw new ArgumentException("user");
 
             using (var _context = new DB())
             {
-                var result = IdentityUser.FromDbUser(_context.Users.SingleOrDefault(x => x.UserID == user.Id)) as TUser;
+                var result = _context.Users.SingleOrDefault(x => x.UserID == user.Id) as TUser;
                 if (result != null)
                 {
                     return Task.FromResult<string>(result.PasswordHash);
@@ -200,16 +175,12 @@ namespace GlobalPrint.ClientWeb
 
         public Task<bool> HasPasswordAsync(TUser user)
         {
-            if (user == null)
-            {
-                throw new ArgumentException("Empty argument: user");
-            }
+            if (user == null) throw new ArgumentException("user");
 
             using (var _context = new DB())
             {
-                var result = IdentityUser.FromDbUser(_context.Users.SingleOrDefault(x => x.UserID == user.Id)) as TUser;
+                var result = _context.Users.SingleOrDefault(x => x.UserID == user.Id) as TUser;
                 var hasPassword = !string.IsNullOrEmpty(result.PasswordHash);
-
                 return Task.FromResult<bool>(hasPassword);
             }
         }
@@ -229,6 +200,99 @@ namespace GlobalPrint.ClientWeb
         }
 
         #endregion
+
+        #region IUserPhoneNumberStore
+
+        public Task SetPhoneNumberAsync(TUser user, string phoneNumber)
+        {
+            if (user == null) throw new ArgumentNullException("user");
+
+            user.PhoneNumber = phoneNumber;
+            UpdateAsync(user);
+
+            return Task.FromResult(user);
+        }
+
+        public Task<string> GetPhoneNumberAsync(TUser user)
+        {
+            if (user == null) throw new ArgumentNullException("user");
+
+            return Task.FromResult(user.PhoneNumber);
+        }
+
+        public Task<bool> GetPhoneNumberConfirmedAsync(TUser user)
+        {
+            if (user == null) throw new ArgumentNullException("user");
+
+            return Task.FromResult(user.PhoneNumberConfirmed);
+        }
+
+        public Task SetPhoneNumberConfirmedAsync(TUser user, bool confirmed)
+        {
+            if (user == null) throw new ArgumentNullException("user");
+
+            user.PhoneNumberConfirmed = confirmed;
+            UpdateAsync(user);
+
+            return Task.FromResult(0);
+        }
+
+        #endregion
+
+        #region IUserEmailStore
+
+        public Task SetEmailAsync(TUser user, string email)
+        {
+            if (user == null) throw new ArgumentNullException("user");
+
+            user.Email = email;
+            UpdateAsync(user);
+
+            return Task.FromResult(0);
+        }
+
+        public Task<string> GetEmailAsync(TUser user)
+        {
+            if (user == null) throw new ArgumentNullException("user");
+
+            return Task.FromResult(user.Email);
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(TUser user)
+        {
+            if (user == null) throw new ArgumentNullException("user");
+
+            return Task.FromResult(user.EmailConfirmed);
+        }
+
+        public Task SetEmailConfirmedAsync(TUser user, bool confirmed)
+        {
+            if (user == null) throw new ArgumentNullException("user");
+
+            user.EmailConfirmed = confirmed;
+            UpdateAsync(user);
+
+            return Task.FromResult(0);
+        }
+
+        public Task<TUser> FindByEmailAsync(string email)
+        {
+            if (String.IsNullOrEmpty(email)) throw new ArgumentNullException("email");
+
+            using (var _context = new DB())
+            {
+                var result = _context.Users.SingleOrDefault(x => x.Email == email) as TUser;
+                if (result != null)
+                {
+                    return Task.FromResult<TUser>(result);
+                }
+            }
+
+            return Task.FromResult<TUser>(null);
+        }
+
+        #endregion
+
     }
 
 }

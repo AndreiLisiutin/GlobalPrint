@@ -32,7 +32,7 @@ namespace GlobalPrint.ClientWeb
             return new ApplicationDbContext();
         }
 
-        public DbSet<IdentityUser> Users { get; set; }
+        public DbSet<ApplicationUser> Users { get; set; }
     }
 
 }

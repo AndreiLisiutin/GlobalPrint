@@ -84,9 +84,9 @@ namespace GlobalPrint.Server
                 db.SaveChanges();
             }
 
-            if (!string.IsNullOrEmpty(client.Phone))
+            if (!string.IsNullOrEmpty(client.PhoneNumber))
             {
-                new SmsUtility(smsParams).Send(client.Phone, "Заказ №" + order.PrintOrderID + " " + status.Status.ToLower());
+                new SmsUtility(smsParams).Send(client.PhoneNumber, "Заказ №" + order.PrintOrderID + " " + status.Status.ToLower());
             }
         }
     }

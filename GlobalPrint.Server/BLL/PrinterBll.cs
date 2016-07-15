@@ -208,10 +208,10 @@ namespace GlobalPrint.Server
                 client.AmountOfMoney -= order.Price;
                 db.SaveChanges();
 
-                if (!string.IsNullOrEmpty(printerOwner.Phone))
+                if (!string.IsNullOrEmpty(printerOwner.PhoneNumber))
                 {
                     string message = "Поступил новый заказ №" + order.PrintOrderID + ".";
-                    new SmsUtility(smsParams).Send(printerOwner.Phone, message);
+                    new SmsUtility(smsParams).Send(printerOwner.PhoneNumber, message);
                 }
                 return order;
             }

@@ -15,10 +15,7 @@ namespace GlobalPrint.ClientWeb
     public class AccountController : BaseController
     {
         #region Helpers
-
-        // Used for XSRF protection when adding external logins
-        private const string XsrfKey = "XsrfId";
-
+        
         private IAuthenticationManager AuthenticationManager
         {
             get
@@ -92,18 +89,14 @@ namespace GlobalPrint.ClientWeb
                 return View("Register", model);
             }
 
-            var user = new ApplicationUser { UserName = model.Name, Email = model.Email, Phone = model.Phone ?? "" };
+            var user = new ApplicationUser { UserName = model.Name, Email = model.Email, PhoneNumber = model.Phone ?? "" };
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                await SignInManager.PasswordSignInAsync(model.Email, model.Password, false, shouldLockout: false);
-                //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                var currentUser = await this.UserManager.FindByNameAsync(model.Name);
+                //await SignInManager.PasswordSignInAsync(model.Email, model.Password, false, shouldLockout: false);
+                await SignInManager.SignInAsync(currentUser, isPersistent: false, rememberBrowser: false);
 
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
                 string printerID = Session["Account_PrinterID"] as string;
                 if (printerID != null)
                 {
@@ -244,17 +237,16 @@ namespace GlobalPrint.ClientWeb
                     var currentUser = await UserManager.FindByNameAsync(model.PhoneNumber);
                     if (currentUser != null)
                     {
-                        currentUser.Password = model.Code;
-                        currentUser.PasswordHash = UserManager.PasswordHasher.HashPassword(password);
-                        await UserManager.UpdateAsync(currentUser);
+                        await SignInManager.SignInAsync(currentUser, isPersistent: false, rememberBrowser: false);
 
-                        LoginViewModel userModel = new LoginViewModel()
+                        string printerID = Session["Account_PrinterID"] as string;
+                        if (printerID != null)
                         {
-                            Email = model.PhoneNumber,
-                            Password = model.Code,
-                            Phone = model.PhoneNumber
-                        };
-                        return await this.Login(userModel, null);
+                            Session["Account_PrinterID"] = null;
+                            return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
+                        }
+
+                        return RedirectToAction("Index", "Home");
                     }
                 }
             }
