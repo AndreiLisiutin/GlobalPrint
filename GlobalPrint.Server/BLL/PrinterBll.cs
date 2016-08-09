@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GlobalPrint.Server.DAL;
+using GlobalPrint.Server.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -55,26 +57,27 @@ namespace GlobalPrint.Server
                 throw new Exception("Не указана стоимость распечатки");
             }
 
-
-
             using (var db = new DB())
             {
-                db.Printers.Add(printer);
-                db.SaveChanges();
-                List<PrinterSchedule> schedule = new List<PrinterSchedule>();
-                for (int i = 1; i <= 7; i++)
+                using (var dbContextTransaction = db.Database.BeginTransaction())
                 {
-                    schedule.Add(new PrinterSchedule()
+                    new PrinterRepository(db).Insert(printer);
+
+                    List<PrinterSchedule> schedule = new List<PrinterSchedule>();
+                    for (int i = 1; i <= 7; i++)
                     {
-                        CloseTime = new TimeSpan(18, 0, 0),
-                        DayOfWeek = i,
-                        OpenTime = new TimeSpan(9, 0, 0),
-                        PrinterID = printer.PrinterID
-                    });
+                        schedule.Add(new PrinterSchedule()
+                        {
+                            CloseTime = new TimeSpan(18, 0, 0),
+                            DayOfWeek = i,
+                            OpenTime = new TimeSpan(9, 0, 0),
+                            PrinterID = printer.PrinterID
+                        });
+                    }
+                    db.PrintSchedules.AddRange(schedule);
+                    db.SaveChanges();
+                    return printer;
                 }
-                db.PrintSchedules.AddRange(schedule);
-                db.SaveChanges();
-                return printer;
             }
         }
         public Printer EditPrinter(Printer printer)

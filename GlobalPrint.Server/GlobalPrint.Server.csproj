@@ -68,8 +68,12 @@
     <Compile Include="BLL\PrintOrderBll.cs" />
     <Compile Include="BLL\HomeBll.cs" />
     <Compile Include="BLL\PrinterBll.cs" />
+    <Compile Include="BLL\UserActionLogBll.cs" />
     <Compile Include="BLL\UserBll.cs" />
     <Compile Include="DAL\EF\PrintDbContext.cs" />
+    <Compile Include="DAL\GenericRepository.cs" />
+    <Compile Include="DAL\Repository\PrinterRepository.cs" />
+    <Compile Include="DAL\Repository\UserActionLogRepository.cs" />
     <Compile Include="Models\Business\PrintOrderInfo.cs" />
     <Compile Include="Models\Business\PrinterInfo.cs" />
     <Compile Include="Models\Domain\PrinterSchedule.cs" />
@@ -77,6 +81,7 @@
     <Compile Include="Models\Domain\Printer.cs" />
     <Compile Include="Models\Domain\PrintOrderStatus.cs" />
     <Compile Include="Models\Domain\User.cs" />
+    <Compile Include="Models\Domain\UserActionLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Extension\StringExtension.cs" />
     <Compile Include="Utilities\SmsUtility.cs" />
@@ -88,6 +93,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
