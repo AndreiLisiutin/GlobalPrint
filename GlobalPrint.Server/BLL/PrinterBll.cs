@@ -36,7 +36,7 @@ namespace GlobalPrint.Server
             {
                 throw new Exception("Не указано расположение принтера");
             }
-            if (printer.UserID <= 0)
+            if (printer.OwnerUserID <= 0)
             {
                 throw new Exception("Не указан владелец принтера");
             }
@@ -90,7 +90,7 @@ namespace GlobalPrint.Server
             {
                 throw new Exception("Не указано расположение принтера");
             }
-            if (printer.UserID <= 0)
+            if (printer.OwnerUserID <= 0)
             {
                 throw new Exception("Не указан владелец принтера");
             }
@@ -156,7 +156,7 @@ namespace GlobalPrint.Server
         {
             using (var db = new DB())
             {
-                return db.Printers.Where(e => e.UserID == UserID).ToList();
+                return db.Printers.Where(e => e.OwnerUserID == UserID).ToList();
             }
         }
 
@@ -204,11 +204,11 @@ namespace GlobalPrint.Server
             {
                 var client = db.Users.First(e => e.UserID == order.UserID);
                 var printerOwner = db.Printers.Where(e => e.PrinterID == order.PrinterID)
-                    .Join(db.Users, e => e.UserID, e => e.UserID, (p, u) => u)
+                    .Join(db.Users, e => e.OwnerUserID, e => e.UserID, (p, u) => u)
                     .First();
 
                 db.PrintOrders.Add(order);
-                client.AmountOfMoney -= order.Price;
+                client.AmountOfMoney -= order.PricePerPage;
                 db.SaveChanges();
 
                 if (!string.IsNullOrEmpty(printerOwner.PhoneNumber))

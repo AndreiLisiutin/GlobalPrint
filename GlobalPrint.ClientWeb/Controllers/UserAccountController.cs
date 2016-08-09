@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.Text.RegularExpressions;
 using GlobalPrint.Server.Utilities;
+using GlobalPrint.Server.Models;
 
 namespace GlobalPrint.ClientWeb
 {

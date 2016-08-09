@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GlobalPrint.Server
+namespace GlobalPrint.Server.Models
 {
     [Table("printer", Schema = "public")]
     public class Printer
@@ -18,16 +18,23 @@ namespace GlobalPrint.Server
         public string Name { get; set; }
         [Column("location")]
         public string Location { get; set; }
-        [Column("user_id")]
-        public int UserID { get; set; }
+        [Column("user_id_owner")]
+        public int OwnerUserID { get; set; }
         [Column("latitude")]
         public float Latitude { get; set; }
         [Column("longtitude")]
         public float Longtitude { get; set; }
         [Column("phone")]
         public string Phone { get; set; }
-        [Column("black_white_print_price")]
+        [Column("email")]
+        public string Email { get; set; }
+        [Column("user_id_operator")]
+        public int OperatorUserID { get; set; }
+
+        [Obsolete]
+        [NotMapped]
         public decimal BlackWhitePrintPrice { get; set; }
+        [Obsolete]
         [NotMapped]
         public string BlackWhitePrintPriceInCurrency 
         {

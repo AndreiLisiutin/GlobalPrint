@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GlobalPrint.Server.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,7 +46,7 @@ namespace GlobalPrint.Server
                     from PrintOrder in db.PrintOrders
                     join Printer in db.Printers on PrintOrder.PrinterID equals Printer.PrinterID
                     join Status in db.PrintOrderStatuses on PrintOrder.PrintOrderStatusID equals Status.PrintOrderStatusID
-                    where Printer.UserID == UserID
+                    where Printer.OwnerUserID == UserID
                     orderby PrintOrder.OrderedOn descending
                     select new PrintOrderInfo() { PrintOrder = PrintOrder, Printer = Printer, Status = Status };
                 return printOrderList.ToList();
@@ -63,7 +64,7 @@ namespace GlobalPrint.Server
                 order = db.PrintOrders.First(e => e.PrintOrderID == printOrderID);
                 client = db.Users.First(e => e.UserID == order.UserID);
                 printerOwner = db.Printers.Where(e => e.PrinterID == order.PrinterID)
-                    .Join(db.Users, e => e.UserID, e => e.UserID, (p, u) => u).
+                    .Join(db.Users, e => e.OwnerUserID, e => e.UserID, (p, u) => u).
                     First();
                 if (order.PrintOrderStatusID == (int)statusID)
                 {
@@ -73,11 +74,11 @@ namespace GlobalPrint.Server
                 if (statusID == PrintOrderStatusEnum.Printed && order.PrintedOn == null)
                 {
                     order.PrintedOn = DateTime.Now;
-                    printerOwner.AmountOfMoney += order.Price;
+                    printerOwner.AmountOfMoney += order.PricePerPage;
                 }
                 else if (statusID == PrintOrderStatusEnum.Rejected)
                 {
-                    client.AmountOfMoney += order.Price;
+                    client.AmountOfMoney += order.PricePerPage;
                 }
                 status = db.PrintOrderStatuses.First(e => e.PrintOrderStatusID == (int)statusID);
 

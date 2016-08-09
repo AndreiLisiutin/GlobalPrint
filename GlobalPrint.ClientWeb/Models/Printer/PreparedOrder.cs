@@ -1,4 +1,5 @@
 ﻿using GlobalPrint.Server;
+using GlobalPrint.Server.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

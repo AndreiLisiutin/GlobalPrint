@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.IO;
 using System.Collections.Generic;
+using GlobalPrint.Server.Models;
 
 namespace GlobalPrint.ClientWeb
 {

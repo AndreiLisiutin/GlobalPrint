@@ -8,19 +8,13 @@ using System.Threading.Tasks;
 
 namespace GlobalPrint.Server.Models
 {
-    [Table("user_action_log", Schema = "public")]
-    public class UserActionLog
+    [Table("user_action_type", Schema = "public")]
+    public class UserActionType
     {
         [Key]
-        [Column("user_action_log_id")]
-        public int UserActionLogID { get; set; }
         [Column("user_action_type_id")]
         public int UserActionTypeID { get; set; }
-        [Column("date")]
-        public DateTime Date { get; set; }
-        [Column("log")]
-        public string Log { get; set; }
-        [Column("user_id")]
-        public int UserID { get; set; }
+        [Column("name")]
+        public string Name { get; set; }
     }
 }

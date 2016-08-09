@@ -3,6 +3,7 @@ using AberrantSMPP.Packet;
 using AberrantSMPP.Packet.Request;
 using AberrantSMPP.Packet.Response;
 using GlobalPrint.Server;
+using GlobalPrint.Server.Models;
 using iTextSharp.text.pdf;
 using Microsoft.AspNet.Identity;
 using System;
@@ -124,7 +125,7 @@ namespace GlobalPrint.ClientWeb
             var order = model.order;
             order.Document = pathFoFile;
             order.OrderedOn = DateTime.Now;
-            order.Price = numberOfPages * printer.BlackWhitePrintPrice;
+            //order.Price = numberOfPages * printer.BlackWhitePrintPrice;
             order.PagesCount = numberOfPages;
             order.PrintedOn = null;
             order.UserID = userID;
@@ -164,7 +165,7 @@ namespace GlobalPrint.ClientWeb
 
             int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
             User user = new UserBll().GetUserByID(userID);
-            if (user.AmountOfMoney <= order.Price)
+            if (user.AmountOfMoney <= order.PricePerPage)
             {
                 ModelState.AddModelError("", "Недостаточно средств на счете. Пополните баланс");
                 var confirmmodel = this._CreatePrintConfirmationViewModel(order);
@@ -204,7 +205,7 @@ namespace GlobalPrint.ClientWeb
         {
             var printer = new PrinterBll().GetPrinterByID(PrinterID);
 
-            printer.UserID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
+            printer.OwnerUserID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
             if (!ModelState.IsValid)
             {
                 return RedirectToAction("UserAccountPrinterList", "UserAccountPrinterList");
@@ -228,7 +229,7 @@ namespace GlobalPrint.ClientWeb
         [HttpPost]
         public ActionResult AddPrinter(Printer model)
         {
-            model.UserID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
+            model.OwnerUserID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
             if (!ModelState.IsValid)
             {
                 return View(model);

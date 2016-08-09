@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GlobalPrint.Server
+namespace GlobalPrint.Server.Models
 {
     [Table("printer_schedule", Schema = "public")]
     public class PrinterSchedule

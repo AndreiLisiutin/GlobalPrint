@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace GlobalPrint.Server.Models
 {
-    [Table("print_order_status", Schema = "public")]
-    public class PrintOrderStatus
+    [Table("print_size", Schema = "public")]
+    public class PrintSize
     {
         [Key]
-        [Column("print_order_status_id")]
-        public int PrintOrderStatusID { get; set; }
-        [Column("status")]
-        public string Status { get; set; }
+        [Column("print_size_id")]
+        public int PrintSizeID { get; set; }
+        [Column("name")]
+        public string Name { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GlobalPrint.Server
+namespace GlobalPrint.Server.Models
 {
     [Table("print_order", Schema = "public")]
     public class PrintOrder
@@ -25,25 +25,27 @@ namespace GlobalPrint.Server
         public DateTime OrderedOn { get; set; }
         [Column("printed_on")]
         public DateTime? PrintedOn { get; set; }
-        [Column("price")]
-        public decimal Price { get; set; }
+        [Column("price_per_page")]
+        public decimal PricePerPage { get; set; }
         [Column("pages_count")]
         public int PagesCount { get; set; }
         [Column("secret_code")]
         public string SecretCode { get; set; }
-        [Column("format")]
-        public string Format { get; set; }
-        [Column("is_both_sides_print")]
-        public bool IsBothSidesPrint { get; set; }
         [Column("print_order_status_id")]
         public int PrintOrderStatusID { get; set; }
+        [Column("print_service_id")]
+        public int PrintServiceID { get; set; }
 
+        [NotMapped]
+        public bool IsBothSidesPrint { get; set; }
+        [NotMapped]
+        public string Format { get; set; }
         [NotMapped]
         public string PriceInCurrency
         {
             get
             {
-                return this.Price.ToString() + " руб.";
+                return this.PricePerPage.ToString() + " руб.";
             }
         }
         [NotMapped]
