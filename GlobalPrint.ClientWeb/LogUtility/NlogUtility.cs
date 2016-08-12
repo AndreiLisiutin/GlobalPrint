@@ -84,7 +84,7 @@ namespace GlobalPrint.ClientWeb
             string dateInfo = "Date: ${date:format=dd\\.MM\\.yyyy HH\\:mm\\:ss}";
             string locationInfo = "Location: ${callsite}";
             string messageInfo = "Message: ${date:format=dd\\.MM\\.yyyy HH\\:mm\\:ss}";
-            string detailsInfo = "Details: ${exception:format=ToString,StackTrace}";
+            string detailsInfo = "Details: ${exception:format=ToString,StackTrace:topFrames=10}";
 
             LoggingConfiguration config = new LoggingConfiguration();
 

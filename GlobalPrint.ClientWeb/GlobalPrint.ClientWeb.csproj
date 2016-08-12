@@ -200,8 +200,6 @@
     <Content Include="Resources\Libraries\bootstrap.file-input\fileinput.js" />
     <Content Include="Resources\Scripts\home.js" />
     <Content Include="Resources\Scripts\home\index.js" />
-    <Content Include="Resources\Scripts\account\register.js" />
-    <Content Include="Resources\Scripts\account\login.js" />
     <Content Include="Resources\Scripts\printer\print.js" />
     <Content Include="Resources\Scripts\shared\navigation.js" />
     <Content Include="Resources\Stylesheets\account\login.css" />
@@ -266,6 +264,7 @@
     <Content Include="Views\UserRecievedPrintOrderList\ConfirmPrintOrder.cshtml" />
     <Content Include="Views\Team\Team.cshtml" />
     <Content Include="Views\Printer\AddPrinter.cshtml" />
+    <Content Include="Views\Account\__RegisterViaPhone.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

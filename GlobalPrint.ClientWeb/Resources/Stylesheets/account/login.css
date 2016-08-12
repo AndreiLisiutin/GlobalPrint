@@ -2,49 +2,31 @@
   padding-top: 40px;
   padding-bottom: 40px;
 }
-
 .form-signin {
-  max-width: 330px;
+  max-width: 300px;
   padding: 15px;
   margin: 0 auto;
 }
-.form-signin .tab-content{
-  margin-top: 15px;
-}
 .form-signin .form-signin-heading,
-.form-signin .checkbox {
-  margin-bottom: 10px;
+.form-signin .form-signin-link {
+  margin-top: 10px;
+  text-align: center;
 }
-.form-signin .checkbox {
-  font-weight: normal;
-}
-.form-signin .form-control {
+.form-signin .form-control,
+.form-signin .btn {
   position: relative;
   height: auto;
+  border-radius: 0;
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
   padding: 10px;
+  margin-bottom: -1px;
   font-size: 16px;
+}
+.form-signin .btn {
+  margin-top: 15px;
 }
 .form-signin .form-control:focus {
   z-index: 2;
-}
-.form-signin input[id="inputName"], 
-.form-signin input[id="inputEmail"], 
-.form-signin input[id="inputPassword"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.form-signin input[id="inputConfirmPassword"],
-.form-signin input[id="inputPhone"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-.form-signin .main-page {
-  margin-top: 10px;
-  font-size: 15px;
-  text-align: center;
 }

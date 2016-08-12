@@ -14,7 +14,8 @@ namespace GlobalPrint.ClientWeb
 {
     public class AccountController : BaseController
     {
-        #region Helpers
+        private ApplicationSignInManager _signInManager;
+        private ApplicationUserManager _userManager;
         
         private IAuthenticationManager AuthenticationManager
         {
@@ -23,9 +24,6 @@ namespace GlobalPrint.ClientWeb
                 return HttpContext.GetOwinContext().Authentication;
             }
         }
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
-
         public ApplicationSignInManager SignInManager
         {
             get
@@ -49,25 +47,115 @@ namespace GlobalPrint.ClientWeb
             }
         }
 
-        private ActionResult RedirectToLocal(string returnUrl)
+        #region Old (Phone, ...)
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> LoginFromPhone(LoginViewModel model)
         {
-            if (Url.IsLocalUrl(returnUrl))
+            var smsUtility = new SmsUtility(this.GetSmsParams());
+            //model.Phone = SmsUtility.ExtractValidPhone(model.Phone);
+            //if (string.IsNullOrEmpty(model.Phone))
+            //{
+            //    return View("Login", model);
+            //}
+
+            var password = smsUtility.GetneratePassword(6);
+            //smsUtility.Send(model.Phone, "Ваш пароль: " + password);
+            this.Session["SmsLoginValidationPassword"] = password;
+
+            return RedirectToAction("VerifyPhoneNumber", new { /*PhoneNumber = model.Phone,*/ FromRegistration = false });
+        }
+        
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult RegisterFromPhone(RegisterViewModel model)
+        {
+            var smsUtility = new SmsUtility(this.GetSmsParams());
+            //var phoneNumber = SmsUtility.ExtractValidPhone(model.Phone);
+            //if (phoneNumber == null)
+            //{
+            //    return View("Register", model);
+            //}
+
+            var password = smsUtility.GetneratePassword(6);
+            //smsUtility.Send(model.Phone, "Ваш пароль: " + password);
+            this.Session["SmsValidationPassword"] = password;
+
+            return RedirectToAction("VerifyPhoneNumber", new { /*PhoneNumber = phoneNumber, */FromRegistration = true });
+        }
+
+        public ActionResult VerifyPhoneNumber(string phoneNumber, bool FromRegistration)
+        {
+            ViewBag.FromRegistration = FromRegistration;
+            return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model, bool fromRegistration)
+        {
+            if (!ModelState.IsValid)
             {
-                return Redirect(returnUrl);
+                return View(model);
+            }
+            string password = fromRegistration ? this.Session["SmsValidationPassword"] as string : this.Session["SmsLoginValidationPassword"] as string;
+            // Костыль пока
+            model.Code = password;
+            if (model.Code != password)
+            {
+                ModelState.AddModelError("", "Введен некорректный пароль");
+                return View(model);
+            }
+            else
+            {
+                if (fromRegistration)
+                {
+                    this.Session["SmsValidationPassword"] = null;
+                    RegisterViewModel userModel = new RegisterViewModel()
+                    {
+                        //Name = model.PhoneNumber,
+                        Email = model.PhoneNumber,
+                        Password = model.Code,
+                        ConfirmPassword = model.Code,
+                        //Phone = model.PhoneNumber
+                    };
+                    return await this.Register(userModel);
+                }
+                else
+                {
+                    this.Session["SmsLoginValidationPassword"] = null;
+
+                    var currentUser = await UserManager.FindByNameAsync(model.PhoneNumber);
+                    if (currentUser != null)
+                    {
+                        await SignInManager.SignInAsync(currentUser, isPersistent: false, rememberBrowser: false);
+
+                        string printerID = Session["Account_PrinterID"] as string;
+                        if (printerID != null)
+                        {
+                            Session["Account_PrinterID"] = null;
+                            return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
+                        }
+
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
             }
 
-            string printerID = Session["Account_PrinterID"] as string;
-            if (printerID != null)
-            {
-                Session["Account_PrinterID"] = null;
-                return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
-            }
-            return RedirectToAction("Index", "Home");
+            ModelState.AddModelError("", "Не найден пользователь");
+            return View(fromRegistration ? "Register" : "Login");
         }
+
         #endregion
 
         #region Register
 
+        /// <summary>
+        /// Get register page
+        /// </summary>
+        /// <returns></returns>
         // GET: Account/Register
         [HttpGet]
         [AllowAnonymous]
@@ -76,29 +164,33 @@ namespace GlobalPrint.ClientWeb
             return View();
         }
 
+        /// <summary>
+        /// Register action
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            model.Name = model.Email ?? model.Phone;
             // If we got this far, something failed, redisplay form
             if (!ModelState.IsValid)
             {
                 return View("Register", model);
             }
 
-            var user = new ApplicationUser { UserName = model.Name, Email = model.Email, PhoneNumber = model.Phone ?? "" };
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                var currentUser = await this.UserManager.FindByNameAsync(model.Name);
-                //await SignInManager.PasswordSignInAsync(model.Email, model.Password, false, shouldLockout: false);
+                var currentUser = await this.UserManager.FindByNameAsync(model.Email);
                 await SignInManager.SignInAsync(currentUser, isPersistent: false, rememberBrowser: false);
 
+                // In case of Print->Register
                 string printerID = Session["Account_PrinterID"] as string;
-                if (printerID != null)
+                if (!string.IsNullOrEmpty(printerID))
                 {
                     Session["Account_PrinterID"] = null;
                     return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
@@ -106,6 +198,7 @@ namespace GlobalPrint.ClientWeb
 
                 return RedirectToAction("Index", "Home");
             }
+
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError("", error);
@@ -113,29 +206,14 @@ namespace GlobalPrint.ClientWeb
             return View("Register", model);
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult RegisterFromPhone(RegisterViewModel model)
-        {
-            var smsUtility = new SmsUtility(this.GetSmsParams());
-            var phoneNumber = SmsUtility.ExtractValidPhone(model.Phone);
-            if (phoneNumber == null)
-            {
-                return View("Register", model);
-            }
-
-            var password = smsUtility.GetneratePassword(6);
-            smsUtility.Send(model.Phone, "Ваш пароль: " + password);
-            this.Session["SmsValidationPassword"] = password;
-
-            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = phoneNumber, FromRegistration = true });
-        }
-
         #endregion
-        
+
         #region Login
 
-        // GET: Account/Login
+        /// <summary>
+        /// Login page
+        /// </summary>
+        // GET: /Account/Login
         [HttpGet]
         [AllowAnonymous]
         public ActionResult Login()
@@ -143,6 +221,12 @@ namespace GlobalPrint.ClientWeb
             return View();
         }
 
+        /// <summary>
+        /// Login action
+        /// </summary>
+        /// <param name="model">Login wiew model with user data</param>
+        /// <param name="returnUrl">Fucking shit</param>
+        /// <returns></returns>
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
@@ -172,99 +256,55 @@ namespace GlobalPrint.ClientWeb
             }
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<ActionResult> LoginFromPhone(LoginViewModel model)
-        {
-            var smsUtility = new SmsUtility(this.GetSmsParams());
-            model.Phone = SmsUtility.ExtractValidPhone(model.Phone);
-            if (string.IsNullOrEmpty(model.Phone))
-            {
-                return View("Login", model);
-            }
-
-            var password = smsUtility.GetneratePassword(6);
-            smsUtility.Send(model.Phone, "Ваш пароль: " + password);
-            this.Session["SmsLoginValidationPassword"] = password;
-
-            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Phone, FromRegistration = false });
-        }
-        
         #endregion
-        
-        public ActionResult VerifyPhoneNumber(string phoneNumber, bool FromRegistration)
-        {
-            ViewBag.FromRegistration = FromRegistration;
-            return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
-        }
 
-        [HttpPost]
+        /// <summary>
+        /// Login and print. Causes when unregistred user wants to print smth
+        /// </summary>
+        /// <param name="printerID">Printer ID to remember</param>
+        /// <returns></returns>
+        // GET: /Account/LoginAndPrint
+        [HttpGet]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model, bool fromRegistration)
+        public ActionResult LoginAndPrint(int printerID)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            string password = fromRegistration ? this.Session["SmsValidationPassword"] as string : this.Session["SmsLoginValidationPassword"] as string; 
-            // Костыль пока
-            model.Code = password;
-            if (model.Code != password)
-            {
-                ModelState.AddModelError("", "Введен некорректный пароль");
-                return View(model);
-            }
-            else
-            {
-                if (fromRegistration)
-                {
-                    this.Session["SmsValidationPassword"] = null;
-                    RegisterViewModel userModel = new RegisterViewModel()
-                    {
-                        Name = model.PhoneNumber,
-                        Email = model.PhoneNumber,
-                        Password = model.Code,
-                        ConfirmPassword = model.Code,
-                        Phone = model.PhoneNumber
-                    };
-                    return await this.Register(userModel);
-                }
-                else
-                {
-                    this.Session["SmsLoginValidationPassword"] = null;
-
-                    var currentUser = await UserManager.FindByNameAsync(model.PhoneNumber);
-                    if (currentUser != null)
-                    {
-                        await SignInManager.SignInAsync(currentUser, isPersistent: false, rememberBrowser: false);
-
-                        string printerID = Session["Account_PrinterID"] as string;
-                        if (printerID != null)
-                        {
-                            Session["Account_PrinterID"] = null;
-                            return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
-                        }
-
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
-            }
-
-            ModelState.AddModelError("", "Не найден пользователь");
-            return View(fromRegistration ? "Register" : "Login");
+            Session["Account_PrinterID"] = printerID.ToString();
+            return View("Login");
         }
 
-
+        /// <summary>
+        /// Log off from the application
+        /// </summary>
+        /// <returns>Redirect to the Index/Home</returns>
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            AuthenticationManager.SignOut();
+            this.AuthenticationManager.SignOut();
             return RedirectToAction("Index", "Home");
         }
 
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
+            string printerID = Session["Account_PrinterID"] as string;
+            if (printerID != null)
+            {
+                Session["Account_PrinterID"] = null;
+                return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        /// <summary>
+        /// Dispose managed resources
+        /// </summary>
+        /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -283,16 +323,6 @@ namespace GlobalPrint.ClientWeb
             }
 
             base.Dispose(disposing);
-        }
-
-
-
-        [HttpGet]
-        [AllowAnonymous]
-        public ActionResult LoginAndPrint(int printerID)
-        {
-            Session["Account_PrinterID"] = printerID.ToString();
-            return View("Login");
         }
     }
 }

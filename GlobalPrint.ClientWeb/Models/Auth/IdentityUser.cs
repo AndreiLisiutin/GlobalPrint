@@ -14,6 +14,7 @@ namespace GlobalPrint.ClientWeb
     public class IdentityUser : User, IUser<int>
     {
         [NotMapped]
+        [Obsolete("Поле используется в механизме ASP.NET Identity, оставлено тут для совместимости с ним. Используйте UserID вместо него.")]
         public int Id { get { return base.UserID; } set { base.UserID = value; } }
     }
 }
