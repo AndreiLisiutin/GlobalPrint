@@ -15,12 +15,11 @@ namespace GlobalPrint.ClientWeb
             : base(user)
         {
         }
-        public ApplicationUser(string userName, string email, string phoneNumber)
+        public ApplicationUser(string userName, string email)
             : base(new User())
         {
             this.UserName = userName;
             this.User.Email = email;
-            this.User.PhoneNumber = phoneNumber;
         }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser, int> manager)
         {

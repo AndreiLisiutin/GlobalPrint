@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GlobalPrint.ClientWeb
@@ -15,38 +16,25 @@ namespace GlobalPrint.ClientWeb
         [StringLength(100, ErrorMessage = "Минимальная длина пароля - {2} символов.", MinimumLength = 6)]
         public string Password { get; set; }
         
-        [Phone]
-        [Display(Name = "Phone")]
-        public string Phone { get; set; }
-
         public bool RememberMe { get; set; }
     }
 
     public class RegisterViewModel
     {
-        [Display(Name = "Name")]
-        public string Name { get; set; }
-
         [Required]
-        [Display(Name = "Email")]
         public string Email { get; set; }
         
-        [Phone]
-        [Display(Name = "Phone")]
-        public string Phone { get; set; }
-
         [Required]
         [StringLength(100, ErrorMessage = "Минимальная длина пароля - {2} символов.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
     }
 
+    [Obsolete("Пока что убрали регистрацию и логин через телефон")]
     public class VerifyPhoneNumberViewModel
     {
         [Required]

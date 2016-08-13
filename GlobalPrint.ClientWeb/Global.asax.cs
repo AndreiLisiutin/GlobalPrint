@@ -22,5 +22,10 @@ namespace GlobalPrint.ClientWeb
             IoC.Instance.RegisterServerBusinessLogic();
             IoC.Instance.RegisterServerDataAccess();
         }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            Exception exception = Server.GetLastError();
+        }
     }
 }
