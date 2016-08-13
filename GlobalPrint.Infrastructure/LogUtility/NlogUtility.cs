@@ -7,75 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace GlobalPrint.ClientWeb
+namespace GlobalPrint.Infrastructure.LogUtility
 {
-    public class NlogUtility : ILogUtility
+    /// <summary>
+    /// Log utility of NLog
+    /// </summary>
+    public class NlogUtility<T> : NLog.Logger, ILogUtility
     {
-        public Logger LoggerInstace { get; private set; }
         public NlogUtility()
         {
-            this.LoggerInstace = LogManager.GetCurrentClassLogger();
             this.SetConfig();
-        }
-
-        public void Debug(string message)
-        {
-            LoggerInstace.Debug(message);
-        }
-
-        public void Debug(Exception ex, string message, params object[] args)
-        {
-            LoggerInstace.Debug(ex, message, args);
-        }
-
-        public void Error(string message)
-        {
-            LoggerInstace.Error(message);
-        }
-
-        public void Error(Exception ex, string message, params object[] args)
-        {
-            LoggerInstace.Error(ex, message, args);
-        }
-
-        public void Fatal(string message)
-        {
-            LoggerInstace.Fatal(message);
-        }
-
-        public void Fatal(Exception ex, string message, params object[] args)
-        {
-            LoggerInstace.Fatal(ex, message, args);
-        }
-
-        public void Info(string message)
-        {
-            LoggerInstace.Info(message);
-        }
-
-        public void Info(Exception ex, string message, params object[] args)
-        {
-            LoggerInstace.Info(ex, message, args);
-        }
-
-        public void Trace(string message)
-        {
-            LoggerInstace.Trace(message);
-        }
-
-        public void Trace(Exception ex, string message, params object[] args)
-        {
-            LoggerInstace.Trace(ex, message, args);
-        }
-
-        public void Warn(string message)
-        {
-            LoggerInstace.Warn(message);
-        }
-
-        public void Warn(Exception ex, string message, params object[] args)
-        {
-            LoggerInstace.Warn(ex, message, args);
         }
 
         private void SetConfig()
@@ -147,6 +88,7 @@ namespace GlobalPrint.ClientWeb
             //config.AddTarget(mailTarget);
             //config.LoggingRules.Add(new LoggingRule("*", LogLevel.Error, mailTarget));
 
+            NLog.LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration("<your path>" + "\\NLog.config", false);
             LogManager.Configuration = config;
             LogManager.ThrowExceptions = true;
         }

@@ -228,7 +228,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="LogUtility\ILogUtility.cs" />
     <Compile Include="Models\Stuff\FloatModelBinder.cs" />
     <Compile Include="Models\Stuff\MultipleButtonAttribute.cs" />
     <Compile Include="Models\Auth\AccountViewModels.cs" />
@@ -238,7 +237,6 @@
     <Compile Include="Models\Printer\PreparedOrder.cs" />
     <Compile Include="Models\Printer\Printer_PrintConfirmationViewModel.cs" />
     <Compile Include="Models\Printer\Printer_PrintViewModel.cs" />
-    <Compile Include="LogUtility\NlogUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

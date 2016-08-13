@@ -73,7 +73,7 @@
     <Compile Include="BusinessLogicLayer\Models\Domain\Users\UserActionLog.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Users\UserActionType.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Users\UserRole.cs" />
-    <Compile Include="BusinessLogicLayer\Units\Orders\PrintOrderBll.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Orders\PrintOrderUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Printers\PrinterUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Users\UserActionUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Users\UserUnit.cs" />
