@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GlobalPrint.Configuration.DI;
+using Ninject;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,6 +17,10 @@ namespace GlobalPrint.ClientWeb
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             ModelBinders.Binders.Add(typeof(float?), new FloatModelBinder());
             ModelBinders.Binders.Add(typeof(float), new FloatModelBinder());
+
+            IoC.Instance.Initialize(new StandardKernel());
+            IoC.Instance.RegisterServerBusinessLogic();
+            IoC.Instance.RegisterServerDataAccess();
         }
     }
 }

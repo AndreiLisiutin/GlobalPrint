@@ -5,11 +5,23 @@ using Microsoft.Owin;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 
 namespace GlobalPrint.ClientWeb
 {
     public class ApplicationUser : IdentityUser
     {
+        public ApplicationUser(User user)
+            : base(user)
+        {
+        }
+        public ApplicationUser(string userName, string email, string phoneNumber)
+            : base(new User())
+        {
+            this.UserName = userName;
+            this.User.Email = email;
+            this.User.PhoneNumber = phoneNumber;
+        }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser, int> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -17,22 +29,6 @@ namespace GlobalPrint.ClientWeb
             // Add custom user claims here
             return userIdentity;
         }
-    }
-
-    public class ApplicationDbContext : DbContext
-    {
-        public ApplicationDbContext()
-            : base("GlobalPrint")
-        {
-            Database.SetInitializer<ApplicationDbContext>(null);
-        }
-
-        public static ApplicationDbContext Create()
-        {
-            return new ApplicationDbContext();
-        }
-
-        public DbSet<ApplicationUser> Users { get; set; }
     }
 
 }

@@ -1,5 +1,5 @@
-﻿using GlobalPrint.Server;
-using GlobalPrint.Server.Models;
+﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;

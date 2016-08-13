@@ -1,5 +1,5 @@
-﻿@using GlobalPrint.Server
-@using GlobalPrint.Server.Utilities
+﻿@using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders
+@using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Orders
 @model List<PrintOrderInfo>
 @{
     ViewBag.Title = "Мои Заказы";
@@ -37,7 +37,7 @@
                         <td>@Html.DisplayFor(c => printOrder.PrintOrder.PrinterID)</td>
                         <td>@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>
                         <td>@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, "{0:dd.MM.yyyy HH:mm:ss}")</td>
-                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.Price, "{0:0.00}")</td>
+                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.PricePerPage, "{0:0.00}")</td>
                         <td>@Html.DisplayFor(c => printOrder.PrintOrder.SecretCode)</td>
                         <td>@Html.DisplayFor(c => printOrder.Status.Status)</td>
                     </tr>

@@ -15,7 +15,6 @@ namespace GlobalPrint.ClientWeb
         public void Configuration(IAppBuilder app)
         {
             // настраиваем контекст и менеджер
-            app.CreatePerOwinContext<ApplicationDbContext>(ApplicationDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
 

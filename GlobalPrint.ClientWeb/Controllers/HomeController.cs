@@ -1,9 +1,7 @@
-﻿using GlobalPrint.Server;
-using GlobalPrint.Server.Models;
+﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb
@@ -18,7 +16,7 @@ namespace GlobalPrint.ClientWeb
 
         public ActionResult GetPrinters()
         {
-            List<Printer> printers = new HomeBll().GetPrinters();
+            List<Printer> printers = new PrinterUnit().GetPrinters();
             return Json(printers);
         }
     }

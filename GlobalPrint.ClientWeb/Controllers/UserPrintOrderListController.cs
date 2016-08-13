@@ -1,5 +1,4 @@
-﻿using GlobalPrint.Server;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -9,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -19,7 +19,7 @@ namespace GlobalPrint.ClientWeb
         public ActionResult UserPrintOrderList()
         {
             int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            var printOrderList = new PrintOrderBll().GetUserPrintOrderList(userID);
+            var printOrderList = new PrintOrderUnit().GetUserPrintOrderList(userID);
             return View(printOrderList);
         }
     }

@@ -1,4 +1,4 @@
-﻿using GlobalPrint.Server;
+﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,4 @@
-﻿using GlobalPrint.Server;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -8,10 +7,8 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using System.Text.RegularExpressions;
-using GlobalPrint.Server.Utilities;
-using GlobalPrint.Server.Models;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -22,7 +19,7 @@ namespace GlobalPrint.ClientWeb
         public ActionResult UserAccount()
         {
             int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            var user = new UserBll().GetUserByID(userID);
+            var user = new UserUnit().GetUserByID(userID);
             return View(user);
         }
 
@@ -37,7 +34,7 @@ namespace GlobalPrint.ClientWeb
 
             try
             {
-                new UserBll().SaveUser(model);
+                new UserUnit().SaveUser(model);
                 return RedirectToAction("UserAccount", new { UserID = model.UserID });
             }
             catch (Exception ex)
@@ -57,14 +54,14 @@ namespace GlobalPrint.ClientWeb
                 decimal decimalUpSumm;
                 try
                 {
-                    decimalUpSumm = StringExtension.ConvertCurrentcyToDecimal(upSumm);
+                    decimalUpSumm = Convert.ToDecimal(upSumm);
                 }
                 catch(Exception ex)
                 {
                     throw new Exception("Некорректно введена ссума пополнения", ex);
                 }
 
-                new UserBll().FillUpBalance(userID, decimalUpSumm);
+                new UserUnit().FillUpBalance(userID, decimalUpSumm);
                 return RedirectToAction("UserAccount", new { UserID = userID });
             }
             catch (Exception ex)

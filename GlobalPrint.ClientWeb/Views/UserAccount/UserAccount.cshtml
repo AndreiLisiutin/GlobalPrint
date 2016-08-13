@@ -1,4 +1,4 @@
-﻿@using GlobalPrint.Server
+﻿@using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
 @model User
 @{
     ViewBag.Title = "Аккаунт";
@@ -26,7 +26,7 @@
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">Имя</label>
             <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @id = "inputName", @type = "text", @placeholder = "Полное имя", @required = "true", @autofocus = true })
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @id = "inputName", @type = "text", @placeholder = "Полное имя", @required = "true", @autofocus = true })
             </div>
         </div>
         <div class="form-group">
@@ -38,7 +38,7 @@
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">Телефон</label>
             <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.Phone, new { @class = "form-control", @readonly = "true", @id = "inputPhone", @type = "phone", @placeholder = "Телефон", @required = "false" })
+                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", @readonly = "true", @id = "inputPhone", @type = "phone", @placeholder = "Телефон", @required = "false" })
             </div>
         </div>
         <div class="form-group">
@@ -49,8 +49,7 @@
         </div>
 
         @Html.HiddenFor(x => x.UserID)
-        @Html.HiddenFor(x => x.Login)
-        @Html.HiddenFor(x => x.Password)
+        @Html.HiddenFor(x => x.Email)
         @Html.HiddenFor(x => x.PasswordHash)
 
         <div class="form-group">

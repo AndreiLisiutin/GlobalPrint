@@ -1,5 +1,4 @@
-﻿using GlobalPrint.Server;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -9,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -89,7 +89,7 @@ namespace GlobalPrint.ClientWeb
                 return View("Register", model);
             }
 
-            var user = new ApplicationUser { UserName = model.Name, Email = model.Email, PhoneNumber = model.Phone ?? "" };
+            var user = new ApplicationUser(model.Name, model.Email, model.Phone ?? "");
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {

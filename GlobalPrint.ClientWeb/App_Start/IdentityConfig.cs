@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -22,7 +23,8 @@ namespace GlobalPrint.ClientWeb
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
+            UserUnit userUnit = new UserUnit();
+            var manager = new ApplicationUserManager(new UserStore(userUnit));
 
             manager.PasswordHasher = new CustomPasswordHasher();
 

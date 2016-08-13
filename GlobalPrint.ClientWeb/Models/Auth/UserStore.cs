@@ -1,4 +1,5 @@
-﻿using GlobalPrint.Server;
+﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -11,97 +12,85 @@ using System.Threading.Tasks;
 
 namespace GlobalPrint.ClientWeb
 {
-    public class UserStore<TUser> : IUserStore<TUser, int>,
-        IUserLockoutStore<TUser, int>,
-        IUserPasswordStore<TUser, int>,
-        IUserTwoFactorStore<TUser, int>,
-        IUserPhoneNumberStore<TUser, int>,
-        IUserEmailStore<TUser, int>
-        where TUser : IdentityUser
+    public class UserStore : IUserStore<ApplicationUser, int>,
+        IUserLockoutStore<ApplicationUser, int>,
+        IUserPasswordStore<ApplicationUser, int>,
+        IUserTwoFactorStore<ApplicationUser, int>,
+        IUserPhoneNumberStore<ApplicationUser, int>,
+        IUserEmailStore<ApplicationUser, int>
     {
-        private ApplicationDbContext _proxyContext { get; set; }
+        private UserUnit _userUnit { get; set; }
 
-        public UserStore(ApplicationDbContext context)
+        public UserStore(UserUnit userUnit)
         {
-            this._proxyContext = context;
+            this._userUnit = userUnit;
         }
 
         #region IUserStore
 
-        public Task CreateAsync(TUser user)
+        public Task CreateAsync(ApplicationUser user)
         {
-            if (user == null) throw new ArgumentNullException("user");
-
-            using (var _context = new DB())
+            if (user == null || user.User == null)
             {
-                var savedUser = _context.Users.Add(user);
-                _context.SaveChanges();
-
-                return Task.FromResult<object>(user);
+                throw new ArgumentNullException("user");
             }
+
+            this._userUnit.SaveUser(user.User);
+            return Task.FromResult<object>(user);
         }
 
-        public Task DeleteAsync(TUser user)
+        public Task DeleteAsync(ApplicationUser user)
         {
-            if (user == null) throw new ArgumentNullException("user");
-
-            using (var _context = new DB())
+            if (user == null || user.User == null)
             {
-                var userToRemove = _context.Users.SingleOrDefault(x => x.UserID == user.Id);
-                if (userToRemove != null)
-                {
-                    _context.Users.Remove(userToRemove);
-                }
-
-                return Task.FromResult<object>(null);
+                throw new ArgumentNullException("user");
             }
+
+            var userToRemove = this._userUnit.GetUserByID(user.Id);
+            if (userToRemove != null)
+            {
+                this._userUnit.DeleteUser(userToRemove);
+            }
+
+            return Task.FromResult<object>(null);
         }
 
-        public Task<TUser> FindByIdAsync(int userId)
+        public Task<ApplicationUser> FindByIdAsync(int userId)
         {
-            if (userId <= 0) throw new ArgumentException("userId");
-
-            var result = _proxyContext.Users.SingleOrDefault(x => x.UserID == userId) as TUser;
-            return Task.FromResult<TUser>(result);
-
-            using (var _context = new DB())
+            if (userId <= 0)
             {
-                result = _context.Users.SingleOrDefault(x => x.UserID == userId) as TUser;
-                return Task.FromResult<TUser>(result);
+                throw new ArgumentException("userId");
             }
+
+            User result = this._userUnit.GetUserByID(userId);
+            if (result != null)
+            {
+                ApplicationUser appUser = new ApplicationUser(result);
+                return Task.FromResult<ApplicationUser>(appUser);
+            }
+            return Task.FromResult<ApplicationUser>(null);
         }
 
-        public Task<TUser> FindByNameAsync(string userName)
+        public Task<ApplicationUser> FindByNameAsync(string userName)
         {
-            if (string.IsNullOrEmpty(userName)) throw new ArgumentException("userName");
-
-            var result = _proxyContext.Users.SingleOrDefault(x => x.Email == userName) as TUser;
-            return Task.FromResult<TUser>(result);
-
-            using (var _context = new DB())
+            if (string.IsNullOrEmpty(userName))
             {
-                var phone = SmsUtility.ExtractValidPhone(userName);
-                result = _context.Users.SingleOrDefault(x => x.Email == userName || x.PhoneNumber == phone && x.PhoneNumber != null) as TUser;
-
-                return Task.FromResult<TUser>(result);
+                throw new ArgumentNullException("userName");
             }
+
+            return this.FindByEmailAsync(userName);
         }
 
-        public Task UpdateAsync(TUser user)
+        public Task UpdateAsync(ApplicationUser user)
         {
-            if (user == null) throw new ArgumentNullException("user");
-
-            using (var _context = new DB())
+            if (user == null || user.User == null)
             {
-                var original = _context.Users.SingleOrDefault(x => x.UserID == user.Id);
-                if (original != null)
-                {
-                    _context.Entry(original).CurrentValues.SetValues(user);
-                    _context.SaveChanges();
-                }
-
-                return Task.FromResult<object>(user);
+                throw new ArgumentNullException("user");
             }
+
+            this._userUnit.SaveUser(user.User);
+
+            return Task.FromResult<object>(user);
         }
 
         public void Dispose()
@@ -113,37 +102,37 @@ namespace GlobalPrint.ClientWeb
 
         #region LockoutStore
 
-        public Task<int> GetAccessFailedCountAsync(TUser user)
+        public Task<int> GetAccessFailedCountAsync(ApplicationUser user)
         {
             return Task.FromResult(0);
         }
 
-        public Task<bool> GetLockoutEnabledAsync(TUser user)
+        public Task<bool> GetLockoutEnabledAsync(ApplicationUser user)
         {
             return Task.Factory.StartNew<bool>(() => false);
         }
 
-        public Task<DateTimeOffset> GetLockoutEndDateAsync(TUser user)
+        public Task<DateTimeOffset> GetLockoutEndDateAsync(ApplicationUser user)
         {
             throw new NotImplementedException();
         }
 
-        public Task<int> IncrementAccessFailedCountAsync(TUser user)
+        public Task<int> IncrementAccessFailedCountAsync(ApplicationUser user)
         {
             throw new NotImplementedException();
         }
 
-        public Task ResetAccessFailedCountAsync(TUser user)
+        public Task ResetAccessFailedCountAsync(ApplicationUser user)
         {
             return Task.FromResult(0);
         }
 
-        public Task SetLockoutEnabledAsync(TUser user, bool enabled)
+        public Task SetLockoutEnabledAsync(ApplicationUser user, bool enabled)
         {
             throw new NotImplementedException();
         }
 
-        public Task SetLockoutEndDateAsync(TUser user, DateTimeOffset lockoutEnd)
+        public Task SetLockoutEndDateAsync(ApplicationUser user, DateTimeOffset lockoutEnd)
         {
             throw new NotImplementedException();
         }
@@ -152,49 +141,58 @@ namespace GlobalPrint.ClientWeb
 
         #region IUserPasswordStore
 
-        public Task SetPasswordHashAsync(TUser user, string passwordHash)
+        public Task SetPasswordHashAsync(ApplicationUser user, string passwordHash)
         {
-            user.PasswordHash = passwordHash;
+            if (user == null || user.User == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+            if (string.IsNullOrEmpty(passwordHash))
+            {
+                throw new ArgumentNullException("passwordHash");
+            }
+
+            user.User.PasswordHash = passwordHash;
             return Task.FromResult(0);
         }
 
-        public Task<string> GetPasswordHashAsync(TUser user)
+        public Task<string> GetPasswordHashAsync(ApplicationUser user)
         {
-            if (user == null) throw new ArgumentException("user");
-
-            using (var _context = new DB())
+            if (user == null || user.User == null)
             {
-                var result = _context.Users.SingleOrDefault(x => x.UserID == user.Id) as TUser;
-                if (result != null)
-                {
-                    return Task.FromResult<string>(result.PasswordHash);
-                }
-                return Task.FromResult<string>(null);
+                throw new ArgumentException("user");
             }
+
+            User result = this._userUnit.GetUserByID(user.Id);
+            if (result != null)
+            {
+                return Task.FromResult<string>(result.PasswordHash);
+            }
+            return Task.FromResult<string>(null);
         }
 
-        public Task<bool> HasPasswordAsync(TUser user)
+        public Task<bool> HasPasswordAsync(ApplicationUser user)
         {
-            if (user == null) throw new ArgumentException("user");
-
-            using (var _context = new DB())
+            if (user == null || user.User == null)
             {
-                var result = _context.Users.SingleOrDefault(x => x.UserID == user.Id) as TUser;
-                var hasPassword = !string.IsNullOrEmpty(result.PasswordHash);
-                return Task.FromResult<bool>(hasPassword);
+                throw new ArgumentException("user");
             }
+
+            User result = this._userUnit.GetUserByID(user.Id);
+            bool hasPassword = !string.IsNullOrEmpty(result.PasswordHash);
+            return Task.FromResult<bool>(hasPassword);
         }
 
         #endregion
 
         #region IUserTwoFactorStore
 
-        public Task<bool> GetTwoFactorEnabledAsync(TUser user)
+        public Task<bool> GetTwoFactorEnabledAsync(ApplicationUser user)
         {
             return Task.FromResult(false);
         }
 
-        public Task SetTwoFactorEnabledAsync(TUser user, bool enabled)
+        public Task SetTwoFactorEnabledAsync(ApplicationUser user, bool enabled)
         {
             throw new NotImplementedException();
         }
@@ -203,35 +201,47 @@ namespace GlobalPrint.ClientWeb
 
         #region IUserPhoneNumberStore
 
-        public Task SetPhoneNumberAsync(TUser user, string phoneNumber)
+        public Task SetPhoneNumberAsync(ApplicationUser user, string phoneNumber)
         {
-            if (user == null) throw new ArgumentNullException("user");
+            if (user == null || user.User == null)
+            {
+                throw new ArgumentException("user");
+            }
 
-            user.PhoneNumber = phoneNumber;
+            user.User.PhoneNumber = phoneNumber;
             UpdateAsync(user);
 
             return Task.FromResult(user);
         }
 
-        public Task<string> GetPhoneNumberAsync(TUser user)
+        public Task<string> GetPhoneNumberAsync(ApplicationUser user)
         {
-            if (user == null) throw new ArgumentNullException("user");
+            if (user == null || user.User == null)
+            {
+                throw new ArgumentException("user");
+            }
 
-            return Task.FromResult(user.PhoneNumber);
+            return Task.FromResult(user.User.PhoneNumber);
         }
 
-        public Task<bool> GetPhoneNumberConfirmedAsync(TUser user)
+        public Task<bool> GetPhoneNumberConfirmedAsync(ApplicationUser user)
         {
-            if (user == null) throw new ArgumentNullException("user");
+            if (user == null || user.User == null)
+            {
+                throw new ArgumentException("user");
+            }
 
-            return Task.FromResult(user.PhoneNumberConfirmed);
+            return Task.FromResult(user.User.PhoneNumberConfirmed);
         }
 
-        public Task SetPhoneNumberConfirmedAsync(TUser user, bool confirmed)
+        public Task SetPhoneNumberConfirmedAsync(ApplicationUser user, bool confirmed)
         {
-            if (user == null) throw new ArgumentNullException("user");
+            if (user == null || user.User == null)
+            {
+                throw new ArgumentException("user");
+            }
 
-            user.PhoneNumberConfirmed = confirmed;
+            user.User.PhoneNumberConfirmed = confirmed;
             UpdateAsync(user);
 
             return Task.FromResult(0);
@@ -241,54 +251,67 @@ namespace GlobalPrint.ClientWeb
 
         #region IUserEmailStore
 
-        public Task SetEmailAsync(TUser user, string email)
+        public Task SetEmailAsync(ApplicationUser user, string email)
         {
-            if (user == null) throw new ArgumentNullException("user");
-
-            user.Email = email;
-            UpdateAsync(user);
-
-            return Task.FromResult(0);
-        }
-
-        public Task<string> GetEmailAsync(TUser user)
-        {
-            if (user == null) throw new ArgumentNullException("user");
-
-            return Task.FromResult(user.Email);
-        }
-
-        public Task<bool> GetEmailConfirmedAsync(TUser user)
-        {
-            if (user == null) throw new ArgumentNullException("user");
-
-            return Task.FromResult(user.EmailConfirmed);
-        }
-
-        public Task SetEmailConfirmedAsync(TUser user, bool confirmed)
-        {
-            if (user == null) throw new ArgumentNullException("user");
-
-            user.EmailConfirmed = confirmed;
-            UpdateAsync(user);
-
-            return Task.FromResult(0);
-        }
-
-        public Task<TUser> FindByEmailAsync(string email)
-        {
-            if (String.IsNullOrEmpty(email)) throw new ArgumentNullException("email");
-
-            using (var _context = new DB())
+            if (user == null || user.User == null)
             {
-                var result = _context.Users.SingleOrDefault(x => x.Email == email) as TUser;
-                if (result != null)
-                {
-                    return Task.FromResult<TUser>(result);
-                }
+                throw new ArgumentException("user");
             }
 
-            return Task.FromResult<TUser>(null);
+            user.User.Email = email;
+            UpdateAsync(user);
+
+            return Task.FromResult(0);
+        }
+
+        public Task<string> GetEmailAsync(ApplicationUser user)
+        {
+            if (user == null || user.User == null)
+            {
+                throw new ArgumentException("user");
+            }
+
+            return Task.FromResult(user.User.Email);
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(ApplicationUser user)
+        {
+            if (user == null || user.User == null)
+            {
+                throw new ArgumentException("user");
+            }
+
+            return Task.FromResult(user.User.EmailConfirmed);
+        }
+
+        public Task SetEmailConfirmedAsync(ApplicationUser user, bool confirmed)
+        {
+            if (user == null || user.User == null)
+            {
+                throw new ArgumentException("user");
+            }
+
+            user.User.EmailConfirmed = confirmed;
+            UpdateAsync(user);
+
+            return Task.FromResult(0);
+        }
+
+        public Task<ApplicationUser> FindByEmailAsync(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentException("email");
+            }
+
+            User result = this._userUnit.GetUserByFilter(x => x.Email == email);
+            if (result != null)
+            {
+                ApplicationUser appUser = new ApplicationUser(result);
+                return Task.FromResult<ApplicationUser>(appUser);
+            }
+
+            return Task.FromResult<ApplicationUser>(null);
         }
 
         #endregion

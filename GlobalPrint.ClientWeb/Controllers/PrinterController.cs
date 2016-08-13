@@ -2,8 +2,12 @@
 using AberrantSMPP.Packet;
 using AberrantSMPP.Packet.Request;
 using AberrantSMPP.Packet.Response;
-using GlobalPrint.Server;
-using GlobalPrint.Server.Models;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Orders;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using iTextSharp.text.pdf;
 using Microsoft.AspNet.Identity;
 using System;
@@ -29,9 +33,9 @@ namespace GlobalPrint.ClientWeb
 
         private Printer_PrintViewModel _CreatePrintViewModel(int printerID, HttpPostedFileBase fileToPrint, PrintOrder order)
         {
-            PrinterInfo printer = new PrinterBll().GetPrinterInfoByID(printerID);
+            PrinterInfo printer = new PrinterUnit().GetPrinterInfoByID(printerID);
             int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            User user = new UserBll().GetUserByID(userID);
+            User user = new UserUnit().GetUserByID(userID);
             if (user.AmountOfMoney <= 0)
             {
                 ModelState.AddModelError("", "Нет средств на счете");
@@ -100,7 +104,7 @@ namespace GlobalPrint.ClientWeb
                 return View("Print", printerModel);
             }
             int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            User user = new UserBll().GetUserByID(userID);
+            User user = new UserUnit().GetUserByID(userID);
             if (user.AmountOfMoney <= 0)
             {
                 var printerModel = this._CreatePrintViewModel(model.order.PrinterID, model.fileToPrint, model.order);
@@ -121,7 +125,7 @@ namespace GlobalPrint.ClientWeb
             PdfReader pdfReader = new PdfReader(serializedFile);
             int numberOfPages = pdfReader.NumberOfPages;
 
-            var printer = new PrinterBll().GetPrinterByID(model.order.PrinterID);
+            var printer = new PrinterUnit().GetPrinterByID(model.order.PrinterID);
             var order = model.order;
             order.Document = pathFoFile;
             order.OrderedOn = DateTime.Now;
@@ -140,7 +144,7 @@ namespace GlobalPrint.ClientWeb
         private Printer_PrintConfirmationViewModel _CreatePrintConfirmationViewModel(PrintOrder order)
         {
             int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            User user = new UserBll().GetUserByID(userID);
+            User user = new UserUnit().GetUserByID(userID);
             var model = new Printer_PrintConfirmationViewModel()
             {
                 order = order,
@@ -164,7 +168,7 @@ namespace GlobalPrint.ClientWeb
             var file = Session["Printer_PreparedOrderFile"] as byte[];
 
             int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            User user = new UserBll().GetUserByID(userID);
+            User user = new UserUnit().GetUserByID(userID);
             if (user.AmountOfMoney <= order.PricePerPage)
             {
                 ModelState.AddModelError("", "Недостаточно средств на счете. Пополните баланс");
@@ -172,14 +176,14 @@ namespace GlobalPrint.ClientWeb
                 return View("PrintConfirmation", confirmmodel);
             }
 
-            order = new PrinterBll().SavePrintOrder(file, order, this.GetSmsParams());
+            order = new PrinterUnit().SavePrintOrder(file, order, this.GetSmsParams());
             return RedirectToAction("OrderCompleted", new { printOrderID = order.PrintOrderID });
         }
 
         [HttpGet]
         public ActionResult OrderCompleted(int printOrderID)
         {
-            var order = new PrinterBll().GetPrintOrderByID(printOrderID);
+            var order = new PrinterUnit().GetPrintOrderByID(printOrderID);
             return View(order);
         }
 
@@ -195,7 +199,7 @@ namespace GlobalPrint.ClientWeb
         [MultipleButton(Name = "action", Argument = "EditPrinter")]
         public ActionResult EditPrinter(int PrinterID)
         {
-            var printer = new PrinterBll().GetPrinterByID(PrinterID);
+            var printer = new PrinterUnit().GetPrinterByID(PrinterID);
             return View("AddPrinter", printer);
         }
 
@@ -203,7 +207,7 @@ namespace GlobalPrint.ClientWeb
         [MultipleButton(Name = "action", Argument = "DelPrinter")]
         public ActionResult DelPrinter(int PrinterID)
         {
-            var printer = new PrinterBll().GetPrinterByID(PrinterID);
+            var printer = new PrinterUnit().GetPrinterByID(PrinterID);
 
             printer.OwnerUserID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
             if (!ModelState.IsValid)
@@ -215,7 +219,7 @@ namespace GlobalPrint.ClientWeb
             {
                 if (printer.PrinterID > 0)
                 {
-                    new PrinterBll().DelPrinter(printer);
+                    new PrinterUnit().DelPrinter(printer);
                 }
             }
             catch (Exception ex)
@@ -239,11 +243,11 @@ namespace GlobalPrint.ClientWeb
             {
                 if (model.PrinterID > 0)
                 {
-                    new PrinterBll().EditPrinter(model);
+                    new PrinterUnit().EditPrinter(model);
                 }
                 else
                 {
-                    new PrinterBll().AddPrinter(model);
+                    new PrinterUnit().AddPrinter(model);
                 }
                 return RedirectToAction("UserAccountPrinterList", "UserAccountPrinterList");
             }
