@@ -22,11 +22,11 @@ namespace GlobalPrint.ClientWeb
         {
             get
             {
-                return User.UserID;
+                return this.User.UserID;
             }
             set
             {
-                User.UserID = value;
+                this.User.UserID = value;
             }
         }
         public string UserName
@@ -35,11 +35,21 @@ namespace GlobalPrint.ClientWeb
             {
                 return this.User.UserName;
             }
-
             set
             {
                 this.User.UserName = value;
             }
+        }
+        public bool EmailConfirmed
+        {
+            get
+            {
+                return this.User.EmailConfirmed;
+            }
+            set
+            {
+                this.User.EmailConfirmed = value;
+            } 
         }
     }
 }

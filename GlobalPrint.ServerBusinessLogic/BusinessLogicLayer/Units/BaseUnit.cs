@@ -13,8 +13,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units
 {
     public class BaseUnit
     {
-        string _connectionString;
-        IDataContextFactory _contextFactory;
+        private string _connectionString;
+        private IDataContextFactory _contextFactory;
+
         public BaseUnit()
         {
             this._contextFactory = IoC.Instance.Resolve<IDataContextFactory>();
@@ -58,6 +59,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units
                     "Service {0} doesn't support constructor with 1 parameter of kind \"IRepository(IDataContext context)\".",
                         repositoryType.Name
                 ));
+            }
+        }
+
+        public void SaveContext(IDataContext context)
+        {
+            if (context != null)
+            {
+                context.Save();
             }
         }
 

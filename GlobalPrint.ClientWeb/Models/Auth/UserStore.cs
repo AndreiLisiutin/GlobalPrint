@@ -35,7 +35,7 @@ namespace GlobalPrint.ClientWeb
                 throw new ArgumentNullException("user");
             }
 
-            this._userUnit.SaveUser(user.User);
+            this._userUnit.InsertUser(user.User);
             return Task.FromResult<object>(user);
         }
 
@@ -88,7 +88,7 @@ namespace GlobalPrint.ClientWeb
                 throw new ArgumentNullException("user");
             }
 
-            this._userUnit.SaveUser(user.User);
+            this._userUnit.UpdateUser(user.User);
 
             return Task.FromResult<object>(user);
         }

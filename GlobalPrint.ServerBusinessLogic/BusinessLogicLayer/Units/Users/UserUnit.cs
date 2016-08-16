@@ -21,6 +21,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                     .GetByID(UserID);
             }
         }
+
         public User GetUserByFilter(Expression<Func<User, bool>> filter)
         {
             using (IDataContext context = this.Context())
@@ -31,7 +32,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             }
         }
 
-        public User SaveUser(User user)
+        public User UpdateUser(User user)
         {
             using (IDataContext context = this.Context())
             {
@@ -43,8 +44,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 if (originalUser != null)
                 {
                     userRepo.Update(user);
-                    //db.Entry(originalUser).CurrentValues.SetValues(user);
-                    //db.SaveChanges();
+                    this.SaveContext(context);
                     return user;
                 }
                 else
@@ -60,15 +60,18 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             {
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
                 userRepo.Insert(user);
+                this.SaveContext(context);
                 return user;
             }
         }
+
         public User DeleteUser(User user)
         {
             using (IDataContext context = this.Context())
             {
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
                 userRepo.Delete(user);
+                this.SaveContext(context);
                 return user;
             }
         }
@@ -87,8 +90,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 {
                     originalUser.AmountOfMoney += upSumm;
                     userRepo.Update(originalUser);
-                    //db.Entry(originalUser).CurrentValues.SetValues(originalUser);
-                    //db.SaveChanges();
+                    this.SaveContext(context);
                     return originalUser;
                 }
                 else

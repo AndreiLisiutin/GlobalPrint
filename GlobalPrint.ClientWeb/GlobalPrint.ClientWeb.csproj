@@ -266,6 +266,8 @@
     <Content Include="Views\Team\Team.cshtml" />
     <Content Include="Views\Printer\AddPrinter.cshtml" />
     <Content Include="Views\Account\__RegisterViaPhone.cshtml" />
+    <Content Include="Views\Account\DisplayEmail.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

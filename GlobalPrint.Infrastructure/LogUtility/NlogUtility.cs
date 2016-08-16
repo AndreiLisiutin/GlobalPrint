@@ -62,7 +62,6 @@ namespace GlobalPrint.Infrastructure.LogUtility
             // Logging into email
             MailTarget mailTarget = new MailTarget();
             mailTarget.Name = "mailTarget";
-            mailTarget.Encoding = System.Text.Encoding.UTF8;
             mailTarget.EnableSsl = true;
             mailTarget.SmtpServer = "smtp.gmail.com";
             mailTarget.SmtpPort = 587;

@@ -185,18 +185,31 @@ namespace GlobalPrint.ClientWeb
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                var currentUser = await this.UserManager.FindByNameAsync(model.Email);
-                await SignInManager.SignInAsync(currentUser, isPersistent: false, rememberBrowser: false);
+                // генерируем токен для подтверждения регистрации
+                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
-                // In case of Print->Register
-                string printerID = Session["Account_PrinterID"] as string;
-                if (!string.IsNullOrEmpty(printerID))
-                {
-                    Session["Account_PrinterID"] = null;
-                    return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
-                }
+                // создаем ссылку для подтверждения
+                string callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
+                           protocol: Request.Url.Scheme);
 
-                return RedirectToAction("Index", "Home");
+                // отправка письма
+                await UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты",
+                    "Для завершения регистрации перейдите по ссылке:: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>");
+
+                return View("DisplayEmail");
+
+                //var currentUser = await this.UserManager.FindByNameAsync(model.Email);
+                //await SignInManager.SignInAsync(currentUser, isPersistent: false, rememberBrowser: false);
+
+                //// In case of Print->Register
+                //string printerID = Session["Account_PrinterID"] as string;
+                //if (!string.IsNullOrEmpty(printerID))
+                //{
+                //    Session["Account_PrinterID"] = null;
+                //    return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
+                //}
+
+                //return RedirectToAction("Index", "Home");
             }
 
             foreach (var error in result.Errors)
@@ -233,30 +246,63 @@ namespace GlobalPrint.ClientWeb
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View("Login", model);
+                var user = await UserManager.FindAsync(model.Email, model.Password);
+                if (user != null)
+                {
+                    if (user.EmailConfirmed == true)
+                    {
+                        // This doesn't count login failures towards account lockout
+                        // To enable password failures to trigger account lockout, change to shouldLockout: true
+                        var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+                        switch (result)
+                        {
+                            case SignInStatus.Success:
+                                return RedirectToLocal(returnUrl);
+                            case SignInStatus.LockedOut:
+                                return View("Lockout");
+                            case SignInStatus.RequiresVerification:
+                                return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                            case SignInStatus.Failure:
+                            default:
+                                ModelState.AddModelError("", "Неверный логин или пароль.");
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Не подтвержден email.");
+                    }                    
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Неверный логин или пароль.");
+                }
             }
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Некорректно введен логин/пароль.");
-                    return View("Login", model);
-            }
+            return View(model);
         }
 
         #endregion
+
+        /// <summary>
+        /// Confirm email
+        /// </summary>
+        /// <param name="userId">Registred user ID</param>
+        /// <param name="code">Confirmation code</param>
+        /// <returns></returns>
+        // GET: /Account/ConfirmEmail
+        [AllowAnonymous]
+        public async Task<ActionResult> ConfirmEmail(int userId, string code)
+        {
+            if (userId == 0 || string.IsNullOrEmpty(code))
+            {
+                return View("Error");
+            }
+            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+        }
 
         /// <summary>
         /// Login and print. Causes when unregistred user wants to print smth

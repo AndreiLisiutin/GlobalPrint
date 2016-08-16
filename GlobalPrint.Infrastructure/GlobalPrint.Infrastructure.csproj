@@ -54,6 +54,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DI\BaseIoC.cs" />
+    <Compile Include="EmailUtility\EmailUtility.cs" />
+    <Compile Include="EmailUtility\IEmailUtility.cs" />
     <Compile Include="LogUtility\ILogUtility.cs" />
     <Compile Include="LogUtility\NlogUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

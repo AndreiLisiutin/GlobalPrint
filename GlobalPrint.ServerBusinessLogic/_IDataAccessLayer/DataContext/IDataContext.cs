@@ -12,5 +12,6 @@ namespace GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext
         void BeginTransaction();
         void CommitTransaction();
         void RollbackTransaction();
+        int Save();
     }
 }

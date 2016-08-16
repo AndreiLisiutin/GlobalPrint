@@ -34,7 +34,7 @@ namespace GlobalPrint.ClientWeb
 
             try
             {
-                new UserUnit().SaveUser(model);
+                new UserUnit().UpdateUser(model);
                 return RedirectToAction("UserAccount", new { UserID = model.UserID });
             }
             catch (Exception ex)

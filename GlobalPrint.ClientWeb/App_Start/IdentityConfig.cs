@@ -10,6 +10,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
+using System.Net.Mail;
+using GlobalPrint.Infrastructure.EmailUtility;
+using Microsoft.Owin.Security.DataProtection;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -44,6 +47,16 @@ namespace GlobalPrint.ClientWeb
                 RequireLowercase = false,
                 RequireUppercase = false,
             };
+
+            var dataProtectionProvider = options.DataProtectionProvider;
+            if (dataProtectionProvider != null)
+            {
+                var provider = new DataProtectorTokenProvider<ApplicationUser, int>(dataProtectionProvider.Create("ASP.NET Identity"));
+                manager.UserTokenProvider = provider;
+            }
+
+            //manager.SmsService = new SmsService();
+            manager.EmailService = new EmailService();
 
             return manager;
         }
@@ -90,6 +103,16 @@ namespace GlobalPrint.ClientWeb
         {
             // Plug in your sms service here to send a text message.
             return Task.FromResult(0);
+        }
+    }
+
+    public class EmailService : IIdentityMessageService
+    {
+        private Lazy<IEmailUtility> _emailUtility = new Lazy<IEmailUtility>(() => new EmailUtility());
+
+        public Task SendAsync(IdentityMessage message)
+        {
+            return this._emailUtility.Value.SendAsync(message.Destination, message.Subject, message.Body);
         }
     }
 }
