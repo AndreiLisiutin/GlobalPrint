@@ -14,9 +14,10 @@ namespace GlobalPrint.ClientWeb
 {
     public class AccountController : BaseController
     {
+        private const bool REGISTER_WITH_MAIL_CONFIRM = false;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        
+
         private IAuthenticationManager AuthenticationManager
         {
             get
@@ -66,7 +67,7 @@ namespace GlobalPrint.ClientWeb
 
             return RedirectToAction("VerifyPhoneNumber", new { /*PhoneNumber = model.Phone,*/ FromRegistration = false });
         }
-        
+
         [HttpPost]
         [AllowAnonymous]
         public ActionResult RegisterFromPhone(RegisterViewModel model)
@@ -185,31 +186,37 @@ namespace GlobalPrint.ClientWeb
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                // генерируем токен для подтверждения регистрации
-                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                if (REGISTER_WITH_MAIL_CONFIRM)
+                {
+                    // генерируем токен для подтверждения регистрации
+                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
-                // создаем ссылку для подтверждения
-                string callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
-                           protocol: Request.Url.Scheme);
+                    // создаем ссылку для подтверждения
+                    string callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
+                               protocol: Request.Url.Scheme);
 
-                // отправка письма
-                await UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты",
-                    "Для завершения регистрации перейдите по ссылке:: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>");
+                    // отправка письма
+                    await UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты",
+                        "Для завершения регистрации перейдите по ссылке:: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>");
 
-                return View("DisplayEmail");
+                    return View("DisplayEmail");
+                }
+                else
+                {
+                    // Old version of registration process, without email confirmation
+                    var currentUser = await this.UserManager.FindByNameAsync(model.Email);
+                    await SignInManager.SignInAsync(currentUser, isPersistent: false, rememberBrowser: false);
 
-                //var currentUser = await this.UserManager.FindByNameAsync(model.Email);
-                //await SignInManager.SignInAsync(currentUser, isPersistent: false, rememberBrowser: false);
+                    // In case of Print->Register
+                    string printerID = Session["Account_PrinterID"] as string;
+                    if (!string.IsNullOrEmpty(printerID))
+                    {
+                        Session["Account_PrinterID"] = null;
+                        return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
+                    }
 
-                //// In case of Print->Register
-                //string printerID = Session["Account_PrinterID"] as string;
-                //if (!string.IsNullOrEmpty(printerID))
-                //{
-                //    Session["Account_PrinterID"] = null;
-                //    return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
-                //}
-
-                //return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home");
+                }
             }
 
             foreach (var error in result.Errors)
@@ -251,7 +258,7 @@ namespace GlobalPrint.ClientWeb
                 var user = await UserManager.FindAsync(model.Email, model.Password);
                 if (user != null)
                 {
-                    if (user.EmailConfirmed == true)
+                    if (!REGISTER_WITH_MAIL_CONFIRM || user.EmailConfirmed == true)
                     {
                         // This doesn't count login failures towards account lockout
                         // To enable password failures to trigger account lockout, change to shouldLockout: true
@@ -273,7 +280,7 @@ namespace GlobalPrint.ClientWeb
                     else
                     {
                         ModelState.AddModelError("", "Не подтвержден email.");
-                    }                    
+                    }
                 }
                 else
                 {
