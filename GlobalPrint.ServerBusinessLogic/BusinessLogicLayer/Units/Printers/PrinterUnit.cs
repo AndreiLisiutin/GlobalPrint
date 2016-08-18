@@ -96,6 +96,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                     printerRepo.Insert(printer);
                     printerScheduleRepo.Insert(schedules.ToArray());
 
+                    context.Save();
                     context.CommitTransaction();
                 }
                 catch (Exception ex)
@@ -145,8 +146,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                 if (originalPrinter != null)
                 {
                     printerRepo.Update(printer);
-                    //db.Entry(originalPrinter).CurrentValues.SetValues(printer);
-                    //db.SaveChanges();
+                    context.Save();
                 }
                 else
                 {
@@ -175,6 +175,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                         printerScheduleRepo.Delete(printSchedules);
                         printerRepo.Delete(printer);
 
+                        context.Save();
                         context.CommitTransaction();
                     }
                     catch (Exception ex)
@@ -182,10 +183,6 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                         context.RollbackTransaction();
                         throw;
                     }
-                    //db.PrintSchedules.RemoveRange(printSchedules);
-                    //db.SaveChanges();
-                    //db.Printers.Remove(original);
-                    //db.SaveChanges();
                 }
                 else
                 {
@@ -269,7 +266,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                     client.AmountOfMoney -= order.PricePerPage;
                     userRepo.Update(client);
 
-                    //db.SaveChanges();
+                    context.Save();
                     context.CommitTransaction();
                 }
                 catch (Exception ex)

@@ -21,7 +21,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
         {
             using (IDataContext context = this.Context())
             {
-                this.Repository<IUserActionLogRepository>(context).Insert(obj);
+                IUserActionLogRepository usreActionLogRepo = this.Repository<IUserActionLogRepository>(context);
+                usreActionLogRepo.Insert(obj);
+                context.Save();
             }
         }
 

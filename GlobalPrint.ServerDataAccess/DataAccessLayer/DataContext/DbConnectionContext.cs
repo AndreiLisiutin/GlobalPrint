@@ -87,8 +87,7 @@ namespace GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext
             return this._transaction != null;
         }
 
-        /// <summary>
-        /// Saves all changes made in this context to the underlying database.
+        /// <summary> Saves all changes made in this context to the underlying database.
         /// </summary>
         /// <returns>
         /// The number of state entries written to the underlying database. This can include

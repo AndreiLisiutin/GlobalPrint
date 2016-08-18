@@ -115,7 +115,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                         client.AmountOfMoney += order.PricePerPage;
                     }
 
-                    //db.SaveChanges();
+                    context.Save();
                     context.CommitTransaction();
                 }
                 catch (Exception ex)
