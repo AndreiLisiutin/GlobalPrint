@@ -44,7 +44,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 if (originalUser != null)
                 {
                     userRepo.Update(user);
-                    this.SaveContext(context);
+                    context.Save();
                     return user;
                 }
                 else
@@ -60,7 +60,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             {
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
                 userRepo.Insert(user);
-                this.SaveContext(context);
+                context.Save();
                 return user;
             }
         }
@@ -71,7 +71,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             {
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
                 userRepo.Delete(user);
-                this.SaveContext(context);
+                context.Save();
                 return user;
             }
         }
@@ -82,15 +82,13 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             using (IDataContext context = this.Context())
             {
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
-                User originalUser = userRepo
-                    .Get(x => x.UserID == userID)
-                    .SingleOrDefault();
+                User originalUser = userRepo.GetByID(userID);
 
                 if (originalUser != null)
                 {
                     originalUser.AmountOfMoney += upSumm;
                     userRepo.Update(originalUser);
-                    this.SaveContext(context);
+                    context.Save();
                     return originalUser;
                 }
                 else

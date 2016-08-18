@@ -61,22 +61,5 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units
                 ));
             }
         }
-
-        public void SaveContext(IDataContext context)
-        {
-            if (context != null)
-            {
-                context.Save();
-            }
-        }
-
-        private void _Test()
-        {
-            using (IDataContext context = this.Context())
-            {
-                var userActionLogRepo = this.Repository<IUserActionLogRepository>(context);
-            }
-        }
-
     }
 }
