@@ -34,6 +34,31 @@ namespace GlobalPrint.ClientWeb
         public string ConfirmPassword { get; set; }
     }
 
+    public class ResetPasswordViewModel
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "Минимальная длина пароля - {2} символов.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
+        public string ConfirmPassword { get; set; }
+
+        public string Code { get; set; }
+    }
+
+    public class ForgotPasswordViewModel
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+    }
+
     [Obsolete("Пока что убрали регистрацию и логин через телефон")]
     public class VerifyPhoneNumberViewModel
     {

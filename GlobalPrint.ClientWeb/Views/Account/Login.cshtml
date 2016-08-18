@@ -39,6 +39,10 @@
     </div>
 
     <div class="form-signin-link">
+        Забыли пароль? @Html.ActionLink("Восстановите", "ForgotPassword", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, new { })
+    </div>
+
+    <div class="form-signin-link">
         @Html.ActionLink("www.globalprint.online.ru", "Index", "Home")
     </div>
 
