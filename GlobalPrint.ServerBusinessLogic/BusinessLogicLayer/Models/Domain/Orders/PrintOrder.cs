@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders
 {
     [Table("print_order", Schema = "public")]
-    public class PrintOrder
+    public class PrintOrder: IDomainModel
     {
         [Key]
         [Column("print_order_id")]
@@ -56,5 +56,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Order
                 return this.Document == null ? null : new FileInfo(this.Document).Name;
             }
         }
+
+        #region IDomainModel
+        [NotMapped]
+        public int ID
+        {
+            get { return this.PrintOrderID; }
+            set { this.PrintOrderID = value; }
+        }
+        #endregion
     }
 }

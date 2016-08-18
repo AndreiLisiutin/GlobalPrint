@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
 {
     [Table("user_role", Schema = "public")]
-    public class UserRole
+    public class UserRole : IDomainModel
     {
         [Key]
         [Column("user_role_id")]
@@ -18,5 +18,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
         public int UserID { get; set; }
         [Column("role_id")]
         public int RoleID { get; set; }
+
+        #region IDomainModel
+        [NotMapped]
+        public int ID
+        {
+            get { return this.UserRoleID; }
+            set { this.UserRoleID = value; }
+        }
+        #endregion
     }
 }

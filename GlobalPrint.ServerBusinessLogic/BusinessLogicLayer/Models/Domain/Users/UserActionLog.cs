@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
 {
     [Table("user_action_log", Schema = "public")]
-    public class UserActionLog
+    public class UserActionLog : IDomainModel
     {
         [Key]
         [Column("user_action_log_id")]
@@ -22,5 +22,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
         public string Log { get; set; }
         [Column("user_id")]
         public int UserID { get; set; }
+
+        #region IDomainModel
+        [NotMapped]
+        public int ID
+        {
+            get { return this.UserActionLogID; }
+            set { this.UserActionLogID = value; }
+        }
+        #endregion
     }
 }

@@ -14,7 +14,7 @@ namespace GlobalPrint.ClientWeb
 {
     public class AccountController : BaseController
     {
-        private const bool REGISTER_WITH_MAIL_CONFIRM = false;
+        private const bool REGISTER_WITH_MAIL_CONFIRM = true;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -197,7 +197,7 @@ namespace GlobalPrint.ClientWeb
 
                     // отправка письма
                     await UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты",
-                        "Для завершения регистрации перейдите по ссылке:: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>");
+                        "Для завершения регистрации перейдите по ссылке: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>");
 
                     return View("DisplayEmail");
                 }
@@ -352,6 +352,28 @@ namespace GlobalPrint.ClientWeb
                 return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
             }
             return RedirectToAction("Index", "Home");
+        }
+        
+        /// <summary>
+        /// Get ConfirmEmail view to test css styles
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult ConfirmEmail()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Get DisplayEmail view to test css styles
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult DisplayEmail()
+        {
+            return View();
         }
 
         /// <summary>

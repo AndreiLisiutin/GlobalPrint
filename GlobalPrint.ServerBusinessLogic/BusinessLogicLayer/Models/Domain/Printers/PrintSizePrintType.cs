@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers
 {
     [Table("print_size_print_type", Schema = "public")]
-    public class PrintSizePrintType
+    public class PrintSizePrintType : IDomainModel
     {
         [Key]
         [Column("print_size_print_type_id")]
@@ -18,5 +18,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
         public int PrintSizeID { get; set; }
         [Column("print_type_id")]
         public int PrintTypeID { get; set; }
+
+        #region IDomainModel
+        [NotMapped]
+        public int ID
+        {
+            get { return this.PrintSizePrintTypeID; }
+            set { this.PrintSizePrintTypeID = value; }
+        }
+        #endregion
     }
 }

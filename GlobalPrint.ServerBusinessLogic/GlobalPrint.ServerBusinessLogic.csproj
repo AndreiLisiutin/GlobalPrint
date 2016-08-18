@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogicLayer\Models\Domain\IDomainModel.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Orders\PrintOrderStatusEnum.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Printers\Printer.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Printers\PrinterSchedule.cs" />

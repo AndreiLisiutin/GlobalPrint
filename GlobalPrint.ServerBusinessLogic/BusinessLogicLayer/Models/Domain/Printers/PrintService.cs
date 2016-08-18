@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers
 {
     [Table("print_service", Schema = "public")]
-    public class PrintService
+    public class PrintService : IDomainModel
     {
         [Key]
         [Column("print_service_id")]
@@ -20,5 +20,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
         public bool IsColored { get; set; }
         [Column("is_two_sided")]
         public bool IsTwoSided { get; set; }
+
+        #region IDomainModel
+        [NotMapped]
+        public int ID
+        {
+            get { return this.PrintServiceID; }
+            set { this.PrintServiceID = value; }
+        }
+        #endregion
     }
 }

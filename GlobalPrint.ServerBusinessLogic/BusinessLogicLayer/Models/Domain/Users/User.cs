@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
 {
     [Table("user", Schema = "public")]
-    public class User
+    public class User : IDomainModel
     {
         [Key]
         [Column("user_id")]
@@ -30,5 +30,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
         public bool PhoneNumberConfirmed { get; set; }
         [Column("email_confirmed")]
         public bool EmailConfirmed { get; set; }
+
+        #region IDomainModel
+        [NotMapped]
+        public int ID
+        {
+            get { return this.UserID; }
+            set { this.UserID = value; }
+        }
+        #endregion
     }
 }

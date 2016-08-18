@@ -18,7 +18,7 @@ namespace GlobalPrint.ServerDataAccess.DataAccessLayer.Repository
     /// </summary>
     /// <typeparam name="T">Тип репозитория</typeparam>
     public class BaseRepository<T> : IRepository<T> 
-        where T : class
+        where T : class, ServerBusinessLogic.BusinessLogicLayer.Models.Domain.IDomainModel
     {
         private readonly DbConnectionContext _context;
         private readonly Lazy<DbSet<T>> _entities;
@@ -78,8 +78,11 @@ namespace GlobalPrint.ServerDataAccess.DataAccessLayer.Repository
                 throw new ArgumentNullException("entity");
             }
 
-            //this._entities.Attach(entity);
-            this._context.DB.Entry(entity).State = EntityState.Modified;
+            T original = this._entities.Value.Find(entity.ID);
+            if (original != null)
+            {
+                this._context.DB.Entry(original).CurrentValues.SetValues(entity);
+            }
         }
 
         public virtual void Delete(object id)

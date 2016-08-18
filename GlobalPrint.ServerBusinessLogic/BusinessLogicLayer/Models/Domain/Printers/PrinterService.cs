@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers
 {
     [Table("printer_service", Schema = "public")]
-    public class PrinterService
+    public class PrinterService : IDomainModel
     {
         [Key]
         [Column("printer_service_id")]
@@ -20,5 +20,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
         public int PrinterID { get; set; }
         [Column("price_per_page")]
         public decimal PricePerPage { get; set; }
+
+        #region IDomainModel
+        [NotMapped]
+        public int ID
+        {
+            get { return this.PrinterServiceID; }
+            set { this.PrinterServiceID = value; }
+        }
+        #endregion
     }
 }

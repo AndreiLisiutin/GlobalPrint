@@ -3,8 +3,14 @@
     ViewBag.Title = "Подтверждение email";
 }
 
-<h2>@ViewBag.Title.</h2>
-<p>
-    Спасибо за подтверждение вашего email. Пожалуйста, перейдите по
-    @Html.ActionLink("ссылке", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
-</p>
+@section Stylesheets {
+    <link href="~/Resources/Stylesheets/account/displayEmail.css" rel="stylesheet" />
+}
+
+<div class="display-email-content">
+    <h2>@ViewBag.Title.</h2>
+    <p>
+        Спасибо за подтверждение вашего email. Пожалуйста, перейдите по
+        @Html.ActionLink("ссылке", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+    </p>
+</div>

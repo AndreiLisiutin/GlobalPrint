@@ -205,6 +205,7 @@
     <Content Include="Resources\Scripts\home\index.js" />
     <Content Include="Resources\Scripts\printer\print.js" />
     <Content Include="Resources\Scripts\shared\navigation.js" />
+    <Content Include="Resources\Stylesheets\account\displayEmail.css" />
     <Content Include="Resources\Stylesheets\account\login.css" />
     <Content Include="Resources\Stylesheets\home\index.css" />
     <Content Include="Resources\Stylesheets\base.css" />

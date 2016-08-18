@@ -11,7 +11,7 @@ namespace GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository
     /// Интерфейс общего репозитория
     /// </summary>
     /// <typeparam name="T">Тип репозитория</typeparam>
-    public interface IRepository<T> where T : class
+    public interface IRepository<T> where T : class, ServerBusinessLogic.BusinessLogicLayer.Models.Domain.IDomainModel
     {
         /// <summary>
         /// Получить объекты по фильтру

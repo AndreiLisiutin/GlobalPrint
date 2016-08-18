@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers
 {
     [Table("printer_schedule", Schema = "public")]
-    public class PrinterSchedule
+    public class PrinterSchedule : IDomainModel
     {
         [Key]
         [Column("printer_schedule_id")]
@@ -22,5 +22,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
         public TimeSpan OpenTime { get; set; }
         [Column("close_time")]
         public TimeSpan CloseTime { get; set; }
+
+        #region IDomainModel
+        [NotMapped]
+        public int ID
+        {
+            get { return this.PrinterScheduleID; }
+            set { this.PrinterScheduleID = value; }
+        }
+        #endregion
     }
 }
