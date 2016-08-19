@@ -16,7 +16,7 @@ namespace GlobalPrint.Infrastructure.LogUtility
     {
         public NlogUtility()
         {
-            this.SetConfig();
+            //this.SetConfig();
         }
 
         private void SetConfig()
@@ -87,7 +87,7 @@ namespace GlobalPrint.Infrastructure.LogUtility
             //config.AddTarget(mailTarget);
             //config.LoggingRules.Add(new LoggingRule("*", LogLevel.Error, mailTarget));
 
-            NLog.LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration("<your path>" + "\\NLog.config", false);
+            //NLog.LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration("<your path>" + "\\NLog.config", false);
             LogManager.Configuration = config;
             LogManager.ThrowExceptions = true;
         }
