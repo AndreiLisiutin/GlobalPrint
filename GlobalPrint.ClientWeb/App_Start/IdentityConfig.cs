@@ -113,7 +113,7 @@ namespace GlobalPrint.ClientWeb
         public Task SendAsync(IdentityMessage message)
         {
             // Заглушка, чтобы не спамить от себя самому себе
-            return Task.FromResult(0);
+            //return Task.FromResult(0);
 
             return this._emailUtility.Value.SendAsync(message.Destination, message.Subject, message.Body);
         }

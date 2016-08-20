@@ -15,6 +15,7 @@ namespace GlobalPrint.Infrastructure.LogUtility
     public class NlogUtility<T> : NLog.Logger, ILogUtility
     {
         public NlogUtility()
+            :base()
         {
             //this.SetConfig();
         }
@@ -66,12 +67,12 @@ namespace GlobalPrint.Infrastructure.LogUtility
             mailTarget.SmtpServer = "smtp.gmail.com";
             mailTarget.SmtpPort = 587;
             mailTarget.SmtpAuthentication = SmtpAuthenticationMode.Basic;
-            mailTarget.SmtpUserName = "sergei.lisiutin@gmail.com";
-            mailTarget.SmtpPassword = "littlelion9310-";
+            mailTarget.SmtpUserName = "sup.globalprint.online@gmail.com";
+            mailTarget.SmtpPassword = "global2016print-";
             mailTarget.UseSystemNetMailSettings = false;
             mailTarget.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
-            mailTarget.From = "sergei.lisiutin@gmail.com";
-            mailTarget.To = "sergei.lisiutin@gmail.com";
+            mailTarget.From = "sup.globalprint.online@gmail.com";
+            mailTarget.To = "sup.globalprint.online@gmail.com";
             mailTarget.Subject = "Global Print Error (${level:uppercase=true}) [${date:format=dd\\.MM\\.yyyy HH\\:mm}]";
             mailTarget.Layout = "Oops... Some error occured during Global Print Web run..." + 
                 Environment.NewLine + errorInfoString;

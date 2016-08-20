@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Linq;
+using System.Net.Configuration;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,24 +15,22 @@ namespace GlobalPrint.Infrastructure.EmailUtility
     {
         private Lazy<ILogUtility> _logUtility = new Lazy<ILogUtility>(() => new NlogUtility<EmailUtility>());
 
+        /// <summary>
+        /// Send email syncroniously
+        /// </summary>
+        /// <param name="destination">Mail destination (To)</param>
+        /// <param name="subject">Mail subject/theme</param>
+        /// <param name="body">Mail body/text</param>
         public void Send(string destination, string subject, string body)
         {
             try
             {
-                // настройка логина, пароля отправителя
-                var from = "sergei.lisiutin@gmail.com";
-                var pass = "littlelion9310-";
+                // SMTP settings from Web.config/system.net/mailSettings
+                SmtpClient client = new SmtpClient();
 
-                // адрес и порт smtp-сервера, с которого мы и будем отправлять письмо
-                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
-
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.UseDefaultCredentials = false;
-                client.Credentials = new System.Net.NetworkCredential(from, pass);
-                client.EnableSsl = true;
-
-                // создаем письмо: message.Destination - адрес получателя
-                MailMessage mail = new MailMessage(from, destination);
+                // mail sender from Web.config/system.net/mailSettings/from
+                MailMessage mail = new MailMessage();
+                mail.To.Add(destination);
                 mail.Subject = subject;
                 mail.Body = body;
                 mail.IsBodyHtml = true;
@@ -44,24 +44,22 @@ namespace GlobalPrint.Infrastructure.EmailUtility
             }
         }
 
+        /// <summary>
+        /// Send email asyncroniously
+        /// </summary>
+        /// <param name="destination">Mail destination (To)</param>
+        /// <param name="subject">Mail subject/theme</param>
+        /// <param name="body">Mail body/text</param>
         public Task SendAsync(string destination, string subject, string body)
         {
            try
             {
-                // настройка логина, пароля отправителя
-                var from = "sergei.lisiutin@gmail.com";
-                var pass = "littlelion9310-";
+                // SMTP settings from Web.config/system.net/mailSettings
+                SmtpClient client = new SmtpClient();
 
-                // адрес и порт smtp-сервера, с которого мы и будем отправлять письмо
-                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
-
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.UseDefaultCredentials = false;
-                client.Credentials = new System.Net.NetworkCredential(from, pass);
-                client.EnableSsl = true;
-
-                // создаем письмо: message.Destination - адрес получателя
-                MailMessage mail = new MailMessage(from, destination);
+                // mail sender from Web.config/system.net/mailSettings/from
+                MailMessage mail = new MailMessage();
+                mail.To.Add(destination);
                 mail.Subject = subject;
                 mail.Body = body;
                 mail.IsBodyHtml = true;
@@ -76,6 +74,11 @@ namespace GlobalPrint.Infrastructure.EmailUtility
             }
         }
 
+        /// <summary>
+        /// Callback of async mail sending
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MailDeliveryComplete(object sender, AsyncCompletedEventArgs e)
         {
             if (e.Error != null)
