@@ -1,4 +1,5 @@
 ﻿using GlobalPrint.Configuration.DI;
+using GlobalPrint.Infrastructure.LogUtility;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,8 @@ namespace GlobalPrint.ClientWeb
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        private Lazy<ILogUtility> _logUtility = new Lazy<ILogUtility>(() => new NlogUtility<MvcApplication>());
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -26,6 +29,7 @@ namespace GlobalPrint.ClientWeb
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception exception = Server.GetLastError();
+            _logUtility.Value.Fatal(exception, "Unhandled controller exception: " + exception.Message);
         }
     }
 }
