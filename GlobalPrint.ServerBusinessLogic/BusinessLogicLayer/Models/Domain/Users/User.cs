@@ -24,6 +24,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
         public string PhoneNumber { get; set; }
         [Column("password_hash")]
         public string PasswordHash { get; set; }
+        [Column("security_stamp")]
+        public string SecurityStamp { get; set; }
         [Column("amount_of_money")]
         public decimal AmountOfMoney { get; set; }
         [Column("phone_confirmed")]

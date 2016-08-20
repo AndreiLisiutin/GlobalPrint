@@ -14,7 +14,7 @@ namespace GlobalPrint.ClientWeb
 {
     public class AccountController : BaseController
     {
-        private const bool REGISTER_WITH_MAIL_CONFIRM = false;
+        private const bool REGISTER_WITH_MAIL_CONFIRM = true;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 

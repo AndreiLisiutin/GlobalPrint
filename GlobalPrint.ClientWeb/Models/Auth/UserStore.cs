@@ -17,7 +17,8 @@ namespace GlobalPrint.ClientWeb
         IUserPasswordStore<ApplicationUser, int>,
         IUserTwoFactorStore<ApplicationUser, int>,
         IUserPhoneNumberStore<ApplicationUser, int>,
-        IUserEmailStore<ApplicationUser, int>
+        IUserEmailStore<ApplicationUser, int>,
+        IUserSecurityStampStore<ApplicationUser, int>
     {
         private UserUnit _userUnit { get; set; }
 
@@ -153,6 +154,8 @@ namespace GlobalPrint.ClientWeb
             }
 
             user.User.PasswordHash = passwordHash;
+            //UpdateAsync(user);
+
             return Task.FromResult(0);
         }
 
@@ -312,6 +315,33 @@ namespace GlobalPrint.ClientWeb
             }
 
             return Task.FromResult<ApplicationUser>(null);
+        }
+
+        #endregion
+
+        #region IUserSecurityStampStore
+        
+        public Task<string> GetSecurityStampAsync(ApplicationUser user)
+        {
+            if (user == null || user.User == null)
+            {
+                throw new ArgumentException("user");
+            }
+
+            return Task.FromResult<string>(user.User.SecurityStamp);
+        }
+
+        public Task SetSecurityStampAsync(ApplicationUser user, string stamp)
+        {
+            if (user == null || user.User == null)
+            {
+                throw new ArgumentException("user");
+            }
+
+            user.User.SecurityStamp = stamp;
+            //UpdateAsync(user);
+
+            return Task.FromResult(0);
         }
 
         #endregion
