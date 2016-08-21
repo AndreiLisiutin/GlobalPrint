@@ -28,6 +28,10 @@ namespace GlobalPrint.ClientWeb
                 Enabled = WebConfigurationManager.AppSettings["SmppEnabled"] == "1",
             };
         }
-        
+
+        protected int GetCurrentUserID()
+        {
+            return Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
+        }
     }
 }

@@ -2,7 +2,10 @@
 using AberrantSMPP.Packet;
 using AberrantSMPP.Packet.Request;
 using AberrantSMPP.Packet.Response;
+using GlobalPrint.ClientWeb.Models.PrinterController;
+using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Orders;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Printers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
@@ -33,7 +36,7 @@ namespace GlobalPrint.ClientWeb
 
         private Printer_PrintViewModel _CreatePrintViewModel(int printerID, HttpPostedFileBase fileToPrint, PrintOrder order)
         {
-            PrinterInfo printer = new PrinterUnit().GetPrinterInfoByID(printerID);
+            PrinterScheduled printer = new PrinterUnit().GetPrinterInfoByID(printerID);
             int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
             User user = new UserUnit().GetUserByID(userID);
             if (user.AmountOfMoney <= 0)
@@ -129,7 +132,6 @@ namespace GlobalPrint.ClientWeb
             var order = model.order;
             order.Document = pathFoFile;
             order.OrderedOn = DateTime.Now;
-            //order.Price = numberOfPages * printer.BlackWhitePrintPrice;
             order.PagesCount = numberOfPages;
             order.PrintedOn = null;
             order.UserID = userID;
@@ -187,40 +189,118 @@ namespace GlobalPrint.ClientWeb
             return View(order);
         }
 
-        [HttpGet]
-        [MultipleButton(Name = "action", Argument = "AddPrinter")]
-        public ActionResult AddPrinter()
-        {
-            var printer = new Printer();
-            return View(printer);
-        }
+        //--------------------------------------------------------CRUD-----------------------------------------------------
 
-        [HttpGet]
-        [MultipleButton(Name = "action", Argument = "EditPrinter")]
-        public ActionResult EditPrinter(int PrinterID)
+        private Printer_EditViewMoel _Printer_EditViewMoel(PrinterEditionModel model = null)
         {
-            var printer = new PrinterUnit().GetPrinterByID(PrinterID);
-            return View("AddPrinter", printer);
-        }
+            int userID = this.GetCurrentUserID();
+            var weekUtility = new WeekUtility();
 
-        [HttpGet]
-        [MultipleButton(Name = "action", Argument = "DelPrinter")]
-        public ActionResult DelPrinter(int PrinterID)
-        {
-            var printer = new PrinterUnit().GetPrinterByID(PrinterID);
-
-            printer.OwnerUserID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            if (!ModelState.IsValid)
+            Printer_EditViewMoel viewModel = new Printer_EditViewMoel();
+            viewModel.Printer = model?.Printer ?? new Printer()
             {
-                return RedirectToAction("UserAccountPrinterList", "UserAccountPrinterList");
-            }
+                OwnerUserID = userID,
+                OperatorUserID = userID,
+            };
 
+            var schedule = new List<Printer_EditViewMoel._Schedule>();
+            foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                PrinterSchedule fromDB = model?.PrinterSchedule
+                    ?.FirstOrDefault(e => e.DayOfWeek == (int)day);
+
+                string dayName = weekUtility.DayName(day);
+                bool isOpened = fromDB != null;
+                schedule.Add(new Printer_EditViewMoel._Schedule((int)day, dayName, isOpened, fromDB?.OpenTime, fromDB?.CloseTime, fromDB?.ID ?? 0));
+            }
+            viewModel.Schedule = schedule;
+
+            var services = new List<Printer_EditViewMoel._Service>();
+            IEnumerable<PrintServiceExtended> allServices = new PrintServicesUnit().GetPrintServices();
+            foreach (PrintServiceExtended service in allServices)
+            {
+                PrinterService fromDB = model?.PrinterServices
+                    ?.FirstOrDefault(e => e.PrintServiceID == service.PrintService.PrintServiceID);
+
+                bool isSupported = fromDB != null;
+                services.Add(new Printer_EditViewMoel._Service(service, isSupported, fromDB?.PricePerPage, fromDB?.ID ?? 0));
+            }
+            viewModel.Services = services;
+
+            return viewModel;
+        }
+
+        private PrinterEditionModel _PrinterEditionModel(Printer_EditViewMoel viewModel)
+        {
+            int userID = this.GetCurrentUserID();
+
+            PrinterEditionModel model = new PrinterEditionModel();
+            model.Printer = viewModel.Printer;
+            model.Printer.OperatorUserID = model.Printer.OperatorUserID > 0 ? model.Printer.OperatorUserID : userID;
+            model.Printer.OwnerUserID = model.Printer.OwnerUserID > 0 ? model.Printer.OwnerUserID : userID;
+
+            model.PrinterSchedule = viewModel.Schedule
+                .Where(e => e.isOpened)
+                .Select(e => new PrinterSchedule()
+                {
+                    ID = e.PrinterScheduleID,
+                    DayOfWeek = e.DayOfWeek,
+                    CloseTime = e.CloseTime ?? TimeSpan.FromHours(-1),
+                    OpenTime = e.OpenTime ?? TimeSpan.FromHours(-1),
+                    PrinterID = model.Printer.PrinterID
+                })
+                .ToList();
+
+            model.PrinterServices = viewModel.Services
+                .Where(e => e.IsSupported)
+                .Select(e => new PrinterService()
+                {
+                    ID = e.PrinterServiceID,
+                    PrintServiceID = e.PrintServiceID,
+                    PricePerPage = e.Price ?? 0
+                })
+                .ToList();
+
+            return model;
+        }
+
+        [HttpGet]
+        public ActionResult CreatePrinter()
+        {
             try
             {
-                if (printer.PrinterID > 0)
-                {
-                    new PrinterUnit().DelPrinter(printer);
-                }
+                Printer_EditViewMoel viewModel = this._Printer_EditViewMoel();
+                return View("EditPrinter", viewModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View("EditPrinter", null);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult EditPrinter(int PrinterID)
+        {
+            try
+            {
+                PrinterEditionModel model = new PrinterUnit().GetPrinterEditionModel(PrinterID);
+                Printer_EditViewMoel viewModel = this._Printer_EditViewMoel(model);
+                return View("EditPrinter", viewModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View("EditPrinter", null);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult DeletePrinter(int PrinterID)
+        {
+            try
+            {
+                new PrinterUnit().DeletePrinter(PrinterID);
             }
             catch (Exception ex)
             {
@@ -231,9 +311,8 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpPost]
-        public ActionResult AddPrinter(Printer model)
+        public ActionResult SavePrinter(Printer_EditViewMoel model)
         {
-            model.OwnerUserID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -241,20 +320,14 @@ namespace GlobalPrint.ClientWeb
 
             try
             {
-                if (model.PrinterID > 0)
-                {
-                    new PrinterUnit().EditPrinter(model);
-                }
-                else
-                {
-                    new PrinterUnit().AddPrinter(model);
-                }
+                PrinterEditionModel editionnModel = this._PrinterEditionModel(model);
+                new PrinterUnit().SavePrinter(editionnModel);
                 return RedirectToAction("UserAccountPrinterList", "UserAccountPrinterList");
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
-                return View(model);
+                return View("EditPrinter", model);
             }
         }
 

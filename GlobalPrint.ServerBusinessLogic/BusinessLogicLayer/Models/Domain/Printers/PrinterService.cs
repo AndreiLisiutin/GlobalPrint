@@ -11,9 +11,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
     [Table("printer_service", Schema = "public")]
     public class PrinterService : IDomainModel
     {
-        [Key]
-        [Column("printer_service_id")]
-        public int PrinterServiceID { get; set; }
+        [NotMapped]
+        private int PrinterServiceID { get; set; }
         [Column("print_service_id")]
         public int PrintServiceID { get; set; }
         [Column("printer_id")]
@@ -22,7 +21,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
         public decimal PricePerPage { get; set; }
 
         #region IDomainModel
-        [NotMapped]
+        [Key]
+        [Column("printer_service_id")]
         public int ID
         {
             get { return this.PrinterServiceID; }

@@ -201,6 +201,41 @@
     <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.js" />
     <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.min.js" />
     <Content Include="Resources\Libraries\bootstrap.file-input\fileinput.js" />
+    <Content Include="Resources\Libraries\clockpicker\.gitignore" />
+    <Content Include="Resources\Libraries\clockpicker\assets\css\bootstrap-theme.css" />
+    <Content Include="Resources\Libraries\clockpicker\assets\css\bootstrap-theme.min.css" />
+    <Content Include="Resources\Libraries\clockpicker\assets\css\bootstrap.css" />
+    <Content Include="Resources\Libraries\clockpicker\assets\css\bootstrap.min.css" />
+    <Content Include="Resources\Libraries\clockpicker\assets\css\github.min.css" />
+    <Content Include="Resources\Libraries\clockpicker\assets\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Resources\Libraries\clockpicker\assets\images\screenshot-1.png" />
+    <Content Include="Resources\Libraries\clockpicker\assets\js\bootstrap.js" />
+    <Content Include="Resources\Libraries\clockpicker\assets\js\bootstrap.min.js" />
+    <Content Include="Resources\Libraries\clockpicker\assets\js\highlight.min.js" />
+    <Content Include="Resources\Libraries\clockpicker\assets\js\html5shiv.js" />
+    <Content Include="Resources\Libraries\clockpicker\assets\js\jquery.js" />
+    <Content Include="Resources\Libraries\clockpicker\assets\js\jquery.min.js" />
+    <Content Include="Resources\Libraries\clockpicker\assets\js\respond.min.js" />
+    <Content Include="Resources\Libraries\clockpicker\dist\bootstrap-clockpicker.css" />
+    <Content Include="Resources\Libraries\clockpicker\dist\bootstrap-clockpicker.js" />
+    <Content Include="Resources\Libraries\clockpicker\dist\bootstrap-clockpicker.min.css" />
+    <Content Include="Resources\Libraries\clockpicker\dist\bootstrap-clockpicker.min.js" />
+    <Content Include="Resources\Libraries\clockpicker\dist\jquery-clockpicker.css" />
+    <Content Include="Resources\Libraries\clockpicker\dist\jquery-clockpicker.js" />
+    <Content Include="Resources\Libraries\clockpicker\dist\jquery-clockpicker.min.css" />
+    <Content Include="Resources\Libraries\clockpicker\dist\jquery-clockpicker.min.js" />
+    <Content Include="Resources\Libraries\clockpicker\gulpfile.js" />
+    <Content Include="Resources\Libraries\clockpicker\index.html" />
+    <Content Include="Resources\Libraries\clockpicker\jquery.html" />
+    <Content Include="Resources\Libraries\clockpicker\src\clockpicker.css" />
+    <Content Include="Resources\Libraries\clockpicker\src\clockpicker.js" />
+    <Content Include="Resources\Libraries\clockpicker\src\standalone.css" />
+    <Content Include="Resources\Libraries\clockpicker\test\all.html" />
+    <Content Include="Resources\Libraries\clockpicker\test\assets\qunit-1.14.0.css" />
+    <Content Include="Resources\Libraries\clockpicker\test\assets\qunit-1.14.0.js" />
+    <Content Include="Resources\Libraries\clockpicker\test\assets\utils.js" />
+    <Content Include="Resources\Libraries\clockpicker\test\suites\basic.js" />
+    <Content Include="Resources\Libraries\clockpicker\test\suites\data-api.js" />
     <Content Include="Resources\Scripts\home.js" />
     <Content Include="Resources\Scripts\home\index.js" />
     <Content Include="Resources\Scripts\printer\print.js" />
@@ -229,15 +264,16 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\PrinterController\Printer_EditViewMoel.cs" />
     <Compile Include="Models\Stuff\FloatModelBinder.cs" />
     <Compile Include="Models\Stuff\MultipleButtonAttribute.cs" />
     <Compile Include="Models\Auth\AccountViewModels.cs" />
     <Compile Include="Models\Auth\IdentityModels.cs" />
     <Compile Include="Models\Auth\IdentityUser.cs" />
     <Compile Include="Models\Auth\UserStore.cs" />
-    <Compile Include="Models\Printer\PreparedOrder.cs" />
-    <Compile Include="Models\Printer\Printer_PrintConfirmationViewModel.cs" />
-    <Compile Include="Models\Printer\Printer_PrintViewModel.cs" />
+    <Compile Include="Models\PrinterController\PreparedOrder.cs" />
+    <Compile Include="Models\PrinterController\Printer_PrintConfirmationViewModel.cs" />
+    <Compile Include="Models\PrinterController\Printer_PrintViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -265,7 +301,7 @@
     <Content Include="Views\Account\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\UserRecievedPrintOrderList\ConfirmPrintOrder.cshtml" />
     <Content Include="Views\Team\Team.cshtml" />
-    <Content Include="Views\Printer\AddPrinter.cshtml" />
+    <Content Include="Views\Printer\EditPrinter.cshtml" />
     <Content Include="Views\Account\__RegisterViaPhone.cshtml" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -273,6 +309,16 @@
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Resources\Libraries\clockpicker\.travis.yml" />
+    <Content Include="Resources\Libraries\clockpicker\assets\css\bootstrap-theme.css.map" />
+    <Content Include="Resources\Libraries\clockpicker\assets\css\bootstrap.css.map" />
+    <Content Include="Resources\Libraries\clockpicker\assets\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Resources\Libraries\clockpicker\assets\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Resources\Libraries\clockpicker\assets\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Resources\Libraries\clockpicker\bower.json" />
+    <Content Include="Resources\Libraries\clockpicker\LICENSE" />
+    <Content Include="Resources\Libraries\clockpicker\package.json" />
+    <Content Include="Resources\Libraries\clockpicker\README.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

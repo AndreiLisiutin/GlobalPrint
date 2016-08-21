@@ -9,16 +9,16 @@
             @Html.AntiForgeryToken()
 
             <li>
-                @Html.ActionLink("Мои Принтеры", "UserAccountPrinterList", "UserAccountPrinterList", new { UserID = User.Identity.GetUserId() }, new { })
+                @Html.ActionLink("Мои Принтеры", "UserAccountPrinterList", "UserAccountPrinterList", new { }, new { })
             </li>
             <li>
                 @Html.ActionLink("Мои заказы", "UserPrintOrderList", "UserPrintOrderList", new { }, new { })
             </li>
             <li>
-                @Html.ActionLink("Входящие заказы", "UserRecievedPrintOrderList", "UserRecievedPrintOrderList", new { UserID = User.Identity.GetUserId() }, new { })
+                @Html.ActionLink("Входящие заказы", "UserRecievedPrintOrderList", "UserRecievedPrintOrderList", new { }, new { })
             </li>
             <li>
-                @Html.ActionLink(User.Identity.GetUserName(), "UserAccount", "UserAccount", new { UserID = User.Identity.GetUserId() }, new { @class = "font-bold" })
+                @Html.ActionLink(User.Identity.GetUserName(), "UserAccount", "UserAccount", new { }, new { @class = "font-bold" })
             </li>
             <li>
                 <a href="javascript:document.getElementById('logoutForm').submit()" class="font-bold">Выйти</a>

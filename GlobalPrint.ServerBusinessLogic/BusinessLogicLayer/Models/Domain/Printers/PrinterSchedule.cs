@@ -11,9 +11,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
     [Table("printer_schedule", Schema = "public")]
     public class PrinterSchedule : IDomainModel
     {
-        [Key]
-        [Column("printer_schedule_id")]
-        public int PrinterScheduleID { get; set; }
+        private int PrinterScheduleID { get; set; }
         [Column("printer_id")]
         public int PrinterID { get; set; }
         [Column("day_of_week")]
@@ -24,7 +22,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
         public TimeSpan CloseTime { get; set; }
 
         #region IDomainModel
-        [NotMapped]
+        [Key]
+        [Column("printer_schedule_id")]
         public int ID
         {
             get { return this.PrinterScheduleID; }
