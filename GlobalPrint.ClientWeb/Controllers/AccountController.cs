@@ -358,8 +358,8 @@ namespace GlobalPrint.ClientWeb
         [AllowAnonymous]
         public ActionResult ResetPassword(string code, string email)
         {
-            return code == null || string.IsNullOrEmpty(email) 
-                ? View("Error") 
+            return code == null || string.IsNullOrEmpty(email)
+                ? View("Error")
                 : View(new ResetPasswordViewModel() { Email = email });
         }
 
@@ -424,12 +424,18 @@ namespace GlobalPrint.ClientWeb
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(int userId, string code)
         {
-            if (userId == 0 || string.IsNullOrEmpty(code))
+            if (userId > 0 && !string.IsNullOrEmpty(code))
             {
-                return View("Error");
+                IdentityResult result = await UserManager.ConfirmEmailAsync(userId, code);
+                if (result.Succeeded)
+                {
+                    var user = await UserManager.FindByIdAsync(userId);
+                    await SignInManager.SignInAsync(user, false, false);
+                    return RedirectToLocal(null);
+                }
             }
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+
+            return View("Error");
         }
 
         /// <summary>
@@ -473,28 +479,6 @@ namespace GlobalPrint.ClientWeb
                 return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
             }
             return RedirectToAction("Index", "Home");
-        }
-        
-        /// <summary>
-        /// Get ConfirmEmail view to test css styles
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [AllowAnonymous]
-        public ActionResult ConfirmEmail()
-        {
-            return View();
-        }
-
-        /// <summary>
-        /// Get DisplayEmail view to test css styles
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [AllowAnonymous]
-        public ActionResult DisplayEmail()
-        {
-            return View();
         }
 
         /// <summary>
