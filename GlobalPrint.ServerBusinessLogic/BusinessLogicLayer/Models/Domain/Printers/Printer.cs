@@ -31,19 +31,6 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
         [Column("user_id_operator")]
         public int OperatorUserID { get; set; }
 
-        [Obsolete]
-        [NotMapped]
-        public decimal BlackWhitePrintPrice { get; set; }
-        [Obsolete]
-        [NotMapped]
-        public string BlackWhitePrintPriceInCurrency 
-        {
-            get
-            {
-                return this.BlackWhitePrintPrice.ToString() + " руб.";
-            }
-        }
-
         #region IDomainModel
         [NotMapped]
         public int ID

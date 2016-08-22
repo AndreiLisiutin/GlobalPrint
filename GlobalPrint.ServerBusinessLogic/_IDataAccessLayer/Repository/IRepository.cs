@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,7 +12,8 @@ namespace GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository
     /// Интерфейс общего репозитория
     /// </summary>
     /// <typeparam name="T">Тип репозитория</typeparam>
-    public interface IRepository<T> where T : class, ServerBusinessLogic.BusinessLogicLayer.Models.Domain.IDomainModel
+    public interface IRepository<T> 
+        where T : class, IDomainModel
     {
         /// <summary>
         /// Получить объекты по фильтру
@@ -35,13 +37,19 @@ namespace GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository
 
         /// <summary> Вставить объекты по запросу.
         /// </summary>
-        /// <param name="entities">запрос на вставку объектов.</param>
+        /// <param name="entities">Запрос на вставку объектов.</param>
         void Insert(IEnumerable<T> entities);
 
         /// <summary>
         /// Обновить объект
         /// </summary>
         void Update(T entity);
+
+        /// <summary>
+        /// Обновить объекты по запросу.
+        /// </summary>
+        /// <param name="entities">Запрос на обновление объектов.</param>
+        void Update(IEnumerable<T> entities);
 
         /// <summary>
         /// Удалить объект по ID
@@ -55,7 +63,14 @@ namespace GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository
 
         /// <summary> Удалить объекты по запросу.
         /// </summary>
-        /// <param name="entities">запрос на удаление объектов.</param>
+        /// <param name="entities">Запрос на удаление объектов.</param>
         void Delete(IEnumerable<T> entities);
+        
+        /// <summary> Merge entity instances - smartly delete/update/insert by IDs.
+        /// </summary>
+        /// <typeparam name="T">Entity.</typeparam>
+        /// <param name="newCollection">Actual list of entities to merge into database.</param>
+        /// <param name="mergeScope">Selector for DB entity instances to merge with actual list.</param>
+        void Merge(IEnumerable<T> newCollection, Expression<Func<T, bool>> mergeScope);
     }
 }

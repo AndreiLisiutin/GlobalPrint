@@ -59,6 +59,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessLogicLayer\Models\Domain\IDomainModel.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Business\Printers\PrinterServiceExtended.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Business\Printers\PrintServiceExtended.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Business\Printers\PrinterEditionModel.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Orders\PrintOrderStatusEnum.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Printers\Printer.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Printers\PrinterSchedule.cs" />
@@ -75,11 +78,12 @@
     <Compile Include="BusinessLogicLayer\Models\Domain\Users\UserActionType.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Users\UserRole.cs" />
     <Compile Include="BusinessLogicLayer\Units\Orders\PrintOrderUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Printers\PrintServicesUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Printers\PrinterUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Users\UserActionUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Users\UserUnit.cs" />
     <Compile Include="BusinessLogicLayer\Models\Business\Orders\PrintOrderInfo.cs" />
-    <Compile Include="BusinessLogicLayer\Models\Business\Orders\PrinterInfo.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Business\Orders\PrinterScheduled.cs" />
     <Compile Include="DI\IoC.cs" />
     <Compile Include="DI\ServerBusinessLogicIoc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

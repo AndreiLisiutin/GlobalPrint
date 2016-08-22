@@ -153,8 +153,7 @@ home.index = home.index || (function () {
             //infowindow.open(_map, marker);
             $("#printer-info").html(
                 printerInfo.Name + "<br>" +
-                "Адрес: " + printerInfo.Location + "<br>" +
-                "Цена ч/б печати(стр): " + printerInfo.BlackWhitePrintPrice + "руб.<br>");
+                "Адрес: " + printerInfo.Location + "<br>");
 
             $("#printer-print").prop("href", "/Printer/Print/" + printerInfo.PrinterID);
             $("#login-loginandprint").prop("href", "/Account/LoginAndPrint/" + printerInfo.PrinterID);

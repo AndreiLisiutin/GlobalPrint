@@ -3,20 +3,30 @@ using GlobalPrint.ServerDataAccess.EF;
 using System;
 using System.Data;
 using System.Data.Common;
+using System.Data.Entity;
 
 namespace GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext
 {
     public class DbConnectionContext : IDataContext
     {
         private DbConnection _connection;
-        private IDbTransaction _transaction;
+        private DbTransaction _transaction;
+        private DbContextTransaction _efTransaction;
         private Lazy<DB> _db;
         private bool _isDisposed;
         public DbConnectionContext(DbConnection connection)
         {
             this._connection = connection;
             this._isDisposed = false;
-            this._db = new Lazy<DB>(() => new DB(connection, false));
+            this._db = new Lazy<DB>(() =>
+            {
+                var db = new DB(connection, false);
+                if (this.IsTransactionAlive())
+                {
+                    db.Database.UseTransaction(this._transaction);
+                }
+                return db;
+            });
         }
 
         public DB DB
@@ -29,22 +39,34 @@ namespace GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext
 
         public void BeginTransaction()
         {
-            if (this.IsTransactionAlive())
-            {
-                throw new InvalidOperationException("Another transaction is active.");
-            }
-            this._transaction = this._connection.BeginTransaction();
+            _efTransaction = this.DB.Database.BeginTransaction();
+            //if (this.IsTransactionAlive())
+            //{
+            //    throw new InvalidOperationException("Another transaction is active.");
+            //}
+            //this._transaction = this._connection.BeginTransaction();
+            //if (this._db.IsValueCreated)
+            //{
+            //    this._db.Value.Database.UseTransaction(this._transaction);
+            //}
         }
 
         public void CommitTransaction()
         {
-            if (!this.IsTransactionAlive())
+            if (_efTransaction == null)
             {
-                throw new InvalidOperationException("Transaction is not active.");
+                return;
             }
-            this._transaction.Commit();
-            this._transaction.Dispose();
-            this._transaction = null;
+            _efTransaction.Commit();
+            _efTransaction.Dispose();
+            _efTransaction = null;
+            //if (!this.IsTransactionAlive())
+            //{
+            //    throw new InvalidOperationException("Transaction is not active.");
+            //}
+            //this._transaction.Commit();
+            //this._transaction.Dispose();
+            //this._transaction = null;
         }
 
         public void Dispose()
@@ -73,18 +95,26 @@ namespace GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext
 
         public void RollbackTransaction()
         {
-            if (!this.IsTransactionAlive())
+            if (_efTransaction == null)
             {
-                throw new InvalidOperationException("Transaction is not active.");
+                return;
             }
-            this._transaction.Rollback();
-            this._transaction.Dispose();
-            this._transaction = null;
+            _efTransaction.Rollback();
+            _efTransaction.Dispose();
+            _efTransaction = null;
+            //if (!this.IsTransactionAlive())
+            //{
+            //    throw new InvalidOperationException("Transaction is not active.");
+            //}
+            //this._transaction.Rollback();
+            //this._transaction.Dispose();
+            //this._transaction = null;
         }
 
         public bool IsTransactionAlive()
         {
-            return this._transaction != null;
+            return _efTransaction != null;
+            //return this._transaction != null;
         }
 
         /// <summary> Saves all changes made in this context to the underlying database.

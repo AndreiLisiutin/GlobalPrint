@@ -1,13 +1,20 @@
 ﻿body {
-  min-height: 2000px;
-  padding-top: 51px;
+    min-height: 2000px;
+    padding-top: 51px;
 }
-.form-horizontal .control-label.text-left{
+
+.form-horizontal .control-label.text-left {
     text-align: left;
 }
+
 .margin-top-20 {
-    margin-top:20px;
+    margin-top: 20px;
 }
+
 .font-bold {
     font-weight: bold;
+}
+
+.clockpicker {
+    width: 100px;
 }

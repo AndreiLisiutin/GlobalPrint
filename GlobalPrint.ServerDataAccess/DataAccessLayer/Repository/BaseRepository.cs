@@ -17,7 +17,7 @@ namespace GlobalPrint.ServerDataAccess.DataAccessLayer.Repository
     /// https://chsakell.com/2015/02/15/asp-net-mvc-solution-architecture-best-practices/
     /// </summary>
     /// <typeparam name="T">Тип репозитория</typeparam>
-    public class BaseRepository<T> : IRepository<T> 
+    public class BaseRepository<T> : IRepository<T>
         where T : class, ServerBusinessLogic.BusinessLogicLayer.Models.Domain.IDomainModel
     {
         private readonly DbConnectionContext _context;
@@ -106,10 +106,50 @@ namespace GlobalPrint.ServerDataAccess.DataAccessLayer.Repository
         {
             if (entities == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException("entities");
             }
+            List<int> ids = entities.ToList().Select(e => e.ID).ToList();
+            IEnumerable<T> formDB = this.Get(db => ids.Contains(db.ID))
+                .ToList();
+            this._entities.Value.RemoveRange(formDB);
+        }
 
-            this._entities.Value.RemoveRange(entities);
+        public void Update(IEnumerable<T> entities)
+        {
+            if (entities == null)
+            {
+                throw new ArgumentNullException("entities");
+            }
+            List<int> ids = entities.Select(e => e.ID).ToList();
+            IEnumerable<T> formDB = this.Get(db => ids.Contains(db.ID))
+                .ToList();
+            foreach (T old in formDB)
+            {
+                T @new = entities.First(e => e.ID == old.ID);
+                this._context.DB.Entry(old).CurrentValues.SetValues(@new);
+            }
+        }
+
+        /// <summary> Merge entity instances - smartly delete/update/insert by IDs.
+        /// </summary>
+        /// <typeparam name="T">Entity.</typeparam>
+        /// <param name="newCollection">Actual list of entities to merge into database.</param>
+        /// <param name="mergeScope">Selector for DB entity instances to merge with actual list.</param>
+        public void Merge(IEnumerable<T> newCollection, Expression<Func<T, bool>> mergeScope)
+        {
+            IEnumerable<T> oldCollection = this.Get(mergeScope).ToList();
+
+            //entity instances with IDs not from DB should be inserted there
+            IEnumerable<T> toInsert = newCollection.Where(@new => !oldCollection.Any(old => old.ID == @new.ID));
+            this.Insert(toInsert);
+
+            //those, which are not inserted - they are to be updated
+            IEnumerable<T> toUpdate = newCollection.Where(@new => !toInsert.Contains(@new));
+            this.Update(toUpdate);
+
+            //entity instances from DB which not presented in current collection should be deleted
+            IEnumerable<T> toDelete = oldCollection.Where(old => !newCollection.Any(@new => @new.ID == old.ID));
+            this.Delete(toDelete);
         }
 
         #endregion

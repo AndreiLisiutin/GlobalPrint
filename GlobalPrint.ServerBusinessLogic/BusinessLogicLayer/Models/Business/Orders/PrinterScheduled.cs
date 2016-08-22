@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Orders
 {
-    public class PrinterInfo
+    public class PrinterScheduled
     {
         public Printer Printer { get; set; }
         public List<PrinterSchedule> Schedule { get; set; }
