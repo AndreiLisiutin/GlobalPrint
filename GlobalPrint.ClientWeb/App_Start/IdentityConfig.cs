@@ -115,7 +115,7 @@ namespace GlobalPrint.ClientWeb
             // Заглушка, чтобы не спамить от себя самому себе
             //return Task.FromResult(0);
 
-            return this._emailUtility.Value.SendAsync(message.Destination, message.Subject, message.Body);
+            return this._emailUtility.Value.SendAsync(new MailAddress(message.Destination), message.Subject, message.Body);
         }
     }
 }

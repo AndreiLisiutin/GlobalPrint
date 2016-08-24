@@ -31,7 +31,11 @@ namespace GlobalPrint.ClientWeb
 
         protected int GetCurrentUserID()
         {
-            return Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
+            return User.Identity.GetUserId<int>();
+        }
+        protected string GetCurrentUserName()
+        {
+            return User.Identity.GetUserName();
         }
     }
 }

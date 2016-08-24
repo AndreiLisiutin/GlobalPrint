@@ -1,0 +1,30 @@
+﻿@using GlobalPrint.ClientWeb.Models.FeedbackViewModel
+@model FeedbackViewModel
+
+@{
+    ViewBag.Title = "Обратная связь";
+    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+}
+@section Stylesheets {
+    <link rel="stylesheet" href="~/Resources/Stylesheets/account/login.css">
+}
+
+<div class="container form-signin">
+    <h2 class="form-signin-heading">Обратная связь</h2>
+
+    @using (Html.BeginForm("Feedback", "Feedback", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @type = "email", @placeholder = "Ваш email", @required = "true", @autofocus = true })
+        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @type = "text", @placeholder = "Ваше имя", @required = "true" })
+        @Html.TextBoxFor(m => m.Subject, new { @class = "form-control", @type = "text", @placeholder = "Тема", @required = "true" })
+        @Html.TextAreaFor(m => m.Message, 10, 55, new { @class = "form-control", @type = "text", @placeholder = "Сообщение", @required = "true" })
+
+        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(m => m.Subject, "", new { @class = "text-danger" })
+        @Html.ValidationMessageFor(m => m.Message, "", new { @class = "text-danger" })
+        @Html.ValidationMessage("", new { @class = "text-danger" });
+
+        <button class="btn btn-default btn-primary btn-block" type="submit">Отправить</button>
+    }
+</div>

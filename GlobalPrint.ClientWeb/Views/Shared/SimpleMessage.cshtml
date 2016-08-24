@@ -1,0 +1,15 @@
+﻿@using GlobalPrint.ClientWeb.Models
+@model SimpleMessage
+
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+
+@section Stylesheets {
+    <link href="~/Resources/Stylesheets/account/displayEmail.css" rel="stylesheet" />
+}
+
+<div class="display-email-content">
+    <h2>@Model.Title</h2>
+    <p>@Model.Message</p>
+</div>

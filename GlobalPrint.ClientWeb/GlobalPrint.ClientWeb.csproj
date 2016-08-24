@@ -244,7 +244,6 @@
     <Content Include="Resources\Stylesheets\account\login.css" />
     <Content Include="Resources\Stylesheets\home\index.css" />
     <Content Include="Resources\Stylesheets\base.css" />
-    <Content Include="Resources\Stylesheets\team\team.css" />
     <Content Include="Resources\Stylesheets\userAccount\userAccount.css" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -252,7 +251,8 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Controllers\Team\TeamController.cs" />
+    <Compile Include="Controllers\AboutController.cs" />
+    <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\UserPrintOrderListController.cs" />
     <Compile Include="Controllers\UserRecievedPrintOrderListController.cs" />
     <Compile Include="Controllers\UserAccountPrinterListController.cs" />
@@ -264,7 +264,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\FeedbackController\FeedbackViewModel.cs" />
     <Compile Include="Models\PrinterController\Printer_EditViewMoel.cs" />
+    <Compile Include="Models\SimpleMessage.cs" />
     <Compile Include="Models\Stuff\FloatModelBinder.cs" />
     <Compile Include="Models\Stuff\MultipleButtonAttribute.cs" />
     <Compile Include="Models\Auth\AccountViewModels.cs" />
@@ -300,7 +302,6 @@
     <Content Include="Views\UserAccount\FillUpBalance.cshtml" />
     <Content Include="Views\Account\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\UserRecievedPrintOrderList\ConfirmPrintOrder.cshtml" />
-    <Content Include="Views\Team\Team.cshtml" />
     <Content Include="Views\Printer\EditPrinter.cshtml" />
     <Content Include="Views\Account\__RegisterViaPhone.cshtml" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
@@ -319,6 +320,9 @@
     <Content Include="Resources\Libraries\clockpicker\LICENSE" />
     <Content Include="Resources\Libraries\clockpicker\package.json" />
     <Content Include="Resources\Libraries\clockpicker\README.md" />
+    <Content Include="Views\About\About.cshtml" />
+    <Content Include="Views\Shared\SimpleMessage.cshtml" />
+    <Content Include="Views\Feedback\Feedback.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

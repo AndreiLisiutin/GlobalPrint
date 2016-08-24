@@ -7,7 +7,9 @@ using System.Linq;
 using System.Net.Configuration;
 using System.Net.Mail;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.Configuration;
 
 namespace GlobalPrint.Infrastructure.EmailUtility
 {
@@ -15,25 +17,50 @@ namespace GlobalPrint.Infrastructure.EmailUtility
     {
         private Lazy<ILogUtility> _logUtility = new Lazy<ILogUtility>(() => new NlogUtility<EmailUtility>());
 
+        private readonly MailAddress _supportEmail = new MailAddress(WebConfigurationManager.AppSettings["SupportEmail"].ToString());
+        public MailAddress SupportEmail
+        {
+            get
+            {
+                return this._supportEmail;
+            }
+        }
+
+        /// <summary>
+        /// Get MailMessage object from parameters
+        /// </summary>
+        private MailMessage GetMailNessage(MailAddress destination, string subject, string body, MailAddress sender = null)
+        {
+            // mail sender from Web.config/system.net/mailSettings/from
+            MailMessage mail = new MailMessage();
+
+            mail.To.Add(destination);
+            mail.Subject = subject;
+            mail.IsBodyHtml = true;
+            // replace all Environment.NewLine with <br/>
+            mail.Body = Regex.Replace(body, @"\r\n?|\n", "<br />");
+            if (sender != null)
+            {
+                mail.Sender = sender;
+            }
+
+            return mail;
+        }
+
         /// <summary>
         /// Send email syncroniously
         /// </summary>
         /// <param name="destination">Mail destination (To)</param>
         /// <param name="subject">Mail subject/theme</param>
         /// <param name="body">Mail body/text</param>
-        public void Send(string destination, string subject, string body)
+        public void Send(MailAddress destination, string subject, string body, MailAddress sender = null)
         {
             try
             {
                 // SMTP settings from Web.config/system.net/mailSettings
                 SmtpClient client = new SmtpClient();
-
-                // mail sender from Web.config/system.net/mailSettings/from
-                MailMessage mail = new MailMessage();
-                mail.To.Add(destination);
-                mail.Subject = subject;
-                mail.Body = body;
-                mail.IsBodyHtml = true;
+                
+                MailMessage mail = GetMailNessage(destination, subject, body, sender);
 
                 client.Send(mail);
             }
@@ -50,19 +77,14 @@ namespace GlobalPrint.Infrastructure.EmailUtility
         /// <param name="destination">Mail destination (To)</param>
         /// <param name="subject">Mail subject/theme</param>
         /// <param name="body">Mail body/text</param>
-        public Task SendAsync(string destination, string subject, string body)
+        public Task SendAsync(MailAddress destination, string subject, string body, MailAddress sender = null)
         {
            try
             {
                 // SMTP settings from Web.config/system.net/mailSettings
                 SmtpClient client = new SmtpClient();
 
-                // mail sender from Web.config/system.net/mailSettings/from
-                MailMessage mail = new MailMessage();
-                mail.To.Add(destination);
-                mail.Subject = subject;
-                mail.Body = body;
-                mail.IsBodyHtml = true;
+                MailMessage mail = GetMailNessage(destination, subject, body, sender);
 
                 client.SendCompleted += MailDeliveryComplete;
                 return client.SendMailAsync(mail);
