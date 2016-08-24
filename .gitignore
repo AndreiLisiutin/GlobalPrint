@@ -30,3 +30,5 @@ _ReSharper*/
 packages
 *.orig
 GlobalPrint.ClientWeb/App_Data
+*.pubxml
+*.pubxml.user
