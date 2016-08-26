@@ -5,9 +5,10 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using GlobalPrint.ClientWeb;
+using GlobalPrint.ClientWeb.Models.PushNotifications;
+using Microsoft.AspNet.SignalR;
 
 [assembly: OwinStartup(typeof(GlobalPrint.ClientWeb.Startup))]
-
 namespace GlobalPrint.ClientWeb
 {
     public class Startup
@@ -39,6 +40,12 @@ namespace GlobalPrint.ClientWeb
                 SlidingExpiration = true,
                 ExpireTimeSpan = System.TimeSpan.FromMinutes(30)
             });
+
+            // Find user by ID functionality for SignalR
+            var userIdProvider = new UserIdProvider(new ServerBusinessLogic.BusinessLogicLayer.Units.Users.UserUnit());
+            GlobalHost.DependencyResolver.Register(typeof(IUserIdProvider), () => userIdProvider);
+
+            app.MapSignalR();
         }
     }
 }

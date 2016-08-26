@@ -14,7 +14,6 @@ namespace GlobalPrint.ClientWeb
 {
     public class AccountController : BaseController
     {
-        private const bool REGISTER_WITH_MAIL_CONFIRM = true;
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -186,22 +185,20 @@ namespace GlobalPrint.ClientWeb
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                if (REGISTER_WITH_MAIL_CONFIRM)
-                {
-                    // генерируем токен для подтверждения регистрации
-                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                // генерируем токен для подтверждения регистрации
+                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
-                    // создаем ссылку для подтверждения
-                    string callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
-                               protocol: Request.Url.Scheme);
+                // создаем ссылку для подтверждения
+                string callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
+                           protocol: Request.Url.Scheme);
 
-                    // отправка письма
-                    await UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты",
-                        "Для завершения регистрации перейдите по ссылке: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>");
+                // отправка письма
+                await UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты",
+                    "Для завершения регистрации перейдите по ссылке: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>");
 
-                    return View("DisplayEmail");
-                }
-                else
+                return View("DisplayEmail");
+
+                if (false)
                 {
                     // Old version of registration process, without email confirmation
                     var currentUser = await this.UserManager.FindByNameAsync(model.Email);
@@ -218,11 +215,12 @@ namespace GlobalPrint.ClientWeb
                     return RedirectToAction("Index", "Home");
                 }
             }
-
-            foreach (var error in result.Errors)
+            else
             {
-                ModelState.AddModelError("", error);
+                // Add errors to ModelState, replasing "Name XXX is alerady taken." by russian error
+                this.AddErrors(result);
             }
+            
             return View("Register", model);
         }
 
@@ -258,7 +256,7 @@ namespace GlobalPrint.ClientWeb
                 var user = await UserManager.FindAsync(model.Email, model.Password);
                 if (user != null)
                 {
-                    if (!REGISTER_WITH_MAIL_CONFIRM || user.EmailConfirmed == true)
+                    if (user.EmailConfirmed == true)
                     {
                         // This doesn't count login failures towards account lockout
                         // To enable password failures to trigger account lockout, change to shouldLockout: true
@@ -320,18 +318,26 @@ namespace GlobalPrint.ClientWeb
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByNameAsync(model.Email);
+
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
                 }
 
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code, email = model.Email }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(user.Id, "Сброс пароля", "Для сброса пароля, перейдите по <a href=\"" + callbackUrl + "\">ссылке</a>");
-                return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                if (user.EmailConfirmed)
+                {
+                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                    // Send an email with this link
+                    string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code, email = model.Email }, protocol: Request.Url.Scheme);
+                    await UserManager.SendEmailAsync(user.Id, "Сброс пароля", "Для сброса пароля, перейдите по <a href=\"" + callbackUrl + "\">ссылке</a>");
+                    return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Не подтвержден email.");
+                }
             }
 
             // If we got this far, something failed, redisplay form
@@ -503,6 +509,25 @@ namespace GlobalPrint.ClientWeb
             }
 
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Add errors to ModelState, replasing "Name XXX is alerady taken." by russian error
+        /// </summary>
+        /// <param name="result">Result of registration process</param>
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                if (error.EndsWith("is already taken.", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ModelState.AddModelError("", "Указанный email занят.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", error);
+                }
+            }
         }
     }
 }

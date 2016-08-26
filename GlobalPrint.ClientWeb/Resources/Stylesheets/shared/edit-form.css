@@ -2,18 +2,28 @@
   padding-top: 40px;
   padding-bottom: 40px;
 }
-.form-signin {
+.edit-form {
   max-width: 330px;
   padding: 15px;
   margin: 0 auto;
 }
-.form-signin .form-signin-heading,
-.form-signin .form-signin-link {
+.edit-form-small {
+    max-width: 300px;
+}
+.edit-form-medium {
+    max-width: 400px;
+}
+.edit-form-large {
+    max-width: 500px;
+}
+
+.edit-form .edit-form-heading,
+.edit-form .edit-form-link {
   margin-top: 10px;
   text-align: center;
 }
-.form-signin .form-control,
-.form-signin .btn {
+.edit-form .form-control,
+.edit-form .btn {
   position: relative;
   height: auto;
   border-radius: 0;
@@ -24,9 +34,9 @@
   margin-bottom: -1px;
   font-size: 16px;
 }
-.form-signin .btn {
+.edit-form .btn {
   margin-top: 15px;
 }
-.form-signin .form-control:focus {
+.edit-form .form-control:focus {
   z-index: 2;
 }

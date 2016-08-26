@@ -1,8 +1,5 @@
-﻿using AberrantSMPP;
-using AberrantSMPP.Packet;
-using AberrantSMPP.Packet.Request;
-using AberrantSMPP.Packet.Response;
-using GlobalPrint.ClientWeb.Models.PrinterController;
+﻿using GlobalPrint.ClientWeb.Models.PrinterController;
+using GlobalPrint.ClientWeb.Models.PushNotifications;
 using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Orders;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Printers;
@@ -15,11 +12,8 @@ using iTextSharp.text.pdf;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -94,7 +88,7 @@ namespace GlobalPrint.ClientWeb
                 var printerModel = this._CreatePrintViewModel(model.order.PrinterID, model.fileToPrint, model.order);
                 return View("Print", printerModel);
             }
-            if (!model.fileToPrint.FileName.EndsWith(".pdf"))
+            if (!model.fileToPrint.FileName.EndsWith(".pdf", StringComparison.InvariantCultureIgnoreCase))
             {
                 ModelState.AddModelError("", "Неизвестный формат файла. Поддерживаемые форматы: PDF.");
                 var printerModel = this._CreatePrintViewModel(model.order.PrinterID, model.fileToPrint, model.order);
@@ -136,6 +130,7 @@ namespace GlobalPrint.ClientWeb
             order.PrintedOn = null;
             order.UserID = userID;
             order.PrintOrderStatusID = (int)PrintOrderStatusEnum.Waiting;
+            order.PrintServiceID = 75; // debug
 
             Session["Printer_PreparedOrder"] = order;
             Session["Printer_PreparedOrderFile"] = serializedFile;
@@ -169,9 +164,10 @@ namespace GlobalPrint.ClientWeb
             PrintOrder order = Session["Printer_PreparedOrder"] as PrintOrder;
             var file = Session["Printer_PreparedOrderFile"] as byte[];
 
-            int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
+            int userID = this.GetCurrentUserID();
             User user = new UserUnit().GetUserByID(userID);
-            if (user.AmountOfMoney <= order.PricePerPage)
+            decimal wholeOrderPrice = order.PricePerPage * order.PagesCount;
+            if (user.AmountOfMoney <= wholeOrderPrice)
             {
                 ModelState.AddModelError("", "Недостаточно средств на счете. Пополните баланс");
                 var confirmmodel = this._CreatePrintConfirmationViewModel(order);
@@ -179,6 +175,19 @@ namespace GlobalPrint.ClientWeb
             }
 
             order = new PrinterUnit().SavePrintOrder(file, order, this.GetSmsParams());
+
+            // Push notification about new order
+            User printerOperator = new PrinterUnit().GetPrinterOperator(order.PrinterID);
+            string notificationMessage = string.Format(
+                "{0}: поступил новый заказ № {1}." + Environment.NewLine +
+                "Количество страниц: {2}, сумма заказа: {3}р.",
+                order.OrderedOn.ToString("HH:mm:ss"),
+                order.PrintOrderID,
+                order.PagesCount,
+                wholeOrderPrice
+            );
+            new PushNotificationHub().NotifyUserByID(notificationMessage, printerOperator.UserID);
+
             return RedirectToAction("OrderCompleted", new { printOrderID = order.PrintOrderID });
         }
 
@@ -320,8 +329,8 @@ namespace GlobalPrint.ClientWeb
 
             try
             {
-                PrinterEditionModel editionnModel = this._PrinterEditionModel(model);
-                new PrinterUnit().SavePrinter(editionnModel);
+                PrinterEditionModel editionModel = this._PrinterEditionModel(model);
+                new PrinterUnit().SavePrinter(editionModel);
                 return RedirectToAction("UserAccountPrinterList", "UserAccountPrinterList");
             }
             catch (Exception ex)

@@ -6,11 +6,11 @@
 }
 
 @section Stylesheets {
-    <link rel="stylesheet" href="~/Resources/Stylesheets/account/login.css">
+    <link rel="stylesheet" href="~/Resources/Stylesheets/shared/edit-form.css">
 }
 
 <div class="container">
-    @using (Html.BeginForm("VerifyPhoneNumber", "Account", new { FromRegistration = ViewBag.FromRegistration }, FormMethod.Post, new { @class = "form-horizontal form-signin", role = "form" }))
+    @using (Html.BeginForm("VerifyPhoneNumber", "Account", new { FromRegistration = ViewBag.FromRegistration }, FormMethod.Post, new { @class = "form-horizontal edit-form", role = "form" }))
     {
         @Html.AntiForgeryToken()
         @Html.Hidden("phoneNumber", @Model.PhoneNumber)
@@ -28,4 +28,4 @@
             <button type="submit" class="btn btn-primary">ОК</button>
         </div>
     }
-</div> <!-- /container -->
+</div>

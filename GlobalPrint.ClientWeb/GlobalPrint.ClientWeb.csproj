@@ -109,6 +109,14 @@
     <Reference Include="Microsoft.AspNet.Identity.Owin">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.1\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -129,8 +137,9 @@
     <Reference Include="Microsoft.Owin.Security.OAuth">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
@@ -200,6 +209,8 @@
     <Content Include="Resources\Images\printer__deactive.png" />
     <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.js" />
     <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.min.js" />
+    <Content Include="Resources\Libraries\bootstrap-notify\bootstrap-notify.js" />
+    <Content Include="Resources\Libraries\bootstrap-notify\bootstrap-notify.min.js" />
     <Content Include="Resources\Libraries\bootstrap.file-input\fileinput.js" />
     <Content Include="Resources\Libraries\clockpicker\.gitignore" />
     <Content Include="Resources\Libraries\clockpicker\assets\css\bootstrap-theme.css" />
@@ -240,11 +251,17 @@
     <Content Include="Resources\Scripts\home\index.js" />
     <Content Include="Resources\Scripts\printer\print.js" />
     <Content Include="Resources\Scripts\shared\navigation.js" />
-    <Content Include="Resources\Stylesheets\account\displayEmail.css" />
-    <Content Include="Resources\Stylesheets\account\login.css" />
+    <Content Include="Resources\Scripts\shared\pushNotification.js" />
+    <Content Include="Resources\Stylesheets\shared\display-form.css" />
+    <Content Include="Resources\Stylesheets\shared\edit-form.css" />
     <Content Include="Resources\Stylesheets\home\index.css" />
     <Content Include="Resources\Stylesheets\base.css" />
-    <Content Include="Resources\Stylesheets\userAccount\userAccount.css" />
+    <Content Include="Resources\Stylesheets\userAccount\user-account.css" />
+    <None Include="Resources\Libraries\jQuery\jquery-1.6.4-vsdoc.js" />
+    <Content Include="Resources\Libraries\jQuery\jquery-1.6.4.js" />
+    <Content Include="Resources\Libraries\jQuery\jquery-1.6.4.min.js" />
+    <Content Include="Resources\Libraries\signalR\jquery.signalR-2.2.1.js" />
+    <Content Include="Resources\Libraries\signalR\jquery.signalR-2.2.1.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -266,6 +283,8 @@
     </Compile>
     <Compile Include="Models\FeedbackController\FeedbackViewModel.cs" />
     <Compile Include="Models\PrinterController\Printer_EditViewMoel.cs" />
+    <Compile Include="Models\PushNotifications\PushNotificationHub.cs" />
+    <Compile Include="Models\PushNotifications\UserIdProvider.cs" />
     <Compile Include="Models\SimpleMessage.cs" />
     <Compile Include="Models\Stuff\FloatModelBinder.cs" />
     <Compile Include="Models\Stuff\MultipleButtonAttribute.cs" />

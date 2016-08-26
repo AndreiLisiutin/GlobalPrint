@@ -6,11 +6,11 @@
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
 @section Stylesheets {
-    <link rel="stylesheet" href="~/Resources/Stylesheets/account/login.css">
+    <link rel="stylesheet" href="~/Resources/Stylesheets/shared/edit-form.css">
 }
 
-<div class="container form-signin">
-    <h2 class="form-signin-heading">Обратная связь</h2>
+<div class="container edit-form edit-form-large">
+    <h2 class="edit-form-heading">Обратная связь</h2>
 
     @using (Html.BeginForm("Feedback", "Feedback", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {

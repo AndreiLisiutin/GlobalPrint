@@ -28,6 +28,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 
         #region Printer
 
+        #region Get
+
         public Printer GetPrinterByID(int printerID)
         {
             using (IDataContext context = this.Context())
@@ -77,6 +79,66 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                     .ToList();
             }
         }
+
+        public List<Printer> GetUserPrinterList(int UserID)
+        {
+            using (IDataContext context = this.Context())
+            {
+                return this.Repository<IPrinterRepository>(context)
+                    .Get(e => e.OwnerUserID == UserID)
+                    .ToList();
+            }
+        }
+
+        /// <summary>
+        /// Get operator of chosen printer
+        /// </summary>
+        /// <param name="printerID">Printer identifier</param>
+        /// <returns>User instance for printer operator or owner (if operator doesn't exists)</returns>
+        public User GetPrinterOperator(int printerID)
+        {
+            using (IDataContext context = this.Context())
+            {
+                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
+                IUserRepository userRepo = this.Repository<IUserRepository>(context);
+
+                User printerOwner = printerRepo.Get(e => e.PrinterID == printerID)
+                       .Join(userRepo.GetAll(), e => e.OperatorUserID, e => e.UserID, (p, u) => u)
+                       .FirstOrDefault();
+
+                if (printerOwner == null)
+                {
+                    printerOwner = printerRepo.Get(e => e.PrinterID == printerID)
+                       .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
+                       .First();
+                }
+
+                return printerOwner;
+            }            
+        }
+
+        /// <summary>
+        /// Get owner of chosen printer
+        /// </summary>
+        /// <param name="printerID">Printer identifier</param>
+        /// <returns>User instance for printer owner</returns>
+        public User GetPrinterOwner(int printerID)
+        {
+            using (IDataContext context = this.Context())
+            {
+                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
+                IUserRepository userRepo = this.Repository<IUserRepository>(context);
+
+                User printerOwner = printerRepo.Get(e => e.PrinterID == printerID)
+                       .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
+                       .First();
+                return printerOwner;
+            }
+        }
+
+        #endregion
+
+        #region Save
 
         public void _ValidatePrinter(Printer printer)
         {
@@ -176,7 +238,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                     context.Save();
                     context.CommitTransaction();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     context.RollbackTransaction();
                     throw;
@@ -226,6 +288,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             }
         }
 
+        #endregion
+
+        #region Delete
+
         public void DeletePrinter(int printerID)
         {
 
@@ -264,16 +330,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             }
         }
 
-
-        public List<Printer> GetUserPrinterList(int UserID)
-        {
-            using (IDataContext context = this.Context())
-            {
-                return this.Repository<IPrinterRepository>(context)
-                    .Get(e => e.OwnerUserID == UserID)
-                    .ToList();
-            }
-        }
+        #endregion
 
         #endregion
 
