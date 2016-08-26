@@ -28,10 +28,5 @@ window.GlonalPrint.PushNotifications = GlonalPrint.PushNotifications || {};
     PushNotifications.playSound = function (filename) {
         $("#sound")[0].innerHTML = '<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename + '.mp3" /></audio>';
     };
-}(window.GlonalPrint.PushNotifications));
 
-$(function () {
-    var notificationhub = $.connection.pushNotificationHub;
-    notificationhub.client.displayMessage = window.GlonalPrint.PushNotifications.notify;
-    $.connection.hub.start();
-});
+}(window.GlonalPrint.PushNotifications));
