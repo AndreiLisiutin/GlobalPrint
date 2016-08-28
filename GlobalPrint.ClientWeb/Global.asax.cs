@@ -13,7 +13,7 @@ namespace GlobalPrint.ClientWeb
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        private Lazy<ILogUtility> _logUtility = new Lazy<ILogUtility>(() => new NlogUtility<MvcApplication>());
+        //private Lazy<ILogUtility> _logUtility = new Lazy<ILogUtility>(() => new NlogUtility<MvcApplication>());
         private Logger logger = LogManager.GetCurrentClassLogger();
 
         protected void Application_Start()
@@ -31,8 +31,7 @@ namespace GlobalPrint.ClientWeb
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception exception = Server.GetLastError();
-            _logUtility.Value.Fatal(exception, "Unhandled controller exception: " + exception.Message);
-            logger.Error(exception, exception.Message);
+            //logger.Error(exception, exception.Message);
         }
     }
 }

@@ -1,13 +1,12 @@
 ﻿@using Microsoft.AspNet.Identity
 
-
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-        <ul id="main-nav-right" class="nav navbar-nav navbar-right">
-            @Html.AntiForgeryToken()
+        @Html.AntiForgeryToken()
 
+        <ul id="main-nav-right" class="nav navbar-nav navbar-right">
             <li>
                 @Html.ActionLink("Мои Принтеры", "UserAccountPrinterList", "UserAccountPrinterList", new { }, new { })
             </li>
@@ -15,7 +14,7 @@
                 @Html.ActionLink("Мои заказы", "UserPrintOrderList", "UserPrintOrderList", new { }, new { })
             </li>
             <li>
-                @Html.ActionLink("Входящие заказы", "UserRecievedPrintOrderList", "UserRecievedPrintOrderList", new { }, new { })
+                @{Html.RenderAction("UserRecievedPrintOrder", "UserPrintInfo");}       
             </li>
             <li>
                 @Html.ActionLink(User.Identity.GetUserName(), "UserAccount", "UserAccount", new { }, new { @class = "font-bold" })

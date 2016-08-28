@@ -114,7 +114,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                 }
 
                 return printerOwner;
-            }            
+            }
         }
 
         /// <summary>
@@ -133,6 +133,25 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                        .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
                        .First();
                 return printerOwner;
+            }
+        }
+
+        /// <summary>
+        /// Get waiting orders count of specified user
+        /// </summary>
+        /// <param name="userID">User identifier (printer owner/operator)</param>
+        /// <returns>Number of waiting orders, not processed by current user</returns>
+        public int GetWaitingIncomingOrdersCount(int userID)
+        {
+            using (IDataContext context = this.Context())
+            {
+                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
+                IPrintOrderRepository printerOrderRepo = this.Repository<IPrintOrderRepository>(context);
+
+                return printerRepo.Get(e => e.OperatorUserID == userID)
+                      .Join(printerOrderRepo.GetAll(), e => e.PrinterID, e => e.PrinterID, (p, o) => o)
+                      .Where(e => e.PrintOrderStatusID == (int)PrintOrderStatusEnum.Waiting)
+                      .Count();
             }
         }
 

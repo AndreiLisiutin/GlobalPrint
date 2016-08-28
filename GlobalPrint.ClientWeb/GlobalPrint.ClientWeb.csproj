@@ -273,6 +273,7 @@
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\UserPrintOrderListController.cs" />
+    <Compile Include="Controllers\UserPrintInfoController.cs" />
     <Compile Include="Controllers\UserRecievedPrintOrderListController.cs" />
     <Compile Include="Controllers\UserAccountPrinterListController.cs" />
     <Compile Include="Controllers\UserAccountController.cs" />
@@ -344,6 +345,7 @@
     <Content Include="Views\About\About.cshtml" />
     <Content Include="Views\Shared\SimpleMessage.cshtml" />
     <Content Include="Views\Feedback\Feedback.cshtml" />
+    <Content Include="Views\UserPrintInfo\_UserRecievedPrintOrder.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -354,6 +356,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\" />
+    <Folder Include="Views\UserRecievedPrintOrder\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GlobalPrint.Configuration\GlobalPrint.Configuration.csproj">

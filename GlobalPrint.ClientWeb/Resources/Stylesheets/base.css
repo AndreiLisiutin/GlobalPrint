@@ -18,3 +18,12 @@
 .clockpicker {
     width: 100px;
 }
+
+.badge-notify {
+   background:red;
+   position:relative;
+}
+.badge-notify.badge-notify-incoming-orders {
+   top: -12px;
+   left: -5px;
+}

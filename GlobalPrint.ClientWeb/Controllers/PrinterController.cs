@@ -186,7 +186,7 @@ namespace GlobalPrint.ClientWeb
                 order.PagesCount,
                 wholeOrderPrice
             );
-            new PushNotificationHub().NotifyUserByID(notificationMessage, printerOperator.UserID);
+            new PushNotificationHub().NewIncomingOrder(notificationMessage, printerOperator.UserID);
 
             return RedirectToAction("OrderCompleted", new { printOrderID = order.PrintOrderID });
         }

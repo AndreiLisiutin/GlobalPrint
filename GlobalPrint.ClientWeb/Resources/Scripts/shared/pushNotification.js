@@ -4,6 +4,11 @@ window.GlonalPrint.PushNotifications = GlonalPrint.PushNotifications || {};
 (function (PushNotifications) {
     var audioFile = "../Resources/Sounds/notification";
 
+    // Update incoming prders count
+    PushNotifications.updateIncomingOrdersCount = function (count) {
+        $("#incomingOrdersCountBadge").text(count > 0 ? count : null);
+    };
+
     PushNotifications.notify = function (message) {
         PushNotifications.displayMessage(message);
         PushNotifications.playSound(audioFile);
