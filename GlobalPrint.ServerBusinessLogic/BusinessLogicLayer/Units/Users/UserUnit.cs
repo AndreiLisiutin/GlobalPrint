@@ -4,6 +4,7 @@ using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -13,6 +14,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 {
     public class UserUnit : BaseUnit
     {
+        [DebuggerStepThrough]
+        public UserUnit()
+            :base()
+        {
+        }
         public User GetUserByID(int UserID)
         {
             using (IDataContext context = this.Context())

@@ -45,7 +45,7 @@ namespace GlobalPrint.ClientWeb.Models.PrinterController
             }
             public _Service(PrintServiceExtended PrintService, bool Supported, decimal? Price, int PrinterServiceID)
             {
-                this.PrintServiceID = PrintService.PrintService.PrintServiceID;
+                this.PrintServiceID = PrintService.PrintService.ID;
                 this.PrintSize = PrintService.PrintSize.Name;
                 this.PrintType = PrintService.PrintType.Name;
                 this.IsColored = PrintService.PrintService.IsColored;

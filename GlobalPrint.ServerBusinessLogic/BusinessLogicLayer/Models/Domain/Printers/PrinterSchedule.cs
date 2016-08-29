@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
     [Table("printer_schedule", Schema = "public")]
     public class PrinterSchedule : IDomainModel
     {
+        [DebuggerStepThrough]
+        public PrinterSchedule()
+        {
+        }
+
         private int PrinterScheduleID { get; set; }
         [Column("printer_id")]
         public int PrinterID { get; set; }

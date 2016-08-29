@@ -13,6 +13,7 @@ using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -21,6 +22,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 {
     public class PrinterUnit : BaseUnit
     {
+        [DebuggerStepThrough]
         public PrinterUnit()
             : base()
         {
@@ -70,13 +72,32 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             return model;
         }
 
-        public List<Printer> GetPrinters()
+        public IEnumerable<PrinterFullInfoModel> GetPrinters()
         {
             using (IDataContext context = this.Context())
             {
-                return this.Repository<IPrinterRepository>(context)
-                    .GetAll()
+                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
+                IPrinterScheduleRepository printerScheduleRepo = this.Repository<IPrinterScheduleRepository>(context);
+
+                List<Printer> printers = printerRepo.GetAll().ToList();
+                IEnumerable<int> printerIDs = printers.Select(p => p.ID);
+
+                IEnumerable<PrinterSchedule> schedules = printerScheduleRepo
+                    .Get(s => printerIDs.Contains(s.PrinterID))
                     .ToList();
+                IEnumerable<PrinterServiceExtended> services = new PrintServicesUnit()
+                    .GetPrinterServices(s => printerIDs.Contains(s.PrinterService.PrinterID))
+                    .ToList();
+
+                IEnumerable<PrinterFullInfoModel> models = printers
+                    .Select(p => 
+                    new PrinterFullInfoModel(p, 
+                        schedules.Where(e => e.PrinterID == p.ID).ToList(),
+                        services.Where(e => e.PrinterService.PrinterID == p.ID).ToList()
+                    ))
+                    .ToList();
+                
+                return models;
             }
         }
 
@@ -102,13 +123,13 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                 IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
 
-                User printerOwner = printerRepo.Get(e => e.PrinterID == printerID)
+                User printerOwner = printerRepo.Get(e => e.ID == printerID)
                        .Join(userRepo.GetAll(), e => e.OperatorUserID, e => e.UserID, (p, u) => u)
                        .FirstOrDefault();
 
                 if (printerOwner == null)
                 {
-                    printerOwner = printerRepo.Get(e => e.PrinterID == printerID)
+                    printerOwner = printerRepo.Get(e => e.ID == printerID)
                        .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
                        .First();
                 }
@@ -129,7 +150,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                 IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
 
-                User printerOwner = printerRepo.Get(e => e.PrinterID == printerID)
+                User printerOwner = printerRepo.Get(e => e.ID == printerID)
                        .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
                        .First();
                 return printerOwner;
@@ -149,7 +170,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                 IPrintOrderRepository printerOrderRepo = this.Repository<IPrintOrderRepository>(context);
 
                 return printerRepo.Get(e => e.OperatorUserID == userID)
-                      .Join(printerOrderRepo.GetAll(), e => e.PrinterID, e => e.PrinterID, (p, o) => o)
+                      .Join(printerOrderRepo.GetAll(), e => e.ID, e => e.PrinterID, (p, o) => o)
                       .Where(e => e.PrintOrderStatusID == (int)PrintOrderStatusEnum.Waiting)
                       .Count();
             }
@@ -213,7 +234,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 
         public PrinterEditionModel SavePrinter(PrinterEditionModel model)
         {
-            bool isEdit = (model?.Printer.PrinterID ?? 0) > 0;
+            bool isEdit = (model?.Printer?.ID ?? 0) > 0;
             if (isEdit)
             {
                 return this.EditPrinter(model);
@@ -245,11 +266,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 
                     foreach (var schedule in model.PrinterSchedule)
                     {
-                        schedule.PrinterID = model.Printer.PrinterID;
+                        schedule.PrinterID = model.Printer.ID;
                     }
                     foreach (var service in model.PrinterServices)
                     {
-                        service.PrinterID = model.Printer.PrinterID;
+                        service.PrinterID = model.Printer.ID;
                     }
                     printerScheduleRepo.Insert(model.PrinterSchedule);
                     printerServiceRepo.Insert(model.PrinterServices);
@@ -286,14 +307,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 
                     foreach (var schedule in model.PrinterSchedule)
                     {
-                        schedule.PrinterID = model.Printer.PrinterID;
+                        schedule.PrinterID = model.Printer.ID;
                     }
                     foreach (var service in model.PrinterServices)
                     {
-                        service.PrinterID = model.Printer.PrinterID;
+                        service.PrinterID = model.Printer.ID;
                     }
-                    printerScheduleRepo.Merge(model.PrinterSchedule, e => e.PrinterID == model.Printer.PrinterID);
-                    printerServiceRepo.Merge(model.PrinterServices, e => e.PrinterID == model.Printer.PrinterID);
+                    printerScheduleRepo.Merge(model.PrinterSchedule, e => e.PrinterID == model.Printer.ID);
+                    printerServiceRepo.Merge(model.PrinterServices, e => e.PrinterID == model.Printer.ID);
 
                     context.Save();
                     context.CommitTransaction();
@@ -362,8 +383,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                 IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
                 IPrinterScheduleRepository printerScheduleRepo = this.Repository<IPrinterScheduleRepository>(context);
 
-                var printerInfos = printerRepo.Get(e => e.PrinterID == printerID)
-                    .Join(printerScheduleRepo.GetAll(), e => e.PrinterID, e => e.PrinterID,
+                var printerInfos = printerRepo.Get(e => e.ID == printerID)
+                    .Join(printerScheduleRepo.GetAll(), e => e.ID, e => e.PrinterID,
                         (p, s) => new { printer = p, schedule = s })
                     .ToList();
                 if (printerInfos.Count == 0)
@@ -403,7 +424,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                 IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
 
                 User client = userRepo.GetByID(order.UserID);
-                User printerOwner = printerRepo.Get(e => e.PrinterID == order.PrinterID)
+                User printerOwner = printerRepo.Get(e => e.ID == order.PrinterID)
                     .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
                     .First();
 

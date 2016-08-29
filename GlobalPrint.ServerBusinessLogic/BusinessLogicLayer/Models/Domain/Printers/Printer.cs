@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,9 +12,13 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
     [Table("printer", Schema = "public")]
     public class Printer : IDomainModel
     {
-        [Key]
-        [Column("printer_id")]
-        public int PrinterID { get; set; }
+        [DebuggerStepThrough]
+        public Printer()
+        {
+        }
+
+        [NotMapped]
+        private int PrinterID { get; set; }
         [Column("name")]
         public string Name { get; set; }
         [Column("location")]
@@ -30,9 +35,12 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
         public string Email { get; set; }
         [Column("user_id_operator")]
         public int OperatorUserID { get; set; }
+        [Column("is_disabled")]
+        public bool IsDisabled { get; set; }
 
         #region IDomainModel
-        [NotMapped]
+        [Key]
+        [Column("printer_id")]
         public int ID
         {
             get { return this.PrinterID; }
