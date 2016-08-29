@@ -229,7 +229,7 @@ namespace GlobalPrint.ClientWeb
             foreach (PrintServiceExtended service in allServices)
             {
                 PrinterService fromDB = model?.PrinterServices
-                    ?.FirstOrDefault(e => e.PrintServiceID == service.PrintService.PrintServiceID);
+                    ?.FirstOrDefault(e => e.PrintServiceID == service.PrintService.ID);
 
                 bool isSupported = fromDB != null;
                 services.Add(new Printer_EditViewMoel._Service(service, isSupported, fromDB?.PricePerPage, fromDB?.ID ?? 0));
@@ -256,7 +256,7 @@ namespace GlobalPrint.ClientWeb
                     DayOfWeek = e.DayOfWeek,
                     CloseTime = e.CloseTime ?? TimeSpan.FromHours(-1),
                     OpenTime = e.OpenTime ?? TimeSpan.FromHours(-1),
-                    PrinterID = model.Printer.PrinterID
+                    PrinterID = model.Printer.ID
                 })
                 .ToList();
 

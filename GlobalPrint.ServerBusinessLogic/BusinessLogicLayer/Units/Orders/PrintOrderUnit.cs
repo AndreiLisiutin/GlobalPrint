@@ -9,6 +9,7 @@ using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,12 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 {
     public class PrintOrderUnit : BaseUnit
     {
+        [DebuggerStepThrough]
+        public PrintOrderUnit()
+            :base()
+        {
+        }
+
         public List<PrintOrderInfo> GetUserPrintOrderList(int UserID)
         {
             using (IDataContext context = this.Context())
@@ -28,7 +35,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
                 var printOrderList =
                     from PrintOrder in orderRepo.GetAll()
-                    join Printer in printerRepo.GetAll() on PrintOrder.PrinterID equals Printer.PrinterID
+                    join Printer in printerRepo.GetAll() on PrintOrder.PrinterID equals Printer.ID
                     join Status in statusRepo.GetAll() on PrintOrder.PrintOrderStatusID equals Status.PrintOrderStatusID
                     where PrintOrder.UserID == UserID
                     orderby PrintOrder.OrderedOn descending
@@ -47,7 +54,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 
                 var printOrderList =
                    from PrintOrder in orderRepo.GetAll()
-                   join Printer in printerRepo.GetAll() on PrintOrder.PrinterID equals Printer.PrinterID
+                   join Printer in printerRepo.GetAll() on PrintOrder.PrinterID equals Printer.ID
                    join Status in statusRepo.GetAll() on PrintOrder.PrintOrderStatusID equals Status.PrintOrderStatusID
                    where PrintOrder.PrintOrderID == printOrderID
                    orderby PrintOrder.OrderedOn descending
@@ -67,7 +74,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
                 var printOrderList =
                     from PrintOrder in orderRepo.GetAll()
-                    join Printer in printerRepo.GetAll() on PrintOrder.PrinterID equals Printer.PrinterID
+                    join Printer in printerRepo.GetAll() on PrintOrder.PrinterID equals Printer.ID
                     join Status in statusRepo.GetAll() on PrintOrder.PrintOrderStatusID equals Status.PrintOrderStatusID
                     where Printer.OwnerUserID == UserID
                     orderby PrintOrder.OrderedOn descending
@@ -91,7 +98,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
                 order = orderRepo.GetByID(printOrderID);
                 client = userRepo.GetByID(order.UserID);
-                printerOwner = printerRepo.Get(e => e.PrinterID == order.PrinterID)
+                printerOwner = printerRepo.Get(e => e.ID == order.PrinterID)
                     .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u).
                     First();
                 status = statusRepo.GetByID((int)statusID);

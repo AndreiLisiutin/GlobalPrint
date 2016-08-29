@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
     [Table("printer_service", Schema = "public")]
     public class PrinterService : IDomainModel
     {
+        [DebuggerStepThrough]
+        public PrinterService()
+        {
+        }
+
         [NotMapped]
         private int PrinterServiceID { get; set; }
         [Column("print_service_id")]

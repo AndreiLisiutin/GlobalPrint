@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Order
     [Table("print_order", Schema = "public")]
     public class PrintOrder: IDomainModel
     {
+        [DebuggerStepThrough]
+        public PrintOrder()
+        {
+        }
+
         [Key]
         [Column("print_order_id")]
         public int PrintOrderID { get; set; }

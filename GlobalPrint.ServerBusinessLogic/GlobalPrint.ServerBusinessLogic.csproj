@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogicLayer\Models\Business\Printers\PrinterFullInfoModel.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\IDomainModel.cs" />
     <Compile Include="BusinessLogicLayer\Models\Business\Printers\PrinterServiceExtended.cs" />
     <Compile Include="BusinessLogicLayer\Models\Business\Printers\PrintServiceExtended.cs" />

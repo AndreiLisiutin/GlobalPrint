@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
     [Table("user_action_log", Schema = "public")]
     public class UserActionLog : IDomainModel
     {
+        [DebuggerStepThrough]
+        public UserActionLog()
+        {
+        }
+
         [Key]
         [Column("user_action_log_id")]
         public int UserActionLogID { get; set; }

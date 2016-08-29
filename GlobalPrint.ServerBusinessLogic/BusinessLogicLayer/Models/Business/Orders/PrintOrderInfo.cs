@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Ord
 {
     public class PrintOrderInfo
     {
+        [DebuggerStepThrough]
         public PrintOrderInfo() { }
 
+        [DebuggerStepThrough]
         public PrintOrderInfo(PrintOrder printOrder, Printer printer)
         {
             this.PrintOrder = printOrder;
