@@ -4,6 +4,7 @@ using System;
 using System.Data;
 using System.Data.Common;
 using System.Data.Entity;
+using System.Diagnostics;
 
 namespace GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext
 {
@@ -21,6 +22,7 @@ namespace GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext
             this._db = new Lazy<DB>(() =>
             {
                 var db = new DB(connection, false);
+                db.Database.Log = this.LogSql;
                 if (this.IsTransactionAlive())
                 {
                     db.Database.UseTransaction(this._transaction);
@@ -132,6 +134,16 @@ namespace GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext
                 return this._db.Value.SaveChanges();
             }
             return 0;
+        }
+
+        private void LogSql(string s)
+        {
+            s = s.Replace("FROM", Environment.NewLine + "FROM")
+                .Replace("INNER", Environment.NewLine + "INNER")
+                .Replace("LEFT", Environment.NewLine + "INNER")
+                .Replace("WHERE", Environment.NewLine + "INNER");
+
+            Debug.WriteLine(s);
         }
     }
 }

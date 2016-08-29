@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,9 +12,13 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
     [Table("print_service", Schema = "public")]
     public class PrintService : IDomainModel
     {
-        [Key]
-        [Column("print_service_id")]
-        public int PrintServiceID { get; set; }
+        [DebuggerStepThrough]
+        public PrintService()
+        {
+        }
+
+        [NotMapped]
+        private int PrintServiceID { get; set; }
         [Column("print_size_print_type_id")]
         public int PrintSizePrintTypeID { get; set; }
         [Column("is_colored")]
@@ -22,7 +27,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
         public bool IsTwoSided { get; set; }
 
         #region IDomainModel
-        [NotMapped]
+        [Key]
+        [Column("print_service_id")]
         public int ID
         {
             get { return this.PrintServiceID; }

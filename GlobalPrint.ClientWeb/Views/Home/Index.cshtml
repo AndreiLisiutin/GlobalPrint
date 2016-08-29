@@ -11,34 +11,52 @@
 @section Stylesheets {
     <link href="~/Resources/Stylesheets/home/index.css" rel="stylesheet" />
 }
+<div class="home_index container-full">
 
-<div class="home_index">
-
-    <div id="wrapper" class="toggled">
-
-        <div id="sidebar-wrapper">
-            <div class="printer-info-wrapper">
-                <div id="printer-info">
-
+    <div id="sidebar-wrapper" class="hidden fixed-top col-xs-12 col-sm-6 col-md-4 col-lg-3">
+        <form class="form-horizontal" role="form">
+            <input type="hidden" id="printerInfoPrinterID" />
+            <div>
+                <div class="form-group">
+                    <label class="control-label text-left">Доступность</label>
+                    <div>
+                        <input type="text" class="form-control" readonly="readonly" id="printerInfoIsAvailable" />
+                    </div>
                 </div>
-
-
-                @if (User.Identity.IsAuthenticated)
-            {
-                    <a href="/Printer/Print/{PrinterID}" class="btn btn-default" id="printer-print">Печать</a>
-                }
-                else
-                {
-                    <a href="/Account/LoginAndPrint/{PrinterID}" class="btn btn-default" id="login-loginandprint">Печать</a>
-                }
-                <a href="#" class="btn btn-default" id="close-printer-info">Закрыть</a>
+                <div class="form-group">
+                    <label class="control-label text-left">Название</label>
+                    <div>
+                        <input type="text" class="form-control" readonly="readonly" id="printerInfoName" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label text-left">Адрес</label>
+                    <div>
+                        <input type="text" class="form-control" readonly="readonly" id="printerInfoLocation" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label text-left">Расписание</label>
+                    <div>
+                        <textarea rows="7" class="form-control" readonly="readonly" id="printerInfoSchedule"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label text-left">Услуги и цены</label>
+                    <div>
+                        <textarea rows="10" class="form-control" readonly="readonly" id="printerInfoPrices"></textarea>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div id="page-content-wrapper">
-            <div id="googlemaps" class="googlemaps">
+            <div class="form-group">
+                <div>
+                    <button class="btn btn-default" type="button" id="printerInfoPrint">Печать</button>
+                    <button class="btn btn-default" type="button" id="printerInfoClose">Закрыть</button>
+                </div>
             </div>
-        </div>
-
+        </form>
     </div>
+    <div id="googlemaps" class="googlemaps">
+    </div>
+
 </div>

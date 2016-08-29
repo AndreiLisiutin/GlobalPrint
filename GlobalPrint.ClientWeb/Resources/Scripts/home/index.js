@@ -54,8 +54,8 @@ home.index = home.index || (function () {
                     var marker = new google.maps.Marker({
                         position: location,
                         map: _map,
-			animation: google.maps.Animation.DROP,
-			label: "Я",
+                        animation: google.maps.Animation.DROP,
+                        label: "Я",
                         title: "Ваше текущее положение"
                     });
 
@@ -100,7 +100,6 @@ home.index = home.index || (function () {
 
     var _createMap = function (location) {
         var mapOptions = {
-            //minZoom: 10,
             zoom: 4,
             center: location,
             mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -121,58 +120,16 @@ home.index = home.index || (function () {
 
         centerControlDiv.index = 1;
         _map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
-
-
     };
 
     var closePrinterInfo = function () {
         if (_currentPrinterID) {
             _currentPrinterID = null;
-            $("#wrapper").toggleClass("toggled");
+            $("#sidebar-wrapper").addClass("hidden");
             _map.setZoom(_lastState.zoom);
             _map.setCenter(_lastState.center);
             _lastState = null;
         }
-    };
-
-
-
-    var image = "/Resources/Images/printer_online.png";
-
-    var _addMarker = function (info) {
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(info.Latitude, info.Longtitude),
-            map: _map,
-            icon: image,
-  
-            title: info.Name
-        });
-
-        var printerInfo = info;
-        google.maps.event.addListener(marker, 'click', function () {
-            //infowindow.open(_map, marker);
-            $("#printer-info").html(
-                printerInfo.Name + "<br>" +
-                "Адрес: " + printerInfo.Location + "<br>");
-
-            $("#printer-print").prop("href", "/Printer/Print/" + printerInfo.PrinterID);
-            $("#login-loginandprint").prop("href", "/Account/LoginAndPrint/" + printerInfo.PrinterID);
-            if (!_currentPrinterID) {
-                _lastState = {
-                    zoom: _map.getZoom(),
-                    center: _map.getCenter()
-                };
-
-                $("#wrapper").toggleClass("toggled");
-                setTimeout(function () {
-                    _zoomMarker(marker);
-                }, 600);
-            } else {
-                _zoomMarker(marker);
-            }
-            _currentPrinterID = printerInfo.PrinterID;
-        });
-        _markersArray.push(marker);
     };
 
     var _zoomMarker = function (marker) {
@@ -182,9 +139,9 @@ home.index = home.index || (function () {
 
     function deleteAllMarkers() {
         if (_markersArray) {
-            for (i in _markersArray) {
-                _markersArray[i].setMap(null);
-            }
+            $.each(_markersArray, function (index, item) {
+                item.setMap(null);
+            });
             _markersArray.length = 0;
         }
     }
@@ -199,6 +156,7 @@ home.index = home.index || (function () {
     }
 
     var loadPrinters = function () {
+        //get google map geographical boundaries
         var lat0 = _map.getBounds().getNorthEast().lat();
         var lat1 = _map.getBounds().getSouthWest().lat();
 
@@ -233,12 +191,93 @@ home.index = home.index || (function () {
         });
     };
 
+    var image = "/Resources/Images/printer_online.png";
+    var DayOfWeek = {
+        ПН: 1,
+        ВТ: 2,
+        СР: 3,
+        ЧТ: 4,
+        ПТ: 5,
+        СБ: 6,
+        ВС: 0
+    };
+    var _addMarker = function (printerInfo) {
+        //adding new marker to the map.
+        //printerInfo is a model for C# PrinterFullInfoModel class.
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(printerInfo.Printer.Latitude, printerInfo.Printer.Longtitude),
+            map: _map,
+            icon: image,
+            title: printerInfo.Printer.Name,
+            printerInfo: printerInfo
+        });
+
+        google.maps.event.addListener(marker, 'click', function () {
+            $("#printerInfoPrinterID").val(printerInfo.Printer.ID);
+            $("#printerInfoIsAvailable").val(printerInfo.IsAvailableNow ? 'Доступен' : 'Не доступен');
+            $("#printerInfoName").val(printerInfo.Printer.Name);
+            $("#printerInfoLocation").val(printerInfo.Printer.Location);
+            function toFixedInt2(n) {
+                return n > 9 ? "" + n : "0" + n;
+            }
+
+            var averallSchedule = '';
+            for (var day in DayOfWeek) {
+                var daySchedules = $.grep(printerInfo.PrinterSchedule, function (item, index) {
+                    return item.DayOfWeek == DayOfWeek[day];
+                }).sort(function (x, y) {
+                    return x.OpenTime.TotalMilliseconds - y.OpenTime.TotalMilliseconds;
+                });
+
+                var scheduleString = '';
+                $.each(daySchedules, function (index, item) {
+                    scheduleString += (scheduleString ? ' ... ' : '') +
+                        toFixedInt2(item.OpenTime.Hours) + ':' + toFixedInt2(item.OpenTime.Minutes) + '-' +
+                        toFixedInt2(item.CloseTime.Hours) + ':' + toFixedInt2(item.CloseTime.Minutes);
+                });
+                scheduleString = scheduleString || 'Не работает';
+                averallSchedule += (averallSchedule ? '\n' : '') + day + ':.....' + scheduleString;
+            }
+            $("#printerInfoSchedule").val(averallSchedule);
+
+            var averallServices = '';
+            $.each(marker.printerInfo.PrinterServices, function (index, item) {
+                var service = ''
+                service += item.PrintService.PrintType.Name + ' ' +
+                    item.PrintService.PrintSize.Name + ' ' + 
+                    (item.PrintService.IsColored ? 'Цветная' : 'Ч/Б') + 
+                    (item.PrintService.IsTwoSided ? 'Двусторонняя' : '');
+
+                service += ':.....' + item.PrinterService.PricePerPage;
+                averallServices += (averallServices ? '\n' : '') + service;
+            });
+            $("#printerInfoPrices").val(averallServices);
+
+            if (!_currentPrinterID) {
+                _lastState = {
+                    zoom: _map.getZoom(),
+                    center: _map.getCenter()
+                };
+
+                $("#sidebar-wrapper").removeClass("hidden");
+                setTimeout(function () {
+                    _zoomMarker(marker);
+                }, 600);
+            } else {
+                _zoomMarker(marker);
+            }
+            _currentPrinterID = marker.printerInfo.Printer.ID;
+        });
+        _markersArray.push(marker);
+    };
+
     var setMapFullScreen = function () {
         var winHeight = $(window).height();
         var navheight = $(".main-navbar").height();
-        $('#googlemaps').height(winHeight - navheight);
+        var fullHeight = winHeight - navheight;
+        $('#googlemaps').height(fullHeight);
         $('#googlemaps').trigger("heightChange");
-        $('#sidebar-wrapper').height(winHeight - navheight);
+        $('#sidebar-wrapper').height(fullHeight);
     };
 
     return {
@@ -250,8 +289,26 @@ home.index = home.index || (function () {
 
 $(document).ready(function () {
     home.index.init();
-    $("#close-printer-info").click(function () {
+    $("#printerInfoClose").click(function () {
+        //Close button in print details sidebar
         home.index.closePrinterInfo();
+    });
+
+    $("#printerInfoPrint").click(function (event) {
+        //Print button in print details sidebar
+        var isUserAuthenticated = $("body").data('isAuthenticated');
+        var printerID = $("#printerInfoPrinterID").val();
+
+        if (!printerID) {
+            console.log('printerID is not defined for printing.');
+            return;
+        }
+
+        var printUrl = isUserAuthenticated
+            ? ("/Printer/Print/" + printerID)
+            : ("/Account/LoginAndPrint/" + printerID);
+
+        window.location.href = printUrl;
     });
 
     $(window).resize(function () {

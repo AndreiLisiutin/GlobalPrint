@@ -4,28 +4,29 @@ using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 using System;
 using System.Data.Common;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GlobalPrint.ServerDataAccess.EF
 {
-
     public class DB : DbContext
     {
+        [DebuggerStepThrough]
         static DB()
         {
             Database.SetInitializer<DB>(new NullDatabaseInitializer<DB>());
         }
 
+        [DebuggerStepThrough]
         public DB() : base("GlobalPrint")
         {
-            this.Database.Log = Console.WriteLine;
         }
-        public DB(DbConnection existingConnection, bool contextOwnsConnection) 
+        [DebuggerStepThrough]
+        public DB(DbConnection existingConnection, bool contextOwnsConnection)
             : base(existingConnection, contextOwnsConnection)
         {
-            this.Database.Log = Console.WriteLine;
         }
 
         //orders

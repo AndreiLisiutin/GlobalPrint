@@ -1,6 +1,7 @@
 ﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,9 +12,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Pri
     /// </summary>
     public class PrintServiceExtended
     {
+        [DebuggerStepThrough]
         public PrintServiceExtended()
         {
         }
+        [DebuggerStepThrough]
         public PrintServiceExtended(PrintService service, PrintSizePrintType sizeType, PrintSize size, PrintType type)
         {
             this.PrintService = service;
