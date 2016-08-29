@@ -17,7 +17,9 @@ window.GlonalPrint.PushNotifications = GlonalPrint.PushNotifications || {};
     PushNotifications.displayMessage = function (message) {
         $.notify({
             icon: 'glyphicon glyphicon-info-sign',
-            message: message
+            message: message,
+            url: '/UserRecievedPrintOrderList/UserRecievedPrintOrderList',
+            target: "_self"
         }, {
             type: "info",
             allow_dismiss: true,
