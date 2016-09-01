@@ -1,7 +1,7 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
 @model User
 @{
-    ViewBag.Title = "Аккаунт";
+    ViewBag.Title = "Профиль пользователя";
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
 
@@ -36,12 +36,6 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-1 control-label text-left">Телефон</label>
-            <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", @readonly = "true", @id = "inputPhone", @type = "phone", @placeholder = "Телефон", @required = "false" })
-            </div>
-        </div>
-        <div class="form-group">
             <label class="col-sm-1 control-label text-left">Баланс</label>
             <div class="col-sm-11">
                 @Html.TextBoxFor(m => m.AmountOfMoney, new { @class = "form-control", @readonly="true", @id = "inputAmountOfMoney", @type = "phone", @placeholder = "Телефон", @required = "false" })
@@ -51,6 +45,7 @@
         @Html.HiddenFor(x => x.UserID)
         @Html.HiddenFor(x => x.Email)
         @Html.HiddenFor(x => x.PasswordHash)
+        @Html.HiddenFor(x => x.PhoneNumber)
 
         <div class="form-group">
             <div class="col-sm-10">

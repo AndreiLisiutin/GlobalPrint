@@ -214,13 +214,14 @@ home.index = home.index || (function () {
 
         google.maps.event.addListener(marker, 'click', function () {
             $("#printerInfoPrinterID").val(printerInfo.Printer.ID);
-            $("#printerInfoIsAvailable").val(printerInfo.IsAvailableNow ? 'Доступен' : 'Не доступен');
+            $("#printerInfoIsAvailable").val(printerInfo.IsAvailableNow);
             $("#printerInfoName").val(printerInfo.Printer.Name);
             $("#printerInfoLocation").val(printerInfo.Printer.Location);
             function toFixedInt2(n) {
                 return n > 9 ? "" + n : "0" + n;
             }
-
+            var name = printerInfo.Printer.Name;
+            var location = printerInfo.Printer.Location;
             var averallSchedule = '';
             for (var day in DayOfWeek) {
                 var daySchedules = $.grep(printerInfo.PrinterSchedule, function (item, index) {
@@ -238,7 +239,7 @@ home.index = home.index || (function () {
                 scheduleString = scheduleString || 'Не работает';
                 averallSchedule += (averallSchedule ? '\n' : '') + day + ':.....' + scheduleString;
             }
-            $("#printerInfoSchedule").val(averallSchedule);
+            $("#printerInfoOperator").val(name + '\n' + location + '\n' + averallSchedule);
 
             var averallServices = '';
             $.each(marker.printerInfo.PrinterServices, function (index, item) {
@@ -248,7 +249,7 @@ home.index = home.index || (function () {
                     (item.PrintService.IsColored ? 'Цветная' : 'Ч/Б') + 
                     (item.PrintService.IsTwoSided ? 'Двусторонняя' : '');
 
-                service += ':.....' + item.PrinterService.PricePerPage;
+                service += ':.....' + item.PrinterService.PricePerPage + ' руб.';
                 averallServices += (averallServices ? '\n' : '') + service;
             });
             $("#printerInfoPrices").val(averallServices);

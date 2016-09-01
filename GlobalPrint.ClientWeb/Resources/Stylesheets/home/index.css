@@ -4,3 +4,26 @@
     position: absolute;
     padding: 5px 25px;
 }
+
+.printer-info-is-available {
+    display: none;
+}
+    /* 
+- Style each label that is directly after the input
+- position: relative; will ensure that any position: absolute children will position themselves in relation to it
+*/
+
+    .printer-info-is-available + label {
+        background: url('/Resources/Images/red_circle.ico');
+        background-size: 25px 25px;
+        background-repeat: no-repeat;
+        height: 25px;
+        width: 25px;
+    }
+    /* Provide a border when hovered and when the checkbox before it is checked */
+
+    .printer-info-is-available:checked + label {
+        background: url('/Resources/Images/green_circle.ico');
+        background-size: 25px 25px;
+        background-repeat: no-repeat;
+    }

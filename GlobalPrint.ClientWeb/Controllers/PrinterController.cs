@@ -200,6 +200,10 @@ namespace GlobalPrint.ClientWeb
 
         //--------------------------------------------------------CRUD-----------------------------------------------------
 
+        /// <summary> Generate view model for printer edition action.
+        /// </summary>
+        /// <param name="model">Business model for printer edition.</param>
+        /// <returns></returns>
         private Printer_EditViewMoel _Printer_EditViewMoel(PrinterEditionModel model = null)
         {
             int userID = this.GetCurrentUserID();
@@ -215,17 +219,24 @@ namespace GlobalPrint.ClientWeb
             var schedule = new List<Printer_EditViewMoel._Schedule>();
             foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
-                PrinterSchedule fromDB = model?.PrinterSchedule
+                PrinterSchedule dayFromDB = model?.PrinterSchedule
                     ?.FirstOrDefault(e => e.DayOfWeek == (int)day);
 
                 string dayName = weekUtility.DayName(day);
-                bool isOpened = fromDB != null;
-                schedule.Add(new Printer_EditViewMoel._Schedule((int)day, dayName, isOpened, fromDB?.OpenTime, fromDB?.CloseTime, fromDB?.ID ?? 0));
+                bool isOpened = model?.Printer != null ? dayFromDB != null : true;
+                //new printer is opened every day from 9:00 to 18:00 by default
+                TimeSpan? openTime = model?.Printer != null ? dayFromDB?.OpenTime : TimeSpan.FromHours(9);
+                TimeSpan? closeTime = model?.Printer != null ? dayFromDB?.CloseTime : TimeSpan.FromHours(18);
+                schedule.Add(new Printer_EditViewMoel._Schedule((int)day, dayName, isOpened, openTime, closeTime, dayFromDB?.ID ?? 0));
             }
             viewModel.Schedule = schedule;
 
             var services = new List<Printer_EditViewMoel._Service>();
-            IEnumerable<PrintServiceExtended> allServices = new PrintServicesUnit().GetPrintServices();
+            IEnumerable<PrintServiceExtended> allServices = new PrintServicesUnit().GetPrintServices()
+                .OrderBy(e => e.PrintType.Name)
+                .ThenBy(e => e.PrintSize.Name)
+                .ThenBy(e => e.PrintService.IsColored)
+                .ThenBy(e => e.PrintService.IsTwoSided);
             foreach (PrintServiceExtended service in allServices)
             {
                 PrinterService fromDB = model?.PrinterServices
@@ -234,6 +245,7 @@ namespace GlobalPrint.ClientWeb
                 bool isSupported = fromDB != null;
                 services.Add(new Printer_EditViewMoel._Service(service, isSupported, fromDB?.PricePerPage, fromDB?.ID ?? 0));
             }
+
             viewModel.Services = services;
 
             return viewModel;
@@ -274,38 +286,38 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpGet]
-        public ActionResult CreatePrinter()
+        public ActionResult Create()
         {
             try
             {
                 Printer_EditViewMoel viewModel = this._Printer_EditViewMoel();
-                return View("EditPrinter", viewModel);
+                return View("Edit", viewModel);
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
-                return View("EditPrinter", null);
+                return View("Edit", null);
             }
         }
 
         [HttpGet]
-        public ActionResult EditPrinter(int PrinterID)
+        public ActionResult Edit(int PrinterID)
         {
             try
             {
                 PrinterEditionModel model = new PrinterUnit().GetPrinterEditionModel(PrinterID);
                 Printer_EditViewMoel viewModel = this._Printer_EditViewMoel(model);
-                return View("EditPrinter", viewModel);
+                return View("Edit", viewModel);
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
-                return View("EditPrinter", null);
+                return View("Edit", null);
             }
         }
 
-        [HttpGet]
-        public ActionResult DeletePrinter(int PrinterID)
+        [HttpPost]
+        public ActionResult Delete(int PrinterID)
         {
             try
             {
@@ -320,7 +332,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpPost]
-        public ActionResult SavePrinter(Printer_EditViewMoel model)
+        public ActionResult Save(Printer_EditViewMoel model)
         {
             if (!ModelState.IsValid)
             {
@@ -336,7 +348,7 @@ namespace GlobalPrint.ClientWeb
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
-                return View("EditPrinter", model);
+                return View("Edit", model);
             }
         }
 

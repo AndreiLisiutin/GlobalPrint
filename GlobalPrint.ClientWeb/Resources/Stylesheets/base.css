@@ -35,3 +35,10 @@
    top: -12px;
    left: -5px;
 }
+
+/*for vertical-align as center*/
+.vertical-center {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
