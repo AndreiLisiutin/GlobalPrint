@@ -199,6 +199,16 @@ namespace GlobalPrint.ClientWeb
         }
 
         //--------------------------------------------------------CRUD-----------------------------------------------------
+        /// <summary> Retreive printers which are owned orr operated by current user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult MyPrinters()
+        {
+            int UserID = this.GetCurrentUserID();
+            var printerList = new PrinterUnit().GetUserPrinterList(UserID);
+            return View("MyPrinters", printerList);
+        }
 
         /// <summary> Generate view model for printer edition action.
         /// </summary>
@@ -328,7 +338,7 @@ namespace GlobalPrint.ClientWeb
                 ModelState.AddModelError("", ex.Message);
             }
 
-            return RedirectToAction("UserAccountPrinterList", "UserAccountPrinterList");
+            return RedirectToAction("MyPrinters", "Printer");
         }
 
         [HttpPost]
@@ -343,7 +353,7 @@ namespace GlobalPrint.ClientWeb
             {
                 PrinterEditionModel editionModel = this._PrinterEditionModel(model);
                 new PrinterUnit().SavePrinter(editionModel);
-                return RedirectToAction("UserAccountPrinterList", "UserAccountPrinterList");
+                return RedirectToAction("MyPrinters", "Printer");
             }
             catch (Exception ex)
             {

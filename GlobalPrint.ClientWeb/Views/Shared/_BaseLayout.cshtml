@@ -25,17 +25,20 @@
         @RenderBody()
     </div>
     <div id="sound"></div>
-    @*<button onclick="GlonalPrint.PushNotifications.notify('Message');">Play</button>*@  
+    @*<button onclick="GlonalPrint.PushNotifications.notify('Message');">Play</button>*@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src="~/Resources/Libraries/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
     <script src="~/Resources/Libraries/bootstrap-notify/bootstrap-notify.min.js"></script>
     <script src="~/Resources/Libraries/signalR/jquery.signalR-2.2.1.min.js"></script>
+    <script src="~/Resources/Libraries/bootstrap.file-input/fileinput.js"></script>
     <!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
     <script src="~/signalr/hubs"></script>
-    <script src="~/Resources/Scripts/shared/pushNotification.js"></script>
-    <script src="~/Resources/Scripts/shared/baseLayout.js"></script>
+    <script src="~/Resources/Scripts/GlobalPrint.js"></script>
+    <script src="~/Resources/Scripts/GlobalPrint/Utils/CommonUtils.js"></script>
+    <script src="~/Resources/Scripts/GlobalPrint/Shared/PushNotifications.js"></script>
+    <script src="~/Resources/Scripts/GlobalPrint/Shared/BaseLayout.js"></script>
 
     @if (IsSectionDefined("Scripts"))
     {

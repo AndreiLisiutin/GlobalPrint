@@ -1,6 +1,4 @@
-﻿window.GlonalPrint = window.GlonalPrint || {};
-window.GlonalPrint.PushNotifications = GlonalPrint.PushNotifications || {};
-
+﻿GlobalPrint.namespace('GlobalPrint.Shared.PushNotifications');
 (function (PushNotifications) {
     var audioFile = "../Resources/Sounds/notification";
 
@@ -36,4 +34,4 @@ window.GlonalPrint.PushNotifications = GlonalPrint.PushNotifications || {};
         $("#sound")[0].innerHTML = '<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename + '.mp3" /></audio>';
     };
 
-}(window.GlonalPrint.PushNotifications));
+}(GlobalPrint.Shared.PushNotifications));
