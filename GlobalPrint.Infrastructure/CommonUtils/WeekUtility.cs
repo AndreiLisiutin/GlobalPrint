@@ -11,7 +11,7 @@ namespace GlobalPrint.Infrastructure.CommonUtils
     {
         public string DayName(DayOfWeek day)
         {
-            return CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(day);
+            return CultureInfo.GetCultureInfo("RU-ru").DateTimeFormat.GetDayName(day);
         }
     }
 }

@@ -204,9 +204,11 @@
     <Content Include="Resources\Documents\TeamPhoto\Ilya.jpg" />
     <Content Include="Resources\Documents\TeamPhoto\Sergei.jpg" />
     <Content Include="Resources\Documents\TeamPhoto\Viktor.jpg" />
+    <Content Include="Resources\Images\green_circle.ico" />
     <Content Include="Resources\Images\printer_offline.png" />
     <Content Include="Resources\Images\printer_online.png" />
     <Content Include="Resources\Images\printer__deactive.png" />
+    <Content Include="Resources\Images\red_circle.ico" />
     <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.js" />
     <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.min.js" />
     <Content Include="Resources\Libraries\bootstrap-notify\bootstrap-notify.js" />
@@ -247,6 +249,15 @@
     <Content Include="Resources\Libraries\clockpicker\test\assets\utils.js" />
     <Content Include="Resources\Libraries\clockpicker\test\suites\basic.js" />
     <Content Include="Resources\Libraries\clockpicker\test\suites\data-api.js" />
+    <Content Include="Resources\Scripts\GlobalPrint.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Home\Index.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Printer\Edit.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Printer\Print.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Shared\BaseLayout.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Shared\Navigation.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Shared\PushNotifications.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Utils\CommonUtils.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Utils\Services.js" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\.gitignore" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\angularjs.html" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\basic-plus.html" />
@@ -287,13 +298,7 @@
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\php\files\.gitignore" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\test\index.html" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\test\test.js" />
-    <Content Include="Resources\Scripts\home.js" />
-    <Content Include="Resources\Scripts\home\index.js" />
-    <Content Include="Resources\Scripts\printer\print.js" />
-    <Content Include="Resources\Scripts\shared\baseLayout.js" />
     <Content Include="Resources\Scripts\shared\fileUpload.js" />
-    <Content Include="Resources\Scripts\shared\navigation.js" />
-    <Content Include="Resources\Scripts\shared\pushNotification.js" />
     <Content Include="Resources\Sounds\notification.mp3" />
     <Content Include="Resources\Stylesheets\shared\display-form.css" />
     <Content Include="Resources\Stylesheets\shared\edit-form.css" />
@@ -331,7 +336,6 @@
     <Compile Include="Controllers\UserPrintOrderListController.cs" />
     <Compile Include="Controllers\UserPrintInfoController.cs" />
     <Compile Include="Controllers\UserRecievedPrintOrderListController.cs" />
-    <Compile Include="Controllers\UserAccountPrinterListController.cs" />
     <Compile Include="Controllers\UserAccountController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -374,13 +378,13 @@
     <None Include="Properties\PublishProfiles\GlobalPrint.pubxml" />
     <Content Include="Views\Printer\OrderCompleted.cshtml" />
     <Content Include="Views\UserAccount\UserAccount.cshtml" />
-    <Content Include="Views\UserAccountPrinterList\UserAccountPrinterList.cshtml" />
+    <Content Include="Views\Printer\MyPrinters.cshtml" />
     <Content Include="Views\UserPrintOrderList\UserPrintOrderList.cshtml" />
     <Content Include="Views\UserRecievedPrintOrderList\UserRecievedPrintOrderList.cshtml" />
     <Content Include="Views\UserAccount\FillUpBalance.cshtml" />
     <Content Include="Views\Account\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\UserRecievedPrintOrderList\ConfirmPrintOrder.cshtml" />
-    <Content Include="Views\Printer\EditPrinter.cshtml" />
+    <Content Include="Views\Printer\Edit.cshtml" />
     <Content Include="Views\Account\__RegisterViaPhone.cshtml" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -412,6 +416,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\" />
+    <Folder Include="Views\UserAccountPrinterList\" />
     <Folder Include="Views\UserRecievedPrintOrder\" />
   </ItemGroup>
   <ItemGroup>

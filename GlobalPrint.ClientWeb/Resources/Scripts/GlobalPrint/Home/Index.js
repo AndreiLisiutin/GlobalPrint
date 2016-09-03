@@ -1,5 +1,20 @@
-﻿home = home || {};
-home.index = home.index || (function () {
+﻿GlobalPrint.namespace('GlobalPrint.Home.Index');
+(function (HomeIndex) {
+
+    var PRINTER_ONLINE_ICON_URL = "/Resources/Images/printer_online.png";
+    var PRINTER_OFFLINE_ICON_URL = "/Resources/Images/printer_offline.png";
+    var PRINTER_DEACTIVE_ICON_URL = "/Resources/Images/printer_deactive.png";
+
+    //select printer's icon by its state
+    var _getPrinterIcon = function (printerInfo) {
+        if (printerInfo.IsAvailableNow) {
+            return PRINTER_ONLINE_ICON_URL;
+        }
+        if (printerInfo.Printer.IsDisabled) {
+            return PRINTER_DEACTIVE_ICON_URL;
+        }
+        return PRINTER_OFFLINE_ICON_URL;
+    };
 
     var _map = null;
     var _markersArray = [];
@@ -7,10 +22,9 @@ home.index = home.index || (function () {
     var _currentPrinterID = null;
     var _lastState = null;
 
-    var init = function () {
+    HomeIndex.init = function () {
         loadMap();
     };
-
 
     function CenterControl(controlDiv, map) {
 
@@ -99,8 +113,9 @@ home.index = home.index || (function () {
     };
 
     var _createMap = function (location) {
+        var isUserAuthenticated = GlobalPrint.Utils.CommonUtils.isUserAuthenticated();
         var mapOptions = {
-            zoom: 4,
+            zoom: isUserAuthenticated ? 16 : 4,
             center: location,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
@@ -108,7 +123,7 @@ home.index = home.index || (function () {
         google.maps.event.addListenerOnce(_map, 'idle', function () {
             loadPrinters();
         });
-        google.maps.event.addListener(_map, 'click', closePrinterInfo);
+        google.maps.event.addListener(_map, 'click', HomeIndex.closePrinterInfo);
         $("#googlemaps").on("heightChange", function () {
             google.maps.event.trigger(_map, "resize");
         });
@@ -122,7 +137,7 @@ home.index = home.index || (function () {
         _map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
     };
 
-    var closePrinterInfo = function () {
+    HomeIndex.closePrinterInfo = function () {
         if (_currentPrinterID) {
             _currentPrinterID = null;
             $("#sidebar-wrapper").addClass("hidden");
@@ -191,7 +206,6 @@ home.index = home.index || (function () {
         });
     };
 
-    var image = "/Resources/Images/printer_online.png";
     var DayOfWeek = {
         ПН: 1,
         ВТ: 2,
@@ -207,20 +221,21 @@ home.index = home.index || (function () {
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(printerInfo.Printer.Latitude, printerInfo.Printer.Longtitude),
             map: _map,
-            icon: image,
+            icon: _getPrinterIcon(printerInfo),
             title: printerInfo.Printer.Name,
             printerInfo: printerInfo
         });
 
         google.maps.event.addListener(marker, 'click', function () {
             $("#printerInfoPrinterID").val(printerInfo.Printer.ID);
-            $("#printerInfoIsAvailable").val(printerInfo.IsAvailableNow ? 'Доступен' : 'Не доступен');
+            $("#printerInfoIsAvailable").val(printerInfo.IsAvailableNow);
             $("#printerInfoName").val(printerInfo.Printer.Name);
             $("#printerInfoLocation").val(printerInfo.Printer.Location);
             function toFixedInt2(n) {
                 return n > 9 ? "" + n : "0" + n;
             }
-
+            var name = printerInfo.Printer.Name;
+            var location = printerInfo.Printer.Location;
             var averallSchedule = '';
             for (var day in DayOfWeek) {
                 var daySchedules = $.grep(printerInfo.PrinterSchedule, function (item, index) {
@@ -238,17 +253,17 @@ home.index = home.index || (function () {
                 scheduleString = scheduleString || 'Не работает';
                 averallSchedule += (averallSchedule ? '\n' : '') + day + ':.....' + scheduleString;
             }
-            $("#printerInfoSchedule").val(averallSchedule);
+            $("#printerInfoOperator").val(name + '\n' + location + '\n' + averallSchedule);
 
             var averallServices = '';
             $.each(marker.printerInfo.PrinterServices, function (index, item) {
                 var service = ''
                 service += item.PrintService.PrintType.Name + ' ' +
-                    item.PrintService.PrintSize.Name + ' ' + 
-                    (item.PrintService.IsColored ? 'Цветная' : 'Ч/Б') + 
+                    item.PrintService.PrintSize.Name + ' ' +
+                    (item.PrintService.IsColored ? 'Цветная' : 'Ч/Б') +
                     (item.PrintService.IsTwoSided ? 'Двусторонняя' : '');
 
-                service += ':.....' + item.PrinterService.PricePerPage;
+                service += ':.....' + item.PrinterService.PricePerPage + ' руб.';
                 averallServices += (averallServices ? '\n' : '') + service;
             });
             $("#printerInfoPrices").val(averallServices);
@@ -271,7 +286,7 @@ home.index = home.index || (function () {
         _markersArray.push(marker);
     };
 
-    var setMapFullScreen = function () {
+    HomeIndex.setMapFullScreen = function () {
         var winHeight = $(window).height();
         var navheight = $(".main-navbar").height();
         var fullHeight = winHeight - navheight;
@@ -280,23 +295,18 @@ home.index = home.index || (function () {
         $('#sidebar-wrapper').height(fullHeight);
     };
 
-    return {
-        init: init,
-        closePrinterInfo: closePrinterInfo,
-        setMapFullScreen: setMapFullScreen
-    };
-}());
+})(GlobalPrint.Home.Index);
 
 $(document).ready(function () {
-    home.index.init();
+    GlobalPrint.Home.Index.init();
     $("#printerInfoClose").click(function () {
         //Close button in print details sidebar
-        home.index.closePrinterInfo();
+        GlobalPrint.Home.Index.closePrinterInfo();
     });
 
     $("#printerInfoPrint").click(function (event) {
         //Print button in print details sidebar
-        var isUserAuthenticated = $("body").data('isAuthenticated');
+        var isUserAuthenticated = GlobalPrint.Utils.CommonUtils.isUserAuthenticated();
         var printerID = $("#printerInfoPrinterID").val();
 
         if (!printerID) {
@@ -312,10 +322,10 @@ $(document).ready(function () {
     });
 
     $(window).resize(function () {
-        home.index.setMapFullScreen();
+        GlobalPrint.Home.Index.setMapFullScreen();
     });
 
-    home.index.setMapFullScreen();
+    GlobalPrint.Home.Index.setMapFullScreen();
 
     $(document).click(function (event) {
         var clickover = $(event.target);

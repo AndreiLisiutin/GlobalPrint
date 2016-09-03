@@ -101,12 +101,16 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             }
         }
 
-        public List<Printer> GetUserPrinterList(int UserID)
+        /// <summary> Retreive printers which are owned orr operated by user.
+        /// </summary>
+        /// <param name="userID">Identifier of the user.</param>
+        /// <returns>List of printers which belong to the user.</returns>
+        public List<Printer> GetUserPrinterList(int userID)
         {
             using (IDataContext context = this.Context())
             {
                 return this.Repository<IPrinterRepository>(context)
-                    .Get(e => e.OwnerUserID == UserID)
+                    .Get(e => e.OwnerUserID == userID || e.OperatorUserID == userID)
                     .ToList();
             }
         }

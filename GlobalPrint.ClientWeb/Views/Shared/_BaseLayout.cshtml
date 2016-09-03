@@ -27,7 +27,7 @@
         @RenderBody()
     </div>
     <div id="sound"></div>
-    @*<button onclick="GlonalPrint.PushNotifications.notify('Message');">Play</button>*@  
+    @*<button onclick="GlonalPrint.PushNotifications.notify('Message');">Play</button>*@
 
     <!-- The fileinput-button span is used to style the file input field as button -->
     <span class="btn btn-success fileinput-button">
@@ -49,10 +49,13 @@
     <script src="~/Resources/Libraries/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
     <script src="~/Resources/Libraries/bootstrap-notify/bootstrap-notify.min.js"></script>
     <script src="~/Resources/Libraries/signalR/jquery.signalR-2.2.1.min.js"></script>
+    <script src="~/Resources/Libraries/bootstrap.file-input/fileinput.js"></script>
     <!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
     <script src="~/signalr/hubs"></script>
-    <script src="~/Resources/Scripts/shared/pushNotification.js"></script>
-    <script src="~/Resources/Scripts/shared/baseLayout.js"></script>
+    <script src="~/Resources/Scripts/GlobalPrint.js"></script>
+    <script src="~/Resources/Scripts/GlobalPrint/Utils/CommonUtils.js"></script>
+    <script src="~/Resources/Scripts/GlobalPrint/Shared/PushNotifications.js"></script>
+    <script src="~/Resources/Scripts/GlobalPrint/Shared/BaseLayout.js"></script>
 
     <script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.fileupload.js"></script>
     <script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.fileupload-ui.js"></script>

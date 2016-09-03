@@ -11,7 +11,7 @@
 <div class="container">
     <h2>Редактирование принтера "@( Model?.Printer?.Name ?? "Новый" )"</h2>
 
-    @using (Html.BeginForm("SavePrinter", "Printer", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("Save", "Printer", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
 
         if (!ViewData.ModelState.IsValid)
@@ -27,13 +27,17 @@
         @Html.HiddenFor(x => x.Printer.OperatorUserID)
 
         <div class="form-group">
-            <label class="col-sm-2 control-label text-left">Название</label>
+            <div class="col-sm-2">
+                <label class="control-label text-left">Название</label>
+            </div>
             <div class="col-sm-10">
                 @Html.TextBoxFor(m => m.Printer.Name, new { @class = "form-control", @type = "text", @placeholder = "Название принтера", @required = "true", @autofocus = true })
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label text-left">Расположение</label>
+            <div class="col-sm-2">
+                <label class="control-label text-left">Расположение</label>
+            </div>
             <div class="col-sm-10">
                 <div class="input-group">
                     @Html.TextBoxFor(m => m.Printer.Location, new { @class = "form-control", @type = "text", @placeholder = "Расположение", @required = "true", @id = "location" })
@@ -46,35 +50,45 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label text-left">Долгота</label>
+            <div class="col-sm-2">
+                <label class="control-label text-left">Долгота</label>
+            </div>
             <div class="col-sm-10">
                 @Html.TextBoxFor(m => m.Printer.Latitude, new { @class = "form-control", @type = "text", @placeholder = "Долгота", @required = "true", @id = "latitude" })
             </div>
         </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label text-left">Широта</label>
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Printer.Longtitude, new { @class = "form-control", @type = "text", @placeholder = "Широта", @required = "true", @id = "longtitude" })
-                </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label class="control-label text-left">Широта</label>
             </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label text-left">Телефон</label>
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Printer.Phone, new { @class = "form-control", @type = "phone", @placeholder = "Телефон" })
-                </div>
+            <div class="col-sm-10">
+                @Html.TextBoxFor(m => m.Printer.Longtitude, new { @class = "form-control", @type = "text", @placeholder = "Широта", @required = "true", @id = "longtitude" })
             </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label text-left">Email</label>
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Printer.Email, new { @class = "form-control", @type = "email", @placeholder = "Email" })
-                </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label class="control-label text-left">Телефон</label>
             </div>
-            <div class="form-group">
-                <label for="isDisabled" class="col-sm-2 control-label text-left">Отключен</label>
-                <div class="col-sm-10">
-                    @Html.CheckBoxFor(m => m.Printer.IsDisabled, new { @class = "form-control", @name = "isDisabled", @id = "isDisabled" })
-                </div>
+            <div class="col-sm-10">
+                @Html.TextBoxFor(m => m.Printer.Phone, new { @class = "form-control", @type = "phone", @placeholder = "Телефон" })
             </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label class="control-label text-left">Email</label>
+            </div>
+            <div class="col-sm-10">
+                @Html.TextBoxFor(m => m.Printer.Email, new { @class = "form-control", @type = "email", @placeholder = "Email" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label for="isDisabled" class="control-label text-left">Отключен</label>
+            </div>
+            <div class="col-sm-10">
+                @Html.CheckBoxFor(m => m.Printer.IsDisabled, new { @class = "", @name = "isDisabled", @id = "isDisabled" })
+            </div>
+        </div>
 
         //--------------------------------------------List of time---------------------------------------------
 
@@ -96,7 +110,7 @@
                     <tr class="printer-schedule">
                         <td class="col-xs-6 col-md-6" scope="row">@Html.DisplayTextFor(e => e.Schedule[i].DayOfWeekName)</td>
                         @Html.HiddenFor(e => e.Schedule[i].DayOfWeekName)
-                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Schedule[i].isOpened, new { @class = "form-control is-printer-schedule-open" })</td>
+                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Schedule[i].isOpened, new { @class = "is-printer-schedule-open" })</td>
                         <td class="col-xs-3 col-md-3">
                             <div class="input-group clockpicker" data-autoclose="true">
                                 @Html.TextBoxFor(e => e.Schedule[i].OpenTime, new { @class = "form-control printer-schedule-time" })
@@ -124,11 +138,11 @@
         <table class="table table-hover" id="printerServices">
             <thead>
                 <tr>
+                    <th class="col-xs-1 col-md-1">Наличие</th>
                     <th class="col-xs-3 col-md-3">Услуга</th>
                     <th class="col-xs-3 col-md-3">Размер</th>
                     <th class="col-xs-1 col-md-1">Цветная</th>
                     <th class="col-xs-1 col-md-1">Двусторонняя</th>
-                    <th class="col-xs-1 col-md-1">Поддерживается</th>
                     <th class="col-xs-3 col-md-3">Стоимость</th>
                 </tr>
             </thead>
@@ -138,14 +152,19 @@
                     @Html.HiddenFor(e => e.Services[i].PrintServiceID)
                     @Html.HiddenFor(e => e.Services[i].PrinterServiceID)
                     <tr class="printer-service">
+                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Services[i].IsSupported, new { @class = "is-printer-service-supported" })</td>
                         <td class="col-xs-3 col-md-3" scope="row">@Html.DisplayTextFor(e => e.Services[i].PrintType)</td>
                         @Html.HiddenFor(e => e.Services[i].PrintType)
                         <td class="col-xs-3 col-md-3" scope="row">@Html.DisplayTextFor(e => e.Services[i].PrintSize)</td>
                         @Html.HiddenFor(e => e.Services[i].PrintSize)
-                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Services[i].IsColored, new { @class = "form-control", disabled = "true" })</td>
-                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Services[i].IsTwoSided, new { @class = "form-control", disabled = "true" })</td>
-                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Services[i].IsSupported, new { @class = "form-control is-printer-service-supported" })</td>
-                        <td class="col-xs-3 col-md-3" scope="row">@Html.TextBoxFor(e => e.Services[i].Price, new { @class = "form-control printer-service-price", @type = "number" })</td>
+                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Services[i].IsColored, new { @class = "", disabled = "true" })</td>
+                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Services[i].IsTwoSided, new { @class = "", disabled = "true" })</td>
+                        <td class="col-xs-3 col-md-3" scope="row">
+                            <div class="input-group">
+                                @Html.TextBoxFor(e => e.Services[i].Price, new { @class = "form-control text-right printer-service-price", @type = "number" })
+                                <div class="input-group-addon">руб.</div>
+                            </div>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -159,100 +178,5 @@
 </div>
 
 @section Scripts {
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.clockpicker').clockpicker();
-
-            var disablePriceForNotSupported = function () {
-                $('#printerServices .printer-service').each(function (index, item) {
-
-                    var isServiceSupported = $(item)
-                        .find('.is-printer-service-supported')
-                        .is(':checked');
-
-                    var prices = $(item)
-                        .find('.printer-service-price');
-
-                    prices.attr('disabled', !isServiceSupported);
-                    if (!isServiceSupported) {
-                        prices.val('');
-                    }
-
-                });
-            };
-            var disableTimeForClosed = function () {
-                $('#printerSchedules .printer-schedule').each(function (index, item) {
-
-                    var isPrinterOpen = $(item)
-                        .find('.is-printer-schedule-open')
-                        .is(':checked');
-
-                    var clockpickers = $(item)
-                        .find('.printer-schedule-time');
-
-                    clockpickers.attr('disabled', !isPrinterOpen);
-                    if (!isPrinterOpen) {
-                        clockpickers.val('');
-                    }
-
-                    var clockpickerBtn = $(item)
-                        .find('.clockpicker .input-group-addon');
-
-                    if (isPrinterOpen) {
-                        clockpickerBtn.removeClass('hidden');
-                    } else {
-                        clockpickerBtn.addClass('hidden');
-                    }
-                });
-            };
-
-            disablePriceForNotSupported();
-            disableTimeForClosed();
-
-            $("#printerServices .is-printer-service-supported").change(function (event) {
-                disablePriceForNotSupported();
-            });
-            $("#printerSchedules .is-printer-schedule-open").change(function (event) {
-                disableTimeForClosed();
-            });
-
-            $('#geolocation').click(function () {
-                var location = $('#location').val();
-
-                $.ajax({
-                    url: 'http://maps.google.com/maps/api/geocode/json',
-                    type: 'GET',
-                    data: {
-                        address: location,
-                        sensor: false
-                    },
-                    async: false
-                }).done(function (json) {
-                    if (!json) {
-                        console.log('Error: ajax response is empty.');
-                        return;
-                    }
-
-                    try {
-                        if (!json.results || !json.results[0]) {
-                            return;
-                        }
-                        var position = {};
-                        position.lat = json.results[0].geometry.location.lat;
-                        position.lng = json.results[0].geometry.location.lng;
-
-                        $('#latitude').val(position.lat);
-                        $('#longtitude').val(position.lng);
-                        $('#location').val(json.results[0].formatted_address);
-
-                    } catch (err) {
-                        position = null;
-                    }
-                }).fail(function () {
-                    console.log('Error: ajax call failed.');
-                });
-
-            });
-        });
-    </script>
+    <script src="~/Resources/Scripts/GlobalPrint/Printer/Edit.js"></script>
 }
