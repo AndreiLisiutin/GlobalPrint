@@ -20,11 +20,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
     {
         [DebuggerStepThrough]
         public PrintOrderUnit()
-            :base()
+            : base()
         {
         }
 
-        public List<PrintOrderInfo> GetUserPrintOrderList(int UserID)
+        public List<PrintOrderInfo> GetUserPrintOrderList(int userID, string printOrderID)
         {
             using (IDataContext context = this.Context())
             {
@@ -37,10 +37,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                     from PrintOrder in orderRepo.GetAll()
                     join Printer in printerRepo.GetAll() on PrintOrder.PrinterID equals Printer.ID
                     join Status in statusRepo.GetAll() on PrintOrder.PrintOrderStatusID equals Status.PrintOrderStatusID
-                    where PrintOrder.UserID == UserID
+                    where PrintOrder.UserID == userID
                     orderby PrintOrder.OrderedOn descending
                     select new PrintOrderInfo() { PrintOrder = PrintOrder, Printer = Printer, Status = Status };
-                return printOrderList.ToList();
+                return printOrderList
+                    .ToList()
+                    .Where(x => string.IsNullOrEmpty(printOrderID) ||
+                        x.PrintOrder.PrintOrderID.ToString().IndexOf(printOrderID) >= 0)
+                    .ToList();
             }
         }
         public PrintOrderInfo GetPrintOrderInfoByID(int printOrderID)
@@ -51,7 +55,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
                 IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
                 IPrintOrderStatusRepository statusRepo = this.Repository<IPrintOrderStatusRepository>(context);
-                
+
                 var printOrderList =
                    from PrintOrder in orderRepo.GetAll()
                    join Printer in printerRepo.GetAll() on PrintOrder.PrinterID equals Printer.ID
@@ -63,7 +67,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             }
         }
 
-        public List<PrintOrderInfo> GetUserRecievedPrintOrderList(int UserID)
+        public List<PrintOrderInfo> GetUserRecievedPrintOrderList(int userID, string printOrderID)
         {
             using (IDataContext context = this.Context())
             {
@@ -76,10 +80,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                     from PrintOrder in orderRepo.GetAll()
                     join Printer in printerRepo.GetAll() on PrintOrder.PrinterID equals Printer.ID
                     join Status in statusRepo.GetAll() on PrintOrder.PrintOrderStatusID equals Status.PrintOrderStatusID
-                    where Printer.OwnerUserID == UserID
+                    where Printer.OwnerUserID == userID
                     orderby PrintOrder.OrderedOn descending
                     select new PrintOrderInfo() { PrintOrder = PrintOrder, Printer = Printer, Status = Status };
-                return printOrderList.ToList();
+                return printOrderList
+                    .ToList()
+                    .Where(x => string.IsNullOrEmpty(printOrderID) ||
+                        x.PrintOrder.PrintOrderID.ToString().IndexOf(printOrderID) >= 0)
+                    .ToList();
             }
         }
 

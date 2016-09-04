@@ -16,10 +16,10 @@ namespace GlobalPrint.ClientWeb
     {
         // GET: UserPrintOrderList/UserPrintOrderList
         [HttpGet]
-        public ActionResult UserPrintOrderList()
+        public ActionResult UserPrintOrderList(string printOrderID)
         {
             int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            var printOrderList = new PrintOrderUnit().GetUserPrintOrderList(userID);
+            var printOrderList = new PrintOrderUnit().GetUserPrintOrderList(userID, printOrderID);
             return View(printOrderList);
         }
     }

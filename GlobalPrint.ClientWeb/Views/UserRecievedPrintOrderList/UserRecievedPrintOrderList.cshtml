@@ -6,6 +6,11 @@
     ViewBag.Title = "Принятые Заказы";
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
+
+@section Scripts {
+    <script src="~/Resources/Scripts/GlobalPrint/PrintOrder/RecievedPrintOrder.js"></script>
+}
+
 @{int rowNo = 0;}
 <div class="container">
     @if (!ViewData.ModelState.IsValid)
@@ -16,13 +21,22 @@
         </div>
     }
 
+    @using (Html.BeginForm("UserRecievedPrintOrderList", "UserRecievedPrintOrderList", FormMethod.Get, new { @class = "form-horizontal", @id = "userRecievedPrintOrderListForm" }))
+    {
+        <div class="form-inline gp-data-filter focus">
+            <label class="control-label">Код заказа</label>
+            @Html.TextBox("printOrderID", "", htmlAttributes: new { @class = "form-control", @id = "recievedPrintOrderIdFilter" })
+            @*<input type="submit" value="Фильтр" class="btn btn-default" />*@
+        </div>
+    }
+
     <table class="table table-hover">
         <thead>
             <tr>
-                <th class="col-md-1">№</th>
+                @*<th class="col-md-1">№</th>*@
                 <th class="col-md-1">Номер заказа</th>
                 <th class="col-md-1">Принтер</th>
-                <th class="col-md-2">Документ</th>
+                <th class="col-md-3">Документ</th>
                 <th class="col-md-1">Дата заказа</th>
                 <th class="col-md-1">Цена заказа</th>
                 <th class="col-md-2">Статус</th>
@@ -33,7 +47,7 @@
             @foreach (PrintOrderInfo printOrder in Model)
             {
                 <tr>
-                    <td class="col-md-1" scope="row">@(rowNo += 1)</td>
+                    @*<td class="col-md-1" scope="row">@(rowNo += 1)</td>*@
                     <td class="col-md-1">@Html.DisplayFor(c => printOrder.PrintOrder.PrintOrderID)</td>
                     <td class="col-md-1">@Html.DisplayFor(c => printOrder.Printer.Name)</td>
                     <td class="col-md-2">@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>

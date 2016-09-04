@@ -5,10 +5,16 @@
     ViewBag.Title = "Мои Заказы";
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
-@{int rowNo = 0;}
+
+@section Scripts {
+    <script src="~/Resources/Scripts/GlobalPrint/PrintOrder/PrintOrder.js"></script>
+}
+
+@*@{int rowNo = 0;}*@
 <div class="container">
-    @using (Html.BeginForm(new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("UserPrintOrderList", "UserPrintOrderList", FormMethod.Get, new { @class = "form-horizontal", role = "form", id="userPrintOrderListForm" }))
     {
+
         if (!ViewData.ModelState.IsValid)
         {
             <div class="alert alert-danger container margin-top-20">
@@ -17,12 +23,18 @@
             </div>
         }
 
+        <div class="form-inline gp-data-filter focus">
+            <label class="control-label">Код заказа</label>
+            @Html.TextBox("printOrderID", "", htmlAttributes: new { @class = "form-control", @id = "printOrderIdFilter" })
+            @*<input type="submit" value="Фильтр" class="btn btn-default" />*@
+        </div>
+
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th class="col-md-1">№</th>
+                    <th class="col-md-2">Номер заказа</th>
                     <th class="col-md-2">Принтер</th>
-                    <th class="col-md-3">Документ</th>
+                    <th class="col-md-2">Документ</th>
                     <th class="col-md-2">Дата заказа</th>
                     <th class="col-md-2">Цена заказа</th>
                     <th class="col-md-2">Код</th>
@@ -33,7 +45,8 @@
                 @foreach (PrintOrderInfo printOrder in Model)
                 {
                     <tr>
-                        <td scope="row">@(rowNo += 1)</td>
+                        @*<td scope="row">@(rowNo += 1)</td>*@
+                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.PrintOrderID)</td>
                         <td>@Html.DisplayFor(c => printOrder.PrintOrder.PrinterID)</td>
                         <td>@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>
                         <td>@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, "{0:dd.MM.yyyy HH:mm:ss}")</td>
