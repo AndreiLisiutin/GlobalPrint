@@ -53,9 +53,18 @@
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label text-left">Файл для печати</label>
-            <div class="col-sm-3">
-                @Html.TextBoxFor(e => e.fileToPrint, new { @type = "file", @data_filename_placement = "inside", @title = "Выберите файл", @accept = ".pdf" })
-            </div>
+            <div class="col-sm-2">
+                @Html.TextBox("Выберите файл", "", new { @type = "file", @data_filename_placement = "inside", @title = "Выберите файл", @id = "fileupload" })
+            </div>            
+            <label class="col-sm-3 control-label text-left" id="fileName"></label>
+            <div class="col-sm-4 progressbar-margin">
+                <div id="progress" class="progress progressbar-nomargin">
+                    <label id="progressbarError" class="progressbar-error" hidden="hidden"></label>
+                    <div class="progress-bar progress-bar-success">
+                        <label id="percent" class="progressbarpercent"></label>
+                    </div>
+                </div>
+            </div>           
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label text-left">Секретный код</label>
@@ -77,16 +86,15 @@
         </div>
         <div class="form-group">
             <div class="col-sm-2">
-            @if (Model.user.AmountOfMoney <= 0)
-            {
-                <input type="submit" id="printButton" value="Печать" disabled="disabled" class="btn btn-default" />
-            }
-            else
-            {
-                <input type="submit" id="printButton" value="Печать" class="btn btn-default" />
-            }
+                @if (Model.user.AmountOfMoney <= 0)
+                {
+                    <input type="submit" id="printButton" value="Печать" disabled="disabled" class="btn btn-default" />
+                }
+                else
+                {
+                    <input type="submit" id="printButton" value="Печать" class="btn btn-default" />
+                }
+            </div>
         </div>
-    </div>
     }
 </div>
-

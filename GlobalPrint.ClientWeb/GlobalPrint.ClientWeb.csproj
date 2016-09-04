@@ -298,7 +298,7 @@
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\php\files\.gitignore" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\test\index.html" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\test\test.js" />
-    <Content Include="Resources\Scripts\shared\fileUpload.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Shared\FileUpload.js" />
     <Content Include="Resources\Sounds\notification.mp3" />
     <Content Include="Resources\Stylesheets\shared\display-form.css" />
     <Content Include="Resources\Stylesheets\shared\edit-form.css" />
@@ -330,7 +330,6 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\UserPrintOrderListController.cs" />
@@ -416,8 +415,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\" />
-    <Folder Include="Views\UserAccountPrinterList\" />
-    <Folder Include="Views\UserRecievedPrintOrder\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GlobalPrint.Configuration\GlobalPrint.Configuration.csproj">
