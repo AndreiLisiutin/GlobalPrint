@@ -1,27 +1,68 @@
-﻿#sidebar-wrapper {
+﻿.home-info-sidebar {
     z-index: 1000;
     background-color: white;
     position: absolute;
     padding: 5px 25px;
 }
 
+
+/*-----controls in the top-right side-----*/
+.home-info-controls {
+    position: absolute;
+    top: 30px;
+    right: 44px;
+    z-index: 2;
+}
+
+.home-info-control {
+    cursor: pointer;
+    margin-bottom: 20px;
+    padding: 8px;
+    width: 45px;
+    height: 45px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.home-info-control.active {
+    border: 3px solid black;
+}
+
+.home-info-control-image {
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+.home-info-control-find-me {
+    background-image: url('/Resources/Images/geolocation.png');
+}
+
+.home-info-control-closest-printer {
+    background-image: url('/Resources/Images/closest_printer.png');
+}
+
+.home-info-control-my_printers {
+    background-image: url('/Resources/Images/my_printers.png');
+}
+/*-----controls in the top-right side-----*/
+
+/*is available pictures*/
 .printer-info-is-available {
     display: none;
 }
-    /* 
-- Style each label that is directly after the input
-- position: relative; will ensure that any position: absolute children will position themselves in relation to it
-*/
-.printer-info-is-available + label {
-    background: url('/Resources/Images/red_circle.ico');
-    background-size: 25px 25px;
-    background-repeat: no-repeat;
-    height: 25px;
-    width: 25px;
-}
-/* Provide a border when hovered and when the checkbox before it is checked */
-.printer-info-is-available:checked + label {
-    background: url('/Resources/Images/green_circle.ico');
-    background-size: 25px 25px;
-    background-repeat: no-repeat;
-}
+    .printer-info-is-available + label {
+        background: url('/Resources/Images/red_circle.ico');
+        background-size: 30px 30px;
+        background-repeat: no-repeat;
+        height: 30px;
+        width: 30px;
+    }
+
+    .printer-info-is-available:checked + label {
+        background: url('/Resources/Images/green_circle.ico');
+        background-size: 30px 30px;
+        background-repeat: no-repeat;
+    }
+

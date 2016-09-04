@@ -18,7 +18,6 @@
 
     var _map = null;
     var _markersArray = [];
-    var _markersCurrentArray = [];
     var _currentPrinterID = null;
     var _lastState = null;
 
@@ -26,90 +25,38 @@
         loadMap();
     };
 
-    function CenterControl(controlDiv, map) {
-
-        // Set CSS for the control border.
-        var controlUI = document.createElement('div');
-        controlUI.style.backgroundColor = '#fff';
-        controlUI.style.border = '2px solid #fff';
-        controlUI.style.borderRadius = '3px';
-        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-        controlUI.style.cursor = 'pointer';
-        controlUI.style.marginBottom = '22px';
-        controlUI.style.textAlign = 'center';
-        controlUI.title = 'Click to recenter the map';
-        controlDiv.appendChild(controlUI);
-
-        // Set CSS for the control interior.
-        var controlText = document.createElement('div');
-        controlText.style.color = 'rgb(25,25,25)';
-        controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-        controlText.style.fontSize = '16px';
-        controlText.style.lineHeight = '38px';
-        controlText.style.paddingLeft = '5px';
-        controlText.style.paddingRight = '5px';
-        controlText.innerHTML = 'Где я?';
-        controlUI.appendChild(controlText);
-
-        // Setup the click event listeners: simply set the map to Chicago.
-        controlUI.addEventListener('click', function () {
-
-            if (navigator.geolocation) {
-
-                navigator.geolocation.getCurrentPosition(
-                function (position) {
-
-                    deleteAllMarkersCurrent();
-
-                    var location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                    _map.setCenter(location);
-                    _map.setZoom(15);
-
-                    var marker = new google.maps.Marker({
-                        position: location,
-                        map: _map,
-                        animation: google.maps.Animation.DROP,
-                        label: "Я",
-                        title: "Ваше текущее положение"
-                    });
-
-                    _markersCurrentArray.push(marker);
-                },
-                function (error) {
-                    alert("Ошибка определения текущего положения." + error.message);
-                }, {
-                    enableHighAccuracy: true,
-                    timeout: 5000,
-                    maximumAge: 0
-                });
-            } else {
-                alert("Отключено определение текущего положения.");
-            }
-
+    //markerwith current user's geoposition
+    var _meMarker = null;
+    //find user's geoposition and print it into map as a marker
+    HomeIndex.findMe = function (controlDiv, map) {
+        GlobalPrint.Utils.CommonUtils.geolocate(function (position) {
+            _meMarker && _meMarker.setMap(null);
+            var location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            _map.setCenter(location);
+            _map.setZoom(15);
+            _meMarker = new google.maps.Marker({
+                position: location,
+                map: _map,
+                animation: google.maps.Animation.DROP,
+                label: "Я",
+                title: "Ваше текущее положение"
+            });
         });
+    };
 
-    }
-
+    //load google map and try to open current user's geolocation
     var loadMap = function () {
-        if (navigator.geolocation) {
-
-            navigator.geolocation.getCurrentPosition(
+        GlobalPrint.Utils.CommonUtils.geolocate(
             function (position) {
                 var location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 _createMap(location);
             },
             function (error) {
+                console.log(error.message);
                 var location = new google.maps.LatLng(55.828345, 49.125938);
                 _createMap(location);
-            }, {
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 0
-            });
-        } else {
-            var location = new google.maps.LatLng(55.828345, 49.125938);
-            _createMap(location);
-        }
+            }
+        );
     };
 
     var _createMap = function (location) {
@@ -125,22 +72,15 @@
         });
         google.maps.event.addListener(_map, 'click', HomeIndex.closePrinterInfo);
         $("#googlemaps").on("heightChange", function () {
+            //for resize map with browser resize
             google.maps.event.trigger(_map, "resize");
         });
-
-        // Create the DIV to hold the control and call the CenterControl() constructor
-        // passing in this DIV.
-        var centerControlDiv = document.createElement('div');
-        var centerControl = new CenterControl(centerControlDiv, _map);
-
-        centerControlDiv.index = 1;
-        _map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
     };
 
     HomeIndex.closePrinterInfo = function () {
         if (_currentPrinterID) {
             _currentPrinterID = null;
-            $("#sidebar-wrapper").addClass("hidden");
+            $("#homeInfoSidebar").addClass("hidden");
             _map.setZoom(_lastState.zoom);
             _map.setCenter(_lastState.center);
             _lastState = null;
@@ -159,16 +99,60 @@
             });
             _markersArray.length = 0;
         }
-    }
+    };
 
-    function deleteAllMarkersCurrent() {
-        if (_markersCurrentArray) {
-            for (i in _markersCurrentArray) {
-                _markersCurrentArray[i].setMap(null);
-            }
-            _markersCurrentArray.length = 0;
+    function deleteMarkerByPrinterID(printerID) {
+        var marker = findMarkerByPrinterID(printerID);
+        if (marker) {
+            marker.setMap(null);
         }
-    }
+        _markersArray = _.filter(_markersArray, function (item) {
+            return item.printerID != printerID;
+        });
+    };
+
+    function findMarkerByPrinterID(printerID) {
+        return _markersArray && _.find(_markersArray, function (marker) {
+            return marker.printerID == printerID;
+        });
+    };
+
+    var _onlyMyPrinters = false;
+    HomeIndex.loadOnlyMyPrinters = function () {
+        _onlyMyPrinters = !_onlyMyPrinters;
+        if (_onlyMyPrinters) {
+            $('#homeInfoControlMyPrinters').addClass('active');
+        } else {
+            $('#homeInfoControlMyPrinters').removeClass('active');
+        }
+        loadPrinters();
+    };
+    HomeIndex.loadClosestPrinter = function () {
+        GlobalPrint.Utils.CommonUtils.geolocate(
+            function (position) {
+                $.ajax({
+                    type: 'GET',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: { latitude: position.coords.latitude, longtitude: position.coords.longitude },
+                    url: '/Home/GetClosestPrinter'
+                }).done(function (json) {
+                    if (!json) {
+                        console.log('Error: ajax response is empty.');
+                        return;
+                    }
+                    deleteMarkerByPrinterID(json.Printer.ID);
+                    var marker = _addMarker(json, true);
+                    _zoomMarker(marker);
+                }).fail(function () {
+                    console.log('Error: ajax call failed.');
+                });
+            },
+            function (error) {
+                console.log(error.message);
+            }
+        );
+    };
 
     var loadPrinters = function () {
         //get google map geographical boundaries
@@ -178,18 +162,18 @@
         var lng0 = _map.getBounds().getNorthEast().lng();
         var lng1 = _map.getBounds().getSouthWest().lng();
 
-        var boundaries = {
+        var jsonData = {
             minLatitude: lat1 >= lat0 ? lat0 : lat1,
             maxLatitude: lat1 >= lat0 ? lat1 : lat0,
             minLongtitude: lng1 >= lng0 ? lng0 : lng1,
             maxLongtitude: lng1 >= lng0 ? lng1 : lng0
         };
-
+        jsonData.userID = _onlyMyPrinters && GlobalPrint.Utils.CommonUtils.getUserID();
         $.ajax({
             type: 'GET',
             contentType: 'application/json',
             dataType: 'json',
-            data: boundaries,
+            data: jsonData,
             url: '/Home/GetPrinters'
         }).done(function (json) {
             if (!json) {
@@ -215,7 +199,7 @@
         СБ: 6,
         ВС: 0
     };
-    var _addMarker = function (printerInfo) {
+    var _addMarker = function (printerInfo, animation) {
         //adding new marker to the map.
         //printerInfo is a model for C# PrinterFullInfoModel class.
         var marker = new google.maps.Marker({
@@ -223,6 +207,8 @@
             map: _map,
             icon: _getPrinterIcon(printerInfo),
             title: printerInfo.Printer.Name,
+            animation: animation ? google.maps.Animation.DROP : null,
+            printerID: printerInfo.Printer.ID,
             printerInfo: printerInfo
         });
 
@@ -274,7 +260,7 @@
                     center: _map.getCenter()
                 };
 
-                $("#sidebar-wrapper").removeClass("hidden");
+                $("#homeInfoSidebar").removeClass("hidden");
                 setTimeout(function () {
                     _zoomMarker(marker);
                 }, 600);
@@ -284,6 +270,7 @@
             _currentPrinterID = marker.printerInfo.Printer.ID;
         });
         _markersArray.push(marker);
+        return marker;
     };
 
     HomeIndex.setMapFullScreen = function () {
@@ -292,7 +279,7 @@
         var fullHeight = winHeight - navheight;
         $('#googlemaps').height(fullHeight);
         $('#googlemaps').trigger("heightChange");
-        $('#sidebar-wrapper').height(fullHeight);
+        $('#homeInfoSidebar').height(fullHeight);
     };
 
 })(GlobalPrint.Home.Index);
@@ -323,6 +310,20 @@ $(document).ready(function () {
 
     $(window).resize(function () {
         GlobalPrint.Home.Index.setMapFullScreen();
+    });
+
+    var isUserAuthenticated = GlobalPrint.Utils.CommonUtils.isUserAuthenticated();
+    if (!isUserAuthenticated) {
+        $("#homeInfoControlMyPrinters").addClass('hidden');
+    }
+    $("#homeIndoControlFindMe").click(function (event) {
+        GlobalPrint.Home.Index.findMe();
+    });
+    $("#homeInfoControlMyPrinters").click(function (event) {
+        GlobalPrint.Home.Index.loadOnlyMyPrinters();
+    });
+    $("#homeInfoControlClosestPrinter").click(function (event) {
+        GlobalPrint.Home.Index.loadClosestPrinter();
     });
 
     GlobalPrint.Home.Index.setMapFullScreen();
