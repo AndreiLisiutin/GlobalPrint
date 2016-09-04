@@ -10,9 +10,9 @@
 @section Stylesheets {
     <link href="~/Resources/Stylesheets/home/index.css" rel="stylesheet" />
 }
-<div class="home_index container-full">
+<div class="container-full">
 
-    <div id="sidebar-wrapper" class="hidden fixed-top col-xs-12 col-sm-5 col-md-4 col-lg-3">
+    <div id="homeInfoSidebar" class="home-info-sidebar hidden fixed-top col-xs-12 col-sm-5 col-md-4 col-lg-3">
         <form class="form-horizontal" role="form">
             <input type="hidden" id="printerInfoPrinterID" />
             <div>
@@ -42,6 +42,22 @@
             </div>
         </form>
     </div>
+
+    <div class="home-info-controls">
+        <div id="homeIndoControlFindMe" class="home-info-control" data-toggle="tooltip" data-placement="bottom" title="Текущее положение">
+            <div class="home-info-control-find-me home-info-control-image">
+            </div>
+        </div>
+        <div id="homeInfoControlClosestPrinter" class="home-info-control" data-toggle="tooltip" data-placement="top" title="Ближайший принтер">
+            <div class="home-info-control-closest-printer home-info-control-image">
+            </div>
+        </div>
+        <div id="homeInfoControlMyPrinters" class="home-info-control" data-toggle="tooltip" data-placement="top" title="Мои принтеры">
+            <div class="home-info-control-my_printers home-info-control-image">
+            </div>
+        </div>
+    </div>
+
     <div id="googlemaps" class="googlemaps">
     </div>
 

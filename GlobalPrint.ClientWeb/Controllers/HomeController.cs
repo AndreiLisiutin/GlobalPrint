@@ -15,10 +15,19 @@ namespace GlobalPrint.ClientWeb
             return View();
         }
 
-        public ActionResult GetPrinters()
+        [HttpGet]
+        public ActionResult GetPrinters(PrinterSearchFilter filter)
         {
-            IEnumerable<PrinterFullInfoModel> printers = new PrinterUnit().GetPrinters();
+            filter = filter ?? new PrinterSearchFilter();
+            IEnumerable<PrinterFullInfoModel> printers = new PrinterUnit().GetPrinters(filter);
             return Json(printers);
+        }
+
+        [HttpGet]
+        public ActionResult GetClosestPrinter(float latitude, float longtitude)
+        {
+            PrinterFullInfoModel printer = new PrinterUnit().GetClosestPrinter(latitude, longtitude);
+            return Json(printer);
         }
     }
 }

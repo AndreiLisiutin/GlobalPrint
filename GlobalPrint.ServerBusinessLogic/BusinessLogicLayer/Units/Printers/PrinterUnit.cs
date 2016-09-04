@@ -72,14 +72,18 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             return model;
         }
 
-        public IEnumerable<PrinterFullInfoModel> GetPrinters()
+        public IEnumerable<PrinterFullInfoModel> GetPrinters(PrinterSearchFilter filter)
         {
+            filter = filter ?? new PrinterSearchFilter();
             using (IDataContext context = this.Context())
             {
                 IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
                 IPrinterScheduleRepository printerScheduleRepo = this.Repository<IPrinterScheduleRepository>(context);
 
-                List<Printer> printers = printerRepo.GetAll().ToList();
+                List<Printer> printers = printerRepo
+                    .Get(e =>
+                        filter.UserID == null || e.OperatorUserID == filter.UserID || e.OwnerUserID == filter.UserID
+                    ).ToList();
                 IEnumerable<int> printerIDs = printers.Select(p => p.ID);
 
                 IEnumerable<PrinterSchedule> schedules = printerScheduleRepo
@@ -90,14 +94,42 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                     .ToList();
 
                 IEnumerable<PrinterFullInfoModel> models = printers
-                    .Select(p => 
-                    new PrinterFullInfoModel(p, 
+                    .Select(p =>
+                    new PrinterFullInfoModel(p,
                         schedules.Where(e => e.PrinterID == p.ID).ToList(),
                         services.Where(e => e.PrinterService.PrinterID == p.ID).ToList()
                     ))
                     .ToList();
-                
+
                 return models;
+            }
+        }
+
+        public PrinterFullInfoModel GetClosestPrinter(float latitude, float longtitude)
+        {
+            using (IDataContext context = this.Context())
+            {
+                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
+                IPrinterScheduleRepository printerScheduleRepo = this.Repository<IPrinterScheduleRepository>(context);
+
+                IQueryable<Printer> all = printerRepo
+                        .GetAll();
+                Printer closest = printerRepo
+                    .GetAll()
+                    .Where(p => Math.Pow(p.Latitude - latitude, 2) + Math.Pow(p.Longtitude - longtitude, 2) ==
+                        all.Min(e => Math.Pow(e.Latitude - latitude, 2) + Math.Pow(e.Longtitude - longtitude, 2))
+                    )
+                    .FirstOrDefault();
+
+                IEnumerable<PrinterSchedule> schedules = printerScheduleRepo
+                    .Get(s => s.PrinterID == closest.ID)
+                    .ToList();
+                IEnumerable<PrinterServiceExtended> services = new PrintServicesUnit()
+                    .GetPrinterServices(s => s.PrinterService.PrinterID == closest.ID)
+                    .ToList();
+
+                PrinterFullInfoModel model = new PrinterFullInfoModel(closest, schedules, services);
+                return model;
             }
         }
 

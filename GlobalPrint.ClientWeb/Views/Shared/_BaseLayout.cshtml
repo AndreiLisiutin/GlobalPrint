@@ -1,4 +1,5 @@
 ﻿@model GlobalPrint.ClientWeb.Models.MyModel
+@using Microsoft.AspNet.Identity
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,30 +23,15 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body data-is-authenticated="@User.Identity.IsAuthenticated">
+<body data-is-authenticated="@User.Identity.IsAuthenticated" data-user-id="@User.Identity.GetUserId()">
     <div class="content">
         @RenderBody()
     </div>
     <div id="sound"></div>
-    @*<button onclick="GlonalPrint.PushNotifications.notify('Message');">Play</button>*@
-
-    <!-- The fileinput-button span is used to style the file input field as button -->
-    <span class="btn btn-success fileinput-button">
-        <i class="glyphicon glyphicon-plus"></i>
-        <span>Add files...</span>
-        <!-- The file input field used as target for the file upload widget -->
-        <input id="fileupload" type="file" name="files[]" multiple>
-    </span>
-    <!-- The global progress bar -->
-    <div id="progress" class="progress">
-        <div class="progress-bar progress-bar-success"></div>
-    </div>
-    <!-- The container for the uploaded files -->
-    <div id="files" class="files"></div>
-
+        
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+    <script src="~/Resources/Libraries/underscore.js/underscore.js"></script>
     <script src="~/Resources/Libraries/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
     <script src="~/Resources/Libraries/bootstrap-notify/bootstrap-notify.min.js"></script>
     <script src="~/Resources/Libraries/signalR/jquery.signalR-2.2.1.min.js"></script>
@@ -56,13 +42,6 @@
     <script src="~/Resources/Scripts/GlobalPrint/Utils/CommonUtils.js"></script>
     <script src="~/Resources/Scripts/GlobalPrint/Shared/PushNotifications.js"></script>
     <script src="~/Resources/Scripts/GlobalPrint/Shared/BaseLayout.js"></script>
-
-    <script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.fileupload.js"></script>
-    <script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.fileupload-ui.js"></script>
-    <script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.iframe-transport.js"></script>
-    <script src="~/Resources/Scripts/shared/fileUpload.js"></script>
-    <link rel="stylesheet" href="~/Resources/Libraries/jQuery-File-Upload-9.12.5/css/jquery.fileupload.css">
-
     @if (IsSectionDefined("Scripts"))
     {
         @RenderSection("Scripts")

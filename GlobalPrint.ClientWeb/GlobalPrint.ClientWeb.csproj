@@ -249,6 +249,7 @@
     <Content Include="Resources\Libraries\clockpicker\test\assets\utils.js" />
     <Content Include="Resources\Libraries\clockpicker\test\suites\basic.js" />
     <Content Include="Resources\Libraries\clockpicker\test\suites\data-api.js" />
+    <Content Include="Resources\Libraries\underscore.js\underscore.js" />
     <Content Include="Resources\Scripts\GlobalPrint.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Home\Index.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Printer\Edit.js" />
@@ -304,6 +305,7 @@
     <Content Include="Resources\Stylesheets\shared\edit-form.css" />
     <Content Include="Resources\Stylesheets\home\index.css" />
     <Content Include="Resources\Stylesheets\base.css" />
+    <Content Include="Resources\Stylesheets\team\team.css" />
     <Content Include="Resources\Stylesheets\userAccount\user-account.css" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\.jshintrc" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\bower.json" />
@@ -416,7 +418,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\" />
-    <Folder Include="Views\UserAccountPrinterList\" />
     <Folder Include="Views\UserRecievedPrintOrder\" />
   </ItemGroup>
   <ItemGroup>
