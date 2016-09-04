@@ -22,7 +22,7 @@
             dataType: 'json',
             messages: {
                 maxNumberOfFiles: 'Превышено максимально допустимое количество файлов для загрузки',
-                acceptFileTypes: 'Тип файла не допустим',
+                acceptFileTypes: 'Тип файла недопустим',
                 maxFileSize: 'Размер файла превышает максимально допустимый'
             }
         }).on('fileuploadadd', function (e, data) {
