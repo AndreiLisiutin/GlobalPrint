@@ -253,7 +253,7 @@
     <Content Include="Resources\Scripts\GlobalPrint.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Home\Index.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Printer\Edit.js" />
-    <Content Include="Resources\Scripts\GlobalPrint\Printer\Print.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Order\New.js" />
     <Content Include="Resources\Scripts\GlobalPrint\PrintOrder\RecievedPrintOrder.js" />
     <Content Include="Resources\Scripts\GlobalPrint\PrintOrder\PrintOrder.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Shared\BaseLayout.js" />
@@ -336,6 +336,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\UserPrintOrderListController.cs" />
     <Compile Include="Controllers\UserPrintInfoController.cs" />
     <Compile Include="Controllers\UserRecievedPrintOrderListController.cs" />
@@ -360,7 +361,7 @@
     <Compile Include="Models\Auth\UserStore.cs" />
     <Compile Include="Models\PrinterController\PreparedOrder.cs" />
     <Compile Include="Models\PrinterController\Printer_PrintConfirmationViewModel.cs" />
-    <Compile Include="Models\PrinterController\Printer_PrintViewModel.cs" />
+    <Compile Include="Models\OrderController\Order_NewViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -374,7 +375,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Printer\Print.cshtml" />
+    <Content Include="Views\Order\New.cshtml" />
     <None Include="Properties\PublishProfiles\Package.pubxml" />
     <Content Include="Views\Printer\PrintConfirmation.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />

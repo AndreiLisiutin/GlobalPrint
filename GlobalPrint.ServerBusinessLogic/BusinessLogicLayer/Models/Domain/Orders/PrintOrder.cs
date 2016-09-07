@@ -11,16 +11,13 @@ using System.Threading.Tasks;
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders
 {
     [Table("print_order", Schema = "public")]
-    public class PrintOrder: IDomainModel
+    public class PrintOrder : IDomainModel
     {
         [DebuggerStepThrough]
         public PrintOrder()
         {
         }
 
-        [Key]
-        [Column("print_order_id")]
-        public int PrintOrderID { get; set; }
         [Column("user_id")]
         public int UserID { get; set; }
         [Column("printer_id")]
@@ -42,16 +39,30 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Order
         [Column("print_service_id")]
         public int PrintServiceID { get; set; }
 
-        [NotMapped]
-        public bool IsBothSidesPrint { get; set; }
-        [NotMapped]
-        public string Format { get; set; }
+        /// <summary> Number of copies that is requested to print.
+        /// </summary>
+        [Column("copies_count")]
+        public int CopiesCount { get; set; }
+
+        /// <summary> Comment to the order.
+        /// </summary>
+        [Column("comment")]
+        public string Comment { get; set; }
+        
         [NotMapped]
         public string PriceInCurrency
         {
             get
             {
                 return this.PricePerPage.ToString() + " руб.";
+            }
+        }
+        [NotMapped]
+        public decimal FullPrice
+        {
+            get
+            {
+                return this.PricePerPage * this.PagesCount * this.CopiesCount;
             }
         }
         [NotMapped]
@@ -64,12 +75,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Order
         }
 
         #region IDomainModel
-        [NotMapped]
-        public int ID
-        {
-            get { return this.PrintOrderID; }
-            set { this.PrintOrderID = value; }
-        }
+        [Key]
+        [Column("print_order_id")]
+        public int ID { get; set; }
         #endregion
     }
 }

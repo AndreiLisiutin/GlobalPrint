@@ -16,20 +16,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Print
         public PrintType()
         {
         }
-
-        [Key]
-        [Column("print_type_id")]
-        public int PrintTypeID { get; set; }
+        
         [Column("name")]
         public string Name { get; set; }
 
         #region IDomainModel
-        [NotMapped]
-        public int ID
-        {
-            get { return this.PrintTypeID; }
-            set { this.PrintTypeID = value; }
-        }
+        [Key]
+        [Column("print_type_id")]
+        public int ID { get; set; }
         #endregion
     }
 }

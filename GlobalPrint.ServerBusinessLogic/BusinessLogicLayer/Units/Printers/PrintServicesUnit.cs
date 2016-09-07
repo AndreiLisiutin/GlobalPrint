@@ -31,12 +31,26 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
         /// <summary> Get all possible print services of the system.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<PrintServiceExtended> GetPrintServices()
+        public PrintServiceExtended GetPrintServiceByID(int printServiceID)
+        {
+            return this.GetPrintServices(e => e.PrintService.ID == printServiceID)
+                .FirstOrDefault();
+        }
+
+        /// <summary> Get all possible print services of the system.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<PrintServiceExtended> GetPrintServices(Expression<Func<PrintServiceExtended, bool>> predicate = null)
         {
             using (IDataContext context = this.Context())
             {
-                List<PrintServiceExtended> services = this.PrintServices(context).ToList();
-                return services;
+                IQueryable<PrintServiceExtended> services = this.PrintServices(context);
+                if (predicate != null)
+                {
+                    services = services.Where(predicate);
+                }
+                
+                return services.ToList();
             }
         }
 
@@ -56,6 +70,15 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                 return services.ToList();
             }
         }
+
+        /// <summary> Get printer services of certain printer.
+        /// </summary>
+        /// <param name="printerID">Identifier of the printer.</param>
+        /// <returns></returns>
+        public IEnumerable<PrinterServiceExtended> GetPrinterServices(int printerID)
+        {
+            return GetPrinterServices(e => e.PrinterService.PrinterID == printerID);
+        }
         
         /// <summary> Create Queryable for print services with all the text values for IDs.
         /// </summary>
@@ -72,7 +95,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                 from service in printServiceRepo.GetAll()
                 join sizeType in printSizePrintTypeRepo.GetAll() on service.PrintSizePrintTypeID equals sizeType.PrintSizePrintTypeID
                 join size in printSizeRepo.GetAll() on sizeType.PrintSizeID equals size.PrintSizeID
-                join type in printTypeRepo.GetAll() on sizeType.PrintTypeID equals type.PrintTypeID
+                join type in printTypeRepo.GetAll() on sizeType.PrintTypeID equals type.ID
                 select new PrintServiceExtended() { PrintService = service, PrintSizePrintType = sizeType, PrintSize = size, PrintType = type };
 
             return queryableServices;

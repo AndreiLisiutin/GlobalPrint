@@ -21,193 +21,12 @@ namespace GlobalPrint.ClientWeb
 {
     public class PrinterController : BaseController
     {
+        
         [HttpGet]
-        public ActionResult Print(int printerID)
+        public ActionResult GetPrinterServices(int printerID)
         {
-            var model = this._CreatePrintViewModel(printerID, null, null);
-            return View(model);
-        }
-
-        private Printer_PrintViewModel _CreatePrintViewModel(int printerID, HttpPostedFileBase fileToPrint, PrintOrder order)
-        {
-            PrinterScheduled printer = new PrinterUnit().GetPrinterInfoByID(printerID);
-            int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            User user = new UserUnit().GetUserByID(userID);
-            if (user.AmountOfMoney <= 0)
-            {
-                ModelState.AddModelError("", "Нет средств на счете");
-            }
-            if (order == null)
-            {
-                var rnd = new Random();
-                order = new PrintOrder()
-                {
-                    PrinterID = printerID,
-                    Format = "A4",
-                    SecretCode = new string(rnd.Next(1, 9).ToString()[0], 2)
-                        + new string(rnd.Next(1, 9).ToString()[0], 2)
-                };
-            }
-            List<string> formats = new List<string>()
-            {
-                "A1",
-                "A2",
-                "A3",
-                "A4",
-                "A5"
-            };
-            List<SelectListItem> formatStore = formats.Select(e => new SelectListItem()
-            {
-                Text = e,
-                Value = e,
-                Selected = order.Format == e
-            }).ToList();
-
-            var model = new Printer_PrintViewModel()
-            {
-                printer = printer,
-                order = order,
-                fileToPrint = fileToPrint,
-                formatStore = formatStore,
-                user = user
-            };
-            return model;
-        }
-
-        [HttpPost]
-        public ActionResult Print(Printer_PrintPostModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                var printerModel = this._CreatePrintViewModel(model.order.PrinterID, model.fileToPrint, model.order);
-                return View("Print", printerModel);
-            }
-            if (model.fileToPrint == null || model.fileToPrint.ContentLength == 0)
-            {
-                ModelState.AddModelError("", "Не выбран файл для печати");
-                var printerModel = this._CreatePrintViewModel(model.order.PrinterID, model.fileToPrint, model.order);
-                return View("Print", printerModel);
-            }
-            if (!model.fileToPrint.FileName.EndsWith(".pdf", StringComparison.InvariantCultureIgnoreCase))
-            {
-                ModelState.AddModelError("", "Неизвестный формат файла. Поддерживаемые форматы: PDF.");
-                var printerModel = this._CreatePrintViewModel(model.order.PrinterID, model.fileToPrint, model.order);
-                return View("Print", printerModel);
-            }
-            if (string.IsNullOrEmpty(model.order.SecretCode))
-            {
-                ModelState.AddModelError("", "Введите секретный код.");
-                var printerModel = this._CreatePrintViewModel(model.order.PrinterID, model.fileToPrint, model.order);
-                return View("Print", printerModel);
-            }
-            int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            User user = new UserUnit().GetUserByID(userID);
-            if (user.AmountOfMoney <= 0)
-            {
-                var printerModel = this._CreatePrintViewModel(model.order.PrinterID, model.fileToPrint, model.order);
-                return View("Print", printerModel);
-            }
-
-            string app_data = HttpContext.Server.MapPath("~/App_Data");
-            string usersFolder = Path.Combine(app_data, userID.ToString());
-            string pathFoFile = Path.Combine(usersFolder, model.fileToPrint.FileName);
-
-            byte[] serializedFile = null;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                model.fileToPrint.InputStream.Seek(0, SeekOrigin.Begin);
-                model.fileToPrint.InputStream.CopyTo(ms);
-                serializedFile = ms.ToArray();
-            }
-            PdfReader pdfReader = new PdfReader(serializedFile);
-            int numberOfPages = pdfReader.NumberOfPages;
-
-            var printer = new PrinterUnit().GetPrinterByID(model.order.PrinterID);
-            var order = model.order;
-            order.Document = pathFoFile;
-            order.OrderedOn = DateTime.Now;
-            order.PagesCount = numberOfPages;
-            order.PrintedOn = null;
-            order.UserID = userID;
-            order.PrintOrderStatusID = (int)PrintOrderStatusEnum.Waiting;
-            order.PrintServiceID = 75; // debug
-
-            Session["Printer_PreparedOrder"] = order;
-            Session["Printer_PreparedOrderFile"] = serializedFile;
-
-            return RedirectToAction("PrintConfirmation");
-        }
-
-        private Printer_PrintConfirmationViewModel _CreatePrintConfirmationViewModel(PrintOrder order)
-        {
-            int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            User user = new UserUnit().GetUserByID(userID);
-            var model = new Printer_PrintConfirmationViewModel()
-            {
-                order = order,
-                user = user
-            };
-            return model;
-        }
-
-        [HttpGet]
-        public ActionResult PrintConfirmation()
-        {
-            PrintOrder order = Session["Printer_PreparedOrder"] as PrintOrder;
-            var model = this._CreatePrintConfirmationViewModel(order);
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult ExecuteOrder()
-        {
-            PrintOrder order = Session["Printer_PreparedOrder"] as PrintOrder;
-            var file = Session["Printer_PreparedOrderFile"] as byte[];
-
-            int userID = this.GetCurrentUserID();
-            User user = new UserUnit().GetUserByID(userID);
-            decimal wholeOrderPrice = order.PricePerPage * order.PagesCount;
-            if (user.AmountOfMoney <= wholeOrderPrice)
-            {
-                ModelState.AddModelError("", "Недостаточно средств на счете. Пополните баланс");
-                var confirmmodel = this._CreatePrintConfirmationViewModel(order);
-                return View("PrintConfirmation", confirmmodel);
-            }
-
-            order = new PrinterUnit().SavePrintOrder(file, order, this.GetSmsParams());
-
-            // Push notification about new order
-            User printerOperator = new PrinterUnit().GetPrinterOperator(order.PrinterID);
-            string notificationMessage = string.Format(
-                "{0}: поступил новый заказ № {1}." + Environment.NewLine +
-                "Количество страниц: {2}, сумма заказа: {3}р.",
-                order.OrderedOn.ToString("HH:mm:ss"),
-                order.PrintOrderID,
-                order.PagesCount,
-                wholeOrderPrice
-            );
-            new PushNotificationHub().NewIncomingOrder(notificationMessage, printerOperator.UserID);
-
-            return RedirectToAction("OrderCompleted", new { printOrderID = order.PrintOrderID });
-        }
-
-        [HttpGet]
-        public ActionResult OrderCompleted(int printOrderID)
-        {
-            var order = new PrinterUnit().GetPrintOrderByID(printOrderID);
-            return View(order);
-        }
-
-        //--------------------------------------------------------CRUD-----------------------------------------------------
-        /// <summary> Retreive printers which are owned orr operated by current user.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public ActionResult MyPrinters()
-        {
-            int UserID = this.GetCurrentUserID();
-            var printerList = new PrinterUnit().GetUserPrinterList(UserID);
-            return View("MyPrinters", printerList);
+            IEnumerable<PrinterServiceExtended> services = new PrintServicesUnit().GetPrinterServices(printerID);
+            return Json(services);
         }
 
         /// <summary> Generate view model for printer edition action.
@@ -293,6 +112,17 @@ namespace GlobalPrint.ClientWeb
                 .ToList();
 
             return model;
+        }
+
+        /// <summary> Retreive printers which are owned orr operated by current user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult MyPrinters()
+        {
+            int UserID = this.GetCurrentUserID();
+            var printerList = new PrinterUnit().GetUserPrinterList(UserID);
+            return View("MyPrinters", printerList);
         }
 
         [HttpGet]
