@@ -32,6 +32,9 @@ namespace GlobalPrint.ClientWeb
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
+
+        [Range(typeof(bool), "true", "true", ErrorMessage = "Вы должны подтвердить свое согласие с условиями оферты.")]
+        public bool IsAgreeWithTerms { get; set; }
     }
 
     public class ResetPasswordViewModel
