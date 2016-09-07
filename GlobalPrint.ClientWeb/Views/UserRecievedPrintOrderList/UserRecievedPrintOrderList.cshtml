@@ -48,7 +48,7 @@
             {
                 <tr>
                     @*<td class="col-md-1" scope="row">@(rowNo += 1)</td>*@
-                    <td class="col-md-1">@Html.DisplayFor(c => printOrder.PrintOrder.PrintOrderID)</td>
+                    <td class="col-md-1">@Html.DisplayFor(c => printOrder.PrintOrder.ID)</td>
                     <td class="col-md-1">@Html.DisplayFor(c => printOrder.Printer.Name)</td>
                     <td class="col-md-2">@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>
                     <td class="col-md-1">@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, "{0:dd.MM.yyyy HH:mm:ss}")</td>
@@ -61,14 +61,14 @@
                                 <div class="col-md-5">
                                     @using (Html.BeginForm("AcceptOrder", "UserRecievedPrintOrderList", FormMethod.Post, new { @class = "form-horizontal" }))
                                     {
-                                        @Html.Hidden("printOrderID", printOrder.PrintOrder.PrintOrderID, new { @class = "btn btn-default" })
+                                        @Html.Hidden("printOrderID", printOrder.PrintOrder.ID, new { @class = "btn btn-default" })
                                         <input type="submit" value="Принять" class="btn btn-default" />
                                     }
                                 </div>
                                 <div class="col-md-7">
                                     @using (Html.BeginForm("RejectOrder", "UserRecievedPrintOrderList", FormMethod.Post, new { @class = "form-horizontal" }))
                                     {
-                                        @Html.Hidden("printOrderID", printOrder.PrintOrder.PrintOrderID, new { @class = "btn btn-default" })
+                                        @Html.Hidden("printOrderID", printOrder.PrintOrder.ID, new { @class = "btn btn-default" })
                                         <input type="submit" value="Отклонить" class="btn btn-default" />
                                     }
                                 </div>
@@ -82,14 +82,14 @@
                                 <div class="col-md-5">
                                     @using (Html.BeginForm("DownloadOrder", "UserRecievedPrintOrderList", FormMethod.Get, new { @class = "form-horizontal" }))
                                     {
-                                        @Html.Hidden("printOrderID", printOrder.PrintOrder.PrintOrderID, new { @class = "btn btn-default" })
+                                        @Html.Hidden("printOrderID", printOrder.PrintOrder.ID, new { @class = "btn btn-default" })
                                         <input type="submit" value="Скачать" class="btn btn-default" />
                                     }
                                 </div>
                                 <div class="col-md-7">
                                     @using (Html.BeginForm("ConfirmPrintOrder", "UserRecievedPrintOrderList", FormMethod.Post, new { @class = "form-horizontal" }))
                                     {
-                                        @Html.Hidden("printOrderID", printOrder.PrintOrder.PrintOrderID, new { @class = "btn btn-default" })
+                                        @Html.Hidden("printOrderID", printOrder.PrintOrder.ID, new { @class = "btn btn-default" })
                                         <input type="submit" value="Распечатать" class="btn btn-default" />
                                     }
                                 </div>

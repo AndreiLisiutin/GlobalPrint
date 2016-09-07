@@ -136,7 +136,7 @@ namespace GlobalPrint.ClientWeb
                         if (printerID != null)
                         {
                             Session["Account_PrinterID"] = null;
-                            return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
+                            return RedirectToAction("New", "Order", new { PrinterID = printerID });
                         }
 
                         return RedirectToAction("Index", "Home");
@@ -209,7 +209,7 @@ namespace GlobalPrint.ClientWeb
                     if (!string.IsNullOrEmpty(printerID))
                     {
                         Session["Account_PrinterID"] = null;
-                        return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
+                        return RedirectToAction("New", "Order", new { PrinterID = printerID });
                     }
 
                     return RedirectToAction("Index", "Home");
@@ -482,7 +482,7 @@ namespace GlobalPrint.ClientWeb
             if (printerID != null)
             {
                 Session["Account_PrinterID"] = null;
-                return RedirectToAction("Print", "Printer", new { PrinterID = printerID });
+                return RedirectToAction("New", "Order", new { PrinterID = printerID });
             }
             return RedirectToAction("Index", "Home");
         }

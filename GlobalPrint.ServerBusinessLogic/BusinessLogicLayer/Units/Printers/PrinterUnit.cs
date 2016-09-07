@@ -484,7 +484,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 
                 if (!string.IsNullOrEmpty(printerOwner.PhoneNumber))
                 {
-                    string message = "Поступил новый заказ №" + order.PrintOrderID + ".";
+                    string message = "Поступил новый заказ №" + order.ID + ".";
                     new SmsUtility(smsParams).Send(printerOwner.PhoneNumber, message);
                 }
                 return order;

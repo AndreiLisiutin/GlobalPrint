@@ -302,8 +302,8 @@ $(document).ready(function () {
         }
 
         var printUrl = isUserAuthenticated
-            ? ("/Printer/Print/" + printerID)
-            : ("/Account/LoginAndPrint/" + printerID);
+            ? ("/Order/New/?printerID=" + printerID)
+            : ("/Account/LoginAndPrint/?printerID=" + printerID);
 
         window.location.href = printUrl;
     });
