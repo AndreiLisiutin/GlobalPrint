@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
 {
     [Table("user", Schema = "public")]
-    public class User : IDomainModel
+    public class User : IDomainModel, IUserAccount
     {
         [DebuggerStepThrough]
         public User()
@@ -25,6 +25,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
         [Column("email")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+        [Column("amount_of_money")]
+        public decimal AmountOfMoney { get; set; }
+
         [Column("phone")]
         [DataType(DataType.PhoneNumber, ErrorMessage = "Телефонный номер введен некорректно")]
         public string PhoneNumber { get; set; }
@@ -32,8 +35,6 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
         public string PasswordHash { get; set; }
         [Column("security_stamp")]
         public string SecurityStamp { get; set; }
-        [Column("amount_of_money")]
-        public decimal AmountOfMoney { get; set; }
         [Column("phone_confirmed")]
         public bool PhoneNumberConfirmed { get; set; }
         [Column("email_confirmed")]

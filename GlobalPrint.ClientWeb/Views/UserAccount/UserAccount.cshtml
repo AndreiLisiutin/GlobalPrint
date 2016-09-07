@@ -22,7 +22,7 @@
                 @Html.ValidationSummary(false, "Ошибки: ")
             </div>
         }
-        <h2 class="form-signin-heading">Аккаунт</h2>
+        <h2 class="form-signin-heading">Профиль пользователя</h2>
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">Имя</label>
             <div class="col-sm-11">
@@ -43,8 +43,6 @@
         </div>
 
         @Html.HiddenFor(x => x.UserID)
-        @Html.HiddenFor(x => x.Email)
-        @Html.HiddenFor(x => x.PasswordHash)
         @Html.HiddenFor(x => x.PhoneNumber)
 
         <div class="form-group">
