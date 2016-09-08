@@ -82,7 +82,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 
                 List<Printer> printers = printerRepo
                     .Get(e =>
-                        filter.UserID == null || e.OperatorUserID == filter.UserID || e.OwnerUserID == filter.UserID
+                        (filter.UserID == null || e.OperatorUserID == filter.UserID || e.OwnerUserID == filter.UserID) &&
+                        (filter.PrinterID == null || e.ID == filter.PrinterID)
                     ).ToList();
                 IEnumerable<int> printerIDs = printers.Select(p => p.ID);
 
@@ -103,6 +104,15 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 
                 return models;
             }
+        }
+        public PrinterFullInfoModel GetFullByID(int printerID)
+        {
+            Argument.Require(printerID > 0, "Ключ принтера должен быть больше 0.");
+            PrinterSearchFilter filter = new PrinterSearchFilter()
+            {
+                PrinterID = printerID
+            };
+            return this.GetPrinters(filter).FirstOrDefault();
         }
 
         public PrinterFullInfoModel GetClosestPrinter(float latitude, float longtitude)
@@ -411,83 +421,13 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
         #endregion
 
         #region PrinterOrder
-
-        public PrinterScheduled GetPrinterInfoByID(int printerID)
-        {
-            using (IDataContext context = this.Context())
-            {
-                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
-                IPrinterScheduleRepository printerScheduleRepo = this.Repository<IPrinterScheduleRepository>(context);
-
-                var printerInfos = printerRepo.Get(e => e.ID == printerID)
-                    .Join(printerScheduleRepo.GetAll(), e => e.ID, e => e.PrinterID,
-                        (p, s) => new { printer = p, schedule = s })
-                    .ToList();
-                if (printerInfos.Count == 0)
-                {
-                    throw new Exception("Не найден принтер или его расписание работы");
-                }
-
-                PrinterScheduled info = new PrinterScheduled()
-                {
-                    Printer = printerInfos.First().printer,
-                    Schedule = printerInfos.Select(e => e.schedule).ToList()
-                };
-                return info;
-            }
-        }
+        
         public PrintOrder GetPrintOrderByID(int printOrderID)
         {
             using (IDataContext context = this.Context())
             {
                 return this.Repository<IPrintOrderRepository>(context)
                     .GetByID(printOrderID);
-            }
-        }
-        public PrintOrder SavePrintOrder(byte[] fileToPrint, PrintOrder order, SmsUtility.Parameters smsParams)
-        {
-            FileInfo file = new FileInfo(order.Document);
-            if (!file.Directory.Exists)
-            {
-                file.Directory.Create();
-            }
-            File.WriteAllBytes(order.Document, fileToPrint);
-
-            using (IDataContext context = this.Context())
-            {
-                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
-                IUserRepository userRepo = this.Repository<IUserRepository>(context);
-                IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
-
-                User client = userRepo.GetByID(order.UserID);
-                User printerOwner = printerRepo.Get(e => e.ID == order.PrinterID)
-                    .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
-                    .First();
-
-                context.BeginTransaction();
-                try
-                {
-                    orderRepo.Insert(order);
-                    client.AmountOfMoney -= order.PricePerPage;
-                    userRepo.Update(client);
-
-                    context.Save();
-                    context.CommitTransaction();
-                }
-                catch (Exception ex)
-                {
-                    context.RollbackTransaction();
-                    throw;
-                }
-
-
-
-                if (!string.IsNullOrEmpty(printerOwner.PhoneNumber))
-                {
-                    string message = "Поступил новый заказ №" + order.ID + ".";
-                    new SmsUtility(smsParams).Send(printerOwner.PhoneNumber, message);
-                }
-                return order;
             }
         }
 

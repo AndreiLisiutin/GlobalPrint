@@ -10,7 +10,7 @@ namespace GlobalPrint.Infrastructure.CommonUtils
     {
         public static void NotNull<T>(T @object, string exception)
         {
-            if (@object.Equals(default(T)))
+            if (@object == null || @object.Equals(default(T)))
             {
                 throw new ArgumentException(exception);
             }

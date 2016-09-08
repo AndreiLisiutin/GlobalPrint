@@ -54,7 +54,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Order
         {
             get
             {
-                return this.PricePerPage.ToString() + " руб.";
+                return this.FullPrice.ToString("#.##").ToString() + " руб.";
             }
         }
         [NotMapped]

@@ -191,33 +191,5 @@ namespace GlobalPrint.ClientWeb
                 return View("Edit", model);
             }
         }
-
-        /// <summary>
-        /// Upload file into session
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost]
-        public virtual ActionResult UploadFile()
-        {
-            HttpPostedFileBase file = Request.Files["gpUserFile"];
-            bool isUploaded = false;
-            string message = "Ошибка загрузки файла.";
-            Guid fileId = new Guid();
-
-            if (file != null && file.ContentLength != 0)
-            {
-                if (this.Session["UploadFiles"] == null)
-                {
-                    this.Session["UploadFiles"] = new Dictionary<Guid, HttpPostedFileBase>();
-                }
-                fileId = Guid.NewGuid();
-                (this.Session["UploadFiles"] as Dictionary<Guid, HttpPostedFileBase>).Add(fileId, file);
-                isUploaded = true;
-                message = "Файл успешно загружен.";
-            }
-
-            return Json(new { isUploaded = isUploaded, message = message, fileId = fileId }, "text/html");
-        }
-
     }
 }

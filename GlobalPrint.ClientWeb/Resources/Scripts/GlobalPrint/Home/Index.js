@@ -214,7 +214,12 @@
 
         google.maps.event.addListener(marker, 'click', function () {
             $("#printerInfoPrinterID").val(printerInfo.Printer.ID);
-            $("#printerInfoIsAvailable").val(printerInfo.IsAvailableNow);
+            $("#printerInfoIsAvailable").prop('checked', printerInfo.IsAvailableNow);
+            if (!printerInfo.IsAvailableNow) {
+                $("#printerInfoPrint").addClass('hidden');
+            } else {
+                $("#printerInfoPrint").removeClass('hidden');
+            }
             $("#printerInfoName").val(printerInfo.Printer.Name);
             $("#printerInfoLocation").val(printerInfo.Printer.Location);
             function toFixedInt2(n) {

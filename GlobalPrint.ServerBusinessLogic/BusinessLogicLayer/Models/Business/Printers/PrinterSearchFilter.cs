@@ -11,5 +11,6 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Pri
         /// <summary> Any, operator or owner.
         /// </summary>
         public int? UserID { get; set; }
+        public int? PrinterID { get; set; }
     }
 }

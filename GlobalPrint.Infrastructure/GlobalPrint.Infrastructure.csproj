@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="itextsharp, Version=5.5.9.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
       <Private>True</Private>
@@ -55,10 +59,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonUtils\Argument.cs" />
+    <Compile Include="CommonUtils\MimeTypeUtility.cs" />
     <Compile Include="CommonUtils\WeekUtility.cs" />
     <Compile Include="DI\BaseIoC.cs" />
     <Compile Include="EmailUtility\EmailUtility.cs" />
     <Compile Include="EmailUtility\IEmailUtility.cs" />
+    <Compile Include="FileUtility\FileReaders\PdfFileReader.cs" />
+    <Compile Include="FileUtility\FileReaders\IFileReader.cs" />
+    <Compile Include="FileUtility\FileUtility.cs" />
     <Compile Include="LogUtility\ILogUtility.cs" />
     <Compile Include="LogUtility\NlogUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

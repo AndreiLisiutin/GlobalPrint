@@ -13,7 +13,7 @@
 
     FileUpload.initFileUpload = function () {
         $('#fileupload').fileupload({
-            url: '/Printer/UploadFile',
+            url: '/Order/UploadFile',
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png|pdf|doc|docx)$/i,
             paramName: 'gpUserFile',
             maxFileSize: 1024 * 1024 * 10, // = 10Mb
@@ -60,7 +60,7 @@
             $('#percent').text(progress + '%');
         }).on('fileuploaddone', function (e, data) {
             if (data.result.isUploaded) {
-
+                $('#fileId').val(data.result.fileId);
             } else {
                 if (data.files[0].error) {
                     $('#progress .progress-bar').css(

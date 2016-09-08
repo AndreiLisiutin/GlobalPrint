@@ -1,11 +1,11 @@
-﻿@model Printer_PrintConfirmationViewModel
+﻿@model Order_ConfirmViewModel
 @{
     ViewBag.Title = "Подтверждение заказа на печать";
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
 
 <div class="container">
-    @using (Html.BeginForm("ExecuteOrder", "Printer", FormMethod.Post, new { @class = "form-horizontal" }))
+    @using (Html.BeginForm("Confirm", "Order", FormMethod.Post, new { @class = "form-horizontal" }))
     {
         if (!ViewData.ModelState.IsValid)
         {
@@ -15,22 +15,25 @@
             </div>
         }
         <h2>Подтверждение заказа</h2>
+        <div class="hidden">
+            @Html.EditorFor(e => e.NewOrder)
+        </div>
         <div class="form-group">
             <label class="col-sm-3 control-label text-left">Количество страниц</label>
             <div class="col-sm-9">
-                @Html.TextBoxFor(e => e.order.PagesCount, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBox("PagesCount",  Model.PreparedOrder.PagesCount, new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label text-left">Стоимость заказа</label>
             <div class="col-sm-9">
-                @Html.TextBoxFor(e => e.order.PriceInCurrency, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBox("PriceInCurrency", Model.PreparedOrder.PriceInCurrency, new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-10">
                 <input type="submit" value="Печать" class="btn btn-default" />
-                @Html.ActionLink("Отмена", "New", "Order", new { printerID = Model.order.PrinterID }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Отмена", "New", "Order", new { printerID = Model.NewOrder.PrinterID }, new { @class = "btn btn-default" })
                 @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
             </div>
         </div>

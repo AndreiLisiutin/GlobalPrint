@@ -20,6 +20,7 @@
         }
         <h2>Информация для печати</h2>
         @Html.HiddenFor(e => e.Order.PrinterID, new { @id = "PrinterID" })
+        @Html.HiddenFor(e => e.Order.UserID, new { @id = "UserID" })
         <div class="form-group">
             <label class="col-sm-3 control-label text-left">Название принтера</label>
             <div class="col-sm-9">
@@ -34,13 +35,9 @@
         </div>
 
         <div class="form-group">
-            @*<label class="col-sm-3 control-label text-left">Файл для печати</label>
-            <div class="col-sm-3">
-                @Html.TextBoxFor(e => e.Order.FileToPrint, new { @type = "text" })
-            </div>*@
-
             <div class="col-sm-2">
                 @Html.TextBox("Выберите файл", "Order.FileToPrint", new { @type = "file", @data_filename_placement = "inside", @title = "Выберите файл", @id = "fileupload" })
+                @Html.HiddenFor(e => e.Order.FileToPrint, new { @id = "fileId", @required = "required" })
             </div>
             <label class="col-sm-3 control-label text-left" id="fileName"></label>
             <div class="col-sm-4 progressbar-margin">
@@ -55,19 +52,19 @@
         <div class="form-group">
             <label class="col-sm-3 control-label text-left">Секретный код</label>
             <div class="col-sm-9">
-                @Html.TextBoxFor(e => e.Order.SecretCode, new { @class = "form-control" })
+                @Html.TextBoxFor(e => e.Order.SecretCode, new { @class = "form-control", @required = "required" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label text-left">Тип</label>
             <div class="col-sm-9">
-                @Html.DropDownListFor(m => m.Order.PrintTypeID, new List<SelectListItem>(), new { @id = "printType", @class = "form-control" })
+                @Html.DropDownListFor(m => m.Order.PrintTypeID, new List<SelectListItem>(), new { @id = "printType", @class = "form-control", @required = "required" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label text-left">Формат</label>
             <div class="col-sm-9">
-                @Html.DropDownListFor(m => m.Order.PrintSizeID, new List<SelectListItem>(), new { @id = "printSize", @class = "form-control" })
+                @Html.DropDownListFor(m => m.Order.PrintSizeID, new List<SelectListItem>(), new { @id = "printSize", @class = "form-control", @required = "required" })
             </div>
         </div>
         <div class="form-group">
@@ -85,7 +82,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label text-left">Количество копий</label>
             <div class="col-sm-9">
-                @Html.TextBoxFor(e => e.Order.CopiesCount, new { @type = "number", @class = "form-control" })
+                @Html.TextBoxFor(e => e.Order.CopiesCount, new { @type = "number", @class = "form-control", @required = "required" })
             </div>
         </div>
         <div class="form-group">
