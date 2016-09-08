@@ -166,7 +166,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             Argument.Require(newOrder.UserID > 0, "Заказчик не может быть пустым.");
             Argument.NotNullOrWhiteSpace(newOrder.SecretCode, "Секретный код не может быть пустым.");
 
-            Argument.Require(printFile.Extension.ToLower().EndsWith(".pdf"), "Только PDF.");
+            Argument.Require(new FileUtility().IsFormatAcceptable(printFile.Extension), "Формат выбранного файла не поддкрживается системой.");
             DirectoryInfo directory = new DirectoryInfo(baseDirectory);
             if (!directory.Exists)
             {
@@ -201,7 +201,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
             Argument.Require(service != null, "Выбранная услуга печати не поддерживается принтером.");
 
-            order.PrintServiceID = service.PrinterService.ID;
+            order.PrintServiceID = service.PrinterService.PrintServiceID;
             order.PricePerPage = service.PrinterService.PricePerPage;
             order.PagesCount = new FileUtility().GetPagesCount(printFile.SerializedFile, printFile.Extension);
             return order;

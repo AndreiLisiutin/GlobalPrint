@@ -11,6 +11,17 @@ namespace GlobalPrint.Infrastructure.FileUtility
     /// </summary>
     public class FileUtility
     {
+        private Dictionary<string, IFileReader> _formats = new Dictionary<string, IFileReader>()
+        {
+            ["pdf"] = new PdfFileReader(),
+            ["doc"] = new DocFileReader(),
+            ["docx"] = new DocFileReader(),
+            ["jpeg"] = new JpegFileReader(),
+            ["jpg"] = new JpegFileReader(),
+            ["tif"] = new TiffFileReader(),
+            ["tiff"] = new TiffFileReader()
+        };
+
         /// <summary> Get number of pages in file.
         /// </summary>
         /// <param name="file">File.</param>
@@ -32,13 +43,28 @@ namespace GlobalPrint.Infrastructure.FileUtility
         public IFileReader GetFileReader(string extension)
         {
             Argument.NotNullOrWhiteSpace(extension, "Расширение файла не может быть пустым.");
-            switch (extension.Trim().Trim('.').ToLower())
+            extension = extension.Trim().Trim('.').ToLower();
+
+            if (!IsFormatAcceptable(extension))
             {
-                case "pdf":
-                    return new PdfFileReader();
-                default:
-                    throw new ArgumentException("Неопознанный тип файла. Поддерживаются только PDF.");
+                throw new ArgumentException(string.Join(
+                    "Неопознанный тип файла. Поддерживаются следующие форматы: {0}.",
+                        string.Join(", ", this._formats.Keys)
+                ));
             }
+
+            return this._formats[extension];
+        }
+
+        /// <summary> Check if file with a certain format acceptable for service.
+        /// </summary>
+        /// <param name="extension">File extension.</param>
+        /// <returns></returns>
+        public bool IsFormatAcceptable(string extension)
+        {
+            Argument.NotNullOrWhiteSpace(extension, "Расширение файла не может быть пустым.");
+            extension = extension.Trim().Trim('.').ToLower();
+            return this._formats.ContainsKey(extension);
         }
     }
 }
