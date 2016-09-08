@@ -54,6 +54,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,6 +66,7 @@
     <Compile Include="BusinessLogicLayer\Models\Business\Orders\NewOrder.cs" />
     <Compile Include="BusinessLogicLayer\Models\Business\Printers\PrinterFullInfoModel.cs" />
     <Compile Include="BusinessLogicLayer\Models\Business\Printers\PrinterSearchFilter.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Business\PrintFile.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\IDomainModel.cs" />
     <Compile Include="BusinessLogicLayer\Models\Business\Printers\PrinterServiceExtended.cs" />
     <Compile Include="BusinessLogicLayer\Models\Business\Printers\PrintServiceExtended.cs" />

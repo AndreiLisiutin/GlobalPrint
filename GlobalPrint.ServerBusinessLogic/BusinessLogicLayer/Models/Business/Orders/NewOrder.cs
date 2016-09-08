@@ -14,7 +14,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Ord
         public int PrintSizeID { get; set; }
         public bool IsColored { get; set; }
         public bool IsTwoSided { get; set; }
-        public string FileToPrint { get; set; }
+        public Guid FileToPrint { get; set; }
         public int CopiesCount { get; set; }
         public string Comment { get; set; }
         public int UserID { get; set; }

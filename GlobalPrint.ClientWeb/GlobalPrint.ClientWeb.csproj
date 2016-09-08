@@ -337,7 +337,6 @@
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
-    <Compile Include="Controllers\UserPrintOrderListController.cs" />
     <Compile Include="Controllers\UserPrintInfoController.cs" />
     <Compile Include="Controllers\UserRecievedPrintOrderListController.cs" />
     <Compile Include="Controllers\UserAccountController.cs" />
@@ -380,13 +379,13 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Order\New.cshtml" />
     <None Include="Properties\PublishProfiles\Package.pubxml" />
-    <Content Include="Views\Printer\PrintConfirmation.cshtml" />
+    <Content Include="Views\Order\Confirm.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <None Include="Properties\PublishProfiles\GlobalPrint.pubxml" />
-    <Content Include="Views\Printer\OrderCompleted.cshtml" />
+    <Content Include="Views\Order\Complete.cshtml" />
     <Content Include="Views\UserAccount\UserAccount.cshtml" />
     <Content Include="Views\Printer\MyPrinters.cshtml" />
-    <Content Include="Views\UserPrintOrderList\UserPrintOrderList.cshtml" />
+    <Content Include="Views\Order\MyOrders.cshtml" />
     <Content Include="Views\UserRecievedPrintOrderList\UserRecievedPrintOrderList.cshtml" />
     <Content Include="Views\UserAccount\FillUpBalance.cshtml" />
     <Content Include="Views\Account\VerifyPhoneNumber.cshtml" />

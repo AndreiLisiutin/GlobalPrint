@@ -25,7 +25,7 @@ namespace GlobalPrint.ClientWeb
 
         public Printer Printer { get; set; }
     }
-
+    
     public class Order_NewPostModel
     {
         public Order_NewPostModel()

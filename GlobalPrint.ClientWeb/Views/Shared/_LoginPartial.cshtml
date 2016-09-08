@@ -11,7 +11,7 @@
                 @Html.ActionLink("Мои Принтеры", "MyPrinters", "Printer", new { }, new { })
             </li>
             <li>
-                @Html.ActionLink("Мои заказы", "UserPrintOrderList", "UserPrintOrderList", new { }, new { })
+                @Html.ActionLink("Мои заказы", "MyOrders", "Order", new { }, new { })
             </li>
             <li>
                 @{Html.RenderAction("UserRecievedPrintOrder", "UserPrintInfo");}       
