@@ -81,6 +81,7 @@
     <Compile Include="BusinessLogicLayer\Models\Domain\Printers\PrintSize.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Printers\PrintSizePrintType.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Printers\PrintType.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Domain\Users\IUserAccount.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Users\Role.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Users\User.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Users\UserActionLog.cs" />

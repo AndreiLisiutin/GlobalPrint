@@ -38,14 +38,47 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             }
         }
 
+        /// <summary>
+        /// Update user account information
+        /// </summary>
+        /// <param name="user">User account info</param>
+        /// <returns>Updated uer account info</returns>
+        public IUserAccount UpdateUserAccount(IUserAccount user)
+        {
+            using (IDataContext context = this.Context())
+            {
+                IUserRepository userRepo = this.Repository<IUserRepository>(context);
+
+                User originalUser = userRepo.GetByID(user.UserID);
+                if (originalUser != null)
+                {
+                    originalUser.UserName = user.UserName;
+                    originalUser.Email = user.Email;
+                    originalUser.PhoneNumber = user.PhoneNumber;
+                    originalUser.AmountOfMoney = user.AmountOfMoney;
+
+                    userRepo.Update(originalUser);
+                    context.Save();
+                    return originalUser;
+                }
+                else
+                {
+                    throw new Exception("Не найден пользователь [ID=" + user.UserID + "]");
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Method only for 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public User UpdateUser(User user)
         {
             using (IDataContext context = this.Context())
             {
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
-                User originalUser = userRepo
-                    .Get(x => x.UserID == user.UserID)
-                    .SingleOrDefault();
+                User originalUser = userRepo.GetByID(user.UserID);
 
                 if (originalUser != null)
                 {
