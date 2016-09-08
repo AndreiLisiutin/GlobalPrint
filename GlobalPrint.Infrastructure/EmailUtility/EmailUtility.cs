@@ -15,7 +15,12 @@ namespace GlobalPrint.Infrastructure.EmailUtility
 {
     public class EmailUtility : IEmailUtility
     {
-        private Lazy<ILogUtility> _logUtility = new Lazy<ILogUtility>(() => new NlogUtility<EmailUtility>());
+        private Lazy<ILogger> _logUtility { get; set; }
+
+        public EmailUtility(ILoggerFactory loggerFactory)
+        {
+            this._logUtility = new Lazy<ILogger>(() => loggerFactory.GetLogger<EmailUtility>());
+        }
 
         private readonly MailAddress _supportEmail = new MailAddress(WebConfigurationManager.AppSettings["SupportEmail"].ToString());
         public MailAddress SupportEmail

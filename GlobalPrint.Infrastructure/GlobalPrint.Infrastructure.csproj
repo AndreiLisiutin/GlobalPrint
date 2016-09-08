@@ -57,10 +57,14 @@
     <Compile Include="CommonUtils\Argument.cs" />
     <Compile Include="CommonUtils\WeekUtility.cs" />
     <Compile Include="DI\BaseIoC.cs" />
+    <Compile Include="DI\InfrastructureIoC.cs" />
+    <Compile Include="DI\IoC.cs" />
     <Compile Include="EmailUtility\EmailUtility.cs" />
     <Compile Include="EmailUtility\IEmailUtility.cs" />
-    <Compile Include="LogUtility\ILogUtility.cs" />
-    <Compile Include="LogUtility\NlogUtility.cs" />
+    <Compile Include="LogUtility\ILoggerFactory.cs" />
+    <Compile Include="LogUtility\ILogger.cs" />
+    <Compile Include="LogUtility\NLogLoggerFactory.cs" />
+    <Compile Include="LogUtility\NLogLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

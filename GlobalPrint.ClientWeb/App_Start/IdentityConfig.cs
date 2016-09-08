@@ -108,13 +108,13 @@ namespace GlobalPrint.ClientWeb
 
     public class EmailService : IIdentityMessageService
     {
-        private Lazy<IEmailUtility> _emailUtility = new Lazy<IEmailUtility>(() => new EmailUtility());
-
+        [Ninject.Inject]
+        public Lazy<IEmailUtility> _emailUtility { private get; set; }
+        
         public Task SendAsync(IdentityMessage message)
         {
             // Заглушка, чтобы не спамить от себя самому себе
             //return Task.FromResult(0);
-
             return this._emailUtility.Value.SendAsync(new MailAddress(message.Destination), message.Subject, message.Body);
         }
     }

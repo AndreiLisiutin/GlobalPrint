@@ -1,13 +1,6 @@
 ﻿using GlobalPrint.Infrastructure.DI;
 using GlobalPrint.ServerBusinessLogic.DI;
 using GlobalPrint.ServerDataAccess.DI;
-using Ninject;
-using Ninject.Parameters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GlobalPrint.Configuration.DI
 {
@@ -31,7 +24,11 @@ namespace GlobalPrint.Configuration.DI
         }
         public void RegisterServerDataAccess()
         {
-            ServerDataAccessIoc.InitializeIoC(this);
+            ServerDataAccessIoC.InitializeIoC(this);
+        }
+        public void RegisterInfrastructure()
+        {
+            InfrastructureIoC.InitializeIoC(this);
         }
     }
 }

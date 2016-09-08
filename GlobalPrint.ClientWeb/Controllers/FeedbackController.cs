@@ -13,7 +13,13 @@ namespace GlobalPrint.ClientWeb.Controllers
 {
     public class FeedbackController : BaseController
     {
-        private Lazy<IEmailUtility> _emailUtility = new Lazy<IEmailUtility>(() => new EmailUtility());
+        private Lazy<IEmailUtility> _emailUtility { get; set; }
+
+        public FeedbackController(Lazy<IEmailUtility> emailUtility) 
+            : base()
+        {
+            _emailUtility = emailUtility;
+        }
 
         /// <summary>
         /// Get feedback form

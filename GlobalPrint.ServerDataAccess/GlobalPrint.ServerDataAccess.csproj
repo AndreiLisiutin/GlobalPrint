@@ -81,7 +81,7 @@
     <Compile Include="DataAccessLayer\Repository\Users\UserRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\Users\UserRoleRepository.cs" />
     <Compile Include="DI\IoC.cs" />
-    <Compile Include="DI\ServerDataAccessIoc.cs" />
+    <Compile Include="DI\ServerDataAccessIoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

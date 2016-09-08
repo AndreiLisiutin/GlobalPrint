@@ -345,6 +345,9 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PrinterController.cs" />
+    <Compile Include="DI\ClientWebIoC.cs" />
+    <Compile Include="DI\IoC.cs" />
+    <Compile Include="DI\NinjectSignalRDependencyResolver.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -410,6 +413,7 @@
     <Content Include="Views\Shared\SimpleMessage.cshtml" />
     <Content Include="Views\Feedback\Feedback.cshtml" />
     <Content Include="Views\UserPrintInfo\_UserRecievedPrintOrder.cshtml" />
+    <Content Include="Views\Shared\Offer.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

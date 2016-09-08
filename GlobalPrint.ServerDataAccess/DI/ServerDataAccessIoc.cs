@@ -16,12 +16,12 @@ using System.Threading.Tasks;
 
 namespace GlobalPrint.ServerDataAccess.DI
 {
-    public static class ServerDataAccessIoc
+    public static class ServerDataAccessIoC
     {
         public static void InitializeIoC(BaseIoC ioc)
         {
             IoC.Instance.Initialize(ioc);
-            ServerDataAccessIoc.RegisterDependencies(ioc);
+            ServerDataAccessIoC.RegisterDependencies(ioc);
         }
 
         private static void RegisterDependencies(BaseIoC ioc)

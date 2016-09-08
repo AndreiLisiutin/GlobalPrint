@@ -4,3 +4,16 @@
     margin: 0 auto;
     text-align: center;
 }
+.display-form-content-large {
+    max-width: 800px;
+    padding: 15px;
+    margin: 0 auto;
+    text-align: justify;
+}
+
+.display-form-content h1,
+.display-form-content h2,
+.display-form-content-large h1,
+.display-form-content-large h2 {
+    text-align: center;
+}

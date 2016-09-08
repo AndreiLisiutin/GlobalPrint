@@ -40,11 +40,7 @@ namespace GlobalPrint.ClientWeb
                 SlidingExpiration = true,
                 ExpireTimeSpan = System.TimeSpan.FromMinutes(30)
             });
-
-            // Find user by ID functionality for SignalR
-            var userIdProvider = new UserIdProvider(new ServerBusinessLogic.BusinessLogicLayer.Units.Users.UserUnit());
-            GlobalHost.DependencyResolver.Register(typeof(IUserIdProvider), () => userIdProvider);
-
+            
             app.MapSignalR();
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GlobalPrint.Infrastructure.LogUtility
 {
-    public interface ILogUtility
+    public interface ILogger
     {
         void Trace(string message);
         void Debug(string message);
