@@ -46,3 +46,22 @@
 .gp-data-filter {
     margin: 20px 10px 20px 10px !important;
 }
+
+/* for progressbar in new order page */
+.progressbar-wrapper {
+    height: 30px;
+    margin: 0;
+    padding: 0;
+    width: 30%;
+    text-align: center;
+}
+.progressbar-bar {
+    display: table;
+    background-image: linear-gradient(to bottom,#5bc0de 0,#337ab7 100%);
+}
+.progressbar-text {
+    display: table-cell;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+}

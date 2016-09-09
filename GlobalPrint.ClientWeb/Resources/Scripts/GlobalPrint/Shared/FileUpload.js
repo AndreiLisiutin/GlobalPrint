@@ -11,6 +11,17 @@
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     };
 
+    var handleError = function (error) {
+        var textfield = $('#fileupload').parents('.input-group').find(':text');
+        var errorLabel = $('#fileupload').parents('.input-group').find('#errorText');
+        var progressBar = $('#fileupload').parents('.input-group').find('#progress .progress-bar');
+
+        progressBar.css('width', 0 + '%');
+        progressBar.hide();
+        errorLabel.show();
+        errorLabel.text(error);
+    };
+
     FileUpload.initFileUpload = function () {
         $('#fileupload').fileupload({
             url: '/Order/UploadFile',
@@ -28,13 +39,17 @@
         }).on('fileuploadadd', function (e, data) {
             var $this = $(this);
             var file = data.files[0];
+            var fileName = file.name + ' (' + formatBytes(file.size) + ')';
+            var textfield = $('#fileupload').parents('.input-group').find(':text');
+            var errorLabel = $('#fileupload').parents('.input-group').find('#errorText');
+            var progressBar = $('#fileupload').parents('.input-group').find('#progress .progress-bar');
 
-            $('#progressbarError').hide();
-            $('#fileName').text(file.name + ' (' + formatBytes(file.size) + ')');
-            
+            progressBar.show();
+            errorLabel.hide();
+            textfield.val(fileName);
+
             // File validation
-            if (data.autoUpload || (data.autoUpload !== false &&
-                    $(this).fileupload('option', 'autoUpload'))) {
+            if (data.autoUpload || (data.autoUpload !== false && $(this).fileupload('option', 'autoUpload'))) {
                 var validation = data.process(function () {
                     return $this.fileupload('process', data);
                 });
@@ -49,34 +64,26 @@
                 file = data.files[index];
             // File validation error
             if (data.files[0].error) {
-                $('#progressbarError').show();
-                $('#progressbarError').text(data.files[0].error);
+                handleError(data.files[0].error);
             }
         }).on('fileuploadprogress', function (e, data) {
+            var progressBar = $('#fileupload').parents('.input-group').find('#progress .progress-bar');
+            var progressPercentText = $('#fileupload').parents('.input-group').find('#progressPercentText');
             var progress = parseInt(data.loaded / data.total * 100, 10);
-            $('#progress .progress-bar').css(
-                'width', progress + '%'
-            );
-            $('#percent').text(progress + '%');
+            progressBar.css('width', progress + '%');
+            progressPercentText.text(progress + '%');
         }).on('fileuploaddone', function (e, data) {
+            var fileIdHiddenField = $('#fileupload').parents('.input-group').find('#fileId');
             if (data.result.isUploaded) {
-                $('#fileId').val(data.result.fileId);
+                fileIdHiddenField.val(data.result.fileId);
             } else {
                 if (data.files[0].error) {
-                    $('#progress .progress-bar').css(
-                        'width', 0 + '%'
-                    );
-                    $('#progressbarError').show();
-                    $('#progressbarError').text(data.files[0].error);
+                    handleError(data.files[0].error);
                 }
             }
         }).on('fileuploadfail', function (e, data) {
             if (data.files[0].error) {
-                $('#progress .progress-bar').css(
-                    'width', 0 + '%'
-                );
-                $('#progressbarError').show();
-                $('#progressbarError').text(data.files[0].error);
+                handleError(data.files[0].error);
             }
         });
     };

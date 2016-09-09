@@ -6,8 +6,6 @@
 @section Scripts{
     <script src="~/Resources/Scripts/GlobalPrint/Order/New.js"></script>
 }
-@section Stylesheets {
-}
 <div class="container">
     @using (Html.BeginForm("New", "Order", FormMethod.Post, new { @enctype = "multipart/form-data", @class = "form-horizontal" }))
     {
@@ -33,19 +31,23 @@
                 @Html.TextBoxFor(e => e.Printer.Location, new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
-
         <div class="form-group">
-            <div class="col-sm-2">
-                @Html.TextBox("Выберите файл", "Order.FileToPrint", new { @type = "file", @data_filename_placement = "inside", @title = "Выберите файл", @id = "fileupload" })
-                @Html.HiddenFor(e => e.Order.FileToPrint, new { @id = "fileId", @required = "required" })
-            </div>
-            <label class="col-sm-3 control-label text-left" id="fileName"></label>
-            <div class="col-sm-4 progressbar-margin">
-                <div id="progress" class="progress progressbar-nomargin">
-                    <label id="progressbarError" class="progressbar-error" hidden="hidden"></label>
-                    <div class="progress-bar progress-bar-success">
-                        <label id="percent" class="progressbarpercent"></label>
+            <label class="col-sm-3 control-label text-left">Файл для печати</label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <label class="input-group-btn">
+                        <span class="btn btn-default">
+                            Выберите файл <input type="file" id="fileupload" style="display: none;">
+                        </span>
+                    </label>
+                    <input type="text" class="form-control" readonly>
+                    <div id="progress" class="input-group-addon progress progressbar-wrapper">
+                        <span id="errorText" class="text-danger"></span>
+                        <div class="progress-bar progress-bar-info progressbar-bar">
+                            <span id="progressPercentText" class="progressbarpercent progressbar-text"></span>
+                        </div>
                     </div>
+                    @Html.HiddenFor(e => e.Order.FileToPrint, new { @id = "fileId", @required = "required" })
                 </div>
             </div>
         </div>
@@ -61,40 +63,40 @@
                 @Html.DropDownListFor(m => m.Order.PrintTypeID, new List<SelectListItem>(), new { @id = "printType", @class = "form-control", @required = "required" })
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Формат</label>
-            <div class="col-sm-9">
-                @Html.DropDownListFor(m => m.Order.PrintSizeID, new List<SelectListItem>(), new { @id = "printSize", @class = "form-control", @required = "required" })
+            <div class="form-group">
+                <label class="col-sm-3 control-label text-left">Формат</label>
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(m => m.Order.PrintSizeID, new List<SelectListItem>(), new { @id = "printSize", @class = "form-control", @required = "required" })
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Цветная печать</label>
-            <div class="col-sm-9">
-                @Html.CheckBoxFor(e => e.Order.IsColored, new { @id = "IsColored" })
+            <div class="form-group">
+                <label class="col-sm-3 control-label text-left">Цветная печать</label>
+                <div class="col-sm-9">
+                    @Html.CheckBoxFor(e => e.Order.IsColored, new { @id = "IsColored" })
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Двусторонняя печать</label>
-            <div class="col-sm-9">
-                @Html.CheckBoxFor(e => e.Order.IsTwoSided, new { @id = "IsTwoSided" })
+            <div class="form-group">
+                <label class="col-sm-3 control-label text-left">Двусторонняя печать</label>
+                <div class="col-sm-9">
+                    @Html.CheckBoxFor(e => e.Order.IsTwoSided, new { @id = "IsTwoSided" })
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Количество копий</label>
-            <div class="col-sm-9">
-                @Html.TextBoxFor(e => e.Order.CopiesCount, new { @type = "number", @class = "form-control", @required = "required" })
+            <div class="form-group">
+                <label class="col-sm-3 control-label text-left">Количество копий</label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(e => e.Order.CopiesCount, new { @type = "number", @class = "form-control", @required = "required" })
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Комментарий</label>
-            <div class="col-sm-9">
-                @Html.TextBoxFor(e => e.Order.Comment, new { @class = "form-control" })
+            <div class="form-group">
+                <label class="col-sm-3 control-label text-left">Комментарий</label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(e => e.Order.Comment, new { @class = "form-control" })
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-2">
-                <input type="submit" id="printButton" value="Печать" class="btn btn-default" />
+            <div class="form-group">
+                <div class="col-sm-2">
+                    <input type="submit" id="printButton" value="Печать" class="btn btn-default" />
+                </div>
             </div>
-        </div>
     }
 </div>
