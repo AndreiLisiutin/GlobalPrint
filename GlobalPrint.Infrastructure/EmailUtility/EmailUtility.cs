@@ -22,7 +22,7 @@ namespace GlobalPrint.Infrastructure.EmailUtility
             this._logUtility = new Lazy<ILogger>(() => loggerFactory.GetLogger<EmailUtility>());
         }
 
-        private readonly MailAddress _supportEmail = new MailAddress(WebConfigurationManager.AppSettings["SupportEmail"].ToString());
+        private readonly MailAddress _supportEmail = new MailAddress(WebConfigurationManager.AppSettings["SupportEmail"].ToString(), WebConfigurationManager.AppSettings["SupportEmailDisplayName"].ToString());
         public MailAddress SupportEmail
         {
             get
@@ -58,21 +58,24 @@ namespace GlobalPrint.Infrastructure.EmailUtility
         /// <param name="destination">Mail destination (To)</param>
         /// <param name="subject">Mail subject/theme</param>
         /// <param name="body">Mail body/text</param>
-        public void Send(MailAddress destination, string subject, string body, MailAddress sender = null)
+        public void Send(MailAddress destination, string subject, string body, MailAddress sender = null, bool throwException = false)
         {
             try
             {
                 // SMTP settings from Web.config/system.net/mailSettings
                 SmtpClient client = new SmtpClient();
-                
+
                 MailMessage mail = GetMailNessage(destination, subject, body, sender);
 
                 client.Send(mail);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 this._logUtility.Value.Error(ex, "Ошибка отправки email сообщения: " + ex.Message);
-                throw;
+                if (throwException)
+                {
+                    throw;
+                }
             }
         }
 
@@ -82,9 +85,9 @@ namespace GlobalPrint.Infrastructure.EmailUtility
         /// <param name="destination">Mail destination (To)</param>
         /// <param name="subject">Mail subject/theme</param>
         /// <param name="body">Mail body/text</param>
-        public Task SendAsync(MailAddress destination, string subject, string body, MailAddress sender = null)
+        public Task SendAsync(MailAddress destination, string subject, string body, MailAddress sender = null, bool throwException = false)
         {
-           try
+            try
             {
                 // SMTP settings from Web.config/system.net/mailSettings
                 SmtpClient client = new SmtpClient();
@@ -94,10 +97,17 @@ namespace GlobalPrint.Infrastructure.EmailUtility
                 client.SendCompleted += MailDeliveryComplete;
                 return client.SendMailAsync(mail);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 this._logUtility.Value.Error(ex, "Ошибка отправки email сообщения: " + ex.Message);
-                throw;
+                if (throwException)
+                {
+                    throw;
+                }
+                else
+                {
+                    return Task.FromResult(0);
+                }
             }
         }
 

@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
+﻿using GlobalPrint.Configuration.DI;
+using GlobalPrint.Infrastructure.EmailUtility;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
+using System;
 using System.Net.Mail;
-using GlobalPrint.Infrastructure.EmailUtility;
-using Microsoft.Owin.Security.DataProtection;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -26,7 +22,7 @@ namespace GlobalPrint.ClientWeb
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            UserUnit userUnit = new UserUnit();
+            UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
             var manager = new ApplicationUserManager(new UserStore(userUnit));
 
             manager.PasswordHasher = new CustomPasswordHasher();
@@ -56,7 +52,7 @@ namespace GlobalPrint.ClientWeb
             }
 
             //manager.SmsService = new SmsService();
-            manager.EmailService = new EmailService();
+            manager.EmailService = IoC.Instance.Resolve<EmailService>();
 
             return manager;
         }
@@ -108,13 +104,15 @@ namespace GlobalPrint.ClientWeb
 
     public class EmailService : IIdentityMessageService
     {
-        [Ninject.Inject]
-        public Lazy<IEmailUtility> _emailUtility { private get; set; }
-        
+        private Lazy<IEmailUtility> _emailUtility { get; set; }
+
+        public EmailService(Lazy<IEmailUtility> emailUtility)
+        {
+            _emailUtility = emailUtility;
+        }
+
         public Task SendAsync(IdentityMessage message)
         {
-            // Заглушка, чтобы не спамить от себя самому себе
-            //return Task.FromResult(0);
             return this._emailUtility.Value.SendAsync(new MailAddress(message.Destination), message.Subject, message.Body);
         }
     }

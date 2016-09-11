@@ -1,4 +1,5 @@
 ﻿using GlobalPrint.Infrastructure.CommonUtils;
+using GlobalPrint.Infrastructure.EmailUtility;
 using GlobalPrint.Infrastructure.FileUtility;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Orders;
@@ -18,6 +19,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,10 +27,13 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 {
     public class PrintOrderUnit : BaseUnit
     {
+        private Lazy<IEmailUtility> _emailUtility { get; set; }
+
         [DebuggerStepThrough]
-        public PrintOrderUnit()
+        public PrintOrderUnit(Lazy<IEmailUtility> emailUtility)
             : base()
         {
+            _emailUtility = emailUtility;
         }
 
         public List<PrintOrderInfo> GetUserPrintOrderList(int userID, string printOrderID)
@@ -101,10 +106,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
         public void UpdateStatus(int printOrderID, PrintOrderStatusEnum statusID, SmsUtility.Parameters smsParams)
         {
-            PrintOrderStatus status = null;
+            PrintOrderStatus newStatus = null;
             User client = null;
             User printerOwner = null;
             PrintOrder order = null;
+
             using (IDataContext context = this.Context())
             {
                 IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
@@ -115,9 +121,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 order = orderRepo.GetByID(printOrderID);
                 client = userRepo.GetByID(order.UserID);
                 printerOwner = printerRepo.Get(e => e.ID == order.PrinterID)
-                    .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u).
-                    First();
-                status = statusRepo.GetByID((int)statusID);
+                    .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
+                    .First();
+                newStatus = statusRepo.GetByID((int)statusID);
 
                 if (order.PrintOrderStatusID == (int)statusID)
                 {
@@ -141,17 +147,26 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                     context.Save();
                     context.CommitTransaction();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     context.RollbackTransaction();
                     throw;
                 }
             }
 
-            if (!string.IsNullOrEmpty(client.PhoneNumber))
-            {
-                new SmsUtility(smsParams).Send(client.PhoneNumber, "Заказ №" + order.ID + " " + status.Status.ToLower());
-            }
+            // send email to client about order statuc change
+            MailAddress userMail = new MailAddress(client.Email, client.UserName);
+            string userMessageBody = string.Format(
+                "Ваш заказ № {0} {1}.",
+                order.ID,
+                newStatus.Status.ToLower()
+            );
+            _emailUtility.Value.Send(userMail, "Global Print - Изменение статуса заказа", userMessageBody);
+
+            //if (!string.IsNullOrEmpty(client.PhoneNumber))
+            //{
+            //    new SmsUtility(smsParams).Send(client.PhoneNumber, "Заказ №" + order.ID + " " + status.Status.ToLower());
+            //}
         }
         
         public PrintOrder New(NewOrder newOrder, string baseDirectory, PrintFile printFile)
@@ -206,6 +221,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             order.PagesCount = new FileUtility().GetPagesCount(printFile.SerializedFile, printFile.Extension);
             return order;
         }
+
         public PrintOrder Create(NewOrder newOrder, string baseDirectory, PrintFile printFile)
         {
             PrintOrder order = this.New(newOrder, baseDirectory, printFile);
@@ -238,11 +254,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
                 IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
+                PrinterUnit printerUnit = new PrinterUnit();
 
                 User client = userRepo.GetByID(order.UserID);
-                User printerOwner = printerRepo.Get(e => e.ID == order.PrinterID)
-                    .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
-                    .First();
+                User printerOperator = printerUnit.GetPrinterOperator(order.PrinterID, context);
 
                 context.BeginTransaction();
                 try
@@ -254,11 +269,28 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                     context.Save();
                     context.CommitTransaction();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     context.RollbackTransaction();
                     throw;
                 }
+                
+                // send email to user about his new order
+                MailAddress userMail = new MailAddress(client.Email, client.UserName);
+                string userMessageBody = string.Format(
+                    "Ваш новый заказ № {0} от {1} успешно зарегистрирован.",
+                    order.ID,
+                    order.OrderedOn.ToString("dd.MM.yyyy HH:mm")
+                );
+                _emailUtility.Value.Send(userMail, "Global Print - Новый заказ на печать", userMessageBody);
+                // send email to printer operator about new order
+                MailAddress userOperatorMail = new MailAddress(printerOperator.Email, printerOperator.UserName);
+                string userOperatorMessageBody = string.Format(
+                    "На Ваш принтер поступил новый заказ № {0} от {1}.",
+                    order.ID,
+                    order.OrderedOn.ToString("dd.MM.yyyy HH:mm")
+                );
+                _emailUtility.Value.Send(userOperatorMail, "Global Print - Входящий заказ на печать", userOperatorMessageBody);
 
                 return order;
             }

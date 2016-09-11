@@ -1,4 +1,5 @@
-﻿using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
+﻿using GlobalPrint.Infrastructure.EmailUtility;
+using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,11 +16,15 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 {
     public class UserUnit : BaseUnit
     {
+        private Lazy<IEmailUtility> _emailUtility { get; set; }
+
         [DebuggerStepThrough]
-        public UserUnit()
+        public UserUnit(Lazy<IEmailUtility> emailUtility)
             :base()
         {
+            _emailUtility = emailUtility;
         }
+
         public User GetUserByID(int UserID)
         {
             using (IDataContext context = this.Context())
@@ -128,6 +134,16 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                     originalUser.AmountOfMoney += upSumm;
                     userRepo.Update(originalUser);
                     context.Save();
+
+                    // send email to user about up balance
+                    MailAddress userMail = new MailAddress(originalUser.Email, originalUser.UserName);
+                    string userMessageBody = string.Format(
+                        "Ваш баланс пополнен на {0} руб. и теперь составляет {1} руб.",
+                        upSumm.ToString("0.00"),
+                        originalUser.AmountOfMoney.ToString("0.00")
+                    );
+                    _emailUtility.Value.Send(userMail, "Global Print - Пополнение баланса", userMessageBody);
+
                     return originalUser;
                 }
                 else

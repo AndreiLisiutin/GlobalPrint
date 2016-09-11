@@ -9,8 +9,8 @@ namespace GlobalPrint.Infrastructure.EmailUtility
 {
     public interface IEmailUtility
     {
-        void Send(MailAddress destination, string subject, string body, MailAddress sender = null);
-        Task SendAsync(MailAddress destination, string subject, string body, MailAddress sender = null);
+        void Send(MailAddress destination, string subject, string body, MailAddress sender = null, bool throwException = false);
+        Task SendAsync(MailAddress destination, string subject, string body, MailAddress sender = null, bool throwException = false);
         MailAddress SupportEmail { get; }
     }
 }

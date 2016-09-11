@@ -1,5 +1,6 @@
 ﻿using GlobalPrint.ClientWeb.Models.PrinterController;
 using GlobalPrint.ClientWeb.Models.PushNotifications;
+using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Orders;
@@ -65,10 +66,11 @@ namespace GlobalPrint.ClientWeb
         {
             Argument.NotNull(newOrder, "Не заполнены поля на форме нового заказа");
             Argument.Require(this._Uploaded.ContainsKey(newOrder.FileToPrint), "Файл заказа не найден.");
+            PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
 
             string app_data = HttpContext.Server.MapPath("~/App_Data");
             PrintFile file = this._Uploaded[newOrder.FileToPrint];
-            PrintOrder order = new PrintOrderUnit().New(newOrder, app_data, file);
+            PrintOrder order = printOrderUnit.New(newOrder, app_data, file);
             return new Tuple<PrintOrder, PrintFile>(order, file);
         }
 
@@ -76,8 +78,10 @@ namespace GlobalPrint.ClientWeb
         [HttpGet]
         public ActionResult MyOrders(string printOrderID)
         {
+            PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
+
             int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            var printOrderList = new PrintOrderUnit().GetUserPrintOrderList(userID, printOrderID);
+            var printOrderList = printOrderUnit.GetUserPrintOrderList(userID, printOrderID);
             return View("MyOrders", printOrderList);
         }
 
@@ -130,11 +134,13 @@ namespace GlobalPrint.ClientWeb
         public ActionResult Confirm(NewOrder NewOrder)
         {
             Argument.NotNull(NewOrder, "Заказ не может быть пустым.");
+            PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
+
             try
             {
                 string app_data = HttpContext.Server.MapPath("~/App_Data");
                 PrintFile file = this._Uploaded[NewOrder.FileToPrint];
-                PrintOrder createdOrder = new PrintOrderUnit().Create(NewOrder, app_data, file);
+                PrintOrder createdOrder = printOrderUnit.Create(NewOrder, app_data, file);
 
                 // Push notification about new order
                 User printerOperator = new PrinterUnit().GetPrinterOperator(createdOrder.PrinterID);
