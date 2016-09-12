@@ -1,12 +1,5 @@
 ﻿using BitMiracle.LibTiff.Classic;
-using iTextSharp.text.pdf;
-using Microsoft.Office.Interop.Word;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GlobalPrint.Infrastructure.FileUtility
 {

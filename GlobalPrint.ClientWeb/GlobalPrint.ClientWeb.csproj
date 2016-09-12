@@ -425,6 +425,7 @@
     <Content Include="Views\Feedback\Feedback.cshtml" />
     <Content Include="Views\UserPrintInfo\_UserRecievedPrintOrder.cshtml" />
     <Content Include="Views\Shared\Offer.cshtml" />
+    <Content Include="Views\UserPrintInfo\_UserBalance.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
