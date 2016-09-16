@@ -41,7 +41,7 @@ namespace GlobalPrint.ClientWeb.Controllers
             else
             {
                 throw new Exception("Не найден текущий пользователь");
-            }            
+            }
         }
     }
 }

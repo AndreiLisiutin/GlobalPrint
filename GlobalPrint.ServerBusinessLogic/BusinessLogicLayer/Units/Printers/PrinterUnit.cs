@@ -166,7 +166,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
         {
             using (IDataContext context = this.Context())
             {
-                return this.GetPrinterOperator(printerID, context);
+                return GetPrinterOperator(printerID, context);
             }
         }
         public User GetPrinterOperator(int printerID, IDataContext context)
@@ -197,7 +197,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
         {
             using (IDataContext context = this.Context())
             {
-                return this.GetPrinterOwner(printerID, context);
+                return GetPrinterOwner(printerID, context);
             }
         }
         public User GetPrinterOwner(int printerID, IDataContext context)
@@ -234,7 +234,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 
         #region Save
 
-        public void _ValidatePrinter(Printer printer)
+        private void _ValidatePrinter(Printer printer)
         {
             Argument.NotNull(printer, "Модель принтера не может быть пустым.");
             Argument.NotNullOrWhiteSpace(printer.Name, "Название принтера не может быть пустым.");
@@ -244,7 +244,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             Argument.Positive(printer.Latitude, "Широта расположения принтера не может быть пустым.");
             Argument.Positive(printer.Longtitude, "Долгота расположения принтера не может быть пустым.");
         }
-        public void _ValidatePrinterSchedule(IEnumerable<PrinterSchedule> printerSchedule)
+        private void _ValidatePrinterSchedule(IEnumerable<PrinterSchedule> printerSchedule)
         {
             IEnumerable<int> allDays = Enum.GetValues(typeof(DayOfWeek))
                 .Cast<DayOfWeek>()
@@ -273,7 +273,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 
             Argument.Require(!periodsAreIntersected, "Расписание принтера не должно пересекаться.");
         }
-        public void _ValidatePrinterServices(IEnumerable<PrinterService> printerServices)
+        private void _ValidatePrinterServices(IEnumerable<PrinterService> printerServices)
         {
             Argument.NotNull(printerServices, "Список сервисов принтера не может быть пустым.");
             Argument.Require(printerServices.Count() > 0, "Список сервисов принтера не может быть пустым.");

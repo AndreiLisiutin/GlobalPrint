@@ -209,6 +209,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Resources\Documents\Logo\logo_09_2016.png" />
     <Content Include="Resources\Documents\Logo\main_logo.png" />
     <Content Include="Resources\Documents\TeamPhoto\Andrei Z.jpg" />
     <Content Include="Resources\Documents\TeamPhoto\Andrei.jpg" />

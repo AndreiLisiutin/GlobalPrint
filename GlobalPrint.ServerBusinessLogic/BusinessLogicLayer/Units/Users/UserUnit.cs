@@ -121,7 +121,6 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             }
         }
 
-
         public User FillUpBalance(int userID, decimal upSumm)
         {
             using (IDataContext context = this.Context())

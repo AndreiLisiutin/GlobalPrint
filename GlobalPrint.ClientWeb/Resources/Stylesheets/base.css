@@ -65,3 +65,9 @@
     margin: 0;
     padding: 0;
 }
+
+/* Logo "GlobalPrint" on main page */
+.main-page-logo {
+    max-height: 40px; 
+    margin-top: -10px;
+}

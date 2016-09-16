@@ -1,4 +1,5 @@
-﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders;
+﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 using System;
@@ -29,10 +30,10 @@ namespace GlobalPrint.ServerDataAccess.EF
         {
         }
 
-        //orders
+        // Models/Domain/Orders
         public DbSet<PrintOrder> PrintOrders { get; set; }
         public DbSet<PrintOrderStatus> PrintOrderStatuses { get; set; }
-        //printers
+        // Models/Domain/Printers
         public DbSet<Printer> Printers { get; set; }
         public DbSet<PrinterSchedule> PrintSchedules { get; set; }
         public DbSet<PrinterService> PrinterServices { get; set; }
@@ -40,12 +41,16 @@ namespace GlobalPrint.ServerDataAccess.EF
         public DbSet<PrintSize> PrintSizes { get; set; }
         public DbSet<PrintType> PrintTypes { get; set; }
         public DbSet<PrintSizePrintType> PrintSizePrintTypes { get; set; }
-        //users
+        // Models/Domain/Users
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserActionLog> UserActionLogs { get; set; }
         public DbSet<UserActionType> UserActionTypes { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        // Models/Domain/Offers
+        public DbSet<Offer> Offers { get; set; }
+        public DbSet<UserOffer> UserOffers { get; set; }
+        public DbSet<OfferType> OfferTypes { get; set; }
 
     }
 }
