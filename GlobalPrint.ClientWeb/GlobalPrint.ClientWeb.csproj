@@ -355,10 +355,11 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
+    <Compile Include="Controllers\OfferController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\UserPrintInfoController.cs" />
     <Compile Include="Controllers\UserRecievedPrintOrderListController.cs" />
-    <Compile Include="Controllers\UserAccountController.cs" />
+    <Compile Include="Controllers\UserProfileController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -401,11 +402,11 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <None Include="Properties\PublishProfiles\GlobalPrint.pubxml" />
     <Content Include="Views\Order\Complete.cshtml" />
-    <Content Include="Views\UserAccount\UserAccount.cshtml" />
+    <Content Include="Views\UserProfile\UserProfile.cshtml" />
     <Content Include="Views\Printer\MyPrinters.cshtml" />
     <Content Include="Views\Order\MyOrders.cshtml" />
     <Content Include="Views\UserRecievedPrintOrderList\UserRecievedPrintOrderList.cshtml" />
-    <Content Include="Views\UserAccount\FillUpBalance.cshtml" />
+    <Content Include="Views\UserProfile\FillUpBalance.cshtml" />
     <Content Include="Views\Account\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\UserRecievedPrintOrderList\ConfirmPrintOrder.cshtml" />
     <Content Include="Views\Printer\Edit.cshtml" />
@@ -430,7 +431,7 @@
     <Content Include="Views\Shared\SimpleMessage.cshtml" />
     <Content Include="Views\Feedback\Feedback.cshtml" />
     <Content Include="Views\UserPrintInfo\_UserRecievedPrintOrder.cshtml" />
-    <Content Include="Views\Shared\Offer.cshtml" />
+    <Content Include="Views\Offer\Offer.cshtml" />
     <Content Include="Views\UserPrintInfo\_UserBalance.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

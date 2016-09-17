@@ -13,16 +13,15 @@ using GlobalPrint.Configuration.DI;
 
 namespace GlobalPrint.ClientWeb
 {
-    public class UserAccountController : BaseController
+    public class UserProfileController : BaseController
     {
-        // GET: UserAccount/UserAccount
+        // GET: UserProfile/UserProfile
         [HttpGet]
-        public ActionResult UserAccount()
+        public ActionResult UserProfile()
         {
             UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
 
-            int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            var user = userUnit.GetUserByID(userID);
+            var user = userUnit.GetExtendedUserByID(this.GetCurrentUserID());
             return View(user);
         }
 
@@ -32,19 +31,19 @@ namespace GlobalPrint.ClientWeb
         {
             if (!ModelState.IsValid)
             {
-                return View("UserAccount", model);
+                return View("UserProfile", model);
             }
             UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
 
             try
             {
-                userUnit.UpdateUserAccount(model);
-                return RedirectToAction("UserAccount", new { UserID = model.UserID });
+                userUnit.UpdateUserProfile(model);
+                return RedirectToAction("UserProfile", new { UserID = model.UserID });
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
-                return View("UserAccount", model);
+                return View("UserProfile", model);
             }
         }
 
@@ -55,7 +54,7 @@ namespace GlobalPrint.ClientWeb
             try
             {
                 UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
-                int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
+                int userID = this.GetCurrentUserID();
                 decimal decimalUpSumm;
                 try
                 {
@@ -67,12 +66,12 @@ namespace GlobalPrint.ClientWeb
                 }
 
                 userUnit.FillUpBalance(userID, decimalUpSumm);
-                return RedirectToAction("UserAccount", new { UserID = userID });
+                return RedirectToAction("UserProfile", new { UserID = userID });
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
-                return View("UserAccount");
+                return View("UserProfile");
             }
         }
     }

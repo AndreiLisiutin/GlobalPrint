@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
 {
     /// <summary>
-    /// Interface only for user account without authentification fields
+    /// Interface only for user profile without authentification fields
     /// </summary>
-    public interface IUserAccount
+    public interface IUserProfile
     {
         int UserID { get; set; }
         string UserName { get; set; }

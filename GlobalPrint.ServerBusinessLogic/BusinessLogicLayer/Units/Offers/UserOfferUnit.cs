@@ -1,9 +1,11 @@
 ﻿using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Offers;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
 using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers
 {
@@ -16,6 +18,45 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers
         public UserOfferUnit()
             : base()
         {
+        }
+
+        /// <summary>
+        /// Get latest user offer by user ID.
+        /// If user didn't sign offer during registration, get latest version of offer.
+        /// </summary>
+        /// <param name="userID">User identifier.</param>
+        /// <param name="offerType">Offer type. User offer by default.</param>
+        /// <returns>Latest user offer.</returns>
+        public UserOfferExtended GetLatestUserOfferByUserID(int userID, OfferTypeEnum offerType = OfferTypeEnum.UserOffer)
+        {
+            using (IDataContext context = this.Context())
+            {
+                return this.GetLatestUserOfferByUserID(userID, offerType, context);
+            }
+        }
+        public UserOfferExtended GetLatestUserOfferByUserID(int userID, OfferTypeEnum offerType, IDataContext context)
+        {
+            IUserOfferRepository userOfferRepo = this.Repository<IUserOfferRepository>(context);
+            IOfferRepository offerRepo = this.Repository<IOfferRepository>(context);
+            OfferUnit offerUnit = new OfferUnit();
+
+            UserOfferExtended userOffer = (
+                from _userOffer in userOfferRepo.Get(e => e.UserID == userID)
+                join _offer in offerRepo.Get(e => e.OfferTypeID == (int)offerType) on _userOffer.OfferID equals _offer.ID
+                orderby _userOffer.OfferDate descending
+                select new UserOfferExtended() { Offer = _offer, LatestUserOffer = _userOffer }
+            ).FirstOrDefault();
+
+            // If user didn't sign offer during registration, get latest version of offer
+            if (userOffer == null)
+            {
+                userOffer = new UserOfferExtended()
+                {
+                    Offer = offerUnit.GetLatestOfferByType(offerType, context)
+                };
+            }
+
+            return userOffer;
         }
 
         /// <summary>

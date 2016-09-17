@@ -1,7 +1,11 @@
 ﻿using GlobalPrint.Infrastructure.EmailUtility;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
+using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Offers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Users;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 using System;
 using System.Collections.Generic;
@@ -25,12 +29,35 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             _emailUtility = emailUtility;
         }
 
-        public User GetUserByID(int UserID)
+        public User GetUserByID(int userID)
         {
             using (IDataContext context = this.Context())
             {
                 return this.Repository<IUserRepository>(context)
-                    .GetByID(UserID);
+                    .GetByID(userID);
+            }
+        }
+
+        /// <summary>
+        /// Get user with latest signed user offer.
+        /// </summary>
+        /// <param name="userID">User identifier.</param>
+        /// <returns>User with latest signed user offer.</returns>
+        public UserExtended GetExtendedUserByID(int userID)
+        {
+            using (IDataContext context = this.Context())
+            {
+                IUserRepository userRepository = this.Repository<IUserRepository>(context);
+                UserOfferUnit userOfferUnit = new UserOfferUnit();
+
+                User user = userRepository.GetByID(userID);
+                var latestUserOfferExtended = userOfferUnit.GetLatestUserOfferByUserID(userID, OfferTypeEnum.UserOffer, context);
+                
+                return new UserExtended()
+                {
+                    User = user,
+                    LatestUserOffer = latestUserOfferExtended?.LatestUserOffer
+                };
             }
         }
 
@@ -45,11 +72,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
         }
 
         /// <summary>
-        /// Update user account information
+        /// Update user profile information
         /// </summary>
-        /// <param name="user">User account info</param>
-        /// <returns>Updated uer account info</returns>
-        public IUserAccount UpdateUserAccount(IUserAccount user)
+        /// <param name="user">User profile info</param>
+        /// <returns>Updated user profile info</returns>
+        public IUserProfile UpdateUserProfile(IUserProfile user)
         {
             using (IDataContext context = this.Context())
             {

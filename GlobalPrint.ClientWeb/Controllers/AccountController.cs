@@ -542,19 +542,7 @@ namespace GlobalPrint.ClientWeb
             this.AuthenticationManager.SignOut();
             return RedirectToAction("Index", "Home");
         }
-
-        /// <summary>
-        /// Show offer to user
-        /// </summary>
-        /// <returns></returns>
-        // GET: /Account/Offer
-        [HttpGet]
-        [AllowAnonymous]
-        public ActionResult Offer()
-        {
-            return View("Offer");
-        }
-
+        
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
 {
     [Table("user", Schema = "public")]
-    public class User : IDomainModel, IUserAccount
+    public class User : IDomainModel, IUserProfile
     {
         [DebuggerStepThrough]
         public User()

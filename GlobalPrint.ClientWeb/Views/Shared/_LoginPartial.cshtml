@@ -17,7 +17,7 @@
                 @{Html.RenderAction("UserRecievedPrintOrder", "UserPrintInfo");}       
             </li>
             <li>
-                @Html.ActionLink(User.Identity.GetUserName(), "UserAccount", "UserAccount", new { }, new { @class = "font-bold" })
+                @Html.ActionLink(User.Identity.GetUserName(), "UserProfile", "UserProfile", new { }, new { @class = "font-bold" })
             </li>
             <li>
                 @{Html.RenderAction("UserBalance", "UserPrintInfo");}
