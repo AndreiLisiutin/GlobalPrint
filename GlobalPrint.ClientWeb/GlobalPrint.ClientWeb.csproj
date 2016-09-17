@@ -216,11 +216,16 @@
     <Content Include="Resources\Documents\TeamPhoto\Ilya.jpg" />
     <Content Include="Resources\Documents\TeamPhoto\Sergei.jpg" />
     <Content Include="Resources\Documents\TeamPhoto\Viktor.jpg" />
+    <Content Include="Resources\Images\add-printer-button.png" />
+    <Content Include="Resources\Images\closest_printer.png" />
+    <Content Include="Resources\Images\geolocation.png" />
     <Content Include="Resources\Images\green_circle.ico" />
+    <Content Include="Resources\Images\my_printers.png" />
+    <Content Include="Resources\Images\printer_deactive.png" />
     <Content Include="Resources\Images\printer_offline.png" />
     <Content Include="Resources\Images\printer_online.png" />
-    <Content Include="Resources\Images\printer__deactive.png" />
     <Content Include="Resources\Images\red_circle.ico" />
+    <Content Include="Resources\Images\run-printer.png" />
     <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.js" />
     <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.min.js" />
     <Content Include="Resources\Libraries\bootstrap-notify\bootstrap-notify.js" />
