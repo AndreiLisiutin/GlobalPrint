@@ -100,7 +100,11 @@ namespace GlobalPrint.ServerDataAccess.DataAccessLayer.Repository
                 throw new ArgumentNullException("entity");
             }
 
-            this._entities.Value.Remove(entity);
+            T original = this._entities.Value.Find(entity.ID);
+            if (original != null)
+            {
+                this._entities.Value.Remove(original);
+            }
         }
         public virtual void Delete(IEnumerable<T> entities)
         {

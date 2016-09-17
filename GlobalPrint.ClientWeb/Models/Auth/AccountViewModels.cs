@@ -6,12 +6,12 @@ namespace GlobalPrint.ClientWeb
 {
     public class LoginViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
         [EmailAddress]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
-
-        [Required]
+        
+        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
         [DataType(DataType.Password)]
         [StringLength(100, ErrorMessage = "Минимальная длина пароля - {2} символов.", MinimumLength = 6)]
         public string Password { get; set; }
@@ -21,33 +21,36 @@ namespace GlobalPrint.ClientWeb
 
     public class RegisterViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
         public string Email { get; set; }
-        
-        [Required]
+
+        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
         [StringLength(100, ErrorMessage = "Минимальная длина пароля - {2} символов.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
-
+        
+        [Required(ErrorMessage = "Вы должны подтвердить свое согласие с условиями оферты.")]
         [Range(typeof(bool), "true", "true", ErrorMessage = "Вы должны подтвердить свое согласие с условиями оферты.")]
         public bool IsAgreeWithTerms { get; set; }
     }
 
     public class ResetPasswordViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
         [EmailAddress]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
         [StringLength(100, ErrorMessage = "Минимальная длина пароля - {2} символов.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
@@ -57,7 +60,7 @@ namespace GlobalPrint.ClientWeb
 
     public class ForgotPasswordViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
         [EmailAddress]
         public string Email { get; set; }
     }
@@ -65,11 +68,11 @@ namespace GlobalPrint.ClientWeb
     [Obsolete("Пока что убрали регистрацию и логин через телефон")]
     public class VerifyPhoneNumberViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
         [Display(Name = "Code")]
         public string Code { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
         [Phone]
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }

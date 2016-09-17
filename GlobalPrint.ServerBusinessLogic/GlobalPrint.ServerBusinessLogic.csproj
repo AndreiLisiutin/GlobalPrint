@@ -71,6 +71,10 @@
     <Compile Include="BusinessLogicLayer\Models\Business\Printers\PrinterServiceExtended.cs" />
     <Compile Include="BusinessLogicLayer\Models\Business\Printers\PrintServiceExtended.cs" />
     <Compile Include="BusinessLogicLayer\Models\Business\Printers\PrinterEditionModel.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Domain\Offers\OfferTypeEnum.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Domain\Offers\OfferType.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Domain\Offers\UserOffer.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Domain\Offers\Offer.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Orders\PrintOrderStatusEnum.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Printers\Printer.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Printers\PrinterSchedule.cs" />
@@ -87,6 +91,9 @@
     <Compile Include="BusinessLogicLayer\Models\Domain\Users\UserActionLog.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Users\UserActionType.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Users\UserRole.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Offers\OfferTypeUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Offers\OfferUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Offers\UserOfferUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Orders\PrintOrderUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Printers\PrintServicesUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Printers\PrinterUnit.cs" />
@@ -101,6 +108,9 @@
     <Compile Include="_IDataAccessLayer\DataContext\IDataContext.cs" />
     <Compile Include="_IDataAccessLayer\DataContext\IDataContextFactory.cs" />
     <Compile Include="BusinessLogicLayer\Units\BaseUnit.cs" />
+    <Compile Include="_IDataAccessLayer\Repository\Offers\IOfferTypeRepository.cs" />
+    <Compile Include="_IDataAccessLayer\Repository\Offers\IUserOfferRepository.cs" />
+    <Compile Include="_IDataAccessLayer\Repository\Offers\IOfferRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Orders\IPrintOrderRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Orders\IPrintOrderStatusRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Printers\IPrinterRepository.cs" />

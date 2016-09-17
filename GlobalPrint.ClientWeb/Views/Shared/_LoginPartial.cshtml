@@ -20,6 +20,9 @@
                 @Html.ActionLink(User.Identity.GetUserName(), "UserAccount", "UserAccount", new { }, new { @class = "font-bold" })
             </li>
             <li>
+                @{Html.RenderAction("UserBalance", "UserPrintInfo");}
+            </li>
+            <li>
                 <a href="javascript:document.getElementById('logoutForm').submit()" class="font-bold">Выйти</a>
             </li>
             <li>

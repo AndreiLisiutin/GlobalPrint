@@ -1,9 +1,11 @@
 ﻿using GlobalPrint.Infrastructure.DI;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
+using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Offers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Orders;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Printers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext;
+using GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Offers;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Orders;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Printers;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Users;
@@ -49,6 +51,10 @@ namespace GlobalPrint.ServerDataAccess.DI
             ioc.Kernel.Bind<IUserRepository>().To<UserRepository>().InTransientScope();
             ioc.Kernel.Bind<IUserRoleRepository>().To<UserRoleRepository>().InTransientScope();
 
+            // Repository/Offers
+            ioc.Kernel.Bind<IOfferRepository>().To<OfferRepository>().InTransientScope();
+            ioc.Kernel.Bind<IUserOfferRepository>().To<UserOfferRepository>().InTransientScope();
+            ioc.Kernel.Bind<IOfferTypeRepository>().To<OfferTypeRepository>().InTransientScope();
         }
     }
 }
