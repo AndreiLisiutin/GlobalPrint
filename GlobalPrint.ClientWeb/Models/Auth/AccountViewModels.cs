@@ -36,7 +36,7 @@ namespace GlobalPrint.ClientWeb
         
         [Required(ErrorMessage = "Вы должны подтвердить свое согласие с условиями оферты.")]
         [Range(typeof(bool), "true", "true", ErrorMessage = "Вы должны подтвердить свое согласие с условиями оферты.")]
-        public bool IsAgreeWithTerms { get; set; }
+        public bool IsAgreeWithOffer { get; set; }
     }
 
     public class ResetPasswordViewModel

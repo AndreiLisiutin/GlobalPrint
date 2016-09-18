@@ -1,6 +1,4 @@
-﻿@using Microsoft.AspNet.Identity
-@using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers
-@using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Printers
+﻿@using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
 @using GlobalPrint.ClientWeb.Models.PrinterController
 @model Printer_EditViewMoel
 @{
@@ -169,8 +167,24 @@
                 }
             </tbody>
         </table>
+
+        if (Model.NeedPrinterOwnerOffer)
+        {
+            <div class="form-group">
+                <div class="col-sm-12 checkbox">
+                    <label>
+                        @Html.CheckBoxFor(m => m.IsAgreeWithOffer, new { @required = "true" }) <span>Настоящим подтверждаю, что я ознакомлен и согласен с условиями @Html.ActionLink("оферты владельца принтера", "Offer", "Offer", new { @offerTypeID = OfferTypeEnum.PrinterOwnerOffer }, new { target = "_blank" }).</span>
+                    </label>
+                </div>
+            </div>
+        }
+        else
+        {
+            @Html.HiddenFor(m => m.IsAgreeWithOffer, new { @required = "true", @Value = true })
+        }
+
         <div class="form-group">
-            <div class="col-sm-10">
+            <div class="col-sm-12">
                 <button class="btn btn-default" type="submit">Сохранить</button>
             </div>
         </div>

@@ -71,3 +71,9 @@
     max-height: 40px; 
     margin-top: -10px;
 }
+
+/* last table column for buttons */
+.table-col-buttons {
+    text-align:right;
+    max-width:40px !important;
+}

@@ -76,6 +76,7 @@ namespace GlobalPrint.ClientWeb
 
 
         [HttpGet]
+        [Authorize]
         public ActionResult MyOrders(string printOrderID)
         {
             PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
@@ -86,6 +87,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult New(int printerID)
         {
             Argument.Require(printerID > 0, "printerID не может быть меньше 0.");
@@ -120,6 +122,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Confirm(Guid preparedOrderID)
         {
             Argument.Require(preparedOrderID != Guid.Empty, "Ключ подготовленного для печати заказа не может быть пустым.");
@@ -131,6 +134,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Confirm(NewOrder NewOrder)
         {
             Argument.NotNull(NewOrder, "Заказ не может быть пустым.");
@@ -166,6 +170,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Complete(int printOrderID)
         {
             var order = new PrinterUnit().GetPrintOrderByID(printOrderID);
@@ -177,6 +182,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [Authorize]
         public virtual ActionResult UploadFile()
         {
             HttpPostedFileBase file = Request.Files["gpUserFile"];

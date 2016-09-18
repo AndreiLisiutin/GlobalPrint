@@ -17,6 +17,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// <returns>Offer view.</returns>
         // GET: /Offer/Offer
         [HttpGet]
+        [Authorize]
         public ActionResult Offer(OfferTypeEnum offerTypeID)
         {
             UserOfferUnit userOfferUnit = new UserOfferUnit();

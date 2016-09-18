@@ -22,6 +22,7 @@ namespace GlobalPrint.ClientWeb
     {
         // GET: UserRecievedPrintOrderList/UserRecievedPrintOrderList
         [HttpGet]
+        [Authorize]
         public ActionResult UserRecievedPrintOrderList(string printOrderID)
         {
             var printOrderList = _GetViewModel(printOrderID);
@@ -36,6 +37,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult AcceptOrder(int printOrderID)
         {
             PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
@@ -44,6 +46,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult RejectOrder(int printOrderID)
         {
             PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
@@ -52,6 +55,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult PrintOrder(int printOrderID, string secretCode)
         {
             PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
@@ -65,6 +69,7 @@ namespace GlobalPrint.ClientWeb
             printOrderUnit.UpdateStatus(printOrderID, PrintOrderStatusEnum.Printed, this.GetSmsParams());
             return RedirectToAction("UserRecievedPrintOrderList");
         }
+
         private PrintOrderInfo ViewModelConfirmPrintOrder(int printOrderID)
         {
             PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
@@ -72,6 +77,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult ConfirmPrintOrder(int printOrderID)
         {
             var vm = ViewModelConfirmPrintOrder(printOrderID);
@@ -79,6 +85,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult DownloadOrder(int printOrderID)
         {
             var order = new PrinterUnit().GetPrintOrderByID(printOrderID);

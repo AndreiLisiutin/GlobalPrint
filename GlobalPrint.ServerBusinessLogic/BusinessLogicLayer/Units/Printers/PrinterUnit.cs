@@ -11,12 +11,14 @@ using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 {
@@ -305,18 +307,29 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             this._ValidatePrinter(model.Printer);
             this._ValidatePrinterSchedule(model.PrinterSchedule);
             this._ValidatePrinterServices(model.PrinterServices);
+            int printerOwnerID = model.Printer.OwnerUserID;
 
             using (IDataContext context = this.Context())
             {
                 IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
                 IPrinterScheduleRepository printerScheduleRepo = this.Repository<IPrinterScheduleRepository>(context);
                 IPrinterServiceRepository printerServiceRepo = this.Repository<IPrinterServiceRepository>(context);
+                UserOfferUnit userOfferUnit = new UserOfferUnit();
+                
+                var latestPrinterOwnerOffer = new UserOfferUnit().GetLatestUserOfferByUserID(printerOwnerID, OfferTypeEnum.PrinterOwnerOffer);
+                bool needCreateOffer = !latestPrinterOwnerOffer.HasUserOffer;
 
                 context.BeginTransaction();
                 try
                 {
                     printerRepo.Insert(model.Printer);
                     context.Save();
+
+                    // Create user offer
+                    if (needCreateOffer)
+                    {
+                        userOfferUnit.CreateUserOfferInTransaction(printerOwnerID, OfferTypeEnum.PrinterOwnerOffer, context);
+                    }
 
                     foreach (var schedule in model.PrinterSchedule)
                     {

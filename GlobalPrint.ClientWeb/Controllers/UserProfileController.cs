@@ -18,6 +18,7 @@ namespace GlobalPrint.ClientWeb
     {
         // GET: UserProfile/UserProfile
         [HttpGet]
+        [Authorize]
         public ActionResult UserProfile()
         {
             UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
@@ -27,6 +28,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpPost]
+        [Authorize]
         [MultipleButton(Name = "action", Argument = "Save")]
         public ActionResult Save(User model)
         {
@@ -49,6 +51,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpPost]
+        [Authorize]
         [MultipleButton(Name = "action", Argument = "FillUpBalance")]
         public ActionResult FillUpBalance(string upSumm)
         {

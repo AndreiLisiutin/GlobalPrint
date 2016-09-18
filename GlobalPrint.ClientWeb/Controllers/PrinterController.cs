@@ -3,9 +3,11 @@ using GlobalPrint.ClientWeb.Models.PushNotifications;
 using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Orders;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Printers;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using iTextSharp.text.pdf;
@@ -21,7 +23,8 @@ namespace GlobalPrint.ClientWeb
 {
     public class PrinterController : BaseController
     {
-        
+
+        [Authorize]
         [HttpGet]
         public ActionResult GetPrinterServices(int printerID)
         {
@@ -79,7 +82,7 @@ namespace GlobalPrint.ClientWeb
 
             return viewModel;
         }
-
+        
         private PrinterEditionModel _PrinterEditionModel(Printer_EditViewMoel viewModel)
         {
             int userID = this.GetCurrentUserID();
@@ -118,19 +121,33 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Authorize]
         public ActionResult MyPrinters()
         {
-            int UserID = this.GetCurrentUserID();
-            var printerList = new PrinterUnit().GetUserPrinterList(UserID);
-            return View("MyPrinters", printerList);
+            int userID = this.GetCurrentUserID();
+
+            var printerList = new PrinterUnit().GetUserPrinterList(userID);
+            var latestPrinterOwnerOffer = new UserOfferUnit().GetLatestUserOfferByUserID(userID, OfferTypeEnum.PrinterOwnerOffer);
+
+            Printer_MyPrinters myPrinters = new Printer_MyPrinters()
+            {
+                PrinterList = printerList,
+                LatestPrinterOwnerOffer = latestPrinterOwnerOffer
+            };
+            return View("MyPrinters", myPrinters);
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Create()
         {
             try
             {
                 Printer_EditViewMoel viewModel = this._Printer_EditViewMoel();
+                
+                var latestPrinterOwnerOffer = new UserOfferUnit().GetLatestUserOfferByUserID(this.GetCurrentUserID(), OfferTypeEnum.PrinterOwnerOffer);
+                viewModel.NeedPrinterOwnerOffer = !latestPrinterOwnerOffer.HasUserOffer;
+
                 return View("Edit", viewModel);
             }
             catch (Exception ex)
@@ -141,6 +158,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult Edit(int PrinterID)
         {
             try
@@ -157,6 +175,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Delete(int PrinterID)
         {
             try
@@ -172,6 +191,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult Save(Printer_EditViewMoel model)
         {
             if (!ModelState.IsValid)

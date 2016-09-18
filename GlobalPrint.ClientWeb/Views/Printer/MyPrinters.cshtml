@@ -1,42 +1,72 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers
-@model List<Printer>
+@using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers
+@using GlobalPrint.ClientWeb.Models.PrinterController
+@model Printer_MyPrinters
 @{
     ViewBag.Title = "Принтеры";
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
-@{int rowNo = 0;}
+@*@{int rowNo = 0;}*@
 <div class="container">
     <table class="table table-hover">
         <thead>
             <tr>
-                <th class="col-md-1">№</th>
+                @*<th class="col-md-1">№</th>*@
                 <th class="col-md-3">Название</th>
-                <th class="col-md-5">Расположение</th>
+                <th class="col-md-4">Расположение</th>
+                <th class="col-md-1"></th>
                 <th class="col-md-1"></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (Printer printer in Model)
+            @if (Model.PrinterList != null)
             {
-                <tr>
-                    <td class="col-md-1" scope="row">@(rowNo += 1)</td>
-                    <td class="col-md-3">@Html.DisplayFor(c => printer.Name)</td>
-                    <td class="col-md-4">@Html.DisplayFor(c => printer.Location)</td>
-                    <td class="col-md-2">
-                        @Html.ActionLink("Изменить", "Edit", "Printer", new { PrinterID = printer.ID }, new { @class = "btn btn-default" })
-                        @using (Html.BeginForm("Delete", "Printer", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                        {
-                            <input type="hidden" name="printerID" value="@printer.ID" />
-                            <input type="submit" class="btn btn-default" value="Удалить" />
-                        }
-                    </td>
-                </tr>
+                foreach (Printer printer in Model.PrinterList)
+                {
+                    <tr>
+                        @*<td class="col-md-1" scope="row">@(rowNo += 1)</td>*@
+                        <td class="col-md-3">@Html.DisplayFor(c => printer.Name)</td>
+                        <td class="col-md-4">@Html.DisplayFor(c => printer.Location)</td>
+                        <td class="col-md-1 table-col-buttons">
+                            <a href="@Url.Action("Edit", "Printer", new { @PrinterID = printer.ID })" title="Изменить параметры принтера" class="btn btn-default">
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                            </a>
+                        </td>
+                        <td class="col-md-1 table-col-buttons">
+                            @using (Html.BeginForm("Delete", "Printer", FormMethod.Post, new { role = "form" }))
+                            {
+                                <input type="hidden" name="printerID" value="@printer.ID" />
+                                <button class="btn btn-default" type="submit" title="Удалить принтер"><span class="glyphicon glyphicon-trash"></span></button>
+                            }
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
 
+    @if (Model.LatestPrinterOwnerOffer.HasUserOffer)
+    {
+        // Оферта
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+                <label class="col-sm-1 control-label text-left">Оферта</label>
+                <div class="col-sm-11">
+                    <div class="input-group">
+                        @Html.TextBox("UserOfferString", Model.LatestPrinterOwnerOffer.UserOfferString, new { @class = "form-control", @readonly = "true", @placeholder = "Договор оферты владельца принтера" })
+                        <span class="input-group-btn">
+                            <a href="@Url.Action("Offer", "Offer", new { @offerTypeID = OfferTypeEnum.PrinterOwnerOffer })" target="_blank" title="Открыть договор оферты" class="btn btn-default">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    }
+
     <div class="form-group">
-        <div class="col-sm-10">
+        <div class="col-sm-12">
             @Html.ActionLink("Добавить", "Create", "Printer", new { }, new { @class = "btn btn-default" })
         </div>
     </div>

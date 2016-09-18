@@ -24,37 +24,63 @@
             </div>
         }
         <h2 class="form-signin-heading">Профиль пользователя</h2>
+
+        // Полное имя
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">Имя</label>
             <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control", @id = "inputName", @type = "text", @placeholder = "Полное имя", @required = "true", @autofocus = true })
+                @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control", @placeholder = "Полное имя", @required = "true", @autofocus = true })
             </div>
         </div>
+
+        // Email
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">Email</label>
             <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control", @readonly = "true", @id = "inputEmail", @type = "email", @placeholder = "Email", @required = "true" })
+                @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control", @readonly = "true", @type = "email", @placeholder = "Email", @required = "true" })
             </div>
         </div>
+
+        // Баланс
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">Баланс</label>
             <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.User.AmountOfMoney, new { @class = "form-control", @readonly = "true", @id = "inputAmountOfMoney", @type = "phone", @placeholder = "Телефон", @required = "false" })
+                <div class="input-group">
+                    @Html.TextBoxFor(m => m.User.AmountOfMoney, new { @class = "form-control", @readonly = "true", @placeholder = "Баланс" })
+                    <span class="input-group-btn">                        
+                        <!-- Кнопка, вызывающее модальное окно -->
+                        <a href="#FillUpBalanceModal" title="Пополнить счет" class="btn btn-default" data-toggle="modal">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        </a>
+                    </span>
+                </div>
             </div>
         </div>
+
+        // Оферта
+        if (Model.LatestUserOffer.HasUserOffer)
+        {
+            <div class="form-group">
+                <label class="col-sm-1 control-label text-left">Оферта</label>
+                <div class="col-sm-11">
+                    <div class="input-group">
+                        @Html.TextBox("UserOfferString", Model.LatestUserOffer.UserOfferString, new { @class = "form-control", @readonly = "true", @placeholder = "Договор оферты пользователя" })
+                        <span class="input-group-btn">
+                            <a href="@Url.Action("Offer", "Offer", new { @offerTypeID = OfferTypeEnum.UserOffer })" target="_blank" title="Открыть договор оферты" class="btn btn-default">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        }
 
         @Html.HiddenFor(m => m.User.UserID)
         @Html.HiddenFor(m => m.User.PhoneNumber)
 
         <div class="form-group">
             <div class="col-sm-10">
-                <button class="btn btn-default" type="submit" value="Save" name="action:Save">Сохранить</button>
-                <!-- Кнопка, вызывающее модальное окно -->
-                <a href="#FillUpBalanceModal" class="btn btn-default" data-toggle="modal">Пополнить счет</a>
-                @if (Model.LatestUserOffer.HasUserOffer)
-                {
-                    @Html.ActionLink(Model.LatestUserOffer.UserOfferString, "Offer", "Offer", new { @offerTypeID = OfferTypeEnum.UserOffer }, new { target = "_blank", @class = "btn btn-default" })
-                }
+                <button class="btn btn-default" type="submit" value="Save" name="action:Save">Сохранить</button>                
             </div>
         </div>
     }

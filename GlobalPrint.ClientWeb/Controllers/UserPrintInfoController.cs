@@ -17,6 +17,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// </summary>
         /// <returns>Partial view with recieved print orders number</returns>
         [ChildActionOnly]
+        [Authorize]
         public ActionResult UserRecievedPrintOrder()
         { 
             int printOrdersCount = new PrinterUnit().GetWaitingIncomingOrdersCount(this.GetCurrentUserID());
@@ -29,6 +30,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// </summary>
         /// <returns>Partial view with user balance</returns>
         [ChildActionOnly]
+        [Authorize]
         public ActionResult UserBalance()
         {
             UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();

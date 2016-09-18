@@ -21,21 +21,21 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Off
         {
             get
             {
-                return this.LatestUserOffer != null;
+                return LatestUserOffer != null;
             }
         }
         public bool HasOffer
         {
             get
             {
-                return this.Offer != null;
+                return Offer != null;
             }
         }
         public bool HasOfferType
         {
             get
             {
-                return this.OfferType != null;
+                return OfferType != null;
             }
         }
 
@@ -49,13 +49,17 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Off
 
                 #region OfferType
 
-                if (HasOfferType)
+                if (HasOffer)
                 {
-                    offerType = this.OfferType.Name;
+                    offerType = Offer.Name;
                 }
-                else if (HasOffer)
+                else if (HasOfferType)
                 {
-                    switch ((OfferTypeEnum)this.Offer.OfferTypeID)
+                    offerType = OfferType.Name;
+                } 
+                else if (HasOffer) // it's not a mistake!
+                {
+                    switch ((OfferTypeEnum)Offer.OfferTypeID)
                     {
                         case OfferTypeEnum.UserOffer:
                             offerType = "Договор оферты пользователя";
