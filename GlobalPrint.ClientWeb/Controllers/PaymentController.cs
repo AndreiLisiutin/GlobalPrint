@@ -11,18 +11,6 @@ namespace GlobalPrint.ClientWeb.Controllers
 {
     public class PaymentController : BaseController
     {
-        public ActionResult Index()
-        {
-            int priceRub = 1000;
-            int orderId = 1;
-
-            // note: use GetRedirectUrl overloading to specify customer email
-
-            string redirectUrl = Robokassa.GetRedirectUrl(priceRub, orderId);
-
-            return Redirect(redirectUrl);
-        }
-
         // So called "Result Url" in terms of Robokassa documentation.
         // This url is called by Robokassa robot.
         [HttpPost]
@@ -35,7 +23,7 @@ namespace GlobalPrint.ClientWeb.Controllers
                 {
                     processOrder(confirmationRequest);
 
-                    return Content("OK Confirm"); // content for robot
+                    return Content("OK Confirm"); 
                 }
             }
             catch (Exception ex)
@@ -56,9 +44,7 @@ namespace GlobalPrint.ClientWeb.Controllers
 
                 if (confirmationRequest.IsQueryValid(RobokassaQueryType.SuccessURL))
                 {
-                    processOrder(confirmationRequest);
-                    return Content("OK Success"); // content for robot
-                    //return View(); // content for user
+                    return Content("OK Success"); 
                 }
             }
             catch (Exception ex)
@@ -82,9 +68,6 @@ namespace GlobalPrint.ClientWeb.Controllers
         {
             UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
             userUnit.FillUpBalance(confirmationRequest.InvId, Decimal.Parse(confirmationRequest.OutSum));
-            // TODO:
-            // 1. verify your order Id and price here
-            // 2. mark your order as paid
         }
     }
 }
