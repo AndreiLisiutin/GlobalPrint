@@ -1,7 +1,4 @@
-﻿@using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Offers
-@model UserOfferExtended
-
-@{
+﻿@{
     Layout = "~/Views/Shared/_BaseLayout.cshtml";
     ViewBag.Title = "Оферта";
 }
@@ -14,7 +11,7 @@
     <h2>@ViewBag.OfferTitle</h2>
     @if (ViewBag.OfferParagraphs != null)
     {
-        @foreach (string paragraph in ViewBag.OfferParagraphs)
+        foreach (string paragraph in ViewBag.OfferParagraphs)
         {
             <p>@paragraph</p>
         }

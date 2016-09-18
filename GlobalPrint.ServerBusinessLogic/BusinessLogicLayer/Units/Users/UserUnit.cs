@@ -6,15 +6,12 @@ using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 {
@@ -24,7 +21,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 
         [DebuggerStepThrough]
         public UserUnit(Lazy<IEmailUtility> emailUtility)
-            :base()
+            : base()
         {
             _emailUtility = emailUtility;
         }
@@ -52,11 +49,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 
                 User user = userRepository.GetByID(userID);
                 var latestUserOfferExtended = userOfferUnit.GetLatestUserOfferByUserID(userID, OfferTypeEnum.UserOffer, context);
-                
+
                 return new UserExtended()
                 {
                     User = user,
-                    LatestUserOffer = latestUserOfferExtended?.LatestUserOffer
+                    LatestUserOffer = latestUserOfferExtended
                 };
             }
         }
@@ -100,7 +97,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 }
             }
         }
-        
+
         /// <summary>
         /// Method only for 
         /// </summary>
@@ -126,6 +123,45 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             }
         }
 
+        /// <summary>
+        /// Insert new user and sing his offer in transaction.
+        /// </summary>
+        /// <param name="user">User to insert.</param>
+        /// <returns>Inserted user with new ID.</returns>
+        public User InsertUserWithOffer(User user)
+        {
+            using (IDataContext context = this.Context())
+            {
+                context.BeginTransaction();
+                try
+                {
+                    IUserRepository userRepo = this.Repository<IUserRepository>(context);
+                    UserOfferUnit userOfferUnit = new UserOfferUnit();
+
+                    // Insert new user
+                    userRepo.Insert(user);
+                    context.Save();
+
+                    // Create user offer
+                    userOfferUnit.CreateUserOfferInTransaction(user.ID, OfferTypeEnum.UserOffer, context);
+
+                    context.Save();
+                    context.CommitTransaction();
+                }
+                catch (Exception)
+                {
+                    context.RollbackTransaction();
+                    throw;
+                }
+                return user;
+            }
+        }
+
+        /// <summary>
+        /// Just insert new user.
+        /// </summary>
+        /// <param name="user">User to insert.</param>
+        /// <returns>Inserted user with new ID.</returns>
         public User InsertUser(User user)
         {
             using (IDataContext context = this.Context())

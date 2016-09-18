@@ -179,10 +179,6 @@ namespace GlobalPrint.ClientWeb
         /// <summary>
         /// User register action.
         /// </summary>
-        /// <remarks>
-        /// Realizes logic transaction on saving new user instance and saving user offer.
-        /// TODO: somehow use db transaction here.
-        /// </remarks>
         /// <param name="model">Register view model.</param>
         /// <returns>Redirects to page with email confirmation message (DisplayEmail).</returns>
         // POST: /Account/Register
@@ -196,96 +192,43 @@ namespace GlobalPrint.ClientWeb
             {
                 return View("Register", model);
             }
-            
+
             UserOfferUnit userOfferUnit = new UserOfferUnit();
 
             var user = new ApplicationUser(model.Email, model.Email);
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                try
+                // генерируем токен для подтверждения регистрации
+                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+
+                // создаем ссылку для подтверждения
+                string callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
+                           protocol: Request.Url.Scheme);
+
+                // отправка письма
+                await UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты",
+                    "Для завершения регистрации перейдите по ссылке: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>");
+
+                return View("DisplayEmail");
+
+                #region Old version of registration process, without email confirmation
+                if (false)
                 {
-                    throw new Exception();
-                    // Create user offer
-                    userOfferUnit.CreateUserOffer(user.Id, OfferTypeEnum.UserOffer);
+                    var currentUser = await this.UserManager.FindByNameAsync(model.Email);
+                    await SignInManager.SignInAsync(currentUser, isPersistent: false, rememberBrowser: false);
 
-                    // генерируем токен для подтверждения регистрации
-                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-
-                    // создаем ссылку для подтверждения
-                    string callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
-                               protocol: Request.Url.Scheme);
-
-                    // отправка письма
-                    await UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты",
-                        "Для завершения регистрации перейдите по ссылке: <a href=\"" + callbackUrl + "\">завершить регистрацию</a>");
-
-                    return View("DisplayEmail");
-
-                    #region Old version of registration process, without email confirmation
-                    if (false)
+                    // In case of Print->Register
+                    string printerID = Session["Account_PrinterID"] as string;
+                    if (!string.IsNullOrEmpty(printerID))
                     {
-                        var currentUser = await this.UserManager.FindByNameAsync(model.Email);
-                        await SignInManager.SignInAsync(currentUser, isPersistent: false, rememberBrowser: false);
-
-                        // In case of Print->Register
-                        string printerID = Session["Account_PrinterID"] as string;
-                        if (!string.IsNullOrEmpty(printerID))
-                        {
-                            Session["Account_PrinterID"] = null;
-                            return RedirectToAction("New", "Order", new { PrinterID = printerID });
-                        }
-
-                        return RedirectToAction("Index", "Home");
+                        Session["Account_PrinterID"] = null;
+                        return RedirectToAction("New", "Order", new { PrinterID = printerID });
                     }
-                    #endregion
-                }
-                catch (Exception ex)
-                {
-                    _logUtility.Value.Error(ex, ex.Message);
-                    ModelState.AddModelError("", "Не удалось завершить регистрацию...");
 
-                    // Delete saved user in case of any failure
-                    ApplicationUser savedUser = await UserManager.FindByEmailAsync(model.Email);
-                    if (savedUser != null)
-                    {
-                        try
-                        {
-                            // Delete user offers
-                            userOfferUnit.DeleteUserOfferByUserID(savedUser.Id);
-                        }
-                        catch (Exception e)
-                        {
-                            _logUtility.Value.Error(e, e.Message);
-                            throw;
-                        }
-
-                        try
-                        {
-                            // delete user
-                            IdentityResult deleteResult = await UserManager.DeleteAsync(savedUser);
-                            if (!deleteResult.Succeeded)
-                            {
-                                string fullError = string.Format(
-                                    "Error in Account/Register method.{0}" +
-                                    "Line: IdentityResult deleteResult = await UserManager.DeleteAsync(savedUser);{0}" +
-                                    "Global error: {1}{0}{2}{0}" +
-                                    "Errors during user delete:{0}{3}",
-                                    Environment.NewLine,
-                                    ex.Message.ToString(),
-                                    ex.StackTrace,
-                                    string.Join(Environment.NewLine, deleteResult.Errors)
-                                );
-                                _logUtility.Value.Error(fullError);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            _logUtility.Value.Error(e, e.Message);
-                            throw;
-                        }
-                    }
+                    return RedirectToAction("Index", "Home");
                 }
+                #endregion
             }
             else
             {
@@ -542,7 +485,7 @@ namespace GlobalPrint.ClientWeb
             this.AuthenticationManager.SignOut();
             return RedirectToAction("Index", "Home");
         }
-        
+
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))

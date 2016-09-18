@@ -38,21 +38,29 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers
         {
             IUserOfferRepository userOfferRepo = this.Repository<IUserOfferRepository>(context);
             IOfferRepository offerRepo = this.Repository<IOfferRepository>(context);
+            IOfferTypeRepository offerTypeRepo = this.Repository<IOfferTypeRepository>(context);
             OfferUnit offerUnit = new OfferUnit();
 
-            UserOfferExtended userOffer = (
-                from _userOffer in userOfferRepo.Get(e => e.UserID == userID)
-                join _offer in offerRepo.Get(e => e.OfferTypeID == (int)offerType) on _userOffer.OfferID equals _offer.ID
-                orderby _userOffer.OfferDate descending
-                select new UserOfferExtended() { Offer = _offer, LatestUserOffer = _userOffer }
-            ).FirstOrDefault();
+            UserOfferExtended userOffer = null;
+
+            if (userID > 0)
+            {
+                userOffer = (
+                    from _userOffer in userOfferRepo.Get(e => e.UserID == userID)
+                    join _offer in offerRepo.Get(e => e.OfferTypeID == (int)offerType) on _userOffer.OfferID equals _offer.ID
+                    join _offerType in offerTypeRepo.Get(e => e.ID == (int)offerType) on _offer.OfferTypeID equals _offerType.ID
+                    orderby _userOffer.OfferDate descending
+                    select new UserOfferExtended() { Offer = _offer, LatestUserOffer = _userOffer, OfferType = _offerType }
+                ).FirstOrDefault();
+            }
 
             // If user didn't sign offer during registration, get latest version of offer
             if (userOffer == null)
             {
                 userOffer = new UserOfferExtended()
                 {
-                    Offer = offerUnit.GetLatestOfferByType(offerType, context)
+                    Offer = offerUnit.GetLatestOfferByType(offerType, context),
+                    OfferType = offerTypeRepo.GetByID((int)offerType)
                 };
             }
 
@@ -109,62 +117,48 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers
 
                 userOfferRepo.Insert(model);
                 context.Save();
-                
+
                 return model;
             }
         }
 
         /// <summary>
-        /// Create new user offer from registration
+        /// Create new user offer from registration. Uses outer transaction.
         /// </summary>
         /// <param name="userID">User identidier.</param>
         /// <param name="offerTypeID">Offer type identifier.</param>
         /// <returns>Created user offer with correct ID.</returns>
-        public UserOffer CreateUserOffer(int userID, OfferTypeEnum offerTypeID)
+        public UserOffer CreateUserOfferInTransaction(int userID, OfferTypeEnum offerTypeID, IDataContext context)
         {
-            using (IDataContext context = this.Context())
+            IUserOfferRepository userOfferRepo = this.Repository<IUserOfferRepository>(context);
+            OfferUnit offerUnit = new OfferUnit();
+
+            Offer latestOffer = offerUnit.GetLatestOfferByType(offerTypeID, context);
+            if (latestOffer == null)
             {
-                IUserOfferRepository userOfferRepo = this.Repository<IUserOfferRepository>(context);
-                OfferUnit offerUnit = new OfferUnit();
-
-                Offer latestOffer = offerUnit.GetLatestOfferByType(OfferTypeEnum.UserOffer, context);
-                if (latestOffer == null)
-                {
-                    throw new Exception("Не найден договор оферты пользователя.");
-                }
-
-                UserOffer model = new UserOffer()
-                {
-                    UserID = userID,
-                    OfferID = latestOffer.ID,
-                    OfferDate = DateTime.Now,
-                    OfferNumber = null
-                };
-
-                context.BeginTransaction();
-                try
-                {
-                    // Insert new offer
-                    this._ValidateUserOffer(model);
-                    userOfferRepo.Insert(model);
-                    context.Save();
-
-                    // Update offer number
-                    model.OfferNumber = model.ID.ToString();
-                    this._ValidateUserOffer(model);
-                    userOfferRepo.Update(model);
-                    context.Save();
-
-                    context.CommitTransaction();
-                }
-                catch (Exception)
-                {
-                    context.RollbackTransaction();
-                    throw;
-                }
-
-                return model;
+                throw new Exception("Не найден договор оферты пользователя.");
             }
+
+            UserOffer model = new UserOffer()
+            {
+                UserID = userID,
+                OfferID = latestOffer.ID,
+                OfferDate = DateTime.Now,
+                OfferNumber = null
+            };
+
+            // Insert new offer
+            this._ValidateUserOffer(model);
+            userOfferRepo.Insert(model);
+            context.Save();
+
+            // Update offer number
+            model.OfferNumber = model.ID.ToString();
+            this._ValidateUserOffer(model);
+            userOfferRepo.Update(model);
+            context.Save();
+
+            return model;
         }
 
         /// <summary>
