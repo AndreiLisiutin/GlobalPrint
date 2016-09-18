@@ -36,12 +36,12 @@
                 @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control", @readonly = "true", @id = "inputEmail", @type = "email", @placeholder = "Email", @required = "true" })
             </div>
         </div>
-        <div class="form-group">
+        @*<div class="form-group">
             <label class="col-sm-1 control-label text-left">Оферта</label>
             <div class="col-sm-11">
                 @Html.ActionLink(Model.UserOfferString, "Offer", "Offer", new { @offerTypeID = OfferTypeEnum.UserOffer }, new { target = "_blank" })
             </div>
-        </div>
+        </div>*@
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">Баланс</label>
             <div class="col-sm-11">

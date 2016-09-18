@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 using GlobalPrint.Configuration.DI;
+using GlobalPrint.Infrastructure.LogUtility.Robokassa;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -60,13 +61,14 @@ namespace GlobalPrint.ClientWeb
                 {
                     decimalUpSumm = Convert.ToDecimal(upSumm);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     throw new Exception("Некорректно введена ссума пополнения", ex);
                 }
-
-                userUnit.FillUpBalance(userID, decimalUpSumm);
-                return RedirectToAction("UserProfile", new { UserID = userID });
+                string redirectUrl = Robokassa.GetRedirectUrl(decimalUpSumm, userID);
+                return Redirect(redirectUrl);
+                
+                //return RedirectToAction("UserProfile", new { UserID = userID });
             }
             catch (Exception ex)
             {

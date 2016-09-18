@@ -81,6 +81,11 @@
     <Compile Include="FileUtility\FileReaders\IFileReader.cs" />
     <Compile Include="FileUtility\FileUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Robokassa\Robokassa.cs" />
+    <Compile Include="Robokassa\RobokassaConfig.cs" />
+    <Compile Include="Robokassa\RobokassaConfirmationRequest.cs" />
+    <Compile Include="Robokassa\RobokassaMode.cs" />
+    <Compile Include="Robokassa\RobokassaQueryType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
