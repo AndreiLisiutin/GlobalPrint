@@ -357,6 +357,7 @@
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\OfferController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\UserPrintInfoController.cs" />
     <Compile Include="Controllers\UserRecievedPrintOrderListController.cs" />
     <Compile Include="Controllers\UserProfileController.cs" />

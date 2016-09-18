@@ -1,4 +1,5 @@
-﻿using GlobalPrint.Infrastructure.LogUtility.Robokassa;
+﻿using GlobalPrint.Configuration.DI;
+using GlobalPrint.Infrastructure.LogUtility.Robokassa;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace GlobalPrint.ClientWeb.Controllers
 
         // So called "Result Url" in terms of Robokassa documentation.
         // This url is called by Robokassa robot.
+        [HttpPost]
 
         public ActionResult Confirm(RobokassaConfirmationRequest confirmationRequest)
         {
@@ -46,6 +48,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         // So called "Success Url" in terms of Robokassa documentation.
         // Customer is redirected to this url after successful payment. 
 
+        [HttpPost]
         public ActionResult Success(RobokassaConfirmationRequest confirmationRequest)
         {
             try
@@ -69,6 +72,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         // So called "Fail Url" in terms of Robokassa documentation.
         // Customer is redirected to this url after unsuccessful payment.
 
+        [HttpPost]
         public ActionResult Fail()
         {
             return Content("Fail");
@@ -76,7 +80,8 @@ namespace GlobalPrint.ClientWeb.Controllers
 
         private void processOrder(RobokassaConfirmationRequest confirmationRequest)
         {
-            new UserUnit().FillUpBalance(confirmationRequest.InvId, Decimal.Parse(confirmationRequest.OutSum));
+            UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
+            userUnit.FillUpBalance(confirmationRequest.InvId, Decimal.Parse(confirmationRequest.OutSum));
             // TODO:
             // 1. verify your order Id and price here
             // 2. mark your order as paid
