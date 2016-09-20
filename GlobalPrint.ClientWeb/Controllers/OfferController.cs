@@ -23,14 +23,13 @@ namespace GlobalPrint.ClientWeb.Controllers
             UserOfferUnit userOfferUnit = new UserOfferUnit();
 
             UserOfferExtended userOffer = userOfferUnit.GetLatestUserOfferByUserID(this.GetCurrentUserID(), offerTypeID);
-            string offerTitle = userOffer.UserOfferString;
             List<string> offerParagraphs = new List<string>();
             if (userOffer != null && userOffer.Offer != null && !string.IsNullOrWhiteSpace(userOffer.Offer.Text))
             {
                 offerParagraphs = userOffer.Offer.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None).ToList();
             }
 
-            ViewBag.OfferTitle = offerTitle;
+            ViewBag.OfferTitle = userOffer.UserOfferString;
             ViewBag.OfferParagraphs = offerParagraphs;
             return View(userOffer);
         }

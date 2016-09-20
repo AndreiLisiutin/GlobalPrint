@@ -11,11 +11,16 @@ using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.LogUtility.Robokassa;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Users;
 
 namespace GlobalPrint.ClientWeb
 {
     public class UserProfileController : BaseController
     {
+        /// <summary>
+        /// Get user profile view.
+        /// </summary>
+        /// <returns>Profile info of current user.</returns>
         // GET: UserProfile/UserProfile
         [HttpGet]
         [Authorize]
@@ -27,10 +32,15 @@ namespace GlobalPrint.ClientWeb
             return View(user);
         }
 
+        /// <summary>
+        /// Save user profile info.
+        /// </summary>
+        /// <param name="model">Profile info of current user.</param>
+        /// <returns>Redirects to updated profile view.</returns>
         [HttpPost]
         [Authorize]
         [MultipleButton(Name = "action", Argument = "Save")]
-        public ActionResult Save(User model)
+        public ActionResult Save(UserExtended model)
         {
             if (!ModelState.IsValid)
             {
@@ -40,8 +50,8 @@ namespace GlobalPrint.ClientWeb
 
             try
             {
-                userUnit.UpdateUserProfile(model);
-                return RedirectToAction("UserProfile", new { UserID = model.UserID });
+                userUnit.UpdateUserProfile(model?.User);
+                return RedirectToAction("UserProfile");
             }
             catch (Exception ex)
             {
