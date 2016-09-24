@@ -28,7 +28,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers
         /// <param name="userID">User identifier.</param>
         /// <param name="offerType">Offer type. User offer by default.</param>
         /// <returns>Latest user offer.</returns>
-        public UserOfferExtended GetLatestUserOfferByUserID(int userID, OfferTypeEnum offerType = OfferTypeEnum.UserOffer)
+        public UserOfferExtended GetLatestUserOfferByUserID(int userID, OfferTypeEnum offerType)
         {
             using (IDataContext context = this.Context())
             {

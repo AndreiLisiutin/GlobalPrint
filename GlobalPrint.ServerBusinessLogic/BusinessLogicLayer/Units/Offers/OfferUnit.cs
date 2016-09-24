@@ -1,4 +1,5 @@
-﻿using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
+﻿using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
+using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
 using System.Diagnostics;
@@ -6,7 +7,7 @@ using System.Linq;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers
 {
-    public class OfferUnit : BaseUnit
+    public class OfferUnit : BaseUnit, IOfferUnit
     {
         [DebuggerStepThrough]
         public OfferUnit()
@@ -33,6 +34,22 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers
             return offerRepo.Get(e => e.OfferTypeID == (int)offerTypeID)
                 .OrderByDescending(e => e.CreatedOn)
                 .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get actual offer of specified type.
+        /// </summary>
+        /// <param name="offerTypeID">Type of offer.</param>
+        /// <returns>Returns actual offer type.</returns>
+        public Offer GetActualOfferByType(OfferTypeEnum offerTypeID)
+        {
+            using (IDataContext context = this.Context())
+            {
+                IOfferRepository offerRepo = this.Repository<IOfferRepository>(context);
+
+                return offerRepo.Get(e => e.IsActual && e.OfferTypeID == (int)offerTypeID)
+                    .FirstOrDefault();
+            }
         }
     }
 }

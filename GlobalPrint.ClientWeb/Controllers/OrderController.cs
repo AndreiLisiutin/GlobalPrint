@@ -173,7 +173,8 @@ namespace GlobalPrint.ClientWeb
         [Authorize]
         public ActionResult Complete(int printOrderID)
         {
-            var order = new PrinterUnit().GetPrintOrderByID(printOrderID);
+            PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
+            PrintOrder order = printOrderUnit.GetPrintOrderByID(printOrderID);
             return View(order);
         }
 

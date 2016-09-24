@@ -29,7 +29,7 @@
 
             <div class="checkbox">
                 <label>
-                    @Html.CheckBoxFor(m => m.IsAgreeWithOffer, new { @required = "true" }) <span>Настоящим подтверждаю, что я ознакомлен и согласен с условиями @Html.ActionLink("оферты", "Offer", "Offer", new { @offerTypeID = OfferTypeEnum.UserOffer }, new { target = "_blank" }).</span>
+                    @Html.CheckBoxFor(m => m.IsAgreeWithOffer, new { @required = "true" }) <span>Настоящим подтверждаю, что я ознакомлен и согласен с условиями @Html.ActionLink("оферты", "ActualUserOffer", "Offer", new { }, new { target = "_blank" }).</span>
                 </label>
             </div>
 

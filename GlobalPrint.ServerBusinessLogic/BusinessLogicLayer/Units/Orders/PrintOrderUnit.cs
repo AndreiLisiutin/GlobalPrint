@@ -36,6 +36,20 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             _emailUtility = emailUtility;
         }
 
+        /// <summary>
+        /// Get print order by it's identifier.
+        /// </summary>
+        /// <param name="printOrderID">Print order ID.</param>
+        /// <returns>Returns print order object.</returns>
+        public PrintOrder GetPrintOrderByID(int printOrderID)
+        {
+            using (IDataContext context = this.Context())
+            {
+                return this.Repository<IPrintOrderRepository>(context)
+                    .GetByID(printOrderID);
+            }
+        }
+
         public List<PrintOrderInfo> GetUserPrintOrderList(int userID, string printOrderID)
         {
             using (IDataContext context = this.Context())

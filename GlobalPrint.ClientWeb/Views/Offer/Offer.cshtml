@@ -1,4 +1,7 @@
-﻿@{
+﻿@using GlobalPrint.ClientWeb.Models.OfferController
+@model OfferViewModel
+
+@{
     Layout = "~/Views/Shared/_BaseLayout.cshtml";
     ViewBag.Title = "Оферта";
 }
@@ -8,10 +11,10 @@
 }
 
 <div class="display-form-content-large">
-    <h2>@ViewBag.OfferTitle</h2>
-    @if (ViewBag.OfferParagraphs != null)
+    <h2>@Model.Title</h2>
+    @if (Model.Paragraphs != null)
     {
-        foreach (string paragraph in ViewBag.OfferParagraphs)
+        foreach (string paragraph in Model.Paragraphs)
         {
             <p>@paragraph</p>
         }

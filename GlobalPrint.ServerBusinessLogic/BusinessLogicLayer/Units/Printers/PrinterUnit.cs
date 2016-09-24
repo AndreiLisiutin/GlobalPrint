@@ -29,9 +29,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             : base()
         {
         }
-
-        #region Printer
-
+        
         #region Get
 
         public Printer GetPrinterByID(int printerID)
@@ -399,11 +397,29 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 
         #region Delete
 
+        /// <summary>
+        /// Delete printer validation.
+        /// </summary>
+        /// <param name="printer">Printer to delete.</param>
+        private void _ValidateDeletePrinter(int printerID, IDataContext context)
+        {
+            Argument.Positive(printerID, "Выберите принтер для удаления.");
+            IPrintOrderRepository printOrderRepository = this.Repository<IPrintOrderRepository>(context);
+
+            var printOrderList = printOrderRepository.GetAll();
+            Argument.Require(!printOrderList.Any(), "Существуют заказы, связанные с этим принтером.");
+        }
+
+        /// <summary>
+        /// Delete printer by ID.
+        /// </summary>
+        /// <param name="printerID">Printer ID.</param>
         public void DeletePrinter(int printerID)
         {
-
             using (IDataContext context = this.Context())
             {
+                this._ValidateDeletePrinter(printerID, context);
+
                 IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
                 IPrinterScheduleRepository printerScheduleRepo = this.Repository<IPrinterScheduleRepository>(context);
                 IPrinterServiceRepository printerServiceRepo = this.Repository<IPrinterServiceRepository>(context);
@@ -438,21 +454,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
         }
 
         #endregion
-
-        #endregion
-
-        #region PrinterOrder
-
-        public PrintOrder GetPrintOrderByID(int printOrderID)
-        {
-            using (IDataContext context = this.Context())
-            {
-                return this.Repository<IPrintOrderRepository>(context)
-                    .GetByID(printOrderID);
-            }
-        }
-
-        #endregion
+        
     }
 
 }

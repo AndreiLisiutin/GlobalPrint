@@ -13,8 +13,19 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Off
         {
         }
 
+        /// <summary>
+        /// Latest user offer of some offer type.
+        /// </summary>
         public UserOffer LatestUserOffer { get; set; }
+
+        /// <summary>
+        /// Offer object with offer version, text, etc.
+        /// </summary>
         public Offer Offer { get; set; }
+
+        /// <summary>
+        /// Offer type (user offer, printer owner offer, etc).
+        /// </summary>
         public OfferType OfferType { get; set; }
 
         public bool HasUserOffer
@@ -39,6 +50,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Off
             }
         }
 
+        /// <summary>
+        /// String representation of user offer.
+        /// </summary>
         public string UserOfferString
         {
             get

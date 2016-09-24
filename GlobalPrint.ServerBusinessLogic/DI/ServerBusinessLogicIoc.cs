@@ -26,6 +26,7 @@ namespace GlobalPrint.ServerBusinessLogic.DI
         {
             // Units/Offer
             ioc.Kernel.Bind<IUserOfferUnit>().To<UserOfferUnit>().InTransientScope();
+            ioc.Kernel.Bind<IOfferUnit>().To<OfferUnit>().InTransientScope();
         }
     }
 }

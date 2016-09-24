@@ -1,4 +1,6 @@
-﻿using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
+﻿using GlobalPrint.ClientWeb.Models.OfferController;
+using GlobalPrint.Infrastructure.CommonUtils;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
@@ -13,12 +15,34 @@ namespace GlobalPrint.ClientWeb.Controllers
 {
     public class OfferController : BaseController
     {
-        [Inject]
         private IUserOfferUnit _userOfferUnit { get; set; }
+        private IOfferUnit _offerUnit { get; set; }
 
-        public OfferController(IUserOfferUnit userOfferUnit)
+        public OfferController(IUserOfferUnit userOfferUnit, IOfferUnit offerUnit)
         {
             _userOfferUnit = userOfferUnit;
+            _offerUnit = offerUnit;
+        }
+
+        /// <summary>
+        /// Show blank user offer on registration.
+        /// </summary>
+        /// <returns>Blank actual user offer.</returns>
+        // GET: /Offer/ActualUserOffer
+        [HttpGet]
+        public ActionResult ActualUserOffer()
+        {
+            Offer userOffer = _offerUnit.GetActualOfferByType(OfferTypeEnum.UserOffer);
+            Argument.NotNull(userOffer, "Не найдена актуальная оферта пользователя.");
+            Argument.NotNullOrWhiteSpace(userOffer.Text, "Текст оферты пользователя пуст.");
+
+            OfferViewModel offerModel = new OfferViewModel()
+            {
+                Title = userOffer.Name ?? "Договор оферты пользователя",
+                Paragraphs = userOffer.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None)
+            };
+
+            return View("Offer", offerModel);
         }
 
         /// <summary>
@@ -31,17 +55,21 @@ namespace GlobalPrint.ClientWeb.Controllers
         public ActionResult Offer(OfferTypeEnum offerTypeID)
         {
             UserOfferExtended userOffer = _userOfferUnit.GetLatestUserOfferByUserID(this.GetCurrentUserID(), offerTypeID);
-            List<string> offerParagraphs = new List<string>();
+
+            string[] offerParagraphs = null;
             string offerTitle = null;
             if (userOffer != null && userOffer.Offer != null && !string.IsNullOrWhiteSpace(userOffer.Offer.Text))
             {
                 offerTitle = userOffer.UserOfferString;
-                offerParagraphs = userOffer.Offer.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None).ToList();
+                offerParagraphs = userOffer.Offer.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
             }
-
-            ViewBag.OfferTitle = offerTitle;
-            ViewBag.OfferParagraphs = offerParagraphs;
-            return View(userOffer);
+            
+            OfferViewModel offerModel = new OfferViewModel()
+            {
+                Title = offerTitle,
+                Paragraphs = offerParagraphs
+            };
+            return View(offerModel);
         }
     }
 }

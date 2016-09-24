@@ -316,6 +316,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\FeedbackController\FeedbackViewModel.cs" />
+    <Compile Include="Models\OfferController\OfferViewModel.cs" />
     <Compile Include="Models\PrinterController\Printer_EditViewMoel.cs" />
     <Compile Include="Models\PrinterController\Printer_MyPrinters.cs" />
     <Compile Include="Models\PushNotifications\PushNotificationHub.cs" />

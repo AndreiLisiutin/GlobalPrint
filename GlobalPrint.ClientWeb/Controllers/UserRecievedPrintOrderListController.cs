@@ -59,7 +59,8 @@ namespace GlobalPrint.ClientWeb
         public ActionResult PrintOrder(int printOrderID, string secretCode)
         {
             PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-            var order = new PrinterUnit().GetPrintOrderByID(printOrderID);
+            PrintOrder order = printOrderUnit.GetPrintOrderByID(printOrderID);
+            
             if (order.SecretCode.ToUpper() != (secretCode ?? "").ToUpper())
             {
                 ModelState.AddModelError("", "Некорректный секретный код");
@@ -88,7 +89,10 @@ namespace GlobalPrint.ClientWeb
         [Authorize]
         public ActionResult DownloadOrder(int printOrderID)
         {
-            var order = new PrinterUnit().GetPrintOrderByID(printOrderID);
+            PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
+
+            PrintOrder order = printOrderUnit.GetPrintOrderByID(printOrderID);
+
             byte[] fileBytes = System.IO.File.ReadAllBytes(order.Document);
             string fileName = new FileInfo(order.Document).Name;
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);

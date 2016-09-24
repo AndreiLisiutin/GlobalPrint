@@ -56,5 +56,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offer
         /// </summary>
         [Column("created_on")]
         public DateTime CreatedOn { get; set; }
+
+        /// <summary>
+        /// Whether this offer with <see cref="OfferTypeID"/> is actial.
+        /// </summary>
+        [Column("is_actual")]
+        public bool IsActual { get; set; }
     }
 }
