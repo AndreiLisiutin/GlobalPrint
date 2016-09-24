@@ -1,5 +1,6 @@
 ﻿using GlobalPrint.ClientWeb.Models.PrinterController;
 using GlobalPrint.ClientWeb.Models.PushNotifications;
+using GlobalPrint.ClientWeb.Models.Stuff;
 using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Orders;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Printers;
@@ -122,6 +123,7 @@ namespace GlobalPrint.ClientWeb
         /// <returns></returns>
         [HttpGet]
         [Authorize]
+        [ImportModelState]
         public ActionResult MyPrinters()
         {
             int userID = this.GetCurrentUserID();
@@ -176,6 +178,7 @@ namespace GlobalPrint.ClientWeb
 
         [HttpPost]
         [Authorize]
+        [ExportModelState]
         public ActionResult Delete(int PrinterID)
         {
             try
@@ -187,7 +190,14 @@ namespace GlobalPrint.ClientWeb
                 ModelState.AddModelError("", ex.Message);
             }
 
-            return RedirectToAction("MyPrinters", "Printer");
+            if (Request.IsAjaxRequest())
+            {
+                return JavaScript("document.location.replace('" + Url.Action("MyPrinters", "Printer") + "');");
+            }
+            else
+            {
+                return RedirectToAction("MyPrinters", "Printer");
+            }            
         }
 
         [HttpPost]

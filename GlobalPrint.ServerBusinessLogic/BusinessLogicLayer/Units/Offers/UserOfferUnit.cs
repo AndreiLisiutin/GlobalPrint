@@ -1,4 +1,5 @@
 ﻿using GlobalPrint.Infrastructure.CommonUtils;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Offers;
@@ -12,7 +13,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers
     /// <summary>
     /// User offer business logic unit.
     /// </summary>
-    public class UserOfferUnit : BaseUnit
+    public class UserOfferUnit : BaseUnit, IUserOfferUnit
     {
         [DebuggerStepThrough]
         public UserOfferUnit()

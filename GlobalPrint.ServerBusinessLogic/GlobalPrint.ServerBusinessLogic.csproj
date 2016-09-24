@@ -107,6 +107,7 @@
     <Compile Include="DI\ServerBusinessLogicIoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BusinessLogicLayer\Utilities\SmsUtility.cs" />
+    <Compile Include="_IBusinessLogicLayer\Units\Offers\IUserOfferUnit.cs" />
     <Compile Include="_IDataAccessLayer\DataContext\IDataContext.cs" />
     <Compile Include="_IDataAccessLayer\DataContext\IDataContextFactory.cs" />
     <Compile Include="BusinessLogicLayer\Units\BaseUnit.cs" />

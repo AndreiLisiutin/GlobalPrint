@@ -227,9 +227,6 @@
     <Content Include="Resources\Images\printer_online.png" />
     <Content Include="Resources\Images\red_circle.ico" />
     <Content Include="Resources\Images\run-printer.png" />
-    <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.js" />
-    <Content Include="Resources\Libraries\ai\ai.0.15.0-build58334.min.js" />
-    <Content Include="Resources\Libraries\bootstrap-notify\bootstrap-notify.js" />
     <Content Include="Resources\Libraries\bootstrap-notify\bootstrap-notify.min.js" />
     <Content Include="Resources\Libraries\bootstrap.file-input\fileinput.js" />
     <Content Include="Resources\Libraries\clockpicker\.gitignore" />
@@ -267,6 +264,7 @@
     <Content Include="Resources\Libraries\clockpicker\test\assets\utils.js" />
     <Content Include="Resources\Libraries\clockpicker\test\suites\basic.js" />
     <Content Include="Resources\Libraries\clockpicker\test\suites\data-api.js" />
+    <Content Include="Resources\Libraries\jQuery\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Resources\Libraries\underscore.js\underscore.js" />
     <Content Include="Resources\Scripts\GlobalPrint.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Home\Index.js" />
@@ -279,46 +277,11 @@
     <Content Include="Resources\Scripts\GlobalPrint\Shared\PushNotifications.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\CommonUtils.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\Services.js" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\.gitignore" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\angularjs.html" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\basic-plus.html" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\basic.html" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\cors\postmessage.html" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\cors\result.html" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\css\demo-ie8.css" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\css\demo.css" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\css\jquery.fileupload-noscript.css" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\css\jquery.fileupload-ui-noscript.css" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\css\jquery.fileupload-ui.css" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\css\jquery.fileupload.css" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\css\style.css" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\Gruntfile.js" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\img\loading.gif" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\img\progressbar.gif" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\index.html" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\jquery-ui.html" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\app.js" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\cors\jquery.postmessage-transport.js" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\cors\jquery.xdr-transport.js" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\jquery.fileupload-angular.js" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\jquery.fileupload-audio.js" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\jquery.fileupload-image.js" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\jquery.fileupload-jquery-ui.js" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\jquery.fileupload-process.js" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\jquery.fileupload-ui.js" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\jquery.fileupload-validate.js" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\jquery.fileupload-video.js" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\jquery.fileupload.js" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\jquery.iframe-transport.js" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\main.js" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\vendor\jquery.ui.widget.js" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\gae-go\static\favicon.ico" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\gae-go\static\robots.txt" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\gae-python\static\favicon.ico" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\gae-python\static\robots.txt" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\php\files\.gitignore" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\test\index.html" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\test\test.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Shared\FileUpload.js" />
     <Content Include="Resources\Sounds\notification.mp3" />
     <Content Include="Resources\Stylesheets\shared\display-form.css" />
@@ -327,24 +290,6 @@
     <Content Include="Resources\Stylesheets\base.css" />
     <Content Include="Resources\Stylesheets\team\team.css" />
     <Content Include="Resources\Stylesheets\userAccount\user-account.css" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\.jshintrc" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\bower.json" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\CONTRIBUTING.md" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\package.json" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\README.md" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\gae-go\app.yaml" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\gae-go\app\main.go" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\gae-python\app.yaml" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\gae-python\main.py" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\php\docker-compose.yml" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\php\Dockerfile" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\php\files\.htaccess" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\php\index.php" />
-    <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\server\php\UploadHandler.php" />
-    <None Include="Resources\Libraries\jQuery\jquery-1.6.4-vsdoc.js" />
-    <Content Include="Resources\Libraries\jQuery\jquery-1.6.4.js" />
-    <Content Include="Resources\Libraries\jQuery\jquery-1.6.4.min.js" />
-    <Content Include="Resources\Libraries\signalR\jquery.signalR-2.2.1.js" />
     <Content Include="Resources\Libraries\signalR\jquery.signalR-2.2.1.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -377,6 +322,7 @@
     <Compile Include="Models\PushNotifications\UserIdProvider.cs" />
     <Compile Include="Models\SimpleMessage.cs" />
     <Compile Include="Models\Stuff\FloatModelBinder.cs" />
+    <Compile Include="Models\Stuff\ModelStateAttributes.cs" />
     <Compile Include="Models\Stuff\MultipleButtonAttribute.cs" />
     <Compile Include="Models\Auth\AccountViewModels.cs" />
     <Compile Include="Models\Auth\IdentityModels.cs" />
@@ -445,6 +391,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\" />
+    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GlobalPrint.Configuration\GlobalPrint.Configuration.csproj">

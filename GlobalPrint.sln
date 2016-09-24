@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalPrint.ClientWeb", "GlobalPrint.ClientWeb\GlobalPrint.ClientWeb.csproj", "{88D5E988-CC12-4C55-8ABB-1C2BB47CD948}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalPrint.Configuration", "GlobalPrint.Configuration\GlobalPrint.Configuration.csproj", "{15506CC4-98BA-4D8A-B2F9-B2E0F249D538}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalPrint.Infrastructure", "GlobalPrint.Infrastructure\GlobalPrint.Infrastructure.csproj", "{78CA21A0-7467-4504-A7F7-A3BCCF9F7083}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalPrint.Test", "GlobalPrint.Test\GlobalPrint.Test.csproj", "{B995FD0F-59E5-4EF2-B798-4C0F7274E6D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{78CA21A0-7467-4504-A7F7-A3BCCF9F7083}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78CA21A0-7467-4504-A7F7-A3BCCF9F7083}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78CA21A0-7467-4504-A7F7-A3BCCF9F7083}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B995FD0F-59E5-4EF2-B798-4C0F7274E6D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B995FD0F-59E5-4EF2-B798-4C0F7274E6D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B995FD0F-59E5-4EF2-B798-4C0F7274E6D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B995FD0F-59E5-4EF2-B798-4C0F7274E6D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

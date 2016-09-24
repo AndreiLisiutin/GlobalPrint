@@ -1,8 +1,10 @@
 ﻿using GlobalPrint.Infrastructure.DI;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Orders;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Printers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -22,6 +24,8 @@ namespace GlobalPrint.ServerBusinessLogic.DI
 
         private static void RegisterDependencies(BaseIoC ioc)
         {
+            // Units/Offer
+            ioc.Kernel.Bind<IUserOfferUnit>().To<UserOfferUnit>().InTransientScope();
         }
     }
 }

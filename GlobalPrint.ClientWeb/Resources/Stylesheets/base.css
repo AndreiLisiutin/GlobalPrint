@@ -74,6 +74,10 @@
 
 /* last table column for buttons */
 .table-col-buttons {
-    text-align:right;
-    max-width:40px !important;
+    text-align:center;
+    min-width:100px !important;
+}
+
+th {
+    text-align:center;
 }
