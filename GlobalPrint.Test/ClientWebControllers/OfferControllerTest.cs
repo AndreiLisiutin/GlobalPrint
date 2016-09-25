@@ -33,7 +33,7 @@ namespace GlobalPrint.Test.ClientWebControllers
             {
                 User = new User()
                 {
-                   Bik = 123456789,
+                   Bic = "123456789",
                    UserID = 1,
                    UserName = this.UserName
                 },

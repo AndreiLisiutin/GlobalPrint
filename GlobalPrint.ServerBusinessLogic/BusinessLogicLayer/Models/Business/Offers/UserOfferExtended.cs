@@ -123,7 +123,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Off
             {
                 if (User != null && Offer != null && !string.IsNullOrEmpty(Offer.Text))
                 {
-                    return Offer.Text.Replace("{bik}", "");
+                    return Offer.Text.Replace("{bik}", User.Bic);
                 }
                 return null;
             }

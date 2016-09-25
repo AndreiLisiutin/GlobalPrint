@@ -27,8 +27,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
         public string Email { get; set; }
         [Column("amount_of_money")]
         public decimal AmountOfMoney { get; set; }
-        [Column("bik")]
-        public int? Bik { get; set; }
+        [Column("bic")]
+        public string Bic { get; set; }
 
         [Column("phone")]
         public string PhoneNumber { get; set; }
