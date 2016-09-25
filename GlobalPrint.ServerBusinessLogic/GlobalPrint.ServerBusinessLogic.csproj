@@ -78,6 +78,11 @@
     <Compile Include="BusinessLogicLayer\Models\Domain\Offers\UserOffer.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Offers\Offer.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Orders\PrintOrderStatusEnum.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Domain\Payment\PaymentTransaction.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Domain\Payment\PaymentTransactionStatus.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Domain\Payment\PaymentActionStatus.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Domain\Payment\PaymentActionType.cs" />
+    <Compile Include="BusinessLogicLayer\Models\Domain\Payment\PaymentAction.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Printers\Printer.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Printers\PrinterSchedule.cs" />
     <Compile Include="BusinessLogicLayer\Models\Domain\Printers\PrinterService.cs" />
@@ -117,6 +122,11 @@
     <Compile Include="_IDataAccessLayer\Repository\Offers\IOfferRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Orders\IPrintOrderRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Orders\IPrintOrderStatusRepository.cs" />
+    <Compile Include="_IDataAccessLayer\Repository\Payment\IPaymentTransactionStatusRepository.cs" />
+    <Compile Include="_IDataAccessLayer\Repository\Payment\IPaymentTransactionRepository.cs" />
+    <Compile Include="_IDataAccessLayer\Repository\Payment\IPaymentActionTypeRepository.cs" />
+    <Compile Include="_IDataAccessLayer\Repository\Payment\IPaymentActionStatusRepository.cs" />
+    <Compile Include="_IDataAccessLayer\Repository\Payment\IPaymentActionRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Printers\IPrinterRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\IRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Printers\IPrinterScheduleRepository.cs" />

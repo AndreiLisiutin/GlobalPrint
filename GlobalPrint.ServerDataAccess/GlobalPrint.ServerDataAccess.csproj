@@ -71,6 +71,11 @@
     <Compile Include="DataAccessLayer\Repository\Offers\OfferRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\Orders\PrintOrderRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\Orders\PrintOrderStatusRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\Payment\PaymentActionRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\Payment\PaymentActionStatusRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\Payment\PaymentActionTypeRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\Payment\PaymentTransactionRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\Payment\PaymentTransactionStatusRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\Printers\PrinterRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\Printers\PrinterScheduleRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\Printers\PrinterServiceRepository.cs" />
