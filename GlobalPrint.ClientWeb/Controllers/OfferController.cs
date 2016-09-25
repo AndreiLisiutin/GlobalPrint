@@ -58,10 +58,10 @@ namespace GlobalPrint.ClientWeb.Controllers
 
             string[] offerParagraphs = null;
             string offerTitle = null;
-            if (userOffer != null && userOffer.Offer != null && !string.IsNullOrWhiteSpace(userOffer.Offer.Text))
+            if (userOffer != null && userOffer.Offer != null && !string.IsNullOrWhiteSpace(userOffer.UserOfferText))
             {
-                offerTitle = userOffer.UserOfferString;
-                offerParagraphs = userOffer.Offer.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+                offerTitle = userOffer.UserOfferTitle;
+                offerParagraphs = userOffer.UserOfferText.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
             }
             
             OfferViewModel offerModel = new OfferViewModel()

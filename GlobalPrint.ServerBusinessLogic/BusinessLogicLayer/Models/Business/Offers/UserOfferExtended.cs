@@ -1,4 +1,6 @@
 ﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
+using System;
 using System.Diagnostics;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Offers
@@ -12,6 +14,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Off
         public UserOfferExtended()
         {
         }
+
+        /// <summary>
+        /// Current user.
+        /// </summary>
+        public User User { get; set; }
 
         /// <summary>
         /// Latest user offer of some offer type.
@@ -51,9 +58,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Off
         }
 
         /// <summary>
-        /// String representation of user offer.
+        /// String representation of user offer title.
         /// </summary>
-        public string UserOfferString
+        public string UserOfferTitle
         {
             get
             {
@@ -104,6 +111,21 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Off
                     offerType,
                     userOfferCharacteristics
                 ).Trim();
+            }
+        }
+
+        /// <summary>
+        /// Text of user offer with user bik number . 
+        /// </summary>
+        public string UserOfferText
+        {
+            get
+            {
+                if (User != null && Offer != null && !string.IsNullOrEmpty(Offer.Text))
+                {
+                    return Offer.Text.Replace("{bik}", "");
+                }
+                return null;
             }
         }
     }

@@ -7,10 +7,8 @@ using Moq;
 using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Offers;
 using System.Collections.Generic;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Threading;
-using GlobalPrint.ClientWeb;
+using GlobalPrint.ClientWeb.Models.OfferController;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 
 namespace GlobalPrint.Test.ClientWebControllers
 {
@@ -26,12 +24,19 @@ namespace GlobalPrint.Test.ClientWebControllers
         [TestMethod]
         public void OfferViewSimpleTest()
         {
-            var mock = new Mock<IUserOfferUnit>();
+            var userOfferUnitMock = new Mock<IUserOfferUnit>();
+            var offerUnitMock = new Mock<IOfferUnit>();
 
-            #region Expected object
+            #region Expected user offer
 
-            var expectedOffer = new UserOfferExtended()
+            var expectedUserOffer = new UserOfferExtended()
             {
+                User = new User()
+                {
+                   Bik = 123456789,
+                   UserID = 1,
+                   UserName = this.UserName
+                },
                 LatestUserOffer = new UserOffer()
                 {
                     ID = 1,
@@ -43,7 +48,7 @@ namespace GlobalPrint.Test.ClientWebControllers
                 Offer = new Offer()
                 {
                     Name = "Offer name",
-                    Text = "Bla bla bla." + Environment.NewLine + "Bla bla bla.",
+                    Text = "Bla bla bla." + Environment.NewLine + "Bla bla bla. Bik is {bik}.",
                     OfferTypeID = 1,
                     CreatedOn = DateTime.Now,
                     ID = 1,
@@ -58,16 +63,20 @@ namespace GlobalPrint.Test.ClientWebControllers
 
             #endregion
 
-            mock.Setup(a => a.GetLatestUserOfferByUserID(It.IsAny<int>(), It.IsAny<OfferTypeEnum>()))
-                .Returns(expectedOffer);
+            userOfferUnitMock.Setup(a => a.GetLatestUserOfferByUserID(It.IsAny<int>(), It.IsAny<OfferTypeEnum>()))
+                .Returns(expectedUserOffer);
 
-            OfferController controller = GetController<OfferController>(new OfferController(mock.Object));
+            OfferController controller = GetController<OfferController>(new OfferController(userOfferUnitMock.Object, offerUnitMock.Object));
 
             ViewResult result = controller.Offer(OfferTypeEnum.UserOffer) as ViewResult;
 
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.ViewBag.OfferTitle == "Offer name № 123 от " + DateTime.Now.ToString("dd.MM.yyyy"));
-            CollectionAssert.AreEqual(result.ViewBag.OfferParagraphs, new List<string>() { "Bla bla bla.", "Bla bla bla." });
+            Assert.IsInstanceOfType(result.Model, typeof(OfferViewModel));
+            Assert.IsNotNull(result.Model);
+
+            OfferViewModel model = result.Model as OfferViewModel;
+            Assert.IsTrue(model.Title == "Offer name № 123 от " + DateTime.Now.ToString("dd.MM.yyyy"));
+            CollectionAssert.AreEqual(model.Paragraphs, new List<string>() { "Bla bla bla.", "Bla bla bla. Bik is 123456789." });
         }
     }
 }

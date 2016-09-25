@@ -45,11 +45,15 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers
         {
             using (IDataContext context = this.Context())
             {
-                IOfferRepository offerRepo = this.Repository<IOfferRepository>(context);
-
-                return offerRepo.Get(e => e.IsActual && e.OfferTypeID == (int)offerTypeID)
-                    .FirstOrDefault();
+                return this.GetActualOfferByType(offerTypeID, context);
             }
+        }
+        public Offer GetActualOfferByType(OfferTypeEnum offerTypeID, IDataContext context)
+        {
+            IOfferRepository offerRepo = this.Repository<IOfferRepository>(context);
+
+            return offerRepo.Get(e => e.IsActual && e.OfferTypeID == (int)offerTypeID)
+                .FirstOrDefault();
         }
     }
 }

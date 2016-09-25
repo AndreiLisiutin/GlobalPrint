@@ -51,7 +51,7 @@
                 <label class="col-sm-1 control-label text-left">Оферта</label>
                 <div class="col-sm-11">
                     <div class="input-group">
-                        @Html.TextBox("UserOfferString", Model.LatestPrinterOwnerOffer.UserOfferString, new { @class = "form-control", @readonly = "true", @placeholder = "Договор оферты владельца принтера" })
+                        @Html.TextBox("UserOfferTitle", Model.LatestPrinterOwnerOffer.UserOfferTitle, new { @class = "form-control", @readonly = "true", @placeholder = "Договор оферты владельца принтера" })
                         <span class="input-group-btn">
                             <a href="@Url.Action("Offer", "Offer", new { @offerTypeID = OfferTypeEnum.PrinterOwnerOffer })" target="_blank" title="Открыть договор оферты" class="btn btn-default">
                                 <span class="glyphicon glyphicon-search" aria-hidden="true"></span>

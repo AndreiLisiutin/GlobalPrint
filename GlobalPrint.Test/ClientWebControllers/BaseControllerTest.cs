@@ -13,7 +13,7 @@ namespace GlobalPrint.Test.ClientWebControllers
 {
     public class BaseControllerTest
     {
-        protected string UserName = "sergei.lisiutin@gmail.com";
+        protected string UserName = "Bob Tester";
         
         protected void UpdateControllerContext(BaseController controller)
         {

@@ -11,7 +11,7 @@ namespace GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers
 {
     public interface IUserOfferUnit
     {
-        UserOfferExtended GetLatestUserOfferByUserID(int userID, OfferTypeEnum offerType = OfferTypeEnum.UserOffer);
+        UserOfferExtended GetLatestUserOfferByUserID(int userID, OfferTypeEnum offerType);
         UserOfferExtended GetLatestUserOfferByUserID(int userID, OfferTypeEnum offerType, IDataContext context);
         UserOffer SaveUserOffer(UserOffer model);
         UserOffer CreateUserOffer(UserOffer model);

@@ -2,6 +2,7 @@
 using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Offers;
+using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
 using System;
@@ -40,6 +41,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers
             IUserOfferRepository userOfferRepo = this.Repository<IUserOfferRepository>(context);
             IOfferRepository offerRepo = this.Repository<IOfferRepository>(context);
             IOfferTypeRepository offerTypeRepo = this.Repository<IOfferTypeRepository>(context);
+            IUserRepository userRepo = this.Repository<IUserRepository>(context);
             OfferUnit offerUnit = new OfferUnit();
 
             UserOfferExtended userOffer = null;
@@ -50,8 +52,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers
                     from _userOffer in userOfferRepo.Get(e => e.UserID == userID)
                     join _offer in offerRepo.Get(e => e.OfferTypeID == (int)offerType) on _userOffer.OfferID equals _offer.ID
                     join _offerType in offerTypeRepo.Get(e => e.ID == (int)offerType) on _offer.OfferTypeID equals _offerType.ID
+                    join _user in userRepo.Get(e => e.ID == userID) on _userOffer.UserID equals _user.ID
                     orderby _userOffer.OfferDate descending
-                    select new UserOfferExtended() { Offer = _offer, LatestUserOffer = _userOffer, OfferType = _offerType }
+                    select new UserOfferExtended() { Offer = _offer, LatestUserOffer = _userOffer, OfferType = _offerType, User = _user }
                 ).FirstOrDefault();
             }
 
@@ -60,7 +63,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers
             {
                 userOffer = new UserOfferExtended()
                 {
-                    Offer = offerUnit.GetLatestOfferByType(offerType, context),
+                    User = userRepo.GetByID(userID),
+                    Offer = offerUnit.GetActualOfferByType(offerType, context),
                     OfferType = offerTypeRepo.GetByID((int)offerType)
                 };
             }

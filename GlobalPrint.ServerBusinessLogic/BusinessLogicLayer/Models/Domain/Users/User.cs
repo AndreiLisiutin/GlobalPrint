@@ -27,9 +27,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users
         public string Email { get; set; }
         [Column("amount_of_money")]
         public decimal AmountOfMoney { get; set; }
+        [Column("bik")]
+        public int? Bik { get; set; }
 
         [Column("phone")]
-        [DataType(DataType.PhoneNumber, ErrorMessage = "Телефонный номер введен некорректно")]
         public string PhoneNumber { get; set; }
         [Column("password_hash")]
         public string PasswordHash { get; set; }
