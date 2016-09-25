@@ -4,21 +4,21 @@ using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Orders;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Printers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Orders;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Printers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
+using GlobalPrint.ServerBusinessLogic.Models.Business.Orders;
+using GlobalPrint.ServerBusinessLogic.Models.Business.Printers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 {
@@ -384,7 +384,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                     context.Save();
                     context.CommitTransaction();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     context.RollbackTransaction();
                     throw;
@@ -445,7 +445,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                     context.Save();
                     context.CommitTransaction();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     context.RollbackTransaction();
                     throw;

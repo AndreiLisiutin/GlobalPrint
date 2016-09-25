@@ -113,7 +113,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities
                         //}
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return;
                 }
@@ -168,7 +168,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities
 
                 string response = this._ExecuteWebRequest(this._parameters.Host, parameters);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return;
             }
@@ -210,7 +210,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities
                     return response;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }

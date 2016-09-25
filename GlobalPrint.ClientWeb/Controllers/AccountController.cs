@@ -1,20 +1,13 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
+﻿using GlobalPrint.Infrastructure.LogUtility;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
-using GlobalPrint.ClientWeb.Models;
-using GlobalPrint.Infrastructure.LogUtility;
-using GlobalPrint.Configuration.DI;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
+using System;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -63,6 +56,7 @@ namespace GlobalPrint.ClientWeb
 
         [HttpPost]
         [AllowAnonymous]
+        [Obsolete]
         public async Task<ActionResult> LoginFromPhone(LoginViewModel model)
         {
             var smsUtility = new SmsUtility(this.GetSmsParams());
@@ -81,6 +75,7 @@ namespace GlobalPrint.ClientWeb
 
         [HttpPost]
         [AllowAnonymous]
+        [Obsolete]
         public ActionResult RegisterFromPhone(RegisterViewModel model)
         {
             var smsUtility = new SmsUtility(this.GetSmsParams());
@@ -97,6 +92,7 @@ namespace GlobalPrint.ClientWeb
             return RedirectToAction("VerifyPhoneNumber", new { /*PhoneNumber = phoneNumber, */FromRegistration = true });
         }
 
+        [Obsolete]
         public ActionResult VerifyPhoneNumber(string phoneNumber, bool FromRegistration)
         {
             ViewBag.FromRegistration = FromRegistration;
@@ -106,6 +102,7 @@ namespace GlobalPrint.ClientWeb
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [Obsolete]
         public async Task<ActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model, bool fromRegistration)
         {
             if (!ModelState.IsValid)

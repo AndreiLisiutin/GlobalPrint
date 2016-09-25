@@ -1,6 +1,6 @@
 ﻿using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Offers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
+using GlobalPrint.ServerBusinessLogic.Models.Business.Offers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

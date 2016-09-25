@@ -1,5 +1,5 @@
 ﻿
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 
 namespace GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users
 {

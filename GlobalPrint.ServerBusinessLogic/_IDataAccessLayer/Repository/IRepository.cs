@@ -1,4 +1,4 @@
-﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain;
+﻿using GlobalPrint.ServerBusinessLogic.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;

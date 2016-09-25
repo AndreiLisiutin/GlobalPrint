@@ -1,7 +1,5 @@
-﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Printers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
-using System;
+﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
+using GlobalPrint.ServerBusinessLogic.Models.Business.Printers;
 using System.Collections.Generic;
 using System.Web.Mvc;
 

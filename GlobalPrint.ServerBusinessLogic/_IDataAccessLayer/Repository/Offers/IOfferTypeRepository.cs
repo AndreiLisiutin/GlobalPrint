@@ -1,4 +1,4 @@
-﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
+﻿using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
 
 namespace GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Offers
 {

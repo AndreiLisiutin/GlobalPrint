@@ -1,7 +1,7 @@
 ﻿using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Offers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
 using System.Diagnostics;
 using System.Linq;
 

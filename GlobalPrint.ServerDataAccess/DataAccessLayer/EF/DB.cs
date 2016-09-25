@@ -1,14 +1,10 @@
-﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
-using System;
+﻿using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GlobalPrint.ServerDataAccess.EF
 {

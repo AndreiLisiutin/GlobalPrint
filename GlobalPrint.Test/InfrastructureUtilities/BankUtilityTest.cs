@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using GlobalPrint.Configuration.DI;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GlobalPrint.Infrastructure.BankUtility;
 
 namespace GlobalPrint.Test.InfrastructureUtilities

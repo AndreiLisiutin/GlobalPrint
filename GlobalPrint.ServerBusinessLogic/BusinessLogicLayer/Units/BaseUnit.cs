@@ -70,7 +70,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units
             {
                 return IoC.Instance.Resolve<T>(IoC.Argument("context", context));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new InvalidOperationException(string.Format(
                     "Service {0} doesn't support constructor with 1 parameter of kind \"IRepository(IDataContext context)\".",

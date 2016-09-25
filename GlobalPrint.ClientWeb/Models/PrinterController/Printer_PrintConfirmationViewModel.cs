@@ -1,10 +1,5 @@
-﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Orders;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using GlobalPrint.ServerBusinessLogic.Models.Business.Orders;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders;
 
 namespace GlobalPrint.ClientWeb
 {

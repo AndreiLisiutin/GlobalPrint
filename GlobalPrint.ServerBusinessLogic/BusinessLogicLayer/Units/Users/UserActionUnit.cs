@@ -1,7 +1,7 @@
 ﻿using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
