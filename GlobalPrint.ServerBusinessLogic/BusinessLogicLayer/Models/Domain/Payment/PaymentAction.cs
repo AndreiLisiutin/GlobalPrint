@@ -37,6 +37,12 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Payme
         public int PaymentTransactionID { get; set; }
 
         /// <summary>
+        /// Amount of money to increase (if positive) or decrease (if negative) user's amount of money.
+        /// </summary>
+        [Column("amount_of_money")]
+        public decimal AmountOfMoney { get; set; }
+
+        /// <summary>
         /// Receiver of money or payment person.
         /// Reference to <see cref="Users.User.ID"/>.
         /// </summary>
@@ -67,7 +73,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Payme
         /// Comment.
         /// </summary>
         [Column("comment")]
-        public int Comment { get; set; }
+        public string Comment { get; set; }
 
         /// <summary>
         /// Start date.
