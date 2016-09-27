@@ -81,3 +81,7 @@
 th {
     text-align:center;
 }
+
+.img-centred {
+    margin: 0 auto;
+}

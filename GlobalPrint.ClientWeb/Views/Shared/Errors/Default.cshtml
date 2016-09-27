@@ -1,0 +1,27 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+@{
+    ViewBag.Title = "Ошибка";
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+<div class="container">
+    <div class="row text-center">
+        <h1>Кажется, что-то отвалилось.</h1>
+        <img src="~/Resources/Images/Errors/default-error-pony.png" class="img-responsive img-centred" style="height:200px;" alt="Пони грустит" />
+        <br/>
+        <p>
+            Либо у нас что-то не работает, либо сервер сильно перегружен.
+        </p>
+        <p>
+            Если Вы увидите это сообщение несколько раз подряд, то напишите на<br> <a href=mailto:sup.globalprint.online@gmail.com>sup.globalprint.online@gmail.com</a>, и сообщите все подробности.
+        </p>
+        <p>
+            Пока что попробуйте открыть одну из этих ссылок, вдруг заработает...
+        </p>
+        @Html.ActionLink("Главная страница", "Index", "Home")
+        &nbsp;|&nbsp;
+        @Html.ActionLink("Обратная связь", "Feedback", "Feedback")
+        &nbsp;|&nbsp;
+        @Html.ActionLink("О проекте", "About", "About")
+        &nbsp;
+    </div>
+</div>

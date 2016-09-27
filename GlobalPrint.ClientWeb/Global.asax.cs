@@ -1,4 +1,5 @@
-﻿using GlobalPrint.Configuration.DI;
+﻿using GlobalPrint.ClientWeb.App_Start;
+using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.LogUtility;
 using Microsoft.AspNet.SignalR;
 using Ninject;
@@ -23,9 +24,9 @@ namespace GlobalPrint.ClientWeb
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             ModelBinders.Binders.Add(typeof(float?), new FloatModelBinder());
             ModelBinders.Binders.Add(typeof(float), new FloatModelBinder());
-            
             _logUtility.Info("Application Start");
         }
 

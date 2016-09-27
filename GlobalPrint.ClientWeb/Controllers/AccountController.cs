@@ -1,4 +1,5 @@
-﻿using GlobalPrint.Infrastructure.LogUtility;
+﻿using GlobalPrint.ClientWeb.App_Start;
+using GlobalPrint.Infrastructure.LogUtility;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 using Microsoft.AspNet.Identity;

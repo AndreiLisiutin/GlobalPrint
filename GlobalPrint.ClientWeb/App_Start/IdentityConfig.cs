@@ -10,7 +10,7 @@ using System.Net.Mail;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace GlobalPrint.ClientWeb
+namespace GlobalPrint.ClientWeb.App_Start
 {
     // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
     public class ApplicationUserManager : UserManager<ApplicationUser, int>

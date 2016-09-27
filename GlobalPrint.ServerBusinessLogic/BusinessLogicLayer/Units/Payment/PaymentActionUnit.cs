@@ -13,6 +13,9 @@ using System.Linq;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
 {
+    /// <summary>
+    /// Unit about payment actions and transactions. 
+    /// </summary>
     public class PaymentActionUnit : BaseUnit
     {
         [DebuggerStepThrough]
@@ -21,6 +24,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
         {
         }
 
+        #region Fill up user's account balance
+
+        /// <summary> Initialize action of filling up user's account balance.
+        /// </summary>
+        /// <param name="userID">Identifier of the user.</param>
+        /// <param name="amountOfMoney">Amount of money that user will receive.</param>
+        /// <param name="externalIdentifier">External payment system's identifier for the transaction.</param>
+        /// <returns>Payment action entity.</returns>
         public PaymentAction InitializeFillUpBalance(int userID, decimal amountOfMoney, string externalIdentifier)
         {
             using (IDataContext context = this.Context())
@@ -42,6 +53,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                 try
                 {
                     transactionRepo.Insert(transaction);
+                    context.Save();
                     PaymentAction action = new PaymentAction()
                     {
                         ID = 0,
@@ -52,10 +64,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                         PaymentActionTypeID = (int)PaymentActionTypeEnum.BalanceRefill,
                         PaymentTransactionID = transaction.ID,
                         StartedOn = DateTime.Now,
-                        UserID = userID
+                        UserID = userID,
+                        AmountOfMoney = amountOfMoney
                     };
                     actionRepo.Insert(action);
-
+                    context.Save();
                     context.CommitTransaction();
                     return action;
                 }
@@ -67,6 +80,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
             }
         }
 
+        /// <summary> Confirm the action of filling up user's account balance.
+        /// </summary>
+        /// <param name="paymentTransactionID">Identifier of payment transaction.</param>
         public void CommitFillUpBalance(int paymentTransactionID)
         {
             using (IDataContext context = this.Context())
@@ -83,6 +99,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                 try
                 {
                     this._CommitTransaction(paymentTransactionID, context);
+                    context.Save();
                     context.CommitTransaction();
                 }
                 catch (Exception ex)
@@ -93,6 +110,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
             }
         }
 
+        /// <summary> Abort the action of filling up user's account balance.
+        /// </summary>
+        /// <param name="paymentTransactionID">Identifier of payment transaction.</param>
         public void RollbackFillUpBalance(int paymentTransactionID)
         {
             using (IDataContext context = this.Context())
@@ -109,6 +129,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                 try
                 {
                     this._RollBackTransaction(paymentTransactionID, context);
+                    context.Save();
                     context.CommitTransaction();
                 }
                 catch (Exception ex)
@@ -118,9 +139,17 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                 }
             }
         }
+        
+        #endregion Fill up user's account balance
 
-
-
+        /// <summary>
+        /// Roll back whole payment transaction. If there are already executed actions, roll back them logically. 
+        /// It means that not only payment_action entities will change their statuses, 
+        /// but also logic of money exchange will be AUTOMATICALLY rolled back (users will loose money).
+        /// Requires transaction to be opened.
+        /// </summary>
+        /// <param name="paymentTransactionID">Identifier of payment transaction entity.</param>
+        /// <param name="context">DB context. Requires transaction to be opened.</param>
         private void _RollBackTransaction(int paymentTransactionID, IDataContext context)
         {
             Argument.Require(context.IsTransactionAlive(), $"Попытка откатить денежную транзакцию без физической транзакции БД (ID={paymentTransactionID}).");
@@ -129,6 +158,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
             IPaymentTransactionRepository transactionRepo = this.Repository<IPaymentTransactionRepository>(context);
             IPaymentActionRepository actionRepo = this.Repository<IPaymentActionRepository>(context);
 
+            //transaction must be in the status of "In progress"
             PaymentTransaction transaction = transactionRepo.GetByID(paymentTransactionID);
             Argument.NotNull(transaction, $"Payment transaction (ID={paymentTransactionID}) not found.");
             Argument.Require(transaction.PaymentTransactionStatusID == (int)PaymentTransactionStatusEnum.InProgress,
@@ -159,6 +189,15 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                 actionRepo.Update(action);
             }
         }
+
+        /// <summary>
+        /// Commit whole payment transaction. If there are not already executed actions, execute them logically. 
+        /// It means that not only payment_action entities will change their statuses, 
+        /// but also logic of money exchange will be AUTOMATICALLY performed (users will receive money).
+        /// Requires transaction to be opened.
+        /// </summary>
+        /// <param name="paymentTransactionID">Identifier of payment transaction entity.</param>
+        /// <param name="context">DB context. Requires transaction to be opened.</param>
         private void _CommitTransaction(int paymentTransactionID, IDataContext context)
         {
             Argument.Require(context.IsTransactionAlive(), $"Попытка подтвердить денежную транзакцию без физической транзакции БД (ID={paymentTransactionID}).");
@@ -167,6 +206,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
             IPaymentTransactionRepository transactionRepo = this.Repository<IPaymentTransactionRepository>(context);
             IPaymentActionRepository actionRepo = this.Repository<IPaymentActionRepository>(context);
 
+            //transaction must be in the status of "In progress"
             PaymentTransaction transaction = transactionRepo.GetByID(paymentTransactionID);
             Argument.NotNull(transaction, $"Payment transaction (ID={paymentTransactionID}) not found.");
             Argument.Require(transaction.PaymentTransactionStatusID == (int)PaymentTransactionStatusEnum.InProgress,

@@ -219,6 +219,7 @@
     <Content Include="Resources\Documents\TeamPhoto\Viktor.jpg" />
     <Content Include="Resources\Images\add-printer-button.png" />
     <Content Include="Resources\Images\closest_printer.png" />
+    <Content Include="Resources\Images\Errors\default-error-pony.png" />
     <Content Include="Resources\Images\geolocation.png" />
     <Content Include="Resources\Images\green_circle.ico" />
     <Content Include="Resources\Images\my_printers.png" />
@@ -294,10 +295,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Attributes\BaseErrorHandleAttribute.cs" />
+    <Compile Include="Controllers\_TestController.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\OfferController.cs" />
@@ -312,6 +316,7 @@
     <Compile Include="Controllers\PrinterController.cs" />
     <Compile Include="DI\NinjectDependencyResolver.cs" />
     <Compile Include="DI\SignalRIoC.cs" />
+    <Compile Include="Attributes\AuthorizeByUrlAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -382,6 +387,7 @@
     <Content Include="Views\UserPrintInfo\_UserRecievedPrintOrder.cshtml" />
     <Content Include="Views\Offer\Offer.cshtml" />
     <Content Include="Views\UserPrintInfo\_UserBalance.cshtml" />
+    <Content Include="Views\Shared\Errors\Default.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -392,7 +398,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\" />
-    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GlobalPrint.Configuration\GlobalPrint.Configuration.csproj">

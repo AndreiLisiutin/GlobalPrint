@@ -8,8 +8,8 @@ using GlobalPrint.ClientWeb;
 using GlobalPrint.ClientWeb.Models.PushNotifications;
 using Microsoft.AspNet.SignalR;
 
-[assembly: OwinStartup(typeof(GlobalPrint.ClientWeb.Startup))]
-namespace GlobalPrint.ClientWeb
+[assembly: OwinStartup(typeof(GlobalPrint.ClientWeb.App_Start.Startup))]
+namespace GlobalPrint.ClientWeb.App_Start
 {
     public class Startup
     {
