@@ -1,11 +1,7 @@
-﻿using System.Data.Entity;
+﻿using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Data.Entity.ModelConfiguration.Conventions;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 
 namespace GlobalPrint.ClientWeb
 {

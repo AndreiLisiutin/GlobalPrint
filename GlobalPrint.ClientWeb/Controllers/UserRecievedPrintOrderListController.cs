@@ -1,20 +1,11 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using System.IO;
-using System.Collections.Generic;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders;
+﻿using GlobalPrint.Configuration.DI;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Orders;
-using GlobalPrint.Configuration.DI;
+using GlobalPrint.ServerBusinessLogic.Models.Business.Orders;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders;
+using Microsoft.AspNet.Identity;
+using System.Collections.Generic;
+using System.IO;
+using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb
 {

@@ -1,5 +1,5 @@
 ﻿using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Payment;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Payment;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext;
 
 namespace GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Payment

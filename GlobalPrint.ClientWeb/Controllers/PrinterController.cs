@@ -1,23 +1,14 @@
 ﻿using GlobalPrint.ClientWeb.Models.PrinterController;
-using GlobalPrint.ClientWeb.Models.PushNotifications;
 using GlobalPrint.ClientWeb.Models.Stuff;
 using GlobalPrint.Infrastructure.CommonUtils;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Orders;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Printers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Orders;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
-using iTextSharp.text.pdf;
-using Microsoft.AspNet.Identity;
+using GlobalPrint.ServerBusinessLogic.Models.Business.Printers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb

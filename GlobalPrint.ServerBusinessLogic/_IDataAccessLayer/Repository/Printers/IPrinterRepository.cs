@@ -1,5 +1,4 @@
-﻿using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers;
+﻿using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
 
 namespace GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Printers
 {

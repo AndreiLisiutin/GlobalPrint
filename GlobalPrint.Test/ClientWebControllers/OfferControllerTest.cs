@@ -1,14 +1,14 @@
-﻿using System;
-using System.Web.Mvc;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using GlobalPrint.ClientWeb.Controllers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Offers;
-using Moq;
-using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Offers;
-using System.Collections.Generic;
+﻿using GlobalPrint.ClientWeb.Controllers;
 using GlobalPrint.ClientWeb.Models.OfferController;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
+using GlobalPrint.ServerBusinessLogic.Models.Business.Offers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace GlobalPrint.Test.ClientWebControllers
 {
@@ -33,7 +33,7 @@ namespace GlobalPrint.Test.ClientWebControllers
             {
                 User = new User()
                 {
-                   Bik = 123456789,
+                   Bic = "123456789",
                    UserID = 1,
                    UserName = this.UserName
                 },

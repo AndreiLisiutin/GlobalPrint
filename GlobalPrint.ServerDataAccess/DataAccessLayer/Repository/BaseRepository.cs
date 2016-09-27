@@ -1,4 +1,5 @@
 ﻿using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository;
+using GlobalPrint.ServerBusinessLogic.Models.Domain;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace GlobalPrint.ServerDataAccess.DataAccessLayer.Repository
     /// </summary>
     /// <typeparam name="T">Тип репозитория</typeparam>
     public class BaseRepository<T> : IRepository<T>
-        where T : class, ServerBusinessLogic.BusinessLogicLayer.Models.Domain.IDomainModel
+        where T : class, IDomainModel
     {
         private readonly DbConnectionContext _context;
         private readonly Lazy<DbSet<T>> _entities;

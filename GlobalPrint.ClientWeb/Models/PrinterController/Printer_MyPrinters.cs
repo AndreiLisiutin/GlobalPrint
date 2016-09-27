@@ -1,9 +1,6 @@
-﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Offers;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers;
-using System;
+﻿using GlobalPrint.ServerBusinessLogic.Models.Business.Offers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace GlobalPrint.ClientWeb.Models.PrinterController
 {

@@ -1,17 +1,9 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Users;
-using GlobalPrint.Configuration.DI;
+﻿using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.LogUtility.Robokassa;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Business.Users;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
+using GlobalPrint.ServerBusinessLogic.Models.Business.Users;
+using System;
+using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb
 {

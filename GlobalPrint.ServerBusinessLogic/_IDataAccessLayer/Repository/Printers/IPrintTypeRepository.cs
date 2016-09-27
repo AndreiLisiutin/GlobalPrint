@@ -1,4 +1,4 @@
-﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Printers;
+﻿using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
