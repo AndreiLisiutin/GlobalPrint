@@ -1,4 +1,5 @@
 ﻿using GlobalPrint.ClientWeb.App_Start;
+using GlobalPrint.ClientWeb.Binders;
 using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.LogUtility;
 using Microsoft.AspNet.SignalR;
@@ -14,12 +15,12 @@ namespace GlobalPrint.ClientWeb
         private ILogger _logUtility { get; set; }
 
         public MvcApplication()
-            :base()
+            : base()
         {
             ILoggerFactory loggerFactory = IoC.Instance.Resolve<ILoggerFactory>();
             _logUtility = loggerFactory.GetLogger<MvcApplication>();
         }
-                        
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -27,6 +28,8 @@ namespace GlobalPrint.ClientWeb
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             ModelBinders.Binders.Add(typeof(float?), new FloatModelBinder());
             ModelBinders.Binders.Add(typeof(float), new FloatModelBinder());
+            ControllerBuilder.Current.SetControllerFactory(new DefaultControllerFactory(new LocalizedControllerActivator()));
+
             _logUtility.Info("Application Start");
         }
 
