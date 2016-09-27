@@ -334,9 +334,6 @@
     <Compile Include="Models\PushNotifications\PushNotificationHub.cs" />
     <Compile Include="Models\PushNotifications\UserIdProvider.cs" />
     <Compile Include="Models\SimpleMessage.cs" />
-    <Compile Include="Models\Stuff\FloatModelBinder.cs" />
-    <Compile Include="Models\Stuff\ModelStateAttributes.cs" />
-    <Compile Include="Models\Stuff\MultipleButtonAttribute.cs" />
     <Compile Include="Models\Auth\AccountViewModels.cs" />
     <Compile Include="Models\Auth\IdentityModels.cs" />
     <Compile Include="Models\Auth\IdentityUser.cs" />
