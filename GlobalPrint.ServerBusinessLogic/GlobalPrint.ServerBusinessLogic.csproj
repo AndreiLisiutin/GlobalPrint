@@ -63,6 +63,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessLogicLayer\Units\BaseUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Offers\OfferTypeUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Offers\OfferUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Offers\UserOfferUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Orders\PrintOrderUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Payment\PaymentActionUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Printers\PrinterUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Printers\PrintServicesUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Users\UserActionUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Users\UserUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Utilities\SmsUtility.cs" />
     <Compile Include="Models\Business\Offers\UserOfferExtended.cs" />
     <Compile Include="Models\Business\Orders\NewOrder.cs" />
     <Compile Include="Models\Business\Printers\PrinterFullInfoModel.cs" />
@@ -81,9 +92,9 @@
     <Compile Include="Models\Domain\Payment\PaymentTransaction.cs" />
     <Compile Include="Models\Domain\Payment\PaymentTransactionStatus.cs" />
     <Compile Include="Models\Domain\Payment\PaymentActionStatus.cs" />
-    <Compile Include="BusinessLogicLayer\Models\Domain\Payment\PaymentTransactionStatusEnum.cs" />
-    <Compile Include="BusinessLogicLayer\Models\Domain\Payment\PaymentActionStatusEnum.cs" />
-    <Compile Include="BusinessLogicLayer\Models\Domain\Payment\PaymentActionTypeEnum.cs" />
+    <Compile Include="Models\Domain\Payment\PaymentTransactionStatusEnum.cs" />
+    <Compile Include="Models\Domain\Payment\PaymentActionStatusEnum.cs" />
+    <Compile Include="Models\Domain\Payment\PaymentActionTypeEnum.cs" />
     <Compile Include="Models\Domain\Payment\PaymentActionType.cs" />
     <Compile Include="Models\Domain\Payment\PaymentAction.cs" />
     <Compile Include="Models\Domain\Printers\Printer.cs" />
@@ -101,26 +112,15 @@
     <Compile Include="Models\Domain\Users\UserActionLog.cs" />
     <Compile Include="Models\Domain\Users\UserActionType.cs" />
     <Compile Include="Models\Domain\Users\UserRole.cs" />
-    <Compile Include="BusinessLogicLayer\Units\Offers\OfferTypeUnit.cs" />
-    <Compile Include="BusinessLogicLayer\Units\Offers\OfferUnit.cs" />
-    <Compile Include="BusinessLogicLayer\Units\Offers\UserOfferUnit.cs" />
-    <Compile Include="BusinessLogicLayer\Units\Orders\PrintOrderUnit.cs" />
-    <Compile Include="BusinessLogicLayer\Units\Payment\PaymentActionUnit.cs" />
-    <Compile Include="BusinessLogicLayer\Units\Printers\PrintServicesUnit.cs" />
-    <Compile Include="BusinessLogicLayer\Units\Printers\PrinterUnit.cs" />
-    <Compile Include="BusinessLogicLayer\Units\Users\UserActionUnit.cs" />
-    <Compile Include="BusinessLogicLayer\Units\Users\UserUnit.cs" />
     <Compile Include="Models\Business\Orders\PrintOrderInfo.cs" />
     <Compile Include="Models\Business\Orders\PrinterScheduled.cs" />
     <Compile Include="DI\IoC.cs" />
     <Compile Include="DI\ServerBusinessLogicIoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BusinessLogicLayer\Utilities\SmsUtility.cs" />
     <Compile Include="_IBusinessLogicLayer\Units\Offers\IOfferUnit.cs" />
     <Compile Include="_IBusinessLogicLayer\Units\Offers\IUserOfferUnit.cs" />
     <Compile Include="_IDataAccessLayer\DataContext\IDataContext.cs" />
     <Compile Include="_IDataAccessLayer\DataContext\IDataContextFactory.cs" />
-    <Compile Include="BusinessLogicLayer\Units\BaseUnit.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Offers\IOfferTypeRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Offers\IUserOfferRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Offers\IOfferRepository.cs" />
@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="BusinessLogicLayer\Units\Orders\PrintOrderUnit.cs.orig" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -157,9 +158,7 @@
       <Name>GlobalPrint.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BusinessLogicLayer\Models\Business\Payment\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

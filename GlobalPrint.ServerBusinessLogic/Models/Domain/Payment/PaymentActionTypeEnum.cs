@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Payment
+namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Payment
 {
     public enum PaymentActionTypeEnum
     {
