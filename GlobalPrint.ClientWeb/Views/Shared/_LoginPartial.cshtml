@@ -9,7 +9,7 @@
         <ul id="main-nav-right" class="nav navbar-nav navbar-right">
             <li>
                 @Html.ActionLink("Мои Принтеры", "MyPrinters", "Printer", new { }, new { })
-            </li>
+            </li>            
             <li>
                 @Html.ActionLink("Мои заказы", "MyOrders", "Order", new { }, new { })
             </li>
@@ -43,6 +43,7 @@ else
         <li>
             @Html.ActionLink("О проекте", "About", "About")
         </li>
+        @{Html.RenderAction("CountryPicker", "UserPrintInfo");}
     </ul>
 }
 

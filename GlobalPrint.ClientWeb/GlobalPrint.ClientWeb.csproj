@@ -219,6 +219,7 @@
     <Content Include="Resources\Documents\TeamPhoto\Viktor.jpg" />
     <Content Include="Resources\Images\add-printer-button.png" />
     <Content Include="Resources\Images\closest_printer.png" />
+    <Content Include="Resources\Images\en_32_round.png" />
     <Content Include="Resources\Images\geolocation.png" />
     <Content Include="Resources\Images\green_circle.ico" />
     <Content Include="Resources\Images\my_printers.png" />
@@ -227,6 +228,7 @@
     <Content Include="Resources\Images\printer_online.png" />
     <Content Include="Resources\Images\red_circle.ico" />
     <Content Include="Resources\Images\run-printer.png" />
+    <Content Include="Resources\Images\ru_32_round.png" />
     <Content Include="Resources\Libraries\bootstrap-notify\bootstrap-notify.min.js" />
     <Content Include="Resources\Libraries\bootstrap.file-input\fileinput.js" />
     <Content Include="Resources\Libraries\clockpicker\.gitignore" />
@@ -295,6 +297,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\LocalizedControllerActivator.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
@@ -312,9 +315,13 @@
     <Compile Include="Controllers\PrinterController.cs" />
     <Compile Include="DI\NinjectDependencyResolver.cs" />
     <Compile Include="DI\SignalRIoC.cs" />
+    <Compile Include="Filters\ModelStateAttributes.cs" />
+    <Compile Include="Filters\MultipleButtonAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\LocalizationHelper.cs" />
+    <Compile Include="Models\Binders\FloatModelBinder.cs" />
     <Compile Include="Models\FeedbackController\FeedbackViewModel.cs" />
     <Compile Include="Models\OfferController\OfferViewModel.cs" />
     <Compile Include="Models\PrinterController\Printer_EditViewMoel.cs" />
@@ -322,9 +329,6 @@
     <Compile Include="Models\PushNotifications\PushNotificationHub.cs" />
     <Compile Include="Models\PushNotifications\UserIdProvider.cs" />
     <Compile Include="Models\SimpleMessage.cs" />
-    <Compile Include="Models\Stuff\FloatModelBinder.cs" />
-    <Compile Include="Models\Stuff\ModelStateAttributes.cs" />
-    <Compile Include="Models\Stuff\MultipleButtonAttribute.cs" />
     <Compile Include="Models\Auth\AccountViewModels.cs" />
     <Compile Include="Models\Auth\IdentityModels.cs" />
     <Compile Include="Models\Auth\IdentityUser.cs" />
@@ -382,6 +386,7 @@
     <Content Include="Views\UserPrintInfo\_UserRecievedPrintOrder.cshtml" />
     <Content Include="Views\Offer\Offer.cshtml" />
     <Content Include="Views\UserPrintInfo\_UserBalance.cshtml" />
+    <Content Include="Views\UserPrintInfo\_CountryPicker.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

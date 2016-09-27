@@ -1,8 +1,10 @@
-﻿using GlobalPrint.Configuration.DI;
+﻿using GlobalPrint.ClientWeb.Helpers;
+using GlobalPrint.Configuration.DI;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using System;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb.Controllers
@@ -16,7 +18,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         [ChildActionOnly]
         [Authorize]
         public ActionResult UserRecievedPrintOrder()
-        { 
+        {
             int printOrdersCount = new PrinterUnit().GetWaitingIncomingOrdersCount(this.GetCurrentUserID());
             ViewData["UserRecievedPrintOrdersCount"] = printOrdersCount > 0 ? printOrdersCount.ToString() : null;
             return PartialView("_UserRecievedPrintOrder");
@@ -41,6 +43,18 @@ namespace GlobalPrint.ClientWeb.Controllers
             {
                 throw new Exception("Не найден текущий пользователь");
             }
+        }
+
+        /// <summary>
+        /// Get country picker
+        /// </summary>
+        /// <returns>Partial view with country picker</returns>
+        [ChildActionOnly]
+        public ActionResult CountryPicker()
+        {
+            ViewBag.CurrentCulture = LocalizationHelper.GetCurrentCulture();
+            ViewBag.CultureList = LocalizationHelper.GetCultureList().ToList();
+            return PartialView("_CountryPicker");
         }
     }
 }

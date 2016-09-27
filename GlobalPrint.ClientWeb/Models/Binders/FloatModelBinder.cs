@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace GlobalPrint.ClientWeb
+namespace GlobalPrint.ClientWeb.Binders
 {
     public class FloatModelBinder : IModelBinder
     {

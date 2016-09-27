@@ -1,5 +1,5 @@
-﻿using GlobalPrint.ClientWeb.Models.PrinterController;
-using GlobalPrint.ClientWeb.Models.Stuff;
+﻿using GlobalPrint.ClientWeb.Models.Filters;
+using GlobalPrint.ClientWeb.Models.PrinterController;
 using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
@@ -15,16 +15,15 @@ namespace GlobalPrint.ClientWeb
 {
     public class PrinterController : BaseController
     {
-
-        [Authorize]
-        [HttpGet]
+        [Authorize, HttpGet]
         public ActionResult GetPrinterServices(int printerID)
         {
             IEnumerable<PrinterServiceExtended> services = new PrintServicesUnit().GetPrinterServices(printerID);
             return Json(services);
         }
 
-        /// <summary> Generate view model for printer edition action.
+        /// <summary> 
+        /// Generate view model for printer edition action.
         /// </summary>
         /// <param name="model">Business model for printer edition.</param>
         /// <returns></returns>
@@ -109,12 +108,11 @@ namespace GlobalPrint.ClientWeb
             return model;
         }
 
-        /// <summary> Retreive printers which are owned orr operated by current user.
+        /// <summary> 
+        /// Retreive printers which are owned orr operated by current user.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [Authorize]
-        [ImportModelState]
+        [Authorize, HttpGet, ImportModelState]
         public ActionResult MyPrinters()
         {
             int userID = this.GetCurrentUserID();
@@ -129,9 +127,8 @@ namespace GlobalPrint.ClientWeb
             };
             return View("MyPrinters", myPrinters);
         }
-
-        [HttpGet]
-        [Authorize]
+        
+        [Authorize, HttpGet]
         public ActionResult Create()
         {
             try
@@ -149,9 +146,8 @@ namespace GlobalPrint.ClientWeb
                 return View("Edit", null);
             }
         }
-
-        [HttpGet]
-        [Authorize]
+        
+        [Authorize, HttpGet]
         public ActionResult Edit(int PrinterID)
         {
             try
@@ -166,10 +162,8 @@ namespace GlobalPrint.ClientWeb
                 return View("Edit", null);
             }
         }
-
-        [HttpPost]
-        [Authorize]
-        [ExportModelState]
+        
+        [Authorize, HttpPost ExportModelState]
         public ActionResult Delete(int PrinterID)
         {
             try
@@ -190,9 +184,8 @@ namespace GlobalPrint.ClientWeb
                 return RedirectToAction("MyPrinters", "Printer");
             }            
         }
-
-        [HttpPost]
-        [Authorize]
+        
+        [Authorize, HttpPost]
         public ActionResult Save(Printer_EditViewMoel model)
         {
             if (!ModelState.IsValid)

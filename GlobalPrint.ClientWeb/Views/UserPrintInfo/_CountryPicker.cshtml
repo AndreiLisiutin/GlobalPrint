@@ -1,0 +1,18 @@
+﻿<li class="dropdown">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-bottom:9px; padding-top: 9px;">
+        <img src="~/Resources/Images/@ViewBag.CurrentCulture.FlagImage" /> @ViewBag.CurrentCulture.DisplayName <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+        @if (ViewBag.CultureList != null)
+        {
+            foreach (var culture in ViewBag.CultureList)
+            {
+            <li>
+                <a href="#">
+                    <img src="~/Resources/Images/@culture.FlagImage"/> @culture.DisplayName
+                </a>
+            </li>
+            }
+        }
+    </ul>
+</li>

@@ -1,4 +1,5 @@
-﻿using GlobalPrint.Configuration.DI;
+﻿using GlobalPrint.ClientWeb.Filters;
+using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.LogUtility.Robokassa;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Users;
