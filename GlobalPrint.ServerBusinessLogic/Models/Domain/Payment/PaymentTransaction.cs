@@ -28,13 +28,7 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Payment
         public int ID { get; set; }
 
         #endregion
-
-        /// <summary>
-        /// Name.
-        /// </summary>
-        [Column("name")]
-        public string Name { get; set; }
-
+        
         /// <summary>
         /// Status of transaction: In progress, commited, rolled back etc.
         /// Reference to <see cref="PaymentTransactionStatus.ID"/>.
@@ -46,7 +40,7 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Payment
         /// Comment.
         /// </summary>
         [Column("comment")]
-        public int Comment { get; set; }
+        public string Comment { get; set; }
 
         /// <summary>
         /// Start date.
