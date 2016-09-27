@@ -68,35 +68,23 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
             }
         }
 
-        public PaymentAction CommitFillUpBalance(int paymentActionID)
+        public void CommitFillUpBalance(int paymentTransactionID)
         {
             using (IDataContext context = this.Context())
             {
-                IUserRepository userRepo = this.Repository<IUserRepository>(context);
                 IPaymentTransactionRepository transactionRepo = this.Repository<IPaymentTransactionRepository>(context);
-                IPaymentActionRepository actionRepo = this.Repository<IPaymentActionRepository>(context);
-
+                PaymentTransaction transaction = transactionRepo.GetByID(paymentTransactionID);
+                Argument.NotNull(transaction, $"Payment transaction (ID={paymentTransactionID}) not found.");
+                if (transaction.PaymentTransactionStatusID == (int)PaymentTransactionStatusEnum.Committed)
+                {
+                    //done
+                    return;
+                }
                 context.BeginTransaction();
                 try
                 {
-                    PaymentAction action = actionRepo.GetByID(paymentActionID);
-                    Argument.NotNull(action, $"Payment action (ID={paymentActionID}) not found.");
-                    PaymentTransaction transaction = transactionRepo.GetByID(action.PaymentTransactionID);
-                    Argument.NotNull(transaction, $"Payment transaction (ID={action.PaymentTransactionID};PaymentActionID={paymentActionID}) not found.");
-                    User user = userRepo.GetByID(action.UserID);
-                    Argument.NotNull(user, $"User account for filling up balance operation not found (ID={action.UserID};PaymentActionID={paymentActionID}) not found.");
-
-                    user.AmountOfMoney += action.AmountOfMoney;
-                    userRepo.Update(user);
-                    transaction.PaymentTransactionStatusID = (int)PaymentTransactionStatusEnum.Committed;
-                    transaction.FinishedOn = DateTime.Now;
-                    transactionRepo.Update(transaction);
-                    action.PaymentActionStatusID = (int)PaymentActionStatusEnum.ExecutedSuccessfully;
-                    action.FinishedOn = DateTime.Now;
-                    actionRepo.Update(action);
-
+                    this._CommitTransaction(paymentTransactionID, context);
                     context.CommitTransaction();
-                    return action;
                 }
                 catch (Exception ex)
                 {
@@ -106,33 +94,23 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
             }
         }
 
-        public PaymentAction RollbackFillUpBalance(int paymentActionID)
+        public void RollbackFillUpBalance(int paymentTransactionID)
         {
             using (IDataContext context = this.Context())
             {
-                IUserRepository userRepo = this.Repository<IUserRepository>(context);
                 IPaymentTransactionRepository transactionRepo = this.Repository<IPaymentTransactionRepository>(context);
-                IPaymentActionRepository actionRepo = this.Repository<IPaymentActionRepository>(context);
-
+                PaymentTransaction transaction = transactionRepo.GetByID(paymentTransactionID);
+                Argument.NotNull(transaction, $"Payment transaction (ID={paymentTransactionID}) not found.");
+                if (transaction.PaymentTransactionStatusID == (int)PaymentTransactionStatusEnum.RolledBack)
+                {
+                    //done
+                    return;
+                }
                 context.BeginTransaction();
                 try
                 {
-                    PaymentAction action = actionRepo.GetByID(paymentActionID);
-                    Argument.NotNull(action, $"Payment action (ID={paymentActionID}) not found.");
-                    PaymentTransaction transaction = transactionRepo.GetByID(action.PaymentTransactionID);
-                    Argument.NotNull(transaction, $"Payment transaction (ID={action.PaymentTransactionID};PaymentActionID={paymentActionID}) not found.");
-                    
-                    transaction.PaymentTransactionStatusID = (int)PaymentTransactionStatusEnum.RolledBack;
-                    transaction.FinishedOn = DateTime.Now;
-                    transaction.Comment = "Отменено.";
-                    transactionRepo.Update(transaction);
-                    action.PaymentActionStatusID = (int)PaymentActionStatusEnum.Failed;
-                    action.Comment = "Отменено.";
-                    action.FinishedOn = DateTime.Now;
-                    actionRepo.Update(action);
-
+                    this._RollBackTransaction(paymentTransactionID, context);
                     context.CommitTransaction();
-                    return action;
                 }
                 catch (Exception ex)
                 {
@@ -140,6 +118,87 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                     throw;
                 }
             }
+        }
+
+
+
+        private void _RollBackTransaction(int paymentTransactionID, IDataContext context)
+        {
+            Argument.Require(context.IsTransactionAlive(), $"Попытка откатить денежную транзакцию без физической транзакции БД (ID={paymentTransactionID}).");
+
+            IUserRepository userRepo = this.Repository<IUserRepository>(context);
+            IPaymentTransactionRepository transactionRepo = this.Repository<IPaymentTransactionRepository>(context);
+            IPaymentActionRepository actionRepo = this.Repository<IPaymentActionRepository>(context);
+
+            PaymentTransaction transaction = transactionRepo.GetByID(paymentTransactionID);
+            Argument.NotNull(transaction, $"Payment transaction (ID={paymentTransactionID}) not found.");
+            Argument.Require(transaction.PaymentTransactionStatusID == (int)PaymentTransactionStatusEnum.InProgress,
+                $"Попытка откатить закрытую ранее денежную транзакцию (ID={paymentTransactionID}).");
+
+            transaction.PaymentTransactionStatusID = (int)PaymentTransactionStatusEnum.RolledBack;
+            transaction.FinishedOn = DateTime.Now;
+            transaction.Comment = "Транзакция отменена.";
+            transactionRepo.Update(transaction);
+
+            List<PaymentAction> actions = actionRepo.Get(e => e.PaymentTransactionID == paymentTransactionID)
+                .ToList();
+
+            foreach (PaymentAction action in actions)
+            {
+                if (action.PaymentActionStatusID == (int)PaymentActionStatusEnum.ExecutedSuccessfully)
+                {
+                    //roll back action if it was already performed
+                    User actionUser = userRepo.GetByID(action.UserID);
+                    Argument.NotNull(actionUser, $"Payment action user (ID={action.UserID}) not found.");
+                    actionUser.AmountOfMoney -= action.AmountOfMoney;
+                    userRepo.Update(actionUser);
+                }
+
+                action.PaymentActionStatusID = (int)PaymentActionStatusEnum.Failed;
+                action.Comment = "Транзакция отменена.";
+                action.FinishedOn = DateTime.Now;
+                actionRepo.Update(action);
+            }
+        }
+        private void _CommitTransaction(int paymentTransactionID, IDataContext context)
+        {
+            Argument.Require(context.IsTransactionAlive(), $"Попытка подтвердить денежную транзакцию без физической транзакции БД (ID={paymentTransactionID}).");
+
+            IUserRepository userRepo = this.Repository<IUserRepository>(context);
+            IPaymentTransactionRepository transactionRepo = this.Repository<IPaymentTransactionRepository>(context);
+            IPaymentActionRepository actionRepo = this.Repository<IPaymentActionRepository>(context);
+
+            PaymentTransaction transaction = transactionRepo.GetByID(paymentTransactionID);
+            Argument.NotNull(transaction, $"Payment transaction (ID={paymentTransactionID}) not found.");
+            Argument.Require(transaction.PaymentTransactionStatusID == (int)PaymentTransactionStatusEnum.InProgress,
+                $"Попытка подтвердить закрытую ранее денежную транзакцию (ID={paymentTransactionID}).");
+
+            List<PaymentAction> actions = actionRepo.Get(e => e.PaymentTransactionID == paymentTransactionID)
+                .ToList();
+            Argument.Require(actions.All(e => e.PaymentActionStatusID != (int)PaymentActionStatusEnum.Failed),
+                $"Попытка подтвердить денежную транзакцию, часть которой звершилась неудачно (ID={paymentTransactionID}).");
+
+            foreach (PaymentAction action in actions)
+            {
+                if (action.PaymentActionStatusID == (int)PaymentActionStatusEnum.InProgress)
+                {
+                    //perform action if it was not already performed
+                    User actionUser = userRepo.GetByID(action.UserID);
+                    Argument.NotNull(actionUser, $"Payment action user (ID={action.UserID}) not found.");
+                    actionUser.AmountOfMoney += action.AmountOfMoney;
+                    userRepo.Update(actionUser);
+                }
+
+                action.PaymentActionStatusID = (int)PaymentActionStatusEnum.ExecutedSuccessfully;
+                action.Comment = "Транзакция подтверждена.";
+                action.FinishedOn = DateTime.Now;
+                actionRepo.Update(action);
+            }
+            
+            transaction.PaymentTransactionStatusID = (int)PaymentTransactionStatusEnum.Committed;
+            transaction.FinishedOn = DateTime.Now;
+            transaction.Comment = "Транзакция подтверждена.";
+            transactionRepo.Update(transaction);
         }
     }
 }

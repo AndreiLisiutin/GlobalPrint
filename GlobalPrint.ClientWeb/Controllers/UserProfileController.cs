@@ -1,8 +1,8 @@
 ﻿using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.LogUtility.Robokassa;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
-using GlobalPrint.ServerBusinessLogic.Models.Business.Users;
-using System;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Models.Domain.Payment;
 using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb
@@ -70,10 +70,10 @@ namespace GlobalPrint.ClientWeb
                 {
                     throw new Exception("Некорректно введена ссума пополнения", ex);
                 }
-                string redirectUrl = Robokassa.GetRedirectUrl(decimalUpSumm, userID);
+                //create payment action in DB for filling up balance and redirect to robokassa
+                PaymentAction action = new PaymentActionUnit().InitializeFillUpBalance(userID, decimalUpSumm, null);
+                string redirectUrl = Robokassa.GetRedirectUrl(decimalUpSumm, action.PaymentTransactionID);
                 return Redirect(redirectUrl);
-                
-                //return RedirectToAction("UserProfile", new { UserID = userID });
             }
             catch (Exception ex)
             {

@@ -1,5 +1,7 @@
 ﻿using GlobalPrint.Configuration.DI;
+using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.Infrastructure.LogUtility.Robokassa;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using System;
 using System.Collections.Generic;
@@ -17,20 +19,26 @@ namespace GlobalPrint.ClientWeb.Controllers
 
         public ActionResult Confirm(RobokassaConfirmationRequest confirmationRequest)
         {
+            Argument.NotNull(confirmationRequest, "PaymentController.Confirm model is null.");
+            Argument.Positive(confirmationRequest.InvId, "PaymentController.Confirm.InvId is not positive.");
+            Argument.NotNullOrWhiteSpace(confirmationRequest.SignatureValue, "PaymentController.Confirm.SignatureValue is empty.");
             try
             {
-                if (confirmationRequest.IsQueryValid(RobokassaQueryType.ResultURL))
+                if (!confirmationRequest.IsQueryValid(RobokassaQueryType.ResultURL))
                 {
-                    processOrder(confirmationRequest);
-
-                    return Content("OK Confirm"); 
+                    throw new InvalidOperationException("Некорректный ответ робокассы. Полученные от робокассы парамеры не прошли проверку подлинности.");
                 }
+                PaymentActionUnit paymentActionUnit = new PaymentActionUnit();
+                int paymentTransactionID = confirmationRequest.InvId;
+                paymentActionUnit.CommitFillUpBalance(paymentTransactionID);
+
+                return RedirectToAction("UserProfile", "UserProfile");
             }
             catch (Exception ex)
             {
-                return Content(ex.ToString());
+#warning ошибку сюда
+                throw;
             }
-            return Content("ERR");
         }
 
         // So called "Success Url" in terms of Robokassa documentation.
@@ -39,35 +47,53 @@ namespace GlobalPrint.ClientWeb.Controllers
         [HttpPost]
         public ActionResult Success(RobokassaConfirmationRequest confirmationRequest)
         {
+            Argument.NotNull(confirmationRequest, "PaymentController.Success model is null.");
+            Argument.Positive(confirmationRequest.InvId, "PaymentController.Success.InvId is not positive.");
+            Argument.NotNullOrWhiteSpace(confirmationRequest.SignatureValue, "PaymentController.Success.SignatureValue is empty.");
             try
             {
-
-                if (confirmationRequest.IsQueryValid(RobokassaQueryType.SuccessURL))
+                if (!confirmationRequest.IsQueryValid(RobokassaQueryType.SuccessURL))
                 {
-                    return Content("OK Success"); 
+                    throw new InvalidOperationException("Некорректный ответ робокассы. Полученные от робокассы парамеры не прошли проверку подлинности.");
                 }
+                PaymentActionUnit paymentActionUnit = new PaymentActionUnit();
+                int paymentTransactionID = confirmationRequest.InvId;
+                paymentActionUnit.CommitFillUpBalance(paymentTransactionID);
+                return Content("OK Success");
             }
             catch (Exception ex)
             {
+#warning ошибку сюда
                 return Content(ex.ToString());
             }
-
-            return View("Fail");
         }
 
         // So called "Fail Url" in terms of Robokassa documentation.
         // Customer is redirected to this url after unsuccessful payment.
 
         [HttpPost]
-        public ActionResult Fail()
+        public ActionResult Fail(RobokassaConfirmationRequest confirmationRequest)
         {
-            return Content("Fail");
-        }
+            Argument.NotNull(confirmationRequest, "PaymentController.Fail model is null.");
+            Argument.Positive(confirmationRequest.InvId, "PaymentController.Fail.InvId is not positive.");
+            Argument.NotNullOrWhiteSpace(confirmationRequest.SignatureValue, "PaymentController.Fail.SignatureValue is empty.");
+            try
+            {
+                if (!confirmationRequest.IsQueryValid(RobokassaQueryType.ResultURL))
+                {
+                    throw new InvalidOperationException("Некорректный ответ робокассы. Полученные от робокассы парамеры не прошли проверку подлинности.");
+                }
+                PaymentActionUnit paymentActionUnit = new PaymentActionUnit();
+                int paymentTransactionID = confirmationRequest.InvId;
+                paymentActionUnit.RollbackFillUpBalance(paymentTransactionID);
 
-        private void processOrder(RobokassaConfirmationRequest confirmationRequest)
-        {
-            UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
-            userUnit.FillUpBalance(confirmationRequest.InvId, Decimal.Parse(confirmationRequest.OutSum));
+                return RedirectToAction("UserProfile", "UserProfile");
+            }
+            catch (Exception ex)
+            {
+#warning ошибку сюда
+                throw;
+            }
         }
     }
 }
