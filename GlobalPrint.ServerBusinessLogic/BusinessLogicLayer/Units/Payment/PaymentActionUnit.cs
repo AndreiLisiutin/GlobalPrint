@@ -2,8 +2,11 @@
 using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Offers;
+using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Orders;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Payment;
+using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Printers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using System;
@@ -139,8 +142,203 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                 }
             }
         }
-        
+
         #endregion Fill up user's account balance
+        
+        #region Print order payment
+
+        /// <summary>
+        /// Initialize action of printing the order.
+        /// </summary>
+        /// <param name="order">Fullfilled print order model to save.</param>
+        /// <returns>Created print order.</returns>
+        public PrintOrder InitializePrintOrder(PrintOrder order)
+        {
+            using (IDataContext context = this.Context())
+            {
+                IUserRepository userRepo = this.Repository<IUserRepository>(context);
+                IPaymentTransactionRepository transactionRepo = this.Repository<IPaymentTransactionRepository>(context);
+                IPaymentActionRepository actionRepo = this.Repository<IPaymentActionRepository>(context);
+                IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
+
+                User client = userRepo.GetByID(order.UserID);
+
+                context.BeginTransaction();
+                try
+                {
+                    //creating payment transaction
+                    PaymentTransaction transaction = new PaymentTransaction()
+                    {
+                        ID = 0,
+                        Comment = $"Оплата заказа печати.",
+                        FinishedOn = null,
+                        StartedOn = DateTime.Now,
+                        PaymentTransactionStatusID = (int)PaymentTransactionStatusEnum.InProgress
+                    };
+
+                    transactionRepo.Insert(transaction);
+                    context.Save();
+
+                    //associates payment transaction with the print order
+                    order.PaymentTransactionID = transaction.ID;
+                    orderRepo.Insert(order);
+                    context.Save();
+
+                    transaction.Comment = $"Оплата заказа печати № {order.ID} от {DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")}.";
+                    transactionRepo.Update(transaction);
+
+                    //creates payment action that "freezes" user's money for that order
+                    PaymentAction action = new PaymentAction()
+                    {
+                        ID = 0,
+                        Comment = $"Оплата заказа печати № {order.ID} от {DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")}. Заморозка денежных средств в размере оплаты заказа на счете клиента.",
+                        ExternalIdentifier = order.ID.ToString(),
+                        FinishedOn = null,
+                        //note that action is already in executed status
+                        PaymentActionStatusID = (int)PaymentActionStatusEnum.ExecutedSuccessfully,
+                        PaymentActionTypeID = (int)PaymentActionTypeEnum.PaymentForOrder,
+                        PaymentTransactionID = transaction.ID,
+                        StartedOn = DateTime.Now,
+                        UserID = client.ID,
+                        AmountOfMoney = -order.FullPrice
+                    };
+                    actionRepo.Insert(action);
+                    
+                    //performs action
+                    client.AmountOfMoney -= order.FullPrice;
+                    userRepo.Update(client);
+
+                    context.Save();
+                    context.CommitTransaction();
+
+
+                    context.CommitTransaction();
+                    return order;
+                }
+                catch (Exception ex)
+                {
+                    context.RollbackTransaction();
+                    throw;
+                }
+            }
+        }
+
+        /// <summary> Confirm action of printing the order.
+        /// </summary>
+        /// <param name="paymentTransactionID">Identifier of payment transaction.</param>
+        public void CommitPrintOrder(int printOrderID)
+        {
+            Argument.Positive(printOrderID, $"Print order (ID={printOrderID}) not found.");
+            using (IDataContext context = this.Context())
+            {
+                IPaymentTransactionRepository transactionRepo = this.Repository<IPaymentTransactionRepository>(context);
+                IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
+                IUserRepository userRepo = this.Repository<IUserRepository>(context);
+                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
+                IPaymentActionRepository actionRepo = this.Repository<IPaymentActionRepository>(context);
+
+                PrintOrder order = orderRepo.GetByID(printOrderID);
+                Argument.NotNull(order, $"Print order (ID={printOrderID}) not found.");
+                Argument.NotNull(order.PaymentTransactionID, $"Print order (ID={printOrderID}) has no payment transaction 0o.");
+
+                PaymentTransaction transaction = transactionRepo.GetByID(order.PaymentTransactionID.Value);
+                Argument.NotNull(transaction, $"Payment transaction (ID={order.PaymentTransactionID.Value}) not found.");
+                if (transaction.PaymentTransactionStatusID == (int)PaymentTransactionStatusEnum.Committed)
+                {
+                    //done
+                    return;
+                }
+
+                User printerOwner = printerRepo.Get(e => e.ID == order.PrinterID)
+                   .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
+                   .First();
+
+                context.BeginTransaction();
+                try
+                {
+                    //creates payment action that "freezes" user's money for that order
+                    //maybe it make sense to move it to Initialization phase
+                    PaymentAction action = new PaymentAction()
+                    {
+                        ID = 0,
+                        Comment = $"Оплата заказа печати № {order.ID} от {order.OrderedOn.ToString("dd.MM.yyyy HH:mm:ss")}. Перечисление оплаты заказа владельцу принтера.",
+                        ExternalIdentifier = order.ID.ToString(),
+                        FinishedOn = null,
+                        PaymentActionStatusID = (int)PaymentActionStatusEnum.InProgress,
+                        PaymentActionTypeID = (int)PaymentActionTypeEnum.PaymentForOrder,
+                        PaymentTransactionID = transaction.ID,
+                        StartedOn = DateTime.Now,
+                        UserID = printerOwner.ID,
+                        AmountOfMoney = order.FullPrice
+                    };
+                    actionRepo.Insert(action);
+                    context.Save();
+                    
+                    this._CommitTransaction(order.PaymentTransactionID.Value, context);
+
+                    //mark order as printed
+                    order.PrintedOn = DateTime.Now;
+                    order.PrintOrderStatusID = (int)PrintOrderStatusEnum.Printed;
+                    orderRepo.Update(order);
+
+                    context.Save();
+                    context.CommitTransaction();
+                }
+                catch (Exception ex)
+                {
+                    context.RollbackTransaction();
+                    throw;
+                }
+            }
+        }
+
+        /// <summary> Abort action of printing the order.
+        /// </summary>
+        /// <param name="paymentTransactionID">Identifier of payment transaction.</param>
+        public void RollbackPrintOrder(int printOrderID)
+        {
+            Argument.Positive(printOrderID, $"Print order (ID={printOrderID}) not found.");
+            using (IDataContext context = this.Context())
+            {
+                IPaymentTransactionRepository transactionRepo = this.Repository<IPaymentTransactionRepository>(context);
+                IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
+                IUserRepository userRepo = this.Repository<IUserRepository>(context);
+                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
+                IPaymentActionRepository actionRepo = this.Repository<IPaymentActionRepository>(context);
+
+                PrintOrder order = orderRepo.GetByID(printOrderID);
+                Argument.NotNull(order, $"Print order (ID={printOrderID}) not found.");
+                Argument.NotNull(order.PaymentTransactionID, $"Print order (ID={printOrderID}) has no payment transaction 0o.");
+
+                PaymentTransaction transaction = transactionRepo.GetByID(order.PaymentTransactionID.Value);
+                Argument.NotNull(transaction, $"Payment transaction (ID={order.PaymentTransactionID.Value}) not found.");
+                if (transaction.PaymentTransactionStatusID == (int)PaymentTransactionStatusEnum.RolledBack)
+                {
+                    //done
+                    return;
+                }
+                context.BeginTransaction();
+                try
+                {
+                    this._RollBackTransaction(order.PaymentTransactionID.Value, context);
+                    
+                    //mark order as not printed
+                    order.PrintOrderStatusID = (int)PrintOrderStatusEnum.Rejected;
+                    orderRepo.Update(order);
+
+                    context.Save();
+                    context.CommitTransaction();
+                }
+                catch (Exception ex)
+                {
+                    context.RollbackTransaction();
+                    throw;
+                }
+            }
+        }
+
+        #endregion Print order payment
+
 
         /// <summary>
         /// Roll back whole payment transaction. If there are already executed actions, roll back them logically. 
@@ -166,7 +364,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
 
             transaction.PaymentTransactionStatusID = (int)PaymentTransactionStatusEnum.RolledBack;
             transaction.FinishedOn = DateTime.Now;
-            transaction.Comment = "Транзакция отменена.";
+            transaction.Comment = transaction.Comment == null ? "Транзакция отменена." : (transaction.Comment + " Транзакция отменена.");
             transactionRepo.Update(transaction);
 
             List<PaymentAction> actions = actionRepo.Get(e => e.PaymentTransactionID == paymentTransactionID)
@@ -184,7 +382,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                 }
 
                 action.PaymentActionStatusID = (int)PaymentActionStatusEnum.Failed;
-                action.Comment = "Транзакция отменена.";
+                action.Comment = action.Comment == null ? "Транзакция отменена." : (action.Comment + " Транзакция отменена.");
                 action.FinishedOn = DateTime.Now;
                 actionRepo.Update(action);
             }
@@ -229,14 +427,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                 }
 
                 action.PaymentActionStatusID = (int)PaymentActionStatusEnum.ExecutedSuccessfully;
-                action.Comment = "Транзакция подтверждена.";
+                action.Comment = action.Comment == null ? "Транзакция подтверждена." : (action.Comment + " Транзакция подтверждена.");
                 action.FinishedOn = DateTime.Now;
                 actionRepo.Update(action);
             }
-            
+
             transaction.PaymentTransactionStatusID = (int)PaymentTransactionStatusEnum.Committed;
             transaction.FinishedOn = DateTime.Now;
-            transaction.Comment = "Транзакция подтверждена.";
+            transaction.Comment = transaction.Comment == null ? "Транзакция подтверждена." : (transaction.Comment + " Транзакция подтверждена.");
             transactionRepo.Update(transaction);
         }
     }

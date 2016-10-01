@@ -39,6 +39,18 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Orders
         [Column("print_service_id")]
         public int PrintServiceID { get; set; }
 
+        /// <summary>
+        /// Reference to the payment transaction, which operates the order's payment actions.
+        /// </summary>
+        [Column("payment_transaction_id")]
+        public int? PaymentTransactionID { get; set; }
+
+        /// <summary>
+        /// Name of the document included extension like: myFile.txt.
+        /// </summary>
+        [Column("document_name")]
+        public string DocumentName { get; set; }
+
         /// <summary> Number of copies that is requested to print.
         /// </summary>
         [Column("copies_count")]
@@ -63,14 +75,6 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Orders
             get
             {
                 return this.PricePerPage * this.PagesCount * this.CopiesCount;
-            }
-        }
-        [NotMapped]
-        public string DocumentName
-        {
-            get
-            {
-                return this.Document == null ? null : new FileInfo(this.Document).Name;
             }
         }
 
