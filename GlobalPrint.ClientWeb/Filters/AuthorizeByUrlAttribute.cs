@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace GlobalPrint.ClientWeb.Attributes
+namespace GlobalPrint.ClientWeb.Filters
 {
     /// <summary> 
     /// Only allows authorized URL addresses access. 

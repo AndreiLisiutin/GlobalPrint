@@ -117,16 +117,64 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="en" xml:space="preserve">
-    <value>English</value>
-    <comment>Английский язык</comment>
+  <data name="EmailFieldLabel" xml:space="preserve">
+    <value>Email</value>
+    <comment>Лэйбл поля "Email"</comment>
   </data>
-  <data name="GlobalPrintWebSiteLink" xml:space="preserve">
-    <value>www.globalprint.online.ru</value>
-    <comment>Ссылка на сайт</comment>
+  <data name="EmailFieldRequiredError" xml:space="preserve">
+    <value>Field "Email" is required.</value>
+    <comment>Ошибка о том, что поле "Email" обязательно для заполнения</comment>
   </data>
-  <data name="ru" xml:space="preserve">
-    <value>Russian</value>
-    <comment>Русский язык</comment>
+  <data name="EmailFieldTypeError" xml:space="preserve">
+    <value>Field "Email" should contain correct email address.</value>
+    <comment>Ошибка о типе поля "Email"</comment>
+  </data>
+  <data name="ForgotPasswordLabel" xml:space="preserve">
+    <value>Click here</value>
+    <comment>Ссылка "Восстановите"</comment>
+  </data>
+  <data name="ForgotPasswordString" xml:space="preserve">
+    <value>Forgot password?</value>
+    <comment>Текст "Забыли пароль?" перед ссылкой "Восстановите"</comment>
+  </data>
+  <data name="LoginButtonLabel" xml:space="preserve">
+    <value>Login</value>
+    <comment>Лэйбл кнопки "Войти"</comment>
+  </data>
+  <data name="LoginFormHeader" xml:space="preserve">
+    <value>Sign in</value>
+    <comment>Заголовок формы (Логин)</comment>
+  </data>
+  <data name="LoginFormTabTitle" xml:space="preserve">
+    <value>Login</value>
+    <comment>Лэйбл табки в браузере</comment>
+  </data>
+  <data name="PasswordFieldLabel" xml:space="preserve">
+    <value>Password</value>
+    <comment>Лэйбл поля "Пароль"</comment>
+  </data>
+  <data name="PasswordFieldMinLengthError" xml:space="preserve">
+    <value>Minimum password length - {2} characters.</value>
+    <comment>Ошибка о минимальной длине поля "Пароль"</comment>
+  </data>
+  <data name="PasswordFieldRequiredError" xml:space="preserve">
+    <value>Field "Пароль" is required.</value>
+    <comment>Ошибка о том, что поле "Пароль" обязательно для заполнения</comment>
+  </data>
+  <data name="PasswordFieldTypeError" xml:space="preserve">
+    <value>Field "Password" should contain correct password.</value>
+    <comment>Ошибка о типе поля "Пароль"</comment>
+  </data>
+  <data name="RegisterLinkLabel" xml:space="preserve">
+    <value>Register here</value>
+    <comment>Ссылка "Зарегистрируйтесь"</comment>
+  </data>
+  <data name="RegisterLinkString" xml:space="preserve">
+    <value>Don't have an account?</value>
+    <comment>Текст "Нет аккаунта?" перед ссылкой "Зарегистрируйтесь"</comment>
+  </data>
+  <data name="RememberMeLabel" xml:space="preserve">
+    <value>Remember me</value>
+    <comment>Лэйбл поля "Запомнить меня"</comment>
   </data>
 </root>

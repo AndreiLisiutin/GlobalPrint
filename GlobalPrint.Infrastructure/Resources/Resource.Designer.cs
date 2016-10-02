@@ -70,6 +70,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на www.globalprint.online.ru.
+        /// </summary>
+        public static string GlobalPrintWebSiteLink {
+            get {
+                return ResourceManager.GetString("GlobalPrintWebSiteLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Русский.
         /// </summary>
         public static string ru {

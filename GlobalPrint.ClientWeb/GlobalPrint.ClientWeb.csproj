@@ -303,7 +303,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Attributes\BaseErrorHandleAttribute.cs" />
+    <Compile Include="Filters\BaseErrorHandleAttribute.cs" />
     <Compile Include="Controllers\_TestController.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
@@ -319,13 +319,14 @@
     <Compile Include="Controllers\PrinterController.cs" />
     <Compile Include="DI\NinjectDependencyResolver.cs" />
     <Compile Include="DI\SignalRIoC.cs" />
-    <Compile Include="Attributes\AuthorizeByUrlAttribute.cs" />
+    <Compile Include="Filters\AuthorizeByUrlAttribute.cs" />
     <Compile Include="Filters\ModelStateAttributes.cs" />
     <Compile Include="Filters\MultipleButtonAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\LocalizationHelper.cs" />
+    <Compile Include="Helpers\ActionLinkHelperExtensions.cs" />
+    <Compile Include="Helpers\UrlHelperExtensions.cs" />
     <Compile Include="Models\Binders\FloatModelBinder.cs" />
     <Compile Include="Models\FeedbackController\FeedbackViewModel.cs" />
     <Compile Include="Models\OfferController\OfferViewModel.cs" />

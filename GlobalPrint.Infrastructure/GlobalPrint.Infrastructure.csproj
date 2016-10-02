@@ -76,6 +76,8 @@
     <Compile Include="DI\IoC.cs" />
     <Compile Include="EmailUtility\EmailUtility.cs" />
     <Compile Include="EmailUtility\IEmailUtility.cs" />
+    <Compile Include="Localization\LocalizationCountry.cs" />
+    <Compile Include="Localization\LocalizationHelper.cs" />
     <Compile Include="LogUtility\ILoggerFactory.cs" />
     <Compile Include="LogUtility\ILogger.cs" />
     <Compile Include="LogUtility\NLogLoggerFactory.cs" />
@@ -91,6 +93,16 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Account\LoginViewResource.Designer.cs">
+      <DependentUpon>LoginViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Account\LoginViewResource.en.Designer.cs">
+      <DependentUpon>LoginViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Resources\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -181,6 +193,16 @@
     <None Include="Web References\CreditOrgInfo\CreditOrgInfo.disco" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\LoginViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LoginViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\LoginViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LoginViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Resource.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.en.Designer.cs</LastGenOutput>

@@ -1,4 +1,5 @@
 ﻿using GlobalPrint.ClientWeb.Helpers;
+using GlobalPrint.Infrastructure.Localization;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,11 +21,8 @@ namespace GlobalPrint.ClientWeb.App_Start
             // Validate culture name, default if not valid
             lang = LocalizationHelper.GetImplementedCulture(lang);
 
-            if (lang != LocalizationHelper.GetDefaultCultureString())
-            {
-                Thread.CurrentThread.CurrentCulture =
-                Thread.CurrentThread.CurrentUICulture = new CultureInfo(lang);
-            }
+            Thread.CurrentThread.CurrentCulture =
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(lang);
 
             return DependencyResolver.Current.GetService(controllerType) as IController;
         }

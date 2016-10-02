@@ -1,8 +1,10 @@
 ﻿@using GlobalPrint.ClientWeb
-@model LoginViewModel
+@using Resources.ClientWeb.Account
+@using Resources
 
+@model LoginViewModel
 @{
-    ViewBag.Title = "Логин";
+    ViewBag.Title = LoginViewResource.LoginFormTabTitle;
     Layout = "~/Views/Shared/_BaseLayout.cshtml";
 }
 @section Stylesheets {
@@ -10,15 +12,17 @@
 }
 
 <div class="container edit-form">
-    <h2 class="edit-form-heading">Вход</h2>
+    <h2 class="edit-form-heading">@LoginViewResource.LoginFormHeader</h2>
 
     <div>
         @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
         {
             @Html.AntiForgeryToken()
 
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @type = "email", @placeholder = "Email", @required = "true", @autofocus = true })
-            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @type = "password", @placeholder = "Пароль", @required = "true" })
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @type = "email",
+                                @placeholder = @Html.DisplayNameFor(m => m.Email), @required = "true", @autofocus = true })
+            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @type = "password",
+                                @placeholder = @Html.DisplayNameFor(m => m.Password), @required = "true" })
 
             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
@@ -26,24 +30,26 @@
             
             <div class="checkbox">
                 <label>
-                    @Html.CheckBoxFor(m => m.RememberMe) Запомнить меня
+                    @Html.CheckBoxFor(m => m.RememberMe) @LoginViewResource.RememberMeLabel
                 </label>
             </div>
 
-            <button class="btn btn-default btn-primary btn-block" type="submit">Войти</button>
+            <button class="btn btn-default btn-primary btn-block" type="submit">@LoginViewResource.LoginButtonLabel</button>
         }
     </div>
 
     <div class="edit-form-link">
-        Нет аккаунта? @Html.ActionLink("Зарегистрируйтесь", "Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, new { })
+        @LoginViewResource.RegisterLinkString @Html.ActionLink(LoginViewResource.RegisterLinkLabel, 
+                                             "Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, new { })
     </div>
 
     <div class="edit-form-link">
-        Забыли пароль? @Html.ActionLink("Восстановите", "ForgotPassword", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, new { })
+        @LoginViewResource.ForgotPasswordString @Html.ActionLink(LoginViewResource.ForgotPasswordLabel, 
+                                               "ForgotPassword", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, new { })
     </div>
 
     <div class="edit-form-link">
-        @Html.ActionLink("www.globalprint.online.ru", "Index", "Home")
+        @Html.ActionLink(Resource.GlobalPrintWebSiteLink, "Index", "Home")
     </div>
 
 </div>

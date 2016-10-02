@@ -8,6 +8,7 @@ namespace GlobalPrint.ClientWeb
     public class HomeController : BaseController
     {
         // GET: Home
+        [HttpGet]
         public ActionResult Index()
         {
             return View();

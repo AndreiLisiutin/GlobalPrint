@@ -7,7 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace GlobalPrint.ClientWeb.Attributes
+namespace GlobalPrint.ClientWeb.Filters
 {
     public class BaseErrorHandleAttribute : HandleErrorAttribute
     {

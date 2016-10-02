@@ -1,4 +1,7 @@
-﻿@{
+﻿@using GlobalPrint.ClientWeb.Helpers
+@using System.Globalization;
+
+@{
     Layout = "~/Views/Shared/_BaseLayout.cshtml";
 }
 <nav class="navbar main-navbar navbar-default navbar-fixed-top">
@@ -10,7 +13,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/Home/Index"><img src="~/Resources/Documents/Logo/logo_09_2016.png" class="main-page-logo"></a>
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")"><img src="~/Resources/Documents/Logo/logo_09_2016.png" class="main-page-logo"></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             @Html.Partial("_LoginPartial")

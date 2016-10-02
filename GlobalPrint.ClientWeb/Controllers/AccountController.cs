@@ -9,6 +9,10 @@ using System;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using GlobalPrint.ClientWeb.Helpers;
+using System.Globalization;
+using GlobalPrint.ClientWeb.Helpers;
+using System.Globalization;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -202,7 +206,7 @@ namespace GlobalPrint.ClientWeb
 
                 // создаем ссылку для подтверждения
                 string callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
-                           protocol: Request.Url.Scheme);
+                    protocol: Request.Url.Scheme);
 
                 // отправка письма
                 await UserManager.SendEmailAsync(user.Id, "Подтверждение электронной почты",
@@ -343,7 +347,9 @@ namespace GlobalPrint.ClientWeb
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code, email = model.Email }, protocol: Request.Url.Scheme);
+                    var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code, email = model.Email }, 
+                        protocol: Request.Url.Scheme);
+
                     await UserManager.SendEmailAsync(user.Id, "Сброс пароля", "Для сброса пароля, перейдите по <a href=\"" + callbackUrl + "\">ссылке</a>");
                     return RedirectToAction("ForgotPasswordConfirmation", "Account");
                 }

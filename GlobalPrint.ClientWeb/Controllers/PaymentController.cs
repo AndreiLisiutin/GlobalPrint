@@ -1,13 +1,8 @@
-﻿using GlobalPrint.ClientWeb.Attributes;
-using GlobalPrint.Configuration.DI;
+﻿using GlobalPrint.ClientWeb.Filters;
 using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.Infrastructure.LogUtility.Robokassa;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb.Controllers

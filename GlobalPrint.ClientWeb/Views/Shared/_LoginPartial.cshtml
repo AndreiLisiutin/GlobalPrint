@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNet.Identity
+@using GlobalPrint.ClientWeb.Helpers
+@using System.Globalization
 
 @if (Request.IsAuthenticated)
 {
@@ -8,10 +10,10 @@
 
         <ul id="main-nav-right" class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink("Мои Принтеры", "MyPrinters", "Printer", new { }, new { })
+                @Html.ActionLink("Мои Принтеры", "MyPrinters", "Printer")
             </li>            
             <li>
-                @Html.ActionLink("Мои заказы", "MyOrders", "Order", new { }, new { })
+                @Html.ActionLink("Мои заказы", "MyOrders", "Order")
             </li>
             <li>
                 @{Html.RenderAction("UserRecievedPrintOrder", "UserPrintInfo");}       
@@ -35,10 +37,10 @@ else
 {
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Зарегистрироваться", "Register", "Account", routeValues: null, htmlAttributes: new { @class = "font-bold", id = "registerLink" })
+            @Html.ActionLink("Зарегистрироваться", "Register", "Account", null, new { @class = "font-bold", id = "registerLink" })
         </li>
         <li>
-            @Html.ActionLink("Войти", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "font-bold", id = "loginLink" })
+            @Html.ActionLink("Войти", "Login", "Account", null, new { @class = "font-bold", id = "loginLink" })
         </li>
         <li>
             @Html.ActionLink("О проекте", "About", "About")

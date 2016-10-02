@@ -1,4 +1,7 @@
-﻿<li class="dropdown">
+﻿@using GlobalPrint.ClientWeb.Helpers;
+@using System.Globalization;
+
+<li class="dropdown">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="padding-bottom:9px; padding-top: 9px;">
         <img src="~/Resources/Images/@ViewBag.CurrentCulture.FlagImage" /> @ViewBag.CurrentCulture.DisplayName <span class="caret"></span>
     </a>
@@ -7,11 +10,19 @@
         {
             foreach (var culture in ViewBag.CultureList)
             {
-            <li>
-                <a href="#">
-                    <img src="~/Resources/Images/@culture.FlagImage"/> @culture.DisplayName
-                </a>
-            </li>
+                string shortCultureName = culture.Culture.TwoLetterISOLanguageName.ToString();
+                string currentCultureName = ViewBag.CurrentCulture.Culture.TwoLetterISOLanguageName.ToString();
+                bool isCurrentCulture = shortCultureName.Equals(currentCultureName, StringComparison.InvariantCultureIgnoreCase);
+                if (isCurrentCulture)
+                {
+                    continue;
+                }
+
+                <li>
+                    <a href="@Url.Action("ChangeCulture", "UserPrintInfo", new { language = culture.Culture.TwoLetterISOLanguageName.ToString() })">
+                        <img src="~/Resources/Images/@culture.FlagImage"/> @culture.DisplayName
+                    </a>
+                </li>
             }
         }
     </ul>

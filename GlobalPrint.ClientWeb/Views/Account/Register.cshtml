@@ -1,7 +1,9 @@
 ﻿@using GlobalPrint.ClientWeb
+@using GlobalPrint.ClientWeb.Helpers
+@using System.Globalization
 @using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
-@model RegisterViewModel
 
+@model RegisterViewModel
 @{
     ViewBag.Title = "Регистрация";
     Layout = "~/Views/Shared/_BaseLayout.cshtml";
@@ -38,7 +40,7 @@
     </div>
 
     <div class="edit-form-link">
-        Есть аккаунт? @Html.ActionLink("Войдите", "Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, new { })
+        Есть аккаунт? @Html.ActionLink("Войдите", "Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, null)
     </div>
 
     <div class="edit-form-link">

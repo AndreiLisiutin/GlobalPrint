@@ -1,5 +1,4 @@
-﻿using GlobalPrint.ClientWeb.Models.Filters;
-using GlobalPrint.ClientWeb.Models.PrinterController;
+﻿using GlobalPrint.ClientWeb.Models.PrinterController;
 using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
@@ -10,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using GlobalPrint.ClientWeb.Filters;
 
 namespace GlobalPrint.ClientWeb
 {

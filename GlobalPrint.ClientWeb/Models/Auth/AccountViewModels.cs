@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Resources.ClientWeb.Account;
 
 namespace GlobalPrint.ClientWeb
 {
     public class LoginViewModel
     {
-        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
-        [EmailAddress]
-        [DataType(DataType.EmailAddress)]
+        [Required(ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "EmailFieldRequiredError")]
+        [EmailAddress(ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "EmailFieldTypeError")]
+        [DataType(DataType.EmailAddress, ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "EmailFieldTypeError")]
+        [Display(ResourceType = typeof(LoginViewResource), Name = "EmailFieldLabel", Prompt = "EmailFieldLabel")]
         public string Email { get; set; }
-        
-        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
-        [DataType(DataType.Password)]
-        [StringLength(100, ErrorMessage = "Минимальная длина пароля - {2} символов.", MinimumLength = 6)]
+
+        [Required(ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "PasswordFieldRequiredError")]
+        [DataType(DataType.Password, ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "PasswordFieldTypeError")]
+        [StringLength(20, MinimumLength = 6, ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "PasswordFieldMinLengthError")]
+        [Display(ResourceType = typeof(LoginViewResource), Name = "PasswordFieldLabel", Prompt = "PasswordFieldLabel")]
         public string Password { get; set; }
         
         public bool RememberMe { get; set; }

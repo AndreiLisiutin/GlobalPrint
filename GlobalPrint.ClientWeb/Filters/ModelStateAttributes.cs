@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace GlobalPrint.ClientWeb.Models.Filters
+namespace GlobalPrint.ClientWeb.Filters
 {
     public abstract class ModelStateTransfer : ActionFilterAttribute
     {

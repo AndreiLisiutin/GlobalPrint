@@ -1,5 +1,6 @@
 ﻿using GlobalPrint.ClientWeb.Helpers;
 using GlobalPrint.Configuration.DI;
+using GlobalPrint.Infrastructure.Localization;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
@@ -15,8 +16,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// Number of waiting orders, not processed by current user
         /// </summary>
         /// <returns>Partial view with recieved print orders number</returns>
-        [ChildActionOnly]
-        [Authorize]
+        [Authorize, ChildActionOnly]
         public ActionResult UserRecievedPrintOrder()
         {
             int printOrdersCount = new PrinterUnit().GetWaitingIncomingOrdersCount(this.GetCurrentUserID());
@@ -28,8 +28,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// Get user balance
         /// </summary>
         /// <returns>Partial view with user balance</returns>
-        [ChildActionOnly]
-        [Authorize]
+        [Authorize, ChildActionOnly]
         public ActionResult UserBalance()
         {
             UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
@@ -55,6 +54,22 @@ namespace GlobalPrint.ClientWeb.Controllers
             ViewBag.CurrentCulture = LocalizationHelper.GetCurrentCulture();
             ViewBag.CultureList = LocalizationHelper.GetCultureList().ToList();
             return PartialView("_CountryPicker");
+        }
+
+        /// <summary>
+        /// Change culture|language of application.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet, AllowAnonymous]
+        public ActionResult ChangeCulture(string language)
+        {
+            string returnUrl = Request.UrlReferrer.AbsolutePath;
+            string currentCulture = LocalizationHelper.GetCurrentCultureString();
+            
+            string culture = LocalizationHelper.GetImplementedCulture(language);
+            RouteData.Values["lang"] = culture;  // set culture
+
+            return Redirect((returnUrl ?? "").Replace(currentCulture, culture));
         }
     }
 }
