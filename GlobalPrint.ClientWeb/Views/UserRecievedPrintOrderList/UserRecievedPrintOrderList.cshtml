@@ -10,8 +10,6 @@
 @section Scripts {
     <script src="~/Resources/Scripts/GlobalPrint/PrintOrder/RecievedPrintOrder.js"></script>
 }
-
-@{int rowNo = 0;}
 <div class="container">
     @if (!ViewData.ModelState.IsValid)
     {
@@ -47,7 +45,6 @@
             @foreach (PrintOrderInfo printOrder in Model)
             {
                 <tr>
-                    @*<td class="col-md-1" scope="row">@(rowNo += 1)</td>*@
                     <td class="col-md-1">@Html.DisplayFor(c => printOrder.PrintOrder.ID)</td>
                     <td class="col-md-1">@Html.DisplayFor(c => printOrder.Printer.Name)</td>
                     <td class="col-md-2">@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>

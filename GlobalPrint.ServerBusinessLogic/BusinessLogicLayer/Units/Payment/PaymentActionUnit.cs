@@ -6,6 +6,7 @@ using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Orders;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Payment;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Printers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
+using GlobalPrint.ServerBusinessLogic.Models.Business.Payments;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
@@ -25,6 +26,37 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
         public PaymentActionUnit()
             : base()
         {
+        }
+
+        /// <summary>
+        /// Return list of user's successfull payments.
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public List<PaymentActionFullInfo> GetByUserID(int userID)
+        {
+            using (IDataContext context = this.Context())
+            {
+                IPaymentTransactionRepository transactionRepo = this.Repository<IPaymentTransactionRepository>(context);
+                IPaymentActionRepository actionRepo = this.Repository<IPaymentActionRepository>(context);
+                IPaymentActionStatusRepository actionStatusRepo = this.Repository<IPaymentActionStatusRepository>(context);
+                IPaymentActionTypeRepository actionTypeRepo = this.Repository<IPaymentActionTypeRepository>(context);
+
+                List<PaymentActionFullInfo> paymentActions = (
+                    from action in actionRepo.GetAll()
+                    join transaction in transactionRepo.GetAll() on action.PaymentTransactionID equals transaction.ID
+                    join status in actionStatusRepo.GetAll() on action.PaymentActionStatusID equals status.ID
+                    join type in actionTypeRepo.GetAll() on action.PaymentActionTypeID equals type.ID
+                    where action.UserID == userID && action.PaymentActionStatusID == (int)PaymentActionStatusEnum.ExecutedSuccessfully
+                    orderby action.FinishedOn descending
+                    select new { action = action, transaction = transaction, status = status, type = type }
+                 )
+                 .ToList()
+                 .Select(e => new PaymentActionFullInfo(e.action, e.transaction, e.status, e.type))
+                 .ToList();
+
+                return paymentActions;
+            }
         }
 
         #region Fill up user's account balance

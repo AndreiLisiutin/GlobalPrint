@@ -76,6 +76,7 @@
     <Compile Include="BusinessLogicLayer\Utilities\SmsUtility.cs" />
     <Compile Include="Models\Business\Offers\UserOfferExtended.cs" />
     <Compile Include="Models\Business\Orders\NewOrder.cs" />
+    <Compile Include="Models\Business\Payments\PaymentActionFullInfo.cs" />
     <Compile Include="Models\Business\Printers\PrinterFullInfoModel.cs" />
     <Compile Include="Models\Business\Printers\PrinterSearchFilter.cs" />
     <Compile Include="Models\Business\PrintFile.cs" />

@@ -50,7 +50,7 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Payment
         public int UserID { get; set; }
 
         /// <summary>
-        /// In our case, ID for Robokassa.
+        /// In our case, ID for Robokassa or PrintOrderID, depending on type of action.
         /// </summary>
         [Column("external_identifier")]
         public string ExternalIdentifier { get; set; }
