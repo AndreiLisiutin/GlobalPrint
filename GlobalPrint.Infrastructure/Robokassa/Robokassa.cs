@@ -21,7 +21,7 @@ namespace GlobalPrint.Infrastructure.LogUtility.Robokassa
             string sMrchPass1 = RobokassaConfig.Pass1;
             // order properties
             int nInvId = orderId;
-            string sDesc = "Здесь описание типа распечатываем что-то";
+            string sDesc = $"Оплата заказа на распечатку заказа #{orderId} в Global print.";
 
             string sOutSum = price.ToString("0.00", CultureInfo.InvariantCulture);
             string sCrcBase = string.Format("{0}:{1}:{2}:{3}",
