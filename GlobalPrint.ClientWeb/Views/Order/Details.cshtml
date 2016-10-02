@@ -1,0 +1,66 @@
+﻿@using GlobalPrint.ServerBusinessLogic.Models.Business.Orders
+@model PrintOrderInfo
+@{
+    ViewBag.Title = "Детали заказа № " + Model.PrintOrder.ID;
+    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+}
+
+<div class="container">
+
+    @using (Html.BeginForm("Rate", "Order", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger container margin-top-20">
+                <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                @Html.ValidationSummary(false, "Ошибки: ")
+            </div>
+        }
+        <h2>Информация о заказе печати печати № @Model.PrintOrder.ID</h2>
+        <div class="hidden">
+            @Html.Hidden("PrintOrderID", Model.PrintOrder.ID)
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">Принтер</label>
+            <div class="col-sm-9">
+                @Html.TextBox("Name", Model.Printer.Name, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">Название документа</label>
+            <div class="col-sm-9">
+                @Html.TextBox("DocumentName", Model.PrintOrder.DocumentName, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">Стоимость заказа</label>
+            <div class="col-sm-9">
+                @Html.TextBox("PriceInCurrency", Model.PrintOrder.PriceInCurrency, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-10">
+                @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
+            </div>
+        </div>
+
+        <hr />
+        <h2>Оценить заказ</h2>
+        <div class="form-group">
+            <div class="col-sm-9">
+                @Html.Hidden("Rating", Model.PrintOrder.Rating, new { @class = "rating", @data_filled = "fa fa-star fa-3x", @data_empty = "fa fa-star-o fa-3x", @data_stop = "5" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">Комментарий к заказу</label>
+            <div class="col-sm-9">
+                @Html.TextArea("Comment", Model.PrintOrder.Comment, new { @class = "form-control", @rows = 5 })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-10">
+                <input type="submit" value="Оценить" class="btn btn-default" />
+            </div>
+        </div>
+    }
+</div>

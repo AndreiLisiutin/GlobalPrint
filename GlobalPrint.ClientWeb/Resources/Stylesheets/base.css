@@ -92,3 +92,7 @@ th {
 .h2, h2 {
     font-size: 20px;
 }
+
+.rating-symbol {
+    color: #dada2f;
+}
