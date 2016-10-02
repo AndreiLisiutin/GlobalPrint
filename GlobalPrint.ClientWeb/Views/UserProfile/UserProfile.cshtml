@@ -61,7 +61,7 @@
         </div>
 
         // Оферта
-        @*if (Model.LatestUserOffer.HasUserOffer)
+        if (Model.LatestUserOffer.HasUserOffer)
         {
             <div class="form-group">
                 <label class="col-sm-1 control-label text-left">Оферта</label>
@@ -76,7 +76,7 @@
                     </div>
                 </div>
             </div>
-        }*@
+        }
 
         @Html.HiddenFor(m => m.User.UserID)
         @Html.HiddenFor(m => m.User.PhoneNumber)
