@@ -6,7 +6,6 @@ using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
 using System.Web.Mvc;
 using System;
-using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Payments;
 using System.Collections.Generic;

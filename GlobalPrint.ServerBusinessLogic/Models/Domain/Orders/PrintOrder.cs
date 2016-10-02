@@ -60,7 +60,12 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Orders
         /// </summary>
         [Column("comment")]
         public string Comment { get; set; }
-        
+
+        /// <summary> Rating of the order.
+        /// </summary>
+        [Column("rating")]
+        public float? Rating { get; set; }
+
         [NotMapped]
         public string PriceInCurrency
         {

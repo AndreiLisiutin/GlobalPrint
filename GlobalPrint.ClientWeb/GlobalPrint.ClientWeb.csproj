@@ -231,6 +231,12 @@
     <Content Include="Resources\Images\run-printer.png" />
     <Content Include="Resources\Images\ru_32_round.png" />
     <Content Include="Resources\Libraries\bootstrap-notify\bootstrap-notify.min.js" />
+    <Content Include="Resources\Libraries\bootstrap-rating\bootstrap-rating.css" />
+    <Content Include="Resources\Libraries\bootstrap-rating\bootstrap-rating.js" />
+    <Content Include="Resources\Libraries\bootstrap-rating\bootstrap-rating.min.js" />
+    <Content Include="Resources\Libraries\bootstrap-rating\deploy.txt" />
+    <Content Include="Resources\Libraries\bootstrap-rating\Gruntfile.js" />
+    <Content Include="Resources\Libraries\bootstrap-rating\index.html" />
     <Content Include="Resources\Libraries\bootstrap.file-input\fileinput.js" />
     <Content Include="Resources\Libraries\clockpicker\.gitignore" />
     <Content Include="Resources\Libraries\clockpicker\assets\css\bootstrap-theme.css" />
@@ -330,6 +336,7 @@
     <Compile Include="Models\Binders\FloatModelBinder.cs" />
     <Compile Include="Models\FeedbackController\FeedbackViewModel.cs" />
     <Compile Include="Models\OfferController\OfferViewModel.cs" />
+    <Compile Include="Models\OrderController\Order_RateViewModel.cs" />
     <Compile Include="Models\PrinterController\Printer_EditViewMoel.cs" />
     <Compile Include="Models\PrinterController\Printer_MyPrinters.cs" />
     <Compile Include="Models\PushNotifications\PushNotificationHub.cs" />
@@ -395,6 +402,12 @@
     <Content Include="Views\Shared\Errors\Default.cshtml" />
     <Content Include="Views\UserPrintInfo\_CountryPicker.cshtml" />
     <Content Include="Views\UserProfile\MyPayments.cshtml" />
+    <Content Include="Views\Order\Details.cshtml" />
+    <Content Include="Resources\Libraries\bootstrap-rating\.gitignore" />
+    <Content Include="Resources\Libraries\bootstrap-rating\bower.json" />
+    <Content Include="Resources\Libraries\bootstrap-rating\LICENSE.md" />
+    <Content Include="Resources\Libraries\bootstrap-rating\package.json" />
+    <Content Include="Resources\Libraries\bootstrap-rating\README.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

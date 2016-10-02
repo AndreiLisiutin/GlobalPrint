@@ -284,5 +284,35 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
             return order;
         }
+
+        /// <summary>
+        /// Rate print order.
+        /// </summary>
+        /// <param name="printOrderID">Identifier of the order.</param>
+        /// <param name="rating">Rating with stars of the order.</param>
+        /// <param name="comment">Comment for the order.</param>
+        /// <param name="userID">Current system's user.</param>
+        /// <returns>Updated order.</returns>
+        public PrintOrder Rate(int printOrderID, float? rating, string comment, int userID)
+        {
+            Argument.Positive(printOrderID, $"Заказ на печать не найден (ID={printOrderID}).");
+
+            using (IDataContext context = this.Context())
+            {
+                IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
+                
+                PrintOrder order = orderRepo.GetByID(printOrderID);
+                Argument.Require(order.UserID == userID, "Редактировать можно только свои заказы.");
+                Argument.Require(!rating.HasValue || rating > 0, "Рейтинг заказа не может быть отрицательным.");
+
+                order.Comment = comment;
+                order.Rating = rating;
+                orderRepo.Update(order);
+
+                context.Save();
+
+                return order;
+            }
+        }
     }
 }

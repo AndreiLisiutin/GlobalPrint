@@ -1,4 +1,5 @@
-﻿using GlobalPrint.ClientWeb.Models.PushNotifications;
+﻿using GlobalPrint.ClientWeb.Models.OrderController;
+using GlobalPrint.ClientWeb.Models.PushNotifications;
 using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
@@ -68,6 +69,45 @@ namespace GlobalPrint.ClientWeb
             return new Tuple<PrintOrder, PrintFile>(order, file);
         }
 
+        /// <summary>
+        /// Order details with opportunity of its rating.
+        /// </summary>
+        /// <param name="printOrderID">Identifier of the order.</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public ActionResult Details(int printOrderID)
+        {
+            PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
+            PrintOrderInfo orderInfo = printOrderUnit.GetPrintOrderInfoByID(printOrderID);
+            return View("Details", orderInfo);
+        }
+
+        /// <summary>
+        /// Rate the order.
+        /// </summary>
+        /// <param name="rateModel">Info about order's rating.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize]
+        public ActionResult Rate(Order_RateViewModel rateModel)
+        {
+            Argument.NotNull(rateModel, "Модель оценки заказа пустая.");
+            Argument.Positive(rateModel.PrintOrderID, "Модель оценки заказа пустая.");
+
+            try
+            {
+                int userID = this.GetCurrentUserID();
+                PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
+                printOrderUnit.Rate(rateModel.PrintOrderID, rateModel.Rating, rateModel.Comment, userID);
+                return RedirectToAction("MyOrders", "Order");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return RedirectToAction("Details", "Order");
+            }
+        }
 
         [HttpGet]
         [Authorize]
