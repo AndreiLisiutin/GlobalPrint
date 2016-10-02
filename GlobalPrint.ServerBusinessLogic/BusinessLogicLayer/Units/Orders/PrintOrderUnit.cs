@@ -22,18 +22,23 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
+using GlobalPrint.ServerBusinessLogic.DI;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 {
     public class PrintOrderUnit : BaseUnit
     {
         private Lazy<IEmailUtility> _emailUtility { get; set; }
+        public Lazy<PaymentActionUnit> _paymentUnit { get; set; }
 
         [DebuggerStepThrough]
         public PrintOrderUnit(Lazy<IEmailUtility> emailUtility)
             : base()
         {
-            _emailUtility = emailUtility;
+            this._emailUtility = emailUtility;
+            this._paymentUnit = new Lazy<PaymentActionUnit>(() => new PaymentActionUnit());
         }
 
         /// <summary>
@@ -139,32 +144,26 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                     .First();
                 newStatus = statusRepo.GetByID((int)statusID);
 
-                if (order.PrintOrderStatusID == (int)statusID)
+                if (order.PrintOrderStatusID == (int)statusID
+                    || order.PrintOrderStatusID == (int)PrintOrderStatusEnum.Printed
+                    || order.PrintOrderStatusID == (int)PrintOrderStatusEnum.Rejected)
                 {
                     return;
                 }
 
-                context.BeginTransaction();
-                try
+                if (statusID == PrintOrderStatusEnum.Printed && order.PrintedOn == null)
                 {
-                    order.PrintOrderStatusID = (int)statusID;
-                    if (statusID == PrintOrderStatusEnum.Printed && order.PrintedOn == null)
-                    {
-                        order.PrintedOn = DateTime.Now;
-                        printerOwner.AmountOfMoney += order.PricePerPage;
-                    }
-                    else if (statusID == PrintOrderStatusEnum.Rejected)
-                    {
-                        client.AmountOfMoney += order.PricePerPage;
-                    }
-
-                    context.Save();
-                    context.CommitTransaction();
+                    this._paymentUnit.Value.CommitPrintOrder(printOrderID);
                 }
-                catch (Exception)
+                else if (statusID == PrintOrderStatusEnum.Rejected)
                 {
-                    context.RollbackTransaction();
-                    throw;
+                    this._paymentUnit.Value.RollbackPrintOrder(printOrderID);
+                }
+                else if (statusID == PrintOrderStatusEnum.Accepted)
+                {
+                    order.PrintOrderStatusID = (int)PrintOrderStatusEnum.Accepted;
+                    orderRepo.Update(order);
+                    context.Save();
                 }
             }
 
@@ -176,13 +175,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 newStatus.Status.ToLower()
             );
             _emailUtility.Value.Send(userMail, "Global Print - Изменение статуса заказа", userMessageBody);
-
-            //if (!string.IsNullOrEmpty(client.PhoneNumber))
-            //{
-            //    new SmsUtility(smsParams).Send(client.PhoneNumber, "Заказ №" + order.ID + " " + status.Status.ToLower());
-            //}
         }
-        
+
         public PrintOrder New(NewOrder newOrder, string baseDirectory, PrintFile printFile)
         {
             Argument.NotNull(newOrder, "Новый заказ не может быть пустым.");
@@ -204,7 +198,6 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
             string usersDirectory = Path.Combine(baseDirectory, newOrder.UserID.ToString());
             string filePath = Path.Combine(usersDirectory, printFile.Name);
-
             PrintOrder order = new PrintOrder()
             {
                 Comment = newOrder.Comment,
@@ -218,7 +211,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 PrintOrderStatusID = (int)PrintOrderStatusEnum.Waiting,
                 PrintServiceID = -1,//is computed below
                 SecretCode = newOrder.SecretCode,
-                UserID = newOrder.UserID
+                UserID = newOrder.UserID,
+                DocumentName = printFile.Name,
+                PaymentTransactionID = null //will be defined while save
             };
 
             var services = new PrintServicesUnit().GetPrinterServices(newOrder.PrinterID);
@@ -252,7 +247,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             Argument.NotNull(printFile, "Файл для печати не может быть пустым.");
             Argument.NotNull(printFile.SerializedFile, "Файл для печати не может быть пустым.");
 
-            PrinterFullInfoModel printer = new PrinterUnit().GetFullByID(order.PrinterID);
+            PrinterUnit printerUnit = new PrinterUnit();
+            PrinterFullInfoModel printer = printerUnit.GetFullByID(order.PrinterID);
             Argument.NotNull(printer, "Принтер не найден.");
             Argument.Require(printer.IsAvailableNow, "Принтер не доступен.");
 
@@ -263,51 +259,30 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             }
             File.WriteAllBytes(order.Document, printFile.SerializedFile);
 
-            using (IDataContext context = this.Context())
-            {
-                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
-                IUserRepository userRepo = this.Repository<IUserRepository>(context);
-                IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
-                PrinterUnit printerUnit = new PrinterUnit();
+            //perform main business logic
+            order = this._paymentUnit.Value.InitializePrintOrder(order);
 
-                User client = userRepo.GetByID(order.UserID);
-                User printerOperator = printerUnit.GetPrinterOperator(order.PrinterID, context);
+            User client = IoC.Instance.Resolve<UserUnit>().GetUserByID(order.UserID);
+            User printerOperator = printerUnit.GetPrinterOperator(order.PrinterID);
 
-                context.BeginTransaction();
-                try
-                {
-                    orderRepo.Insert(order);
-                    client.AmountOfMoney -= order.FullPrice;
-                    userRepo.Update(client);
+            // send email to user about his new order
+            MailAddress userMail = new MailAddress(client.Email, client.UserName);
+            string userMessageBody = string.Format(
+                "Ваш новый заказ № {0} от {1} успешно зарегистрирован.",
+                order.ID,
+                order.OrderedOn.ToString("dd.MM.yyyy HH:mm")
+            );
+            _emailUtility.Value.Send(userMail, "Global Print - Новый заказ на печать", userMessageBody);
+            // send email to printer operator about new order
+            MailAddress userOperatorMail = new MailAddress(printerOperator.Email, printerOperator.UserName);
+            string userOperatorMessageBody = string.Format(
+                "На Ваш принтер поступил новый заказ № {0} от {1}.",
+                order.ID,
+                order.OrderedOn.ToString("dd.MM.yyyy HH:mm")
+            );
+            _emailUtility.Value.Send(userOperatorMail, "Global Print - Входящий заказ на печать", userOperatorMessageBody);
 
-                    context.Save();
-                    context.CommitTransaction();
-                }
-                catch (Exception)
-                {
-                    context.RollbackTransaction();
-                    throw;
-                }
-                
-                // send email to user about his new order
-                MailAddress userMail = new MailAddress(client.Email, client.UserName);
-                string userMessageBody = string.Format(
-                    "Ваш новый заказ № {0} от {1} успешно зарегистрирован.",
-                    order.ID,
-                    order.OrderedOn.ToString("dd.MM.yyyy HH:mm")
-                );
-                _emailUtility.Value.Send(userMail, "Global Print - Новый заказ на печать", userMessageBody);
-                // send email to printer operator about new order
-                MailAddress userOperatorMail = new MailAddress(printerOperator.Email, printerOperator.UserName);
-                string userOperatorMessageBody = string.Format(
-                    "На Ваш принтер поступил новый заказ № {0} от {1}.",
-                    order.ID,
-                    order.OrderedOn.ToString("dd.MM.yyyy HH:mm")
-                );
-                _emailUtility.Value.Send(userOperatorMail, "Global Print - Входящий заказ на печать", userOperatorMessageBody);
-
-                return order;
-            }
+            return order;
         }
     }
 }

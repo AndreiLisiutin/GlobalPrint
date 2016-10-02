@@ -394,6 +394,7 @@
     <Content Include="Views\UserPrintInfo\_UserBalance.cshtml" />
     <Content Include="Views\Shared\Errors\Default.cshtml" />
     <Content Include="Views\UserPrintInfo\_CountryPicker.cshtml" />
+    <Content Include="Views\UserProfile\MyPayments.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

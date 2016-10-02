@@ -8,6 +8,8 @@ using System.Web.Mvc;
 using System;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Users;
+using GlobalPrint.ServerBusinessLogic.Models.Business.Payments;
+using System.Collections.Generic;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -78,6 +80,28 @@ namespace GlobalPrint.ClientWeb
                 PaymentAction action = new PaymentActionUnit().InitializeFillUpBalance(userID, decimalUpSumm, null);
                 string redirectUrl = Robokassa.GetRedirectUrl(decimalUpSumm, action.PaymentTransactionID);
                 return Redirect(redirectUrl);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View("UserProfile");
+            }
+        }
+        
+        /// <summary>
+        /// Get list of user's payments.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public ActionResult MyPayments()
+        {
+            try
+            {
+                PaymentActionUnit paymentUnit = new PaymentActionUnit();
+                int userID = this.GetCurrentUserID();
+                List<PaymentActionFullInfo> actions = paymentUnit.GetByUserID(userID);
+                return View(actions);
             }
             catch (Exception ex)
             {

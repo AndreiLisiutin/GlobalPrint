@@ -85,3 +85,10 @@ th {
 .img-centred {
     margin: 0 auto;
 }
+
+.h1, h1 {
+    font-size: 20px;
+}
+.h2, h2 {
+    font-size: 20px;
+}
