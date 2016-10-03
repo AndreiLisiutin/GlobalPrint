@@ -15,19 +15,19 @@ namespace GlobalPrint.ClientWeb.App_Start
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            string defaultLang = LocalizationHelper.GetDefaultCultureString();
+            //string defaultLang = LocalizationHelper.GetDefaultCultureString();
 
-            routes.MapRoute(
-                name: "lang",
-                url: "{lang}/{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
-                constraints: new { lang = @"(\w{2})|(\w{2}-\w{2})" }
-            );
+            //routes.MapRoute(
+            //    name: "lang",
+            //    url: "{lang}/{controller}/{action}/{id}",
+            //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+            //    constraints: new { lang = @"(\w{2})|(\w{2}-\w{2})" }
+            //);
 
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional, lang = defaultLang }
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional /*lang = defaultLang*/ }
             );
         }
     }

@@ -83,8 +83,12 @@
 
         <div class="form-group">
             <div class="col-xs-10">
-                <button class="btn btn-default" type="submit" value="Save" name="action:Save">Сохранить</button>        
-                @Html.ActionLink("История платежей", "MyPayments", "UserProfile", new { @class = "btn btn-default" })        
+                <button class="btn btn-default" type="submit" value="Save" name="action:Save">Сохранить</button>       
+                <!-- Кнопка, вызывающее модальное окно -->
+                <a href="#FillUpBalanceModal" title="Пополнить счет" class="btn btn-default" data-toggle="modal">
+                    Пополнить счет
+                </a>  
+                @Html.ActionLink("История платежей", "MyPayments", "UserProfile", new { @class = "btn btn-default" })
             </div>
         </div>
     }

@@ -8,10 +8,10 @@
             @using (Html.BeginForm("UserProfile", "UserProfile", new { @class = "form-horizontal", role = "form" }))
             {
                 <div class="modal-body" id="modal-body">
-                    <div class="form-group">
+                    <div class="form-group row">
                         <label class="col-sm-3 control-label text-left">Сумма</label>
-                        <div class="col-sm-7">
-                            <input class="form-control currency bottom-component" id="summ" name="upSumm" type="number" value="1" min="1" step="any" max="100000">
+                        <div class="col-sm-9">
+                            <input class="form-control currency bottom-component" id="summ" name="upSumm" type="number" value="300" min="1" step="any" max="10000">
                         </div>
                     </div>
                 </div>
