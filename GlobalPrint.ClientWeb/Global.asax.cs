@@ -29,7 +29,7 @@ namespace GlobalPrint.ClientWeb
             ModelBinders.Binders.Add(typeof(float?), new FloatModelBinder());
             ModelBinders.Binders.Add(typeof(float), new FloatModelBinder());
 
-            //ControllerBuilder.Current.SetControllerFactory(new DefaultControllerFactory(new LocalizedControllerActivator()));
+            ControllerBuilder.Current.SetControllerFactory(new DefaultControllerFactory(new LocalizedControllerActivator()));
 
             _logUtility.Info("Application Start");
         }

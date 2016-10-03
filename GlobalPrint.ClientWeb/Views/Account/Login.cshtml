@@ -19,12 +19,11 @@
         {
             @Html.AntiForgeryToken()
 
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @type = "email",
-                                @placeholder = @Html.DisplayNameFor(m => m.Email), @required = "true", @autofocus = true })
-            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @type = "password",
-                                @placeholder = @Html.DisplayNameFor(m => m.Password), @required = "true" })
-
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = @Html.DisplayNameFor(m => m.Email), @autofocus = true })
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = @Html.DisplayNameFor(m => m.Password) })
+            
             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            @*@Html.Raw("&nbsp;")*@
             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
             @Html.ValidationMessage("", new { @class = "text-danger" });
             

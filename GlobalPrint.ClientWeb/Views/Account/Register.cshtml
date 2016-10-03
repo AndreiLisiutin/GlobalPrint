@@ -1,11 +1,11 @@
 ﻿@using GlobalPrint.ClientWeb
 @using GlobalPrint.ClientWeb.Helpers
-@using System.Globalization
-@using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
+@using Resources.ClientWeb.Account
+@using Resources
 
 @model RegisterViewModel
 @{
-    ViewBag.Title = "Регистрация";
+    ViewBag.Title = RegisterViewResource.RegisterFormTabTitle;
     Layout = "~/Views/Shared/_BaseLayout.cshtml";
 }
 @section Stylesheets {
@@ -13,38 +13,39 @@
 }
 
 <div class="container edit-form">
-    <h2 class="edit-form-heading">Регистрация</h2>
+    <h2 class="edit-form-heading">@RegisterViewResource.RegisterFormHeader</h2>
 
     <div>
         @using (Html.BeginForm("Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
         {
             @Html.AntiForgeryToken()
 
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @type = "email", @placeholder = "Email", @required = "true" })
-            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @type = "password", @placeholder = "Пароль", @required = "true" })
-            @Html.TextBoxFor(m => m.ConfirmPassword, new { @class = "form-control", @type = "password", @placeholder = "Подтвердите пароль", @required = "true" })
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = @Html.DisplayNameFor(m => m.Email), @autofocus = true })
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = @Html.DisplayNameFor(m => m.Password) })
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @placeholder = @Html.DisplayNameFor(m => m.ConfirmPassword) })
             
             @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
             @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(m => m.IsAgreeWithOffer, "", new { @class = "text-danger" })
             @Html.ValidationMessage("", new { @class = "text-danger" });
 
             <div class="checkbox">
                 <label>
-                    @Html.CheckBoxFor(m => m.IsAgreeWithOffer, new { @required = "true" }) <span>Настоящим подтверждаю, что я ознакомлен и согласен с условиями @Html.ActionLink("оферты", "ActualUserOffer", "Offer", new { }, new { target = "_blank" }).</span>
+                    @Html.CheckBoxFor(m => m.IsAgreeWithOffer) <span>@RegisterViewResource.ConfirmOfferLinkString @Html.ActionLink(RegisterViewResource.ConfirmOfferLinkLabel, "ActualUserOffer", "Offer", new { }, new { target = "_blank" }).</span>
                 </label>
             </div>
 
-            <button class="btn btn-default btn-primary btn-block" type="submit">Зарегистрироваться</button>
+            <button class="btn btn-default btn-primary btn-block" type="submit">@RegisterViewResource.RegisterButtonLabel</button>
         }
     </div>
 
     <div class="edit-form-link">
-        Есть аккаунт? @Html.ActionLink("Войдите", "Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, null)
+        @RegisterViewResource.LoginLinkString @Html.ActionLink(RegisterViewResource.LoginLinkLabel, "Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, null)
     </div>
 
     <div class="edit-form-link">
-        @Html.ActionLink("www.globalprint.online.ru", "Index", "Home")
+        @Html.ActionLink(Resource.GlobalPrintWebSiteLink, "Index", "Home")
     </div>
 
 </div>

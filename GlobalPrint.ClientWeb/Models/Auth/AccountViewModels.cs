@@ -24,21 +24,26 @@ namespace GlobalPrint.ClientWeb
 
     public class RegisterViewModel
     {
-        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
+        [Required(ErrorMessageResourceType = typeof(RegisterViewResource), ErrorMessageResourceName = "EmailFieldRequiredError")]
+        [EmailAddress(ErrorMessageResourceType = typeof(RegisterViewResource), ErrorMessageResourceName = "EmailFieldTypeError")]
+        [DataType(DataType.EmailAddress, ErrorMessageResourceType = typeof(RegisterViewResource), ErrorMessageResourceName = "EmailFieldTypeError")]
+        [Display(ResourceType = typeof(RegisterViewResource), Name = "EmailFieldLabel", Prompt = "EmailFieldLabel")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
-        [StringLength(100, ErrorMessage = "Минимальная длина пароля - {2} символов.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
+        [Required(ErrorMessageResourceType = typeof(RegisterViewResource), ErrorMessageResourceName = "PasswordFieldRequiredError")]
+        [DataType(DataType.Password, ErrorMessageResourceType = typeof(RegisterViewResource), ErrorMessageResourceName = "PasswordFieldTypeError")]
+        [StringLength(20, MinimumLength = 6, ErrorMessageResourceType = typeof(RegisterViewResource), ErrorMessageResourceName = "PasswordFieldMinLengthError")]
+        [Display(ResourceType = typeof(RegisterViewResource), Name = "PasswordFieldLabel", Prompt = "PasswordFieldLabel")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
+        [Required(ErrorMessageResourceType = typeof(RegisterViewResource), ErrorMessageResourceName = "ConfirmPasswordFieldRequiredError")]
+        [DataType(DataType.Password, ErrorMessageResourceType = typeof(RegisterViewResource), ErrorMessageResourceName = "ConfirmPasswordFieldTypeError")]
+        [Display(ResourceType = typeof(RegisterViewResource), Name = "ConfirmPasswordFieldLabel", Prompt = "ConfirmPasswordFieldLabel")]
+        [Compare("Password", ErrorMessageResourceType = typeof(RegisterViewResource), ErrorMessageResourceName = "ConfirmationNotEqualToPassword")]
         public string ConfirmPassword { get; set; }
         
-        [Required(ErrorMessage = "Вы должны подтвердить свое согласие с условиями оферты.")]
-        [Range(typeof(bool), "true", "true", ErrorMessage = "Вы должны подтвердить свое согласие с условиями оферты.")]
+        [Required(ErrorMessageResourceType = typeof(RegisterViewResource), ErrorMessageResourceName = "ConfirmOfferRequiredError")]
+        [Range(typeof(bool), "true", "true", ErrorMessageResourceType = typeof(RegisterViewResource), ErrorMessageResourceName = "ConfirmOfferRequiredError")]
         public bool IsAgreeWithOffer { get; set; }
     }
 
@@ -63,8 +68,10 @@ namespace GlobalPrint.ClientWeb
 
     public class ForgotPasswordViewModel
     {
-        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
-        [EmailAddress]
+        [Required(ErrorMessageResourceType = typeof(ForgotPasswordViewResource), ErrorMessageResourceName = "EmailFieldRequiredError")]
+        [EmailAddress(ErrorMessageResourceType = typeof(ForgotPasswordViewResource), ErrorMessageResourceName = "EmailFieldTypeError")]
+        [DataType(DataType.EmailAddress, ErrorMessageResourceType = typeof(ForgotPasswordViewResource), ErrorMessageResourceName = "EmailFieldTypeError")]
+        [Display(ResourceType = typeof(ForgotPasswordViewResource), Name = "EmailFieldLabel", Prompt = "EmailFieldLabel")]
         public string Email { get; set; }
     }
 

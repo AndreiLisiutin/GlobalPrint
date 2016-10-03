@@ -22,14 +22,14 @@ namespace Resources.ClientWeb.Account {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class LoginViewResource {
+    public class RegisterViewResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal LoginViewResource() {
+        internal RegisterViewResource() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Resources.ClientWeb.Account {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GlobalPrint.Infrastructure.Resources.ClientWeb.Account.LoginViewResource", typeof(LoginViewResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GlobalPrint.Infrastructure.Resources.ClientWeb.Account.RegisterViewResource", typeof(RegisterViewResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,69 @@ namespace Resources.ClientWeb.Account {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Пароль и его подтверждение не совпадают..
+        /// </summary>
+        public static string ConfirmationNotEqualToPassword {
+            get {
+                return ResourceManager.GetString("ConfirmationNotEqualToPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на оферты.
+        /// </summary>
+        public static string ConfirmOfferLinkLabel {
+            get {
+                return ResourceManager.GetString("ConfirmOfferLinkLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Настоящим подтверждаю, что я ознакомлен и согласен с условиями.
+        /// </summary>
+        public static string ConfirmOfferLinkString {
+            get {
+                return ResourceManager.GetString("ConfirmOfferLinkString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Чтобы завершить регистрацию, Вы должны подтвердить согласие с условиями оферты..
+        /// </summary>
+        public static string ConfirmOfferRequiredError {
+            get {
+                return ResourceManager.GetString("ConfirmOfferRequiredError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Подтвердите пароль.
+        /// </summary>
+        public static string ConfirmPasswordFieldLabel {
+            get {
+                return ResourceManager.GetString("ConfirmPasswordFieldLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Поле &quot;Подтвердите пароль&quot; обязательно для заполнения..
+        /// </summary>
+        public static string ConfirmPasswordFieldRequiredError {
+            get {
+                return ResourceManager.GetString("ConfirmPasswordFieldRequiredError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Поле &quot;Подтвердите пароль&quot; должно содержать корректный пароль..
+        /// </summary>
+        public static string ConfirmPasswordFieldTypeError {
+            get {
+                return ResourceManager.GetString("ConfirmPasswordFieldTypeError", resourceCulture);
             }
         }
         
@@ -88,47 +151,20 @@ namespace Resources.ClientWeb.Account {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Восстановите.
+        ///   Ищет локализованную строку, похожую на Войдите.
         /// </summary>
-        public static string ForgotPasswordLabel {
+        public static string LoginLinkLabel {
             get {
-                return ResourceManager.GetString("ForgotPasswordLabel", resourceCulture);
+                return ResourceManager.GetString("LoginLinkLabel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Забыли пароль?.
+        ///   Ищет локализованную строку, похожую на Есть аккаунт?.
         /// </summary>
-        public static string ForgotPasswordString {
+        public static string LoginLinkString {
             get {
-                return ResourceManager.GetString("ForgotPasswordString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Войти.
-        /// </summary>
-        public static string LoginButtonLabel {
-            get {
-                return ResourceManager.GetString("LoginButtonLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Вход.
-        /// </summary>
-        public static string LoginFormHeader {
-            get {
-                return ResourceManager.GetString("LoginFormHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Логин.
-        /// </summary>
-        public static string LoginFormTabTitle {
-            get {
-                return ResourceManager.GetString("LoginFormTabTitle", resourceCulture);
+                return ResourceManager.GetString("LoginLinkString", resourceCulture);
             }
         }
         
@@ -169,29 +205,29 @@ namespace Resources.ClientWeb.Account {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Зарегистрируйтесь.
+        ///   Ищет локализованную строку, похожую на Зарегистрироваться.
         /// </summary>
-        public static string RegisterLinkLabel {
+        public static string RegisterButtonLabel {
             get {
-                return ResourceManager.GetString("RegisterLinkLabel", resourceCulture);
+                return ResourceManager.GetString("RegisterButtonLabel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Нет аккаунта?.
+        ///   Ищет локализованную строку, похожую на Регистрация.
         /// </summary>
-        public static string RegisterLinkString {
+        public static string RegisterFormHeader {
             get {
-                return ResourceManager.GetString("RegisterLinkString", resourceCulture);
+                return ResourceManager.GetString("RegisterFormHeader", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Запомнить меня.
+        ///   Ищет локализованную строку, похожую на Регистрация.
         /// </summary>
-        public static string RememberMeLabel {
+        public static string RegisterFormTabTitle {
             get {
-                return ResourceManager.GetString("RememberMeLabel", resourceCulture);
+                return ResourceManager.GetString("RegisterFormTabTitle", resourceCulture);
             }
         }
     }

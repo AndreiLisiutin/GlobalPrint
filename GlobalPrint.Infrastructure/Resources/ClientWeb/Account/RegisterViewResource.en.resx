@@ -117,6 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ConfirmationNotEqualToPassword" xml:space="preserve">
+    <value>Password and it's confirmation are not the same.</value>
+    <comment>Ошибка о том, что пароль и подтверждение пароля не совпадают.</comment>
+  </data>
+  <data name="ConfirmOfferLinkLabel" xml:space="preserve">
+    <value>terms and conditions</value>
+    <comment>Ссылка на оферту в тексте о согласии с офертой</comment>
+  </data>
+  <data name="ConfirmOfferLinkString" xml:space="preserve">
+    <value>I have read and agree to the</value>
+    <comment>Текст о согласии с офертой перед ссылкой "оферты"</comment>
+  </data>
+  <data name="ConfirmOfferRequiredError" xml:space="preserve">
+    <value>To continue registration you should accept all the terms and conditions.</value>
+    <comment>Ошибка об обязательности согласия с офертой</comment>
+  </data>
+  <data name="ConfirmPasswordFieldLabel" xml:space="preserve">
+    <value>Confirm password.</value>
+    <comment>Лэйбл поля "Подтвердите пароль"</comment>
+  </data>
+  <data name="ConfirmPasswordFieldRequiredError" xml:space="preserve">
+    <value>Field "Confirm password" is required.</value>
+    <comment>Ошибка о том, что поле "Подтвердите пароль" обязательно для заполнения</comment>
+  </data>
+  <data name="ConfirmPasswordFieldTypeError" xml:space="preserve">
+    <value>Field "Confirm password" should contain correct password.</value>
+    <comment>Ошибка о типе поля "Подтвердите пароль"</comment>
+  </data>
   <data name="EmailFieldLabel" xml:space="preserve">
     <value>Email</value>
     <comment>Лэйбл поля "Email"</comment>
@@ -129,25 +157,13 @@
     <value>Field "Email" should contain correct email address.</value>
     <comment>Ошибка о типе поля "Email"</comment>
   </data>
-  <data name="ForgotPasswordLabel" xml:space="preserve">
-    <value>Click here</value>
-    <comment>Ссылка "Восстановите"</comment>
-  </data>
-  <data name="ForgotPasswordString" xml:space="preserve">
-    <value>Forgot password?</value>
-    <comment>Текст "Забыли пароль?" перед ссылкой "Восстановите"</comment>
-  </data>
-  <data name="LoginButtonLabel" xml:space="preserve">
-    <value>Login</value>
-    <comment>Лэйбл кнопки "Войти"</comment>
-  </data>
-  <data name="LoginFormHeader" xml:space="preserve">
+  <data name="LoginLinkLabel" xml:space="preserve">
     <value>Sign in</value>
-    <comment>Заголовок формы (Логин)</comment>
+    <comment>Ссылка "Войдите"</comment>
   </data>
-  <data name="LoginFormTabTitle" xml:space="preserve">
-    <value>Login</value>
-    <comment>Лэйбл табки в браузере</comment>
+  <data name="LoginLinkString" xml:space="preserve">
+    <value>Have an account?</value>
+    <comment>Текст "Есть аккаунт?" перед ссылкой "Войдите"</comment>
   </data>
   <data name="PasswordFieldLabel" xml:space="preserve">
     <value>Password</value>
@@ -165,16 +181,16 @@
     <value>Field "Password" should contain correct password.</value>
     <comment>Ошибка о типе поля "Пароль"</comment>
   </data>
-  <data name="RegisterLinkLabel" xml:space="preserve">
-    <value>Register here</value>
-    <comment>Ссылка "Зарегистрируйтесь"</comment>
+  <data name="RegisterButtonLabel" xml:space="preserve">
+    <value>Register</value>
+    <comment>Лэйбл кнопки "Зарегистрироваться"</comment>
   </data>
-  <data name="RegisterLinkString" xml:space="preserve">
-    <value>Don't have an account?</value>
-    <comment>Текст "Нет аккаунта?" перед ссылкой "Зарегистрируйтесь"</comment>
+  <data name="RegisterFormHeader" xml:space="preserve">
+    <value>Registration</value>
+    <comment>Заголовок формы ("Регистрация")</comment>
   </data>
-  <data name="RememberMeLabel" xml:space="preserve">
-    <value>Remember me</value>
-    <comment>Лэйбл поля "Запомнить меня"</comment>
+  <data name="RegisterFormTabTitle" xml:space="preserve">
+    <value>Registration</value>
+    <comment>Лэйбл табки в браузере</comment>
   </data>
 </root>

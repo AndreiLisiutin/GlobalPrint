@@ -22,14 +22,14 @@ namespace Resources.ClientWeb.Account {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class LoginViewResource {
+    public class ForgotPasswordViewResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal LoginViewResource() {
+        internal ForgotPasswordViewResource() {
         }
         
         /// <summary>
@@ -39,7 +39,8 @@ namespace Resources.ClientWeb.Account {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GlobalPrint.Infrastructure.Resources.ClientWeb.Account.LoginViewResource", typeof(LoginViewResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GlobalPrint.Infrastructure.Resources.ClientWeb.Account.ForgotPasswordViewResource" +
+                            "", typeof(ForgotPasswordViewResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -88,110 +89,29 @@ namespace Resources.ClientWeb.Account {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Восстановите.
+        ///   Ищет локализованную строку, похожую на Восстановление пароля.
         /// </summary>
-        public static string ForgotPasswordLabel {
+        public static string ForgotPasswordFormHeader {
             get {
-                return ResourceManager.GetString("ForgotPasswordLabel", resourceCulture);
+                return ResourceManager.GetString("ForgotPasswordFormHeader", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Забыли пароль?.
+        ///   Ищет локализованную строку, похожую на Восстановление пароля.
         /// </summary>
-        public static string ForgotPasswordString {
+        public static string ForgotPasswordFormTabTitle {
             get {
-                return ResourceManager.GetString("ForgotPasswordString", resourceCulture);
+                return ResourceManager.GetString("ForgotPasswordFormTabTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Войти.
+        ///   Ищет локализованную строку, похожую на Подтвердить email.
         /// </summary>
-        public static string LoginButtonLabel {
+        public static string RestorePasswordButtonLabel {
             get {
-                return ResourceManager.GetString("LoginButtonLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Вход.
-        /// </summary>
-        public static string LoginFormHeader {
-            get {
-                return ResourceManager.GetString("LoginFormHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Логин.
-        /// </summary>
-        public static string LoginFormTabTitle {
-            get {
-                return ResourceManager.GetString("LoginFormTabTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Пароль.
-        /// </summary>
-        public static string PasswordFieldLabel {
-            get {
-                return ResourceManager.GetString("PasswordFieldLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Минимальная длина пароля - {2} символов..
-        /// </summary>
-        public static string PasswordFieldMinLengthError {
-            get {
-                return ResourceManager.GetString("PasswordFieldMinLengthError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Поле &quot;Пароль&quot; обязательно для заполнения..
-        /// </summary>
-        public static string PasswordFieldRequiredError {
-            get {
-                return ResourceManager.GetString("PasswordFieldRequiredError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Поле &quot;Пароль&quot; должно содержать корректный пароль..
-        /// </summary>
-        public static string PasswordFieldTypeError {
-            get {
-                return ResourceManager.GetString("PasswordFieldTypeError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Зарегистрируйтесь.
-        /// </summary>
-        public static string RegisterLinkLabel {
-            get {
-                return ResourceManager.GetString("RegisterLinkLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Нет аккаунта?.
-        /// </summary>
-        public static string RegisterLinkString {
-            get {
-                return ResourceManager.GetString("RegisterLinkString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Запомнить меня.
-        /// </summary>
-        public static string RememberMeLabel {
-            get {
-                return ResourceManager.GetString("RememberMeLabel", resourceCulture);
+                return ResourceManager.GetString("RestorePasswordButtonLabel", resourceCulture);
             }
         }
     }

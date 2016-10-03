@@ -162,7 +162,7 @@
     <comment>Ошибка о том, что поле "Пароль" обязательно для заполнения</comment>
   </data>
   <data name="PasswordFieldTypeError" xml:space="preserve">
-    <value>Поле "Password" должно содержать корректный пароль.</value>
+    <value>Поле "Пароль" должно содержать корректный пароль.</value>
     <comment>Ошибка о типе поля "Пароль"</comment>
   </data>
   <data name="RegisterLinkLabel" xml:space="preserve">

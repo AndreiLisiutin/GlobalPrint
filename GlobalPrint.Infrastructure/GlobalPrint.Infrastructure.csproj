@@ -94,8 +94,28 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Resources\ClientWeb\Account\ForgotPasswordViewResource.Designer.cs">
+      <DependentUpon>ForgotPasswordViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Account\RegisterViewResource.Designer.cs">
+      <DependentUpon>RegisterViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\ClientWeb\Account\LoginViewResource.Designer.cs">
       <DependentUpon>LoginViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Account\ForgotPasswordViewResource.en.Designer.cs">
+      <DependentUpon>ForgotPasswordViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Account\RegisterViewResource.en.Designer.cs">
+      <DependentUpon>RegisterViewResource.en.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -193,6 +213,26 @@
     <None Include="Web References\CreditOrgInfo\CreditOrgInfo.disco" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\ForgotPasswordViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ForgotPasswordViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\ForgotPasswordViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ForgotPasswordViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\RegisterViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>RegisterViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\RegisterViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>RegisterViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ClientWeb\Account\LoginViewResource.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LoginViewResource.en.Designer.cs</LastGenOutput>
