@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace GlobalPrint.Infrastructure.LogUtility.Robokassa
 {
@@ -21,7 +22,7 @@ namespace GlobalPrint.Infrastructure.LogUtility.Robokassa
             string sMrchPass1 = RobokassaConfig.Pass1;
             // order properties
             int nInvId = orderId;
-            string sDesc = $"Оплата заказа на распечатку заказа #{orderId} в Global print.";
+            string sDesc = HttpUtility.UrlEncode($"Оплата заказа на распечатку заказа №{orderId} в Global print.");
 
             string sOutSum = price.ToString("0.00", CultureInfo.InvariantCulture);
             string sCrcBase = string.Format("{0}:{1}:{2}:{3}",
