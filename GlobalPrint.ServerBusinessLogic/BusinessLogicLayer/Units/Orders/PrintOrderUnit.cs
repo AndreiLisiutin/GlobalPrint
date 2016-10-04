@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.DI;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 {
@@ -177,6 +178,72 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             _emailUtility.Value.Send(userMail, "Global Print - Изменение статуса заказа", userMessageBody);
         }
 
+        /// <summary>
+        /// Createt new order object from already existing order.
+        /// </summary>
+        /// <param name="printOrderID">Order identifier.</param>
+        /// <returns></returns>
+        public Tuple<NewOrder, PrintFile> FromExisting(int printOrderID, string baseDirectory)
+        {
+            Argument.Positive(printOrderID, "Ключ исходного заказа меньше нуля.");
+            using (IDataContext context = this.Context())
+            {
+                IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
+                PrintServicesUnit serviceUnit = new PrintServicesUnit();
+                PrinterUnit printerUnit = new PrinterUnit();
+
+                PrintOrder existingOrder = orderRepo.GetByID(printOrderID);
+                Argument.NotNull(existingOrder,
+                    $"Указанный исходный заказ не найден (PrintOrderID={printOrderID}).");
+
+                PrinterFullInfoModel printer = printerUnit.GetFullByID(existingOrder.PrinterID, context);
+                Argument.Require(printer != null && printer.IsAvailableNow,
+                    $"Принтер, на котором был выполнен заказ, не доступен в данный момент.");
+
+                IEnumerable<PrinterServiceExtended> services = serviceUnit
+                    .GetPrinterServices(existingOrder.PrinterID);
+                Argument.Require(services.Count() > 0,
+                    $"Принтер, на котором был выполнен заказ, не оказывает услуг (PrintOrderID={printOrderID}).");
+
+                //service associated with the order
+                PrinterServiceExtended orderService = services
+                    .FirstOrDefault(e => e.PrintService.PrintService.ID == existingOrder.PrintServiceID);
+
+                //or default of the printer
+                orderService = orderService ?? services.FirstOrDefault();
+
+                NewOrder newOrder = new NewOrder()
+                {
+                    Comment = existingOrder.Comment,
+                    CopiesCount = existingOrder.CopiesCount,
+                    UserID = existingOrder.UserID,
+                    FileToPrint = Guid.NewGuid(),
+                    IsColored = orderService.PrintService.PrintService.IsColored,
+                    IsTwoSided = orderService.PrintService.PrintService.IsTwoSided,
+                    PrintSizeID = orderService.PrintService.PrintSize.ID,
+                    PrintTypeID = orderService.PrintService.PrintType.ID,
+                    SecretCode = existingOrder.SecretCode,
+                    PrinterID = existingOrder.PrinterID
+                };
+
+                PrintFile file = new PrintFile()
+                {
+                    Name = existingOrder.DocumentName,
+                    Extension = existingOrder.DocumentExtension,
+                    SerializedFile = null
+                };
+                string usersDirectory = Path.Combine(baseDirectory, existingOrder.UserID.ToString());
+                string filePath = Path.Combine(usersDirectory, existingOrder.Document);
+                FileInfo fileInfo = new FileInfo(filePath);
+                if (!fileInfo.Exists)
+                {
+                    throw new FileNotFoundException($"Не найден файл заказа № {printOrderID} по пути {filePath}.");
+                }
+                file.SerializedFile = File.ReadAllBytes(filePath);
+                return new Tuple<NewOrder, PrintFile>(newOrder, file);
+            }
+        } 
+
         public PrintOrder New(NewOrder newOrder, string baseDirectory, PrintFile printFile)
         {
             Argument.NotNull(newOrder, "Новый заказ не может быть пустым.");
@@ -213,7 +280,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 SecretCode = newOrder.SecretCode,
                 UserID = newOrder.UserID,
                 DocumentName = printFile.Name,
-                PaymentTransactionID = null //will be defined while save
+                DocumentExtension = printFile.Extension,
+                PaymentTransactionID = 0 //will be defined while save
             };
 
             var services = new PrintServicesUnit().GetPrinterServices(newOrder.PrinterID);
@@ -241,6 +309,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             Argument.Positive(order.PagesCount, "Количество страниц должно быть положительным.");
             Argument.Positive(order.PricePerPage, "Цена за страницу должна быть положительной.");
             Argument.Positive(order.PrinterID, "Принтер не может быть неопределенным.");
+            Argument.Positive(order.PrintServiceID, "Услуга не может быть неопределенной.");
+            Argument.NotNullOrWhiteSpace(order.DocumentName, "Название документа не может быть пустым.");
+            Argument.NotNullOrWhiteSpace(order.DocumentExtension, "Расширение документа не может быть пустым.");
             Argument.Positive(order.PrintServiceID, "Услуга не может быть неопределенной.");
             Argument.NotNullOrWhiteSpace(order.SecretCode, "Секретный код не может быть пустым.");
             Argument.Positive(order.UserID, "Заказчик должен быть определен.");
@@ -300,7 +371,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             using (IDataContext context = this.Context())
             {
                 IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
-                
+
                 PrintOrder order = orderRepo.GetByID(printOrderID);
                 Argument.Require(order.UserID == userID, "Редактировать можно только свои заказы.");
                 Argument.Require(!rating.HasValue || rating > 0, "Рейтинг заказа не может быть отрицательным.");

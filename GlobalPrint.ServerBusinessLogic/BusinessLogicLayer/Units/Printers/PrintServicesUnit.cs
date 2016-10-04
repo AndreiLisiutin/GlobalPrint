@@ -28,30 +28,56 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
         {
         }
 
-        /// <summary> Get all possible print services of the system.
+        /// <summary> Get print services of the system by its identifier.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="printServiceID">Identifier of the print service.</param>
+        /// <returns>Found print service or null if it not exists.</returns>
         public PrintServiceExtended GetPrintServiceByID(int printServiceID)
         {
             return this.GetPrintServices(e => e.PrintService.ID == printServiceID)
                 .FirstOrDefault();
         }
 
-        /// <summary> Get all possible print services of the system.
+        /// <summary> Get print services of the system by its identifier.
         /// </summary>
+        /// <param name="printServiceID">Identifier of the print service.</param>
+        /// <param name="context">Existing data context.</param>
+        /// <returns>Found print service or null if it not exists.</returns>
+        public PrintServiceExtended GetPrintServiceByID(int printServiceID, IDataContext context)
+        {
+            return this.GetPrintServices(e => e.PrintService.ID == printServiceID, context)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get print services of the system by certain criteria.
+        /// </summary>
+        /// <param name="predicate">Criteria for print services.</param>
         /// <returns></returns>
         public IEnumerable<PrintServiceExtended> GetPrintServices(Expression<Func<PrintServiceExtended, bool>> predicate = null)
         {
             using (IDataContext context = this.Context())
             {
-                IQueryable<PrintServiceExtended> services = this.PrintServices(context);
-                if (predicate != null)
-                {
-                    services = services.Where(predicate);
-                }
-                
-                return services.ToList();
+                return this.GetPrintServices(predicate, context);
             }
+        }
+
+        /// <summary>
+        /// Get print services of the system by certain criteria. Requires data context.
+        /// </summary>
+        /// <param name="predicate">Criteria for print services.</param>
+        /// <param name="context">Existing data context.</param>
+        /// <returns>List of matching print services.</returns>
+        public IEnumerable<PrintServiceExtended> GetPrintServices(Expression<Func<PrintServiceExtended, bool>> predicate, IDataContext context)
+        {
+            Argument.NotNull(context, "Контекст данных пустой.");
+
+            IQueryable<PrintServiceExtended> services = this.PrintServices(context);
+            if (predicate != null)
+            {
+                services = services.Where(predicate);
+            }
+            return services.ToList();
         }
 
         /// <summary> Get printer services by certain condition.
@@ -79,7 +105,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
         {
             return GetPrinterServices(e => e.PrinterService.PrinterID == printerID);
         }
-        
+
         /// <summary> Create Queryable for print services with all the text values for IDs.
         /// </summary>
         /// <param name="context">Data context with connection to the data source.</param>
@@ -94,7 +120,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             IQueryable<PrintServiceExtended> queryableServices =
                 from service in printServiceRepo.GetAll()
                 join sizeType in printSizePrintTypeRepo.GetAll() on service.PrintSizePrintTypeID equals sizeType.PrintSizePrintTypeID
-                join size in printSizeRepo.GetAll() on sizeType.PrintSizeID equals size.PrintSizeID
+                join size in printSizeRepo.GetAll() on sizeType.PrintSizeID equals size.ID
                 join type in printTypeRepo.GetAll() on sizeType.PrintTypeID equals type.ID
                 select new PrintServiceExtended() { PrintService = service, PrintSizePrintType = sizeType, PrintSize = size, PrintType = type };
 
