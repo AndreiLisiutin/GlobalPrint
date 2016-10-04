@@ -271,10 +271,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
 
                 PrintOrder order = orderRepo.GetByID(printOrderID);
                 Argument.NotNull(order, $"Print order (ID={printOrderID}) not found.");
-                Argument.NotNull(order.PaymentTransactionID, $"Print order (ID={printOrderID}) has no payment transaction 0o.");
+                Argument.Positive(order.PaymentTransactionID, $"Print order (ID={printOrderID}) has no payment transaction 0o.");
 
-                PaymentTransaction transaction = transactionRepo.GetByID(order.PaymentTransactionID.Value);
-                Argument.NotNull(transaction, $"Payment transaction (ID={order.PaymentTransactionID.Value}) not found.");
+                PaymentTransaction transaction = transactionRepo.GetByID(order.PaymentTransactionID);
+                Argument.NotNull(transaction, $"Payment transaction (ID={order.PaymentTransactionID}) not found.");
                 if (transaction.PaymentTransactionStatusID == (int)PaymentTransactionStatusEnum.Committed)
                 {
                     //done
@@ -306,7 +306,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                     actionRepo.Insert(action);
                     context.Save();
                     
-                    this._CommitTransaction(order.PaymentTransactionID.Value, context);
+                    this._CommitTransaction(order.PaymentTransactionID, context);
 
                     //mark order as printed
                     order.PrintedOn = DateTime.Now;
@@ -340,10 +340,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
 
                 PrintOrder order = orderRepo.GetByID(printOrderID);
                 Argument.NotNull(order, $"Print order (ID={printOrderID}) not found.");
-                Argument.NotNull(order.PaymentTransactionID, $"Print order (ID={printOrderID}) has no payment transaction 0o.");
+                Argument.Positive(order.PaymentTransactionID, $"Print order (ID={printOrderID}) has no payment transaction 0o.");
 
-                PaymentTransaction transaction = transactionRepo.GetByID(order.PaymentTransactionID.Value);
-                Argument.NotNull(transaction, $"Payment transaction (ID={order.PaymentTransactionID.Value}) not found.");
+                PaymentTransaction transaction = transactionRepo.GetByID(order.PaymentTransactionID);
+                Argument.NotNull(transaction, $"Payment transaction (ID={order.PaymentTransactionID}) not found.");
                 if (transaction.PaymentTransactionStatusID == (int)PaymentTransactionStatusEnum.RolledBack)
                 {
                     //done
@@ -352,7 +352,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                 context.BeginTransaction();
                 try
                 {
-                    this._RollBackTransaction(order.PaymentTransactionID.Value, context);
+                    this._RollBackTransaction(order.PaymentTransactionID, context);
                     
                     //mark order as not printed
                     order.PrintOrderStatusID = (int)PrintOrderStatusEnum.Rejected;

@@ -114,11 +114,23 @@ namespace GlobalPrint.ClientWeb
         public ActionResult MyOrders(string printOrderID)
         {
             PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-
-            int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
+            int userID = this.GetCurrentUserID();
             var printOrderList = printOrderUnit.GetUserPrintOrderList(userID, printOrderID);
             return View("MyOrders", printOrderList);
         }
+
+
+        //[HttpGet]
+        //[Authorize]
+        //public ActionResult FromExisting(int printOrderID)
+        //{
+        //    Argument.Positive(printOrderID, "printOrderID не может быть меньше 0.");
+        //    PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
+
+        //    Tuple<NewOrder, PrintFile> newOrder = printOrderUnit.FromExisting(printOrderID);
+        //    var model = this._CreatePrintViewModel(newOrder.Item1.PrinterID, newOrder.Item1);
+        //    return View(model);
+        //}
 
         [HttpGet]
         [Authorize]

@@ -85,7 +85,7 @@ namespace GlobalPrint.ClientWeb
             PrintOrder order = printOrderUnit.GetPrintOrderByID(printOrderID);
 
             byte[] fileBytes = System.IO.File.ReadAllBytes(order.Document);
-            string fileName = new FileInfo(order.Document).Name;
+            string fileName = order.DocumentName ?? new FileInfo(order.Document).Name;
             return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
     }

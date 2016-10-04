@@ -32,3 +32,4 @@ packages
 GlobalPrint.ClientWeb/App_Data
 *.pubxml
 *.pubxml.user
+.vs/

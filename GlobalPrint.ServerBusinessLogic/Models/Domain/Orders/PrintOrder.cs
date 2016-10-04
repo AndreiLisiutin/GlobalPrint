@@ -43,13 +43,19 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Orders
         /// Reference to the payment transaction, which operates the order's payment actions.
         /// </summary>
         [Column("payment_transaction_id")]
-        public int? PaymentTransactionID { get; set; }
+        public int PaymentTransactionID { get; set; }
 
         /// <summary>
         /// Name of the document included extension like: myFile.txt.
         /// </summary>
         [Column("document_name")]
         public string DocumentName { get; set; }
+
+        /// <summary>
+        /// Only extension of the printed document: "txt" for document_name "myFile.txt".
+        /// </summary>
+        [Column("document_extension")]
+        public string DocumentExtension { get; set; }
 
         /// <summary> Number of copies that is requested to print.
         /// </summary>
