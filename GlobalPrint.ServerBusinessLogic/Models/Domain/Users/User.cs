@@ -29,7 +29,6 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         public decimal AmountOfMoney { get; set; }
         [Column("bic")]
         public string Bic { get; set; }
-
         [Column("phone")]
         public string PhoneNumber { get; set; }
         [Column("password_hash")]
@@ -40,6 +39,8 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         public bool PhoneNumberConfirmed { get; set; }
         [Column("email_confirmed")]
         public bool EmailConfirmed { get; set; }
+        [Column("last_activity_date")]
+        public DateTime LastActivityDate { get; set; }
 
         #region IDomainModel
         [NotMapped]

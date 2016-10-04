@@ -50,7 +50,7 @@
             <div class="col-sm-11">
                 <div class="input-group">
                     @Html.TextBoxFor(m => m.User.AmountOfMoney, new { @class = "form-control", @readonly = "true", @placeholder = "Баланс" })
-                    <span class="input-group-btn">                        
+                    <span class="input-group-btn">
                         <!-- Кнопка, вызывающее модальное окно -->
                         <a href="#FillUpBalanceModal" title="Пополнить счет" class="btn btn-default" data-toggle="modal">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -61,33 +61,30 @@
         </div>
 
         // Оферта
-        if (Model.LatestUserOffer.HasUserOffer)
-        {
-            <div class="form-group">
-                <label class="col-sm-1 control-label text-left">Оферта</label>
-                <div class="col-sm-11">
-                    <div class="input-group">
-                        @Html.TextBox("UserOfferTitle", Model.LatestUserOffer.UserOfferTitle, new { @class = "form-control", @readonly = "true", @placeholder = "Договор оферты пользователя" })
-                        <span class="input-group-btn">
-                            <a href="@Url.Action("Offer", "Offer", new { @offerTypeID = OfferTypeEnum.UserOffer })" target="_blank" title="Открыть договор оферты" class="btn btn-default">
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                            </a>
-                        </span>
-                    </div>
+        <div class="form-group">
+            <label class="col-sm-1 control-label text-left">Оферта</label>
+            <div class="col-sm-11">
+                <div class="input-group">
+                    @Html.TextBox("UserOfferTitle", "Договор оферты пользователя", new { @class = "form-control", @readonly = "true", @placeholder = "Договор оферты пользователя" })
+                    <span class="input-group-btn">
+                        <a href="@Url.Action("Offer", "Offer", new { @offerTypeID = OfferTypeEnum.UserOffer })" target="_blank" title="Открыть договор оферты" class="btn btn-default">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </a>
+                    </span>
                 </div>
             </div>
-        }
+        </div>
 
         @Html.HiddenFor(m => m.User.UserID)
         @Html.HiddenFor(m => m.User.PhoneNumber)
 
         <div class="form-group">
             <div class="col-xs-10">
-                <button class="btn btn-default" type="submit" value="Save" name="action:Save">Сохранить</button>       
+                <button class="btn btn-default" type="submit" value="Save" name="action:Save">Сохранить</button>
                 <!-- Кнопка, вызывающее модальное окно -->
                 <a href="#FillUpBalanceModal" title="Пополнить счет" class="btn btn-default" data-toggle="modal">
                     Пополнить счет
-                </a>  
+                </a>
                 @Html.ActionLink("История платежей", "MyPayments", "UserProfile", new { @class = "btn btn-default" })
             </div>
         </div>

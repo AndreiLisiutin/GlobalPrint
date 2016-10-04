@@ -12,10 +12,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Mail;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 {
-    public class UserUnit : BaseUnit
+    public class UserUnit : BaseUnit, IUserUnit
     {
         private Lazy<IEmailUtility> _emailUtility { get; set; }
 
@@ -99,7 +100,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
         }
 
         /// <summary>
-        /// Method only for 
+        /// Method only for User store
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
@@ -212,6 +213,50 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 {
                     throw new Exception("Не найден пользователь [ID=" + userID + "]");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Update last user activity.
+        /// </summary>
+        /// <param name="userID">User identifier.</param>
+        /// <returns>User instance.</returns>
+        public User UpdateUserActivity(int userID)
+        {
+            using (IDataContext context = this.Context())
+            {
+                IUserRepository userRepo = this.Repository<IUserRepository>(context);
+                User originalUser = userRepo.GetByID(userID);
+
+                if (originalUser != null)
+                {
+                    originalUser.LastActivityDate = DateTime.Now;
+                    userRepo.Update(originalUser);
+                    context.Save();
+
+                    return originalUser;
+                }
+                else
+                {
+                    throw new Exception("Не найден пользователь [ID=" + userID + "]");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Return all the inactive users during "threshold" period.
+        /// </summary>
+        /// <param name="threshold">Period to search inactive users.</param>
+        /// <returns>List of inactive users.</returns>
+        public List<User> GetInactiveUsers(TimeSpan threshold)
+        {
+            using (IDataContext context = this.Context())
+            {
+                IUserRepository userRepo = this.Repository<IUserRepository>(context);
+
+                return userRepo.Get(e => e.LastActivityDate > DateTime.Now.Subtract(threshold)
+                        && e.EmailConfirmed == true)
+                    .ToList();
             }
         }
     }

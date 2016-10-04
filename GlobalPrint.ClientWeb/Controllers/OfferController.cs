@@ -20,6 +20,17 @@ namespace GlobalPrint.ClientWeb.Controllers
         }
 
         /// <summary>
+        /// Show privacy policy on registration.
+        /// </summary>
+        /// <returns>Blank privacy policy.</returns>
+        // GET: /Offer/PrivacyPolicy
+        [HttpGet]
+        public ActionResult PrivacyPolicy()
+        {
+            return View("PrivacyPolicy");
+        }
+
+        /// <summary>
         /// Show blank user offer on registration.
         /// </summary>
         /// <returns>Blank actual user offer.</returns>
@@ -27,17 +38,17 @@ namespace GlobalPrint.ClientWeb.Controllers
         [HttpGet]
         public ActionResult ActualUserOffer()
         {
-            Offer userOffer = _offerUnit.GetActualOfferByType(OfferTypeEnum.UserOffer);
-            Argument.NotNull(userOffer, "Не найдена актуальная оферта пользователя.");
-            Argument.NotNullOrWhiteSpace(userOffer.Text, "Текст оферты пользователя пуст.");
+            //Offer userOffer = _offerUnit.GetActualOfferByType(OfferTypeEnum.UserOffer);
+            //Argument.NotNull(userOffer, "Не найдена актуальная оферта пользователя.");
+            //Argument.NotNullOrWhiteSpace(userOffer.Text, "Текст оферты пользователя пуст.");
 
-            OfferViewModel offerModel = new OfferViewModel()
-            {
-                Title = userOffer.Name ?? "Договор оферты пользователя",
-                Paragraphs = userOffer.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None)
-            };
+            //OfferViewModel offerModel = new OfferViewModel()
+            //{
+            //    Title = userOffer.Name ?? "Договор оферты пользователя",
+            //    Paragraphs = userOffer.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None)
+            //};
 
-            return View("Offer", offerModel);
+            return View("Offer");
         }
 
         /// <summary>
@@ -49,22 +60,22 @@ namespace GlobalPrint.ClientWeb.Controllers
         [Authorize]
         public ActionResult Offer(OfferTypeEnum offerTypeID)
         {
-            UserOfferExtended userOffer = _userOfferUnit.GetLatestUserOfferByUserID(this.GetCurrentUserID(), offerTypeID);
+            //UserOfferExtended userOffer = _userOfferUnit.GetLatestUserOfferByUserID(this.GetCurrentUserID(), offerTypeID);
 
-            string[] offerParagraphs = null;
-            string offerTitle = null;
-            if (userOffer != null && userOffer.Offer != null && !string.IsNullOrWhiteSpace(userOffer.UserOfferText))
-            {
-                offerTitle = userOffer.UserOfferTitle;
-                offerParagraphs = userOffer.UserOfferText.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
-            }
+            //string[] offerParagraphs = null;
+            //string offerTitle = null;
+            //if (userOffer != null && userOffer.Offer != null && !string.IsNullOrWhiteSpace(userOffer.UserOfferText))
+            //{
+            //    offerTitle = userOffer.UserOfferTitle;
+            //    offerParagraphs = userOffer.UserOfferText.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+            //}
             
-            OfferViewModel offerModel = new OfferViewModel()
-            {
-                Title = offerTitle,
-                Paragraphs = offerParagraphs
-            };
-            return View(offerModel);
+            //OfferViewModel offerModel = new OfferViewModel()
+            //{
+            //    Title = offerTitle,
+            //    Paragraphs = offerParagraphs
+            //};
+            return View();
         }
     }
 }

@@ -328,6 +328,7 @@
     <Compile Include="Filters\AuthorizeByUrlAttribute.cs" />
     <Compile Include="Filters\ModelStateAttributes.cs" />
     <Compile Include="Filters\MultipleButtonAttribute.cs" />
+    <Compile Include="Filters\UpdateActivityAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -408,6 +409,7 @@
     <Content Include="Resources\Libraries\bootstrap-rating\LICENSE.md" />
     <Content Include="Resources\Libraries\bootstrap-rating\package.json" />
     <Content Include="Resources\Libraries\bootstrap-rating\README.md" />
+    <Content Include="Views\Offer\PrivacyPolicy.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

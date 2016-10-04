@@ -120,6 +120,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_IBusinessLogicLayer\Units\Offers\IOfferUnit.cs" />
     <Compile Include="_IBusinessLogicLayer\Units\Offers\IUserOfferUnit.cs" />
+    <Compile Include="_IBusinessLogicLayer\Units\Users\IUserUnit.cs" />
     <Compile Include="_IDataAccessLayer\DataContext\IDataContext.cs" />
     <Compile Include="_IDataAccessLayer\DataContext\IDataContextFactory.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Offers\IOfferTypeRepository.cs" />

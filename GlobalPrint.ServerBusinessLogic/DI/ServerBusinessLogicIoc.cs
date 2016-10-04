@@ -1,10 +1,12 @@
 ﻿using GlobalPrint.Infrastructure.DI;
 using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Orders;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Printers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -27,6 +29,10 @@ namespace GlobalPrint.ServerBusinessLogic.DI
             // Units/Offer
             ioc.Kernel.Bind<IUserOfferUnit>().To<UserOfferUnit>().InTransientScope();
             ioc.Kernel.Bind<IOfferUnit>().To<OfferUnit>().InTransientScope();
+
+            // Units/User
+            ioc.Kernel.Bind<IUserUnit>().To<UserUnit>().InTransientScope();
+
         }
     }
 }
