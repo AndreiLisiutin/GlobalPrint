@@ -2,7 +2,6 @@
 using GlobalPrint.ClientWeb.Binders;
 using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.LogUtility;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities.ScheduledActivityChecker;
 using Microsoft.AspNet.SignalR;
 using Ninject;
 using System;

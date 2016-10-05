@@ -75,17 +75,23 @@ namespace GlobalPrint.ClientWeb
             return View("MyOrders", printOrderList);
         }
 
-
-        //[HttpGet]
-        //[Authorize]
-        //public ActionResult FromExisting(int printOrderID)
-        //{
-        //    Argument.Positive(printOrderID, "printOrderID не может быть меньше 0.");
-
-        //    Tuple<NewOrder, PrintFile> newOrder = this._printOrderUnit.FromExisting(printOrderID);
-        //    var model = this._CreatePrintViewModel(newOrder.Item1.PrinterID, newOrder.Item1);
-        //    return View(model);
-        //}
+        /// <summary>
+        /// Create a new order using old document and printer where such an order was performed.
+        /// </summary>
+        /// <param name="printOrderID">Identifier of an order.</param>
+        /// <returns>New order creation view.</returns>
+        [HttpGet]
+        [Authorize]
+        public ActionResult FromExisting(int printOrderID)
+        {
+            Argument.Positive(printOrderID, "printOrderID не может быть меньше 0.");
+            int userID = this.GetCurrentUserID();
+            string app_data = HttpContext.Server.MapPath("~/App_Data");
+            NewOrder newOrder = this._printOrderUnit.FromExisting(printOrderID, userID);
+            DocumentBusinessInfo document = this._printOrderUnit.GetPrintOrderDocument(printOrderID, app_data);
+            this._Uploaded[newOrder.FileToPrint] = document;
+            return this._ORDER_NEW(newOrder);
+        }
 
         /// <summary>
         /// Place a new order for a certain printer.
@@ -123,6 +129,12 @@ namespace GlobalPrint.ClientWeb
             Argument.NotNull(newOrder, "Модель нового заказа не может быть пустой.");
             if (!ModelState.IsValid)
             {
+                return this._ORDER_NEW(newOrder);
+            }
+            if (!this._Uploaded.ContainsKey(newOrder.FileToPrint))
+            {
+                //файл не найден
+                ModelState.AddModelError("", "Файл для печати не найден.");
                 return this._ORDER_NEW(newOrder);
             }
             DocumentBusinessInfo document = null;
@@ -185,7 +197,8 @@ namespace GlobalPrint.ClientWeb
             }
 
             string app_data = HttpContext.Server.MapPath("~/App_Data");
-            PrintOrder createdOrder = this._printOrderUnit.Create(newOrder, app_data, this._Uploaded[newOrder.FileToPrint]);
+            int userID = this.GetCurrentUserID();
+            PrintOrder createdOrder = this._printOrderUnit.Create(newOrder, userID, app_data, this._Uploaded[newOrder.FileToPrint]);
 
             #region Notifications
 #warning remove it from here
@@ -228,13 +241,19 @@ namespace GlobalPrint.ClientWeb
             return View(order);
         }
 
+        /// <summary>
+        /// Download order from the App_data folder of the application.
+        /// </summary>
+        /// <param name="printOrderID">Identifier of the order.</param>
+        /// <returns>File stram with order file.</returns>
         [HttpGet]
         [Authorize]
         public ActionResult DownloadOrder(int printOrderID)
         {
             string app_data = HttpContext.Server.MapPath("~/App_Data");
-            DocumentBusinessInfo order = this._printOrderUnit.GetPrintOrderDocument(printOrderID, app_data);
-            return File(order.SerializedFile, System.Net.Mime.MediaTypeNames.Application.Octet, order.Name);
+            int userID = this.GetCurrentUserID();
+            DocumentBusinessInfo fileInfo = this._printOrderUnit.GetPrintOrderDocument(printOrderID, userID, app_data);
+            return File(fileInfo.SerializedFile, System.Net.Mime.MediaTypeNames.Application.Octet, fileInfo.Name);
         }
 
         private ViewResult _ORDER_NEW(NewOrder newOrder)
