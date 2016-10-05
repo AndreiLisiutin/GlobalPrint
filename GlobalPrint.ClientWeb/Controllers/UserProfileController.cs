@@ -73,7 +73,7 @@ namespace GlobalPrint.ClientWeb
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Некорректно введена ссума пополнения", ex);
+                    throw new Exception("Некорректно введена сумма пополнения", ex);
                 }
                 //create payment action in DB for filling up balance and redirect to robokassa
                 PaymentAction action = new PaymentActionUnit().InitializeFillUpBalance(userID, decimalUpSumm, null);

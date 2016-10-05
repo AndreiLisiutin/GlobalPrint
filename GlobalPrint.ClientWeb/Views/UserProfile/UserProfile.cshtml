@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        @Html.HiddenFor(m => m.User.UserID)
+        @Html.HiddenFor(m => m.User.ID)
         @Html.HiddenFor(m => m.User.PhoneNumber)
 
         <div class="form-group">
@@ -85,7 +85,8 @@
                 <a href="#FillUpBalanceModal" title="Пополнить счет" class="btn btn-default" data-toggle="modal">
                     Пополнить счет
                 </a>
-                @Html.ActionLink("История платежей", "MyPayments", "UserProfile", new { @class = "btn btn-default" })
+                @Html.ActionLink("История платежей", "MyPayments", "UserProfile", new { }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Реестр заказов", "PrintOrderRegister", "Reports", new { }, new { @class = "btn btn-default" })
             </div>
         </div>
     }

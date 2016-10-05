@@ -16,20 +16,14 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Printers
         public PrintSize()
         {
         }
-
-        private int PrintSizeID { get; set; }
+        
         [Column("name")]
         public string Name { get; set; }
 
         #region IDomainModel
-        [NotMapped]
         [Key]
         [Column("print_size_id")]
-        public int ID
-        {
-            get { return this.PrintSizeID; }
-            set { this.PrintSizeID = value; }
-        }
+        public int ID { get; set; }
         #endregion
     }
 }

@@ -15,11 +15,11 @@ namespace GlobalPrint.ClientWeb
         {
             get
             {
-                return this.User.UserID;
+                return this.User.ID;
             }
             set
             {
-                this.User.UserID = value;
+                this.User.ID = value;
             }
         }
         public string UserName

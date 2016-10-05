@@ -11,7 +11,7 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
     /// </summary>
     public interface IUserProfile
     {
-        int UserID { get; set; }
+        int ID { get; set; }
         string UserName { get; set; }
         string Email { get; set; }
         string PhoneNumber { get; set; }

@@ -309,6 +309,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Filters\BaseErrorHandleAttribute.cs" />
     <Compile Include="Controllers\_TestController.cs" />
     <Compile Include="Controllers\AboutController.cs" />
@@ -410,6 +411,7 @@
     <Content Include="Resources\Libraries\bootstrap-rating\package.json" />
     <Content Include="Resources\Libraries\bootstrap-rating\README.md" />
     <Content Include="Views\Offer\PrivacyPolicy.cshtml" />
+    <Content Include="Views\Reports\PrintOrderRegister.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

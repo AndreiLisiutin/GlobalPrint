@@ -38,6 +38,11 @@
       <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\packages\Microsoft.Office.Interop.Word.15.0.4420.1017\lib\net20\Microsoft.Office.Interop.Word.dll</HintPath>
@@ -74,6 +79,7 @@
     <Compile Include="BankUtility\BankUtility.cs" />
     <Compile Include="BankUtility\IBankUtility.cs" />
     <Compile Include="CommonUtils\Argument.cs" />
+    <Compile Include="CommonUtils\IMimeTypeUtility.cs" />
     <Compile Include="CommonUtils\MimeTypeUtility.cs" />
     <Compile Include="CommonUtils\WeekUtility.cs" />
     <Compile Include="DI\BaseIoC.cs" />
@@ -81,6 +87,13 @@
     <Compile Include="DI\IoC.cs" />
     <Compile Include="EmailUtility\EmailUtility.cs" />
     <Compile Include="EmailUtility\IEmailUtility.cs" />
+    <Compile Include="FileUtility\FileExporters\ExcelExporter.cs" />
+    <Compile Include="FileUtility\FileExporters\Exportable\ExportableEntity.cs" />
+    <Compile Include="FileUtility\FileExporters\Exportable\ExportableProperty.cs" />
+    <Compile Include="FileUtility\FileExporters\FileExporterEnum.cs" />
+    <Compile Include="FileUtility\FileExporters\IFileExporter.cs" />
+    <Compile Include="FileUtility\FileExporters\TextExporter.cs" />
+    <Compile Include="FileUtility\IFileUtility.cs" />
     <Compile Include="Localization\LocalizationCountry.cs" />
     <Compile Include="Localization\LocalizationHelper.cs" />
     <Compile Include="LogUtility\ILoggerFactory.cs" />
@@ -143,9 +156,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Enums\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <COMReference Include="VBIDE">
       <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>

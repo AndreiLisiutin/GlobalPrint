@@ -69,6 +69,7 @@
     <Compile Include="BusinessLogicLayer\Units\Offers\UserOfferUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Orders\PrintOrderUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Payment\PaymentActionUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Orders\PrintOrderRegistersUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Printers\PrinterUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Printers\PrintServicesUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Users\UserActionUnit.cs" />
@@ -76,10 +77,11 @@
     <Compile Include="BusinessLogicLayer\Utilities\SmsUtility.cs" />
     <Compile Include="Models\Business\Offers\UserOfferExtended.cs" />
     <Compile Include="Models\Business\Orders\NewOrder.cs" />
+    <Compile Include="Models\Business\Orders\OrderRegisterFilter.cs" />
     <Compile Include="Models\Business\Payments\PaymentActionFullInfo.cs" />
     <Compile Include="Models\Business\Printers\PrinterFullInfoModel.cs" />
     <Compile Include="Models\Business\Printers\PrinterSearchFilter.cs" />
-    <Compile Include="Models\Business\PrintFile.cs" />
+    <Compile Include="Models\Business\DocumentBusinessInfo.cs" />
     <Compile Include="Models\Business\Users\UserExtended.cs" />
     <Compile Include="Models\Domain\IDomainModel.cs" />
     <Compile Include="Models\Business\Printers\PrinterServiceExtended.cs" />

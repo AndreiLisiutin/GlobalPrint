@@ -34,7 +34,7 @@ namespace GlobalPrint.Test.ClientWebControllers
             //    User = new User()
             //    {
             //       Bic = "123456789",
-            //       UserID = 1,
+            //       ID = 1,
             //       UserName = this.UserName
             //    },
             //    LatestUserOffer = new UserOffer()

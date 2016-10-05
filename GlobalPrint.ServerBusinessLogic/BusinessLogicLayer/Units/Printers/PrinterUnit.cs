@@ -192,13 +192,13 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             IUserRepository userRepo = this.Repository<IUserRepository>(context);
 
             User printerOwner = printerRepo.Get(e => e.ID == printerID)
-                   .Join(userRepo.GetAll(), e => e.OperatorUserID, e => e.UserID, (p, u) => u)
+                   .Join(userRepo.GetAll(), e => e.OperatorUserID, e => e.ID, (p, u) => u)
                    .FirstOrDefault();
 
             if (printerOwner == null)
             {
                 printerOwner = printerRepo.Get(e => e.ID == printerID)
-                   .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
+                   .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.ID, (p, u) => u)
                    .First();
             }
 
@@ -223,7 +223,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             IUserRepository userRepo = this.Repository<IUserRepository>(context);
 
             User printerOwner = printerRepo.Get(e => e.ID == printerID)
-                   .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
+                   .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.ID, (p, u) => u)
                    .First();
             return printerOwner;
         }

@@ -80,7 +80,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             {
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
 
-                User originalUser = userRepo.GetByID(user.UserID);
+                User originalUser = userRepo.GetByID(user.ID);
                 if (originalUser != null)
                 {
                     originalUser.UserName = user.UserName;
@@ -94,7 +94,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 }
                 else
                 {
-                    throw new Exception("Не найден пользователь [ID=" + user.UserID + "]");
+                    throw new Exception("Не найден пользователь [ID=" + user.ID + "]");
                 }
             }
         }
@@ -109,7 +109,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             using (IDataContext context = this.Context())
             {
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
-                User originalUser = userRepo.GetByID(user.UserID);
+                User originalUser = userRepo.GetByID(user.ID);
 
                 if (originalUser != null)
                 {
@@ -119,7 +119,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 }
                 else
                 {
-                    throw new Exception("Не найден пользователь [ID=" + user.UserID + "]");
+                    throw new Exception("Не найден пользователь [ID=" + user.ID + "]");
                 }
             }
         }

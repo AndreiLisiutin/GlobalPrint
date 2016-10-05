@@ -57,16 +57,16 @@ namespace GlobalPrint.ClientWeb
             return model;
         }
 
-        private Tuple<PrintOrder, PrintFile> _OrderEditionModel(NewOrder newOrder)
+        private Tuple<PrintOrder, DocumentBusinessInfo> _OrderEditionModel(NewOrder newOrder)
         {
             Argument.NotNull(newOrder, "Не заполнены поля на форме нового заказа");
             Argument.Require(this._Uploaded.ContainsKey(newOrder.FileToPrint), "Файл заказа не найден.");
             PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
 
             string app_data = HttpContext.Server.MapPath("~/App_Data");
-            PrintFile file = this._Uploaded[newOrder.FileToPrint];
+            DocumentBusinessInfo file = this._Uploaded[newOrder.FileToPrint];
             PrintOrder order = printOrderUnit.New(newOrder, app_data, file);
-            return new Tuple<PrintOrder, PrintFile>(order, file);
+            return new Tuple<PrintOrder, DocumentBusinessInfo>(order, file);
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace GlobalPrint.ClientWeb
             try
             {
                 string app_data = HttpContext.Server.MapPath("~/App_Data");
-                PrintFile file = this._Uploaded[NewOrder.FileToPrint];
+                DocumentBusinessInfo file = this._Uploaded[NewOrder.FileToPrint];
                 PrintOrder createdOrder = printOrderUnit.Create(NewOrder, app_data, file);
 
                 // Push notification about new order
@@ -202,7 +202,7 @@ namespace GlobalPrint.ClientWeb
                     createdOrder.PagesCount,
                     createdOrder.FullPrice
                 );
-                new PushNotificationHub().NewIncomingOrder(notificationMessage, printerOperator.UserID);
+                new PushNotificationHub().NewIncomingOrder(notificationMessage, printerOperator.ID);
 
                 this._Uploaded.Remove(NewOrder.FileToPrint);
                 return RedirectToAction("Complete", new { printOrderID = createdOrder.ID });
@@ -240,7 +240,7 @@ namespace GlobalPrint.ClientWeb
             if (file != null && file.ContentLength != 0)
             {
                 fileId = Guid.NewGuid();
-                PrintFile printFile = PrintFile.FromHttpPostedFileBase(file);
+                DocumentBusinessInfo printFile = DocumentBusinessInfo.FromHttpPostedFileBase(file);
                 this._Uploaded.Add(fileId, printFile);
                 isUploaded = true;
                 message = "Файл успешно загружен.";
@@ -251,15 +251,15 @@ namespace GlobalPrint.ClientWeb
 
         /// <summary> Uplioaded files in memory. Will die if user will decide not to print them.
         /// </summary>
-        private Dictionary<Guid, PrintFile> _Uploaded
+        private Dictionary<Guid, DocumentBusinessInfo> _Uploaded
         {
             get
             {
-                Dictionary<Guid, PrintFile> _uploaded = this.Session["UploadFiles"]
-                    as Dictionary<Guid, PrintFile>;
+                Dictionary<Guid, DocumentBusinessInfo> _uploaded = this.Session["UploadFiles"]
+                    as Dictionary<Guid, DocumentBusinessInfo>;
                 if (_uploaded == null)
                 {
-                    this.Session["UploadFiles"] = _uploaded = new Dictionary<Guid, PrintFile>();
+                    this.Session["UploadFiles"] = _uploaded = new Dictionary<Guid, DocumentBusinessInfo>();
                 }
                 return _uploaded;
             }

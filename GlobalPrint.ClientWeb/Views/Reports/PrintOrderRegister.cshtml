@@ -1,0 +1,48 @@
+﻿@using GlobalPrint.ServerBusinessLogic.Models.Business.Orders
+@model OrderRegisterFilter
+@{
+    ViewBag.Title = "Реестр заказов";
+    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+}
+
+<div class="container">
+    @using (Html.BeginForm("GetPrintOrderRegister", "Reports", FormMethod.Get, new { @class = "form-horizontal" }))
+    {
+        if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger container margin-top-20">
+                <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                @Html.ValidationSummary(false, "Ошибки: ")
+            </div>
+        }
+        <h2>Реестр заказов</h2>
+        @Html.HiddenFor(e => e.OwnerUserID, new { @id = "OwnerUserID" })
+        <div class="form-group">
+            <label class="col-lg-2 control-label text-left">Дата реестра с</label>
+            <div class="col-md-5 nopadding">
+                <div class="col-lg-12">
+                    @Html.TextBoxFor(e => e.DateFrom, new { @type = "date", @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-md-5 nopadding">
+                <label class="col-lg-3 control-label text-left">по</label>
+                <div class="col-lg-9">
+                    @Html.TextBoxFor(e => e.DateTo, new { @type = "date", @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label text-left">Тип</label>
+            <div class="col-sm-10">
+                @Html.DropDownListFor(m => m.FileExporter, (IEnumerable<SelectListItem>)ViewBag.ExportTypesList, new { @id = "FileExporter", @class = "form-control", @required = "required" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-10">
+                <input type="submit" id="printButton" value="Выполнить" class="btn btn-default" />
+                <a href="@Request.UrlReferrer" class="btn btn-default"><i class="icon-circle-arrow-left"></i>Отмена</a>
+            </div>
+        </div>
+    }
+</div>

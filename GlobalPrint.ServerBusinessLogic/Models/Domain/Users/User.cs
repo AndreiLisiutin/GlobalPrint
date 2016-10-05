@@ -16,10 +16,7 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         public User()
         {
         }
-
-        [Key]
-        [Column("user_id")]
-        public int UserID { get; set; }
+        
         [Column("name")]
         public string UserName { get; set; }
         [Column("email")]
@@ -43,12 +40,9 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         public DateTime LastActivityDate { get; set; }
 
         #region IDomainModel
-        [NotMapped]
-        public int ID
-        {
-            get { return this.UserID; }
-            set { this.UserID = value; }
-        }
+        [Key]
+        [Column("user_id")]
+        public int ID { get; set; } 
         #endregion
     }
 }

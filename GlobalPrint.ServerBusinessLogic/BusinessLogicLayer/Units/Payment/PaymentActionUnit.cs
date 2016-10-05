@@ -32,8 +32,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
         /// Return list of user's successfull payments.
         /// </summary>
         /// <param name="userID"></param>
+        /// <param name="dateFrom">Date from for the payments.</param>
+        /// <param name="dateTo">Date to for the payments.</param>
         /// <returns></returns>
-        public List<PaymentActionFullInfo> GetByUserID(int userID)
+        public List<PaymentActionFullInfo> GetByUserID(int userID, DateTime? dateFrom = null, DateTime? dateTo = null)
         {
             using (IDataContext context = this.Context())
             {
@@ -47,7 +49,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                     join transaction in transactionRepo.GetAll() on action.PaymentTransactionID equals transaction.ID
                     join status in actionStatusRepo.GetAll() on action.PaymentActionStatusID equals status.ID
                     join type in actionTypeRepo.GetAll() on action.PaymentActionTypeID equals type.ID
-                    where action.UserID == userID && action.PaymentActionStatusID == (int)PaymentActionStatusEnum.ExecutedSuccessfully
+                    where action.UserID == userID 
+                        && action.PaymentActionStatusID == (int)PaymentActionStatusEnum.ExecutedSuccessfully
+                        && (!dateFrom.HasValue || action.FinishedOn >= dateFrom)
+                        && (!dateTo.HasValue || action.FinishedOn <= dateTo)
                     orderby action.FinishedOn descending
                     select new { action = action, transaction = transaction, status = status, type = type }
                  )
@@ -282,7 +287,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                 }
 
                 User printerOwner = printerRepo.Get(e => e.ID == order.PrinterID)
-                   .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
+                   .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.ID, (p, u) => u)
                    .First();
 
                 context.BeginTransaction();

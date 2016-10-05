@@ -32,6 +32,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
     public class PrintOrderUnit : BaseUnit
     {
         private Lazy<IEmailUtility> _emailUtility { get; set; }
+        private Lazy<IFileUtility> _fileUtility { get; set; }
         public Lazy<PaymentActionUnit> _paymentUnit { get; set; }
 
         [DebuggerStepThrough]
@@ -39,6 +40,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             : base()
         {
             this._emailUtility = emailUtility;
+            this._fileUtility = IoC.Instance.Resolve<Lazy<IFileUtility>>();
             this._paymentUnit = new Lazy<PaymentActionUnit>(() => new PaymentActionUnit());
         }
 
@@ -141,7 +143,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 order = orderRepo.GetByID(printOrderID);
                 client = userRepo.GetByID(order.UserID);
                 printerOwner = printerRepo.Get(e => e.ID == order.PrinterID)
-                    .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
+                    .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.ID, (p, u) => u)
                     .First();
                 newStatus = statusRepo.GetByID((int)statusID);
 
@@ -183,7 +185,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
         /// </summary>
         /// <param name="printOrderID">Order identifier.</param>
         /// <returns></returns>
-        public Tuple<NewOrder, PrintFile> FromExisting(int printOrderID, string baseDirectory)
+        public Tuple<NewOrder, DocumentBusinessInfo> FromExisting(int printOrderID, string baseDirectory)
         {
             Argument.Positive(printOrderID, "Ключ исходного заказа меньше нуля.");
             using (IDataContext context = this.Context())
@@ -226,7 +228,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                     PrinterID = existingOrder.PrinterID
                 };
 
-                PrintFile file = new PrintFile()
+                DocumentBusinessInfo businessFile = new DocumentBusinessInfo()
                 {
                     Name = existingOrder.DocumentName,
                     Extension = existingOrder.DocumentExtension,
@@ -239,24 +241,24 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 {
                     throw new FileNotFoundException($"Не найден файл заказа № {printOrderID} по пути {filePath}.");
                 }
-                file.SerializedFile = File.ReadAllBytes(filePath);
-                return new Tuple<NewOrder, PrintFile>(newOrder, file);
+                businessFile.SerializedFile = File.ReadAllBytes(filePath);
+                return new Tuple<NewOrder, DocumentBusinessInfo>(newOrder, businessFile);
             }
         } 
 
-        public PrintOrder New(NewOrder newOrder, string baseDirectory, PrintFile printFile)
+        public PrintOrder New(NewOrder newOrder, string baseDirectory, DocumentBusinessInfo printFile)
         {
             Argument.NotNull(newOrder, "Новый заказ не может быть пустым.");
             Argument.NotNull(printFile, "Файл для печати не может быть пустым.");
             Argument.Require(newOrder.CopiesCount >= 1, "Количество копий не может быть меньше 1.");
-            Argument.NotNull(newOrder.FileToPrint, "Файл дл печатм не может быть пустым.");
+            Argument.NotNull(newOrder.FileToPrint, "Файл для печати не может быть пустым.");
             Argument.Require(newOrder.PrinterID > 0, "Принтер не может быть пустым.");
             Argument.Require(newOrder.PrintSizeID > 0, "Размер печати не может быть пустым.");
             Argument.Require(newOrder.PrintTypeID > 0, "Тип печати не может быть пустым.");
             Argument.Require(newOrder.UserID > 0, "Заказчик не может быть пустым.");
             Argument.NotNullOrWhiteSpace(newOrder.SecretCode, "Секретный код не может быть пустым.");
 
-            Argument.Require(new FileUtility().IsFormatAcceptable(printFile.Extension), "Формат выбранного файла не поддкрживается системой.");
+            Argument.Require(this._fileUtility.Value.IsFormatAcceptable(printFile.Extension), "Формат выбранного файла не поддерживается системой.");
             DirectoryInfo directory = new DirectoryInfo(baseDirectory);
             if (!directory.Exists)
             {
@@ -295,17 +297,17 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
             order.PrintServiceID = service.PrinterService.PrintServiceID;
             order.PricePerPage = service.PrinterService.PricePerPage;
-            order.PagesCount = new FileUtility().GetPagesCount(printFile.SerializedFile, printFile.Extension);
+            order.PagesCount = this._fileUtility.Value.GetPagesCount(printFile.SerializedFile, printFile.Extension);
             return order;
         }
 
-        public PrintOrder Create(NewOrder newOrder, string baseDirectory, PrintFile printFile)
+        public PrintOrder Create(NewOrder newOrder, string baseDirectory, DocumentBusinessInfo printFile)
         {
             PrintOrder order = this.New(newOrder, baseDirectory, printFile);
 
             Argument.NotNull(order, "Заказ на печать не может быть пустым.");
             Argument.Positive(order.CopiesCount, "Количество копий должно быть положительным.");
-            Argument.NotNullOrWhiteSpace(order.Document, "Документ должнен быть определен.");
+            Argument.NotNullOrWhiteSpace(order.Document, "Документ должен быть определен.");
             Argument.Positive(order.PagesCount, "Количество страниц должно быть положительным.");
             Argument.Positive(order.PricePerPage, "Цена за страницу должна быть положительной.");
             Argument.Positive(order.PrinterID, "Принтер не может быть неопределенным.");
