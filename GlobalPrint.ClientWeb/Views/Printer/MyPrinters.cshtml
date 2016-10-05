@@ -67,8 +67,7 @@
     }
 
     <div class="form-group">
-        <div class="col-sm-12">
-            @Html.ActionLink("Добавить", "Create", "Printer", new { }, new { @class = "btn btn-default" })
-        </div>
+        @Html.ActionLink("Добавить", "Create", "Printer", new { }, new { @class = "btn btn-default" })
+        <a href="@Request.UrlReferrer" class="btn btn-default"><i class="icon-circle-arrow-left"></i>Назад</a>
     </div>
 </div>

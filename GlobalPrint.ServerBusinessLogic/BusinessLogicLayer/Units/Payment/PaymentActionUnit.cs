@@ -53,7 +53,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                         && action.PaymentActionStatusID == (int)PaymentActionStatusEnum.ExecutedSuccessfully
                         && (!dateFrom.HasValue || action.FinishedOn >= dateFrom)
                         && (!dateTo.HasValue || action.FinishedOn <= dateTo)
-                    orderby action.FinishedOn descending
+                    orderby action.StartedOn descending, action.FinishedOn descending
                     select new { action = action, transaction = transaction, status = status, type = type }
                  )
                  .ToList()
