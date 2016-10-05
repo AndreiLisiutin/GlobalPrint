@@ -33,7 +33,8 @@ namespace GlobalPrint.ClientWeb
         public ActionResult AcceptOrder(int printOrderID)
         {
             PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-            printOrderUnit.UpdateStatus(printOrderID, PrintOrderStatusEnum.Accepted, this.GetSmsParams());
+            int userID = this.GetCurrentUserID();
+            printOrderUnit.UpdateStatus(printOrderID, PrintOrderStatusEnum.Accepted, userID);
             return RedirectToAction("UserRecievedPrintOrderList");
         }
 
@@ -42,7 +43,8 @@ namespace GlobalPrint.ClientWeb
         public ActionResult RejectOrder(int printOrderID)
         {
             PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-            printOrderUnit.UpdateStatus(printOrderID, PrintOrderStatusEnum.Rejected, this.GetSmsParams());
+            int userID = this.GetCurrentUserID();
+            printOrderUnit.UpdateStatus(printOrderID, PrintOrderStatusEnum.Rejected, userID);
             return RedirectToAction("UserRecievedPrintOrderList");
         }
 
@@ -59,7 +61,8 @@ namespace GlobalPrint.ClientWeb
                 var vm = ViewModelConfirmPrintOrder(printOrderID);
                 return View("ConfirmPrintOrder", vm);
             }
-            printOrderUnit.UpdateStatus(printOrderID, PrintOrderStatusEnum.Printed, this.GetSmsParams());
+            int userID = this.GetCurrentUserID();
+            printOrderUnit.UpdateStatus(printOrderID, PrintOrderStatusEnum.Printed, userID);
             return RedirectToAction("UserRecievedPrintOrderList");
         }
 

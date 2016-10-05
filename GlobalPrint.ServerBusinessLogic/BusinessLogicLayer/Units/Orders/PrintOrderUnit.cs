@@ -132,7 +132,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             }
         }
 
-        public void UpdateStatus(int printOrderID, PrintOrderStatusEnum statusID, SmsUtility.Parameters smsParams)
+        public void UpdateStatus(int printOrderID, PrintOrderStatusEnum statusID, int userID)
         {
             PrintOrderStatus newStatus = null;
             User client = null;
@@ -162,14 +162,17 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
                 if (statusID == PrintOrderStatusEnum.Printed && order.PrintedOn == null)
                 {
+                    Argument.Require(printerOwner.ID == userID, "Выполнить заказ может только владелец принтера.");
                     this._paymentUnit.Value.CommitPrintOrder(printOrderID);
                 }
                 else if (statusID == PrintOrderStatusEnum.Rejected)
                 {
+                    Argument.Require(printerOwner.ID == userID, "Отменить заказ может только владелец принтера.");
                     this._paymentUnit.Value.RollbackPrintOrder(printOrderID);
                 }
                 else if (statusID == PrintOrderStatusEnum.Accepted)
                 {
+                    Argument.Require(printerOwner.ID == userID, "Принять заказ может только владелец принтера.");
                     order.PrintOrderStatusID = (int)PrintOrderStatusEnum.Accepted;
                     orderRepo.Update(order);
                     context.Save();
@@ -190,8 +193,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
         /// Createt new order object from already existing order.
         /// </summary>
         /// <param name="printOrderID">Order identifier.</param>
-        /// <returns></returns>
-        public Tuple<NewOrder, DocumentBusinessInfo> FromExisting(int printOrderID, string baseDirectory)
+        /// <param name="userID">Current user identifier.</param>
+        /// <returns>New order with the same details as existing one.</returns>
+        public NewOrder FromExisting(int printOrderID, int userID)
         {
             Argument.Positive(printOrderID, "Ключ исходного заказа меньше нуля.");
             using (IDataContext context = this.Context())
@@ -203,15 +207,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 PrintOrder existingOrder = orderRepo.GetByID(printOrderID);
                 Argument.NotNull(existingOrder,
                     $"Указанный исходный заказ не найден (PrintOrderID={printOrderID}).");
-
-                PrinterFullInfoModel printer = printerUnit.GetFullByID(existingOrder.PrinterID, context);
-                Argument.Require(printer != null && printer.IsAvailableNow,
-                    $"Принтер, на котором был выполнен заказ, не доступен в данный момент.");
+                Argument.Require(userID == existingOrder.UserID, "Нельзя клонировать чужие заказы.");
 
                 IEnumerable<PrinterServiceExtended> services = serviceUnit
                     .GetPrinterServices(existingOrder.PrinterID);
-                Argument.Require(services.Count() > 0,
-                    $"Принтер, на котором был выполнен заказ, не оказывает услуг (PrintOrderID={printOrderID}).");
 
                 //service associated with the order
                 PrinterServiceExtended orderService = services
@@ -226,28 +225,15 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                     CopiesCount = existingOrder.CopiesCount,
                     UserID = existingOrder.UserID,
                     FileToPrint = Guid.NewGuid(),
-                    IsColored = orderService.PrintService.PrintService.IsColored,
-                    IsTwoSided = orderService.PrintService.PrintService.IsTwoSided,
-                    PrintSizeID = orderService.PrintService.PrintSize.ID,
-                    PrintTypeID = orderService.PrintService.PrintType.ID,
+                    IsColored = orderService?.PrintService.PrintService.IsColored ?? false,
+                    IsTwoSided = orderService?.PrintService.PrintService.IsTwoSided ?? false,
+                    PrintSizeID = orderService?.PrintService.PrintSize.ID ?? 0,
+                    PrintTypeID = orderService?.PrintService.PrintType.ID ?? 0,
                     SecretCode = existingOrder.SecretCode,
                     PrinterID = existingOrder.PrinterID
                 };
 
-                DocumentBusinessInfo businessFile = new DocumentBusinessInfo()
-                {
-                    Name = existingOrder.DocumentName,
-                    Extension = existingOrder.DocumentExtension,
-                    SerializedFile = null
-                };
-                string _physicalPathToFile = PrintOrderUnit.PRINT_ORDER_FILE_PATH(baseDirectory, existingOrder.UserID, existingOrder.InternalDocumentName);
-                FileInfo fileInfo = new FileInfo(_physicalPathToFile);
-                if (!fileInfo.Exists)
-                {
-                    throw new FileNotFoundException($"Не найден файл заказа № {printOrderID} по пути {_physicalPathToFile}.");
-                }
-                businessFile.SerializedFile = File.ReadAllBytes(_physicalPathToFile);
-                return new Tuple<NewOrder, DocumentBusinessInfo>(newOrder, businessFile);
+                return newOrder;
             }
         }
 
@@ -257,12 +243,13 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
         /// <param name="printOrderID">Order identifier.</param>
         /// <param name="baseDirectory">App_Data directory location.</param>
         /// <returns>File of the order and its info.</returns>
-        public DocumentBusinessInfo GetPrintOrderDocument(int printOrderID, string baseDirectory)
+        public DocumentBusinessInfo GetPrintOrderDocument(int printOrderID, int userID, string baseDirectory)
         {
             Argument.NotNull(printOrderID, "Ключ заказа на печать должен быть положительным.");
 
             PrintOrder order = this.GetByID(printOrderID);
             Argument.NotNull(order, $"Заказ на печать не найден (PrintOrderID={printOrderID}).");
+            Argument.Require(order.UserID == userID, "Нельзя скачивать чужие заказы.");
 
             string _physicalPathToFile = PrintOrderUnit.PRINT_ORDER_FILE_PATH(baseDirectory, order.UserID, order.InternalDocumentName);
             FileInfo physicalFile = new FileInfo(_physicalPathToFile);
@@ -386,7 +373,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 DocumentExtension = document.Extension,
                 PaymentTransactionID = 0 //will be defined while save
             };
-            
+
             PrinterServiceExtended service = this.GetPrintService(newOrder);
             Argument.Require(service != null, "Выбранная услуга печати не поддерживается принтером.");
 
@@ -396,7 +383,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             return order;
         }
 
-        public PrintOrder Create(NewOrder newOrder, string baseDirectory, DocumentBusinessInfo printFile)
+        public PrintOrder Create(NewOrder newOrder, int userID, string baseDirectory, DocumentBusinessInfo printFile)
         {
             Validation validation = this.Validate(newOrder, printFile);
             validation.ThrowExceptionIfNotValid();
@@ -404,6 +391,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             PrintOrder order = this._ConvertNewOrderToDomainOrder(newOrder, baseDirectory, printFile);
 
             Argument.NotNull(order, "Заказ на печать не может быть пустым.");
+            Argument.Require(order.UserID == userID, "Нельзя сохранять заказы за другого пользователя.");
             Argument.Positive(order.CopiesCount, "Количество копий должно быть положительным.");
             Argument.NotNullOrWhiteSpace(order.InternalDocumentName, "Документ должен быть определен.");
             Argument.Positive(order.PagesCount, "Количество страниц должно быть положительным.");
