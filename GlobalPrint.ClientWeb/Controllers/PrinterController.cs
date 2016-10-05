@@ -109,7 +109,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary> 
-        /// Retreive printers which are owned orr operated by current user.
+        /// Retrieves printers which are owned orr operated by current user.
         /// </summary>
         /// <returns></returns>
         [Authorize, HttpGet, ImportModelState]

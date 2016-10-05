@@ -1,4 +1,5 @@
 ﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
+using GlobalPrint.ServerBusinessLogic.Models.Business;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,47 @@ namespace GlobalPrint.ClientWeb
         protected string GetCurrentUserName()
         {
             return User.Identity.GetUserName();
+        }
+        
+        /// <summary>
+        /// Upload file into session.
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize]
+        public virtual ActionResult UploadFile()
+        {
+            HttpPostedFileBase file = Request.Files["gpUserFile"];
+            bool isUploaded = false;
+            string message = "Ошибка загрузки файла.";
+            Guid fileId = new Guid();
+
+            if (file != null && file.ContentLength != 0)
+            {
+                fileId = Guid.NewGuid();
+                DocumentBusinessInfo printFile = DocumentBusinessInfo.FromHttpPostedFileBase(file);
+                this._Uploaded.Add(fileId, printFile);
+                isUploaded = true;
+                message = "Файл успешно загружен.";
+            }
+
+            return Json(new { isUploaded = isUploaded, message = message, fileId = fileId }, "text/html");
+        }
+
+        /// <summary> Uploaded files in memory. Will die if user will decide not to print them.
+        /// </summary>
+        protected Dictionary<Guid, DocumentBusinessInfo> _Uploaded
+        {
+            get
+            {
+                Dictionary<Guid, DocumentBusinessInfo> _uploaded = this.Session["UploadFiles"]
+                    as Dictionary<Guid, DocumentBusinessInfo>;
+                if (_uploaded == null)
+                {
+                    this.Session["UploadFiles"] = _uploaded = new Dictionary<Guid, DocumentBusinessInfo>();
+                }
+                return _uploaded;
+            }
         }
     }
 }

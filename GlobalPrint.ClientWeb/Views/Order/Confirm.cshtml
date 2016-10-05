@@ -1,14 +1,20 @@
 ﻿@using GlobalPrint.ClientWeb.Helpers
-@using System.Globalization
+@using GlobalPrint.ServerBusinessLogic.Models.Business.Orders
+@using GlobalPrint.ServerBusinessLogic.Models.Business.Printers
 
-@model Order_ConfirmViewModel
+@model NewOrder
 @{
     ViewBag.Title = "Подтверждение заказа на печать";
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+
+    decimal FullPrice = (decimal)ViewBag.FullPrice;
+    string FullPriceFormatted = String.Format("{0:0.00}", FullPrice);
+    PrinterServiceExtended PrinterService = (PrinterServiceExtended)ViewBag.PrinterService;
+    int PagesCount = (int)ViewBag.PagesCount;
 }
 
 <div class="container">
-    @using (Html.BeginForm("Confirm", "Order", FormMethod.Post, new { @class = "form-horizontal" }))
+    @using (Html.BeginForm("Create", "Order", FormMethod.Post, new { @class = "form-horizontal" }))
     {
         if (!ViewData.ModelState.IsValid)
         {
@@ -19,24 +25,27 @@
         }
         <h2>Подтверждение заказа</h2>
         <div class="hidden">
-            @Html.EditorFor(e => e.NewOrder)
+            @Html.EditorForModel()
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label text-left">Количество страниц</label>
             <div class="col-sm-9">
-                @Html.TextBox("PagesCount",  Model.PreparedOrder.PagesCount, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextBox("PagesCount", PagesCount, new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label text-left">Стоимость заказа</label>
             <div class="col-sm-9">
-                @Html.TextBox("PriceInCurrency", Model.PreparedOrder.PriceInCurrency, new { @class = "form-control", @readonly = "readonly" })
+                <div class="input-group">
+                    @Html.TextBox("PriceInCurrency", FullPriceFormatted, new { @class = "form-control text-right", @readonly = "readonly" })
+                    <div class="input-group-addon">руб.</div>
+                </div>
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-10">
                 <input type="submit" value="Печать" class="btn btn-default" />
-                @Html.ActionLink("Отмена", "New", "Order", new { printerID = Model.NewOrder.PrinterID }, new { @class = "btn btn-default" })
+                <a href="@Request.UrlReferrer" class="btn btn-default"><i class="icon-circle-arrow-left"></i>Назад</a>
                 @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
             </div>
         </div>
