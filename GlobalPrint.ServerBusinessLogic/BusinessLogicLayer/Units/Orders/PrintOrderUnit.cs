@@ -33,7 +33,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
     {
         private Lazy<IEmailUtility> _emailUtility { get; set; }
         private Lazy<IFileUtility> _fileUtility { get; set; }
-        public Lazy<PaymentActionUnit> _paymentUnit { get; set; }
+        private Lazy<PaymentActionUnit> _paymentUnit { get; set; }
+        private Lazy<PrintServicesUnit> _printServiceUnit { get; set; }
+        private Lazy<PrinterUnit> _printerUnit { get; set; }
 
         [DebuggerStepThrough]
         public PrintOrderUnit(Lazy<IEmailUtility> emailUtility)
@@ -42,6 +44,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             this._emailUtility = emailUtility;
             this._fileUtility = IoC.Instance.Resolve<Lazy<IFileUtility>>();
             this._paymentUnit = new Lazy<PaymentActionUnit>(() => new PaymentActionUnit());
+            this._printServiceUnit = new Lazy<PrintServicesUnit>(() => new PrintServicesUnit());
+            this._printerUnit = new Lazy<PrinterUnit>(() => new PrinterUnit());
         }
 
         /// <summary>
@@ -49,8 +53,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
         /// </summary>
         /// <param name="printOrderID">Print order ID.</param>
         /// <returns>Returns print order object.</returns>
-        public PrintOrder GetPrintOrderByID(int printOrderID)
+        public PrintOrder GetByID(int printOrderID)
         {
+            Argument.NotNull(printOrderID, "Ключ заказа на печать должен быть положительным.");
+
             using (IDataContext context = this.Context())
             {
                 return this.Repository<IPrintOrderRepository>(context)
@@ -234,44 +240,139 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                     Extension = existingOrder.DocumentExtension,
                     SerializedFile = null
                 };
-                string usersDirectory = Path.Combine(baseDirectory, existingOrder.UserID.ToString());
-                string filePath = Path.Combine(usersDirectory, existingOrder.Document);
-                FileInfo fileInfo = new FileInfo(filePath);
+                string _physicalPathToFile = PrintOrderUnit.PRINT_ORDER_FILE_PATH(baseDirectory, existingOrder.UserID, existingOrder.InternalDocumentName);
+                FileInfo fileInfo = new FileInfo(_physicalPathToFile);
                 if (!fileInfo.Exists)
                 {
-                    throw new FileNotFoundException($"Не найден файл заказа № {printOrderID} по пути {filePath}.");
+                    throw new FileNotFoundException($"Не найден файл заказа № {printOrderID} по пути {_physicalPathToFile}.");
                 }
-                businessFile.SerializedFile = File.ReadAllBytes(filePath);
+                businessFile.SerializedFile = File.ReadAllBytes(_physicalPathToFile);
                 return new Tuple<NewOrder, DocumentBusinessInfo>(newOrder, businessFile);
             }
-        } 
+        }
 
-        public PrintOrder New(NewOrder newOrder, string baseDirectory, DocumentBusinessInfo printFile)
+        /// <summary>
+        /// Get user order's file from the database.
+        /// </summary>
+        /// <param name="printOrderID">Order identifier.</param>
+        /// <param name="baseDirectory">App_Data directory location.</param>
+        /// <returns>File of the order and its info.</returns>
+        public DocumentBusinessInfo GetPrintOrderDocument(int printOrderID, string baseDirectory)
         {
-            Argument.NotNull(newOrder, "Новый заказ не может быть пустым.");
-            Argument.NotNull(printFile, "Файл для печати не может быть пустым.");
-            Argument.Require(newOrder.CopiesCount >= 1, "Количество копий не может быть меньше 1.");
-            Argument.NotNull(newOrder.FileToPrint, "Файл для печати не может быть пустым.");
-            Argument.Require(newOrder.PrinterID > 0, "Принтер не может быть пустым.");
-            Argument.Require(newOrder.PrintSizeID > 0, "Размер печати не может быть пустым.");
-            Argument.Require(newOrder.PrintTypeID > 0, "Тип печати не может быть пустым.");
-            Argument.Require(newOrder.UserID > 0, "Заказчик не может быть пустым.");
-            Argument.NotNullOrWhiteSpace(newOrder.SecretCode, "Секретный код не может быть пустым.");
+            Argument.NotNull(printOrderID, "Ключ заказа на печать должен быть положительным.");
 
-            Argument.Require(this._fileUtility.Value.IsFormatAcceptable(printFile.Extension), "Формат выбранного файла не поддерживается системой.");
+            PrintOrder order = this.GetByID(printOrderID);
+            Argument.NotNull(order, $"Заказ на печать не найден (PrintOrderID={printOrderID}).");
+
+            string _physicalPathToFile = PrintOrderUnit.PRINT_ORDER_FILE_PATH(baseDirectory, order.UserID, order.InternalDocumentName);
+            FileInfo physicalFile = new FileInfo(_physicalPathToFile);
+            if (!physicalFile.Directory.Exists)
+            {
+                throw new FileNotFoundException($"Файл заказа № {printOrderID} по пути {_physicalPathToFile} не найден.");
+            }
+            byte[] fileArray = File.ReadAllBytes(_physicalPathToFile);
+            DocumentBusinessInfo fileInfo = new DocumentBusinessInfo()
+            {
+                SerializedFile = fileArray,
+                Name = order.DocumentName,
+                Extension = order.DocumentExtension
+            };
+
+            return fileInfo;
+        }
+
+        /// <summary>
+        /// Validate incoming print order model.
+        /// </summary>
+        /// <param name="newOrder">Print order model.</param>
+        /// <param name="printFile">Print order file model.</param>
+        /// <returns>Validation object with errors.</returns>
+        public Validation Validate(NewOrder newOrder, DocumentBusinessInfo printFile)
+        {
+            Validation validation = new Validation();
+
+            validation.NotNull(printFile, "Файл для печати не может быть пустым.");
+            validation.NotNull(printFile.SerializedFile, "Файл для печати не может быть пустым.");
+            validation.NotNullOrWhiteSpace(printFile.Name, "Название файла для печати не может быть пустым.");
+            validation.NotNullOrWhiteSpace(printFile.Extension, "Расширение файла для печати не может быть пустым.");
+            validation.NotNull(newOrder, "Новый заказ не может быть пустым.");
+            validation.Positive(newOrder.PrinterID, "Принтер не может быть пустым.");
+            validation.NotNullOrWhiteSpace(newOrder.SecretCode, "Секретный код не может быть пустым.");
+            validation.Positive(newOrder.PrintSizeID, "Размер печати не может быть пустым.");
+            validation.Positive(newOrder.PrintTypeID, "Тип печати не может быть пустым.");
+            validation.Require(newOrder.FileToPrint != Guid.Empty, "Для нового заказа не задан .");
+            validation.Positive(newOrder.CopiesCount, "Количество копий не может быть меньше 1.");
+            validation.Positive(newOrder.UserID, "Заказчик не может быть пустым.");
+
+            bool isExtensionAcceptable = this._fileUtility.Value.IsFormatAcceptable(printFile.Extension);
+            validation.Require(isExtensionAcceptable, "Формат выбранного файла не поддерживается системой.");
+
+            PrinterServiceExtended service = this.GetPrintService(newOrder);
+            validation.NotNull(service, "Выбранная услуга печати не поддерживается принтером.");
+
+            PrinterFullInfoModel printer = this._printerUnit.Value.GetFullByID(newOrder.PrinterID);
+            validation.NotNull(printer, "Принтер не найден.");
+
+            validation.Require(printer.IsAvailableNow, "В данный момент принтер недоступен.");
+
+            return validation;
+        }
+
+        /// <summary>
+        /// Calculate pages count of the document.
+        /// </summary>
+        /// <param name="document">Document to calculate pages.</param>
+        /// <returns>Pages count.</returns>
+        public int CalculatePagesCount(DocumentBusinessInfo document)
+        {
+            Argument.NotNull(document, "Документ не может быть пустым.");
+            Argument.NotNull(document.SerializedFile, "Документ не может быть пустым.");
+            Argument.NotNullOrWhiteSpace(document.Extension, "Расширение документа не может быть пустым.");
+            bool isFormatAcceptable = this._fileUtility.Value.IsFormatAcceptable(document.Extension);
+            Argument.Require(isFormatAcceptable, $"Выбранное расширение документа ({document.Extension}) не поддерживается системой.");
+
+            IFileReader fileReader = this._fileUtility.Value.GetFileReader(document.Extension);
+            int pagesCount = fileReader.GetPagesCount(document.SerializedFile);
+            return pagesCount;
+        }
+
+        /// <summary>
+        /// Retrieves print service information by new order. If doesn't found - returns null.
+        /// </summary>
+        /// <param name="newOrder">New print order model.</param>
+        /// <returns>Print service information. If doesn't found - returns null.</returns>
+        public PrinterServiceExtended GetPrintService(NewOrder newOrder)
+        {
+            Argument.NotNull(newOrder, "Модель заказа не может быть пустой.");
+            Argument.Positive(newOrder.PrintSizeID, "Размер печати не может быть пустым.");
+            Argument.Positive(newOrder.PrintTypeID, "Тип печати не может быть пустой.");
+
+            IEnumerable<PrinterServiceExtended> services = _printServiceUnit.Value.GetPrinterServices(newOrder.PrinterID);
+            PrinterServiceExtended service = services.Where(e =>
+                e.PrintService.PrintSize.ID == newOrder.PrintSizeID
+                && e.PrintService.PrintType.ID == newOrder.PrintTypeID
+                && e.PrintService.PrintService.IsColored == newOrder.IsColored
+                && e.PrintService.PrintService.IsTwoSided == newOrder.IsTwoSided
+            )
+                .FirstOrDefault();
+
+            return service;
+        }
+
+        private PrintOrder _ConvertNewOrderToDomainOrder(NewOrder newOrder, string baseDirectory, DocumentBusinessInfo document)
+        {
             DirectoryInfo directory = new DirectoryInfo(baseDirectory);
             if (!directory.Exists)
             {
                 directory.Create();
             }
 
-            string usersDirectory = Path.Combine(baseDirectory, newOrder.UserID.ToString());
-            string filePath = Path.Combine(usersDirectory, printFile.Name);
+            string fileName = $"{newOrder.FileToPrint.ToString()}.{document.Extension}";
             PrintOrder order = new PrintOrder()
             {
                 Comment = newOrder.Comment,
                 CopiesCount = newOrder.CopiesCount,
-                Document = filePath,
+                InternalDocumentName = fileName,
                 OrderedOn = DateTime.Now,
                 PagesCount = -1, //is computed below
                 PricePerPage = -1,//is computed below
@@ -281,37 +382,33 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 PrintServiceID = -1,//is computed below
                 SecretCode = newOrder.SecretCode,
                 UserID = newOrder.UserID,
-                DocumentName = printFile.Name,
-                DocumentExtension = printFile.Extension,
+                DocumentName = document.Name,
+                DocumentExtension = document.Extension,
                 PaymentTransactionID = 0 //will be defined while save
             };
-
-            var services = new PrintServicesUnit().GetPrinterServices(newOrder.PrinterID);
-            var service = services.Where(e => e.PrintService.PrintSize.ID == newOrder.PrintSizeID
-                && e.PrintService.PrintType.ID == newOrder.PrintTypeID
-                && e.PrintService.PrintService.IsColored == newOrder.IsColored
-                && e.PrintService.PrintService.IsTwoSided == newOrder.IsTwoSided)
-                .FirstOrDefault();
-
+            
+            PrinterServiceExtended service = this.GetPrintService(newOrder);
             Argument.Require(service != null, "Выбранная услуга печати не поддерживается принтером.");
 
             order.PrintServiceID = service.PrinterService.PrintServiceID;
             order.PricePerPage = service.PrinterService.PricePerPage;
-            order.PagesCount = this._fileUtility.Value.GetPagesCount(printFile.SerializedFile, printFile.Extension);
+            order.PagesCount = this.CalculatePagesCount(document);
             return order;
         }
 
         public PrintOrder Create(NewOrder newOrder, string baseDirectory, DocumentBusinessInfo printFile)
         {
-            PrintOrder order = this.New(newOrder, baseDirectory, printFile);
+            Validation validation = this.Validate(newOrder, printFile);
+            validation.ThrowExceptionIfNotValid();
+
+            PrintOrder order = this._ConvertNewOrderToDomainOrder(newOrder, baseDirectory, printFile);
 
             Argument.NotNull(order, "Заказ на печать не может быть пустым.");
             Argument.Positive(order.CopiesCount, "Количество копий должно быть положительным.");
-            Argument.NotNullOrWhiteSpace(order.Document, "Документ должен быть определен.");
+            Argument.NotNullOrWhiteSpace(order.InternalDocumentName, "Документ должен быть определен.");
             Argument.Positive(order.PagesCount, "Количество страниц должно быть положительным.");
             Argument.Positive(order.PricePerPage, "Цена за страницу должна быть положительной.");
             Argument.Positive(order.PrinterID, "Принтер не может быть неопределенным.");
-            Argument.Positive(order.PrintServiceID, "Услуга не может быть неопределенной.");
             Argument.NotNullOrWhiteSpace(order.DocumentName, "Название документа не может быть пустым.");
             Argument.NotNullOrWhiteSpace(order.DocumentExtension, "Расширение документа не может быть пустым.");
             Argument.Positive(order.PrintServiceID, "Услуга не может быть неопределенной.");
@@ -325,12 +422,13 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             Argument.NotNull(printer, "Принтер не найден.");
             Argument.Require(printer.IsAvailableNow, "Принтер не доступен.");
 
-            FileInfo file = new FileInfo(order.Document);
-            if (!file.Directory.Exists)
+            string _physicalPathToFile = PrintOrderUnit.PRINT_ORDER_FILE_PATH(baseDirectory, newOrder.UserID, order.InternalDocumentName);
+            FileInfo physicalFile = new FileInfo(_physicalPathToFile);
+            if (!physicalFile.Directory.Exists)
             {
-                file.Directory.Create();
+                physicalFile.Directory.Create();
             }
-            File.WriteAllBytes(order.Document, printFile.SerializedFile);
+            File.WriteAllBytes(_physicalPathToFile, printFile.SerializedFile);
 
             //perform main business logic
             order = this._paymentUnit.Value.InitializePrintOrder(order);
@@ -369,6 +467,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
         public PrintOrder Rate(int printOrderID, float? rating, string comment, int userID)
         {
             Argument.Positive(printOrderID, $"Заказ на печать не найден (ID={printOrderID}).");
+            Argument.Require(!rating.HasValue || rating > 0, "Рейтинг заказа не может быть отрицательным.");
 
             using (IDataContext context = this.Context())
             {
@@ -376,7 +475,6 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
                 PrintOrder order = orderRepo.GetByID(printOrderID);
                 Argument.Require(order.UserID == userID, "Редактировать можно только свои заказы.");
-                Argument.Require(!rating.HasValue || rating > 0, "Рейтинг заказа не может быть отрицательным.");
 
                 order.Comment = comment;
                 order.Rating = rating;
@@ -386,6 +484,38 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
                 return order;
             }
+        }
+
+        /// <summary>
+        /// Calculate full price of the order.
+        /// </summary>
+        /// <param name="pricePerPage">Price per page of the print service.</param>
+        /// <param name="pagesCount">Order document pages count.</param>
+        /// <param name="copiesCount">Order document copies count.</param>
+        /// <returns></returns>
+        public static decimal CALCULATE_FULL_PRICE(decimal pricePerPage, int pagesCount, int copiesCount)
+        {
+            Argument.Positive(pricePerPage, "Цена за страницу должна быть положительным числом.");
+            Argument.Positive(pagesCount, "Количество страниц должно быть положительным числом.");
+            Argument.Positive(copiesCount, "Количество копий должно быть положительным числом.");
+
+            return pricePerPage * pagesCount * copiesCount;
+        }
+
+        /// <summary>
+        /// Calculate path to user's file from print order.
+        /// </summary>
+        /// <param name="app_data">App_Data folder path.</param>
+        /// <param name="userID">User identifier.</param>
+        /// <param name="fileName">File name with extension. Example: myFile.txt.</param>
+        /// <returns>String as full path to save the file.</returns>
+        public static string PRINT_ORDER_FILE_PATH(string app_data, int userID, string fileName)
+        {
+            Argument.NotNullOrWhiteSpace(app_data, "Путь к App_Data не задан.");
+            Argument.Positive(userID, "Пользователь-хозяин файла не задан.");
+            Argument.NotNullOrWhiteSpace(fileName, "Название файла с расширением не задано.");
+
+            return Path.Combine(app_data, userID.ToString(), fileName);
         }
     }
 }

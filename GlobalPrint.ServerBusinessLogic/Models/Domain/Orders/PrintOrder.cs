@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,8 +23,11 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Orders
         public int UserID { get; set; }
         [Column("printer_id")]
         public int PrinterID { get; set; }
+        /// <summary>
+        /// Physical name of the file on disc included file extension. Example: myFile.txt.
+        /// </summary>
         [Column("document")]
-        public string Document { get; set; }
+        public string InternalDocumentName { get; set; }
         [Column("ordered_on")]
         public DateTime OrderedOn { get; set; }
         [Column("printed_on")]
@@ -85,7 +89,7 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Orders
         {
             get
             {
-                return this.PricePerPage * this.PagesCount * this.CopiesCount;
+                return PrintOrderUnit.CALCULATE_FULL_PRICE(this.PricePerPage, this.PagesCount, this.CopiesCount);
             }
         }
 

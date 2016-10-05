@@ -160,7 +160,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             }
         }
 
-        /// <summary> Retreive printers which are owned orr operated by user.
+        /// <summary> Retrieve printers which are owned orr operated by user.
         /// </summary>
         /// <param name="userID">Identifier of the user.</param>
         /// <returns>List of printers which belong to the user.</returns>

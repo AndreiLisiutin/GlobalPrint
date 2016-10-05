@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GlobalPrint.Infrastructure.FileUtility
 {
-    /// <summary> interface for the utility to work with files and retreive their internal information.
+    /// <summary> interface for the utility to work with files and retrieve their internal information.
     /// </summary>
     public interface IFileReader
     {

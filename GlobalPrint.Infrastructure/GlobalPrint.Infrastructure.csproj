@@ -81,6 +81,7 @@
     <Compile Include="CommonUtils\Argument.cs" />
     <Compile Include="CommonUtils\IMimeTypeUtility.cs" />
     <Compile Include="CommonUtils\MimeTypeUtility.cs" />
+    <Compile Include="CommonUtils\Validation.cs" />
     <Compile Include="CommonUtils\WeekUtility.cs" />
     <Compile Include="DI\BaseIoC.cs" />
     <Compile Include="DI\InfrastructureIoC.cs" />

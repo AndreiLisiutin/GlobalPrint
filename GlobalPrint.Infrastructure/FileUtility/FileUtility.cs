@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace GlobalPrint.Infrastructure.FileUtility
 {
 
-    /// <summary> Utility to work with different types of files and retreive their information.
+    /// <summary> Utility to work with different types of files and retrieve their information.
     /// </summary>
     public class FileUtility : IFileUtility
     {
