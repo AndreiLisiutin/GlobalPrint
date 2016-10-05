@@ -1,8 +1,8 @@
 ﻿using GlobalPrint.ClientWeb.App_Start;
 using GlobalPrint.ClientWeb.Binders;
+using GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker;
 using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.LogUtility;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities.ScheduledActivityChecker;
 using Microsoft.AspNet.SignalR;
 using Ninject;
 using System;
@@ -30,9 +30,11 @@ namespace GlobalPrint.ClientWeb
             ModelBinders.Binders.Add(typeof(float?), new FloatModelBinder());
             ModelBinders.Binders.Add(typeof(float), new FloatModelBinder());
 
+            // Set controller factory implementing multilanguage stuff
             //ControllerBuilder.Current.SetControllerFactory(new DefaultControllerFactory(new LocalizedControllerActivator()));
 
-            //ActivityCheckerJobScheduler.Start();
+            // run web service to check inactive users with - printer operators and send notifications to them
+            new ActivityCheckerJobScheduler().Start();
 
             _logUtility.Info("Application Start");
         }

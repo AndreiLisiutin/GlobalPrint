@@ -253,7 +253,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
         /// <param name="threshold">Period from to search inactive users.</param>
         /// <param name="callInterval">Period to to search inactive users.</param>
         /// <returns>List of inactive users.</returns>
-        public List<User> GetInactiveUsers(TimeSpan threshold, TimeSpan callInterval)
+        public List<PrinterOperatorModel> GetInactiveUsers(TimeSpan threshold, TimeSpan callInterval)
         {
             // Now - threshold (30 min)
             DateTime intervalTo = DateTime.Now.Subtract(threshold);
@@ -269,21 +269,24 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 var list = userRepo.Get(e => e.EmailConfirmed == true // user activated his account
                         && e.LastActivityDate > intervalFrom // user was active between (Now - threshold) and (Now - threshold - callInterval) ~ 30-35 min before
                         && e.LastActivityDate < intervalTo)
-                    .Join(printerRepo.GetAll(), u => u.ID, p => p.OperatorUserID, (u, p) => new { User = u, Printer = p })
+                    .Join(printerRepo.GetAll(), u => u.ID, p => p.OperatorUserID, (u, p) => new { PrinterOperator = u, Printer = p })
                     .Where(p => p.Printer != null && !p.Printer.IsDisabled)
                     .ToList();
 
                 // Build total list to notify users
-                var totalList = new List<User>();
-                foreach(var printer in list)
+                List<PrinterOperatorModel> totalList = new List<PrinterOperatorModel>();
+                foreach(var item in list)
                 {
-                    PrinterFullInfoModel currentPrinter = printerUnit.GetFullByID(printer.Printer.ID, context);
-                    if (currentPrinter.IsAvailableNow && totalList.FindAll(x => x.ID == printer.User.ID).Count == 0)
+                    PrinterFullInfoModel currentPrinter = printerUnit.GetFullByID(item.Printer.ID, context);
+                    if (currentPrinter.IsAvailableNow && totalList.FindAll(x => x.PrinterOperator.ID == item.PrinterOperator.ID).Count == 0)
                     {
-                        totalList.Add(printer.User);
+                        totalList.Add(new PrinterOperatorModel() { Printer = item.Printer, PrinterOperator = item.PrinterOperator });
                     }
                 }
 
+                //User andrei = userRepo.Get(e => e.Email == "lisutin.andrey@gmail.com").FirstOrDefault();
+                //Printer andreiPrinter = printerRepo.Get(e => e.OwnerUserID == andrei.ID).FirstOrDefault();
+                //totalList.Add(new PrinterOperatorModel() { Printer = andreiPrinter, PrinterOperator = andrei });
                 return totalList;
             }
         }

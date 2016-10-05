@@ -1,4 +1,5 @@
-﻿using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
+﻿using GlobalPrint.ServerBusinessLogic.Models.Business.Printers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,6 @@ namespace GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users
         User DeleteUser(User user);
         User FillUpBalance(int userID, decimal upSumm);
         User UpdateUserActivity(int userID);
-        List<User> GetInactiveUsers(TimeSpan threshold, TimeSpan callInterval);
+        List<PrinterOperatorModel> GetInactiveUsers(TimeSpan threshold, TimeSpan callInterval);
     }
 }

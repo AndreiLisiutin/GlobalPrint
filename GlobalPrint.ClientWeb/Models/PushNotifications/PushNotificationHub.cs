@@ -1,4 +1,5 @@
-﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
+﻿using GlobalPrint.Infrastructure.LogUtility;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
 using Microsoft.AspNet.SignalR;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,13 @@ namespace GlobalPrint.ClientWeb.Models.PushNotifications
     [Authorize]
     public class PushNotificationHub : Hub
     {
+        private Lazy<ILogger> _logUtility;
+
+        public PushNotificationHub(ILoggerFactory loggerFactory)
+        {
+            _logUtility = new Lazy<ILogger>(() => loggerFactory.GetLogger<PushNotificationHub>());
+        }
+
         public void NotifyUserByID(string message, int userID)
         {
             var context = GlobalHost.ConnectionManager.GetHubContext<PushNotificationHub>();
@@ -18,16 +26,44 @@ namespace GlobalPrint.ClientWeb.Models.PushNotifications
 
         public void NewIncomingOrder(string message, int clientUserID)
         {
-            var context = GlobalHost.ConnectionManager.GetHubContext<PushNotificationHub>();
-            var userToNotify = context.Clients.User(clientUserID.ToString());
+            try
+            {
+                var context = GlobalHost.ConnectionManager.GetHubContext<PushNotificationHub>();
+                var userToNotify = context.Clients.User(clientUserID.ToString());
 
-            // Number of waiting orders, not processed by current user
-            int printOrdersCount = new PrinterUnit().GetWaitingIncomingOrdersCount(clientUserID);
-            
-            // notify by message
-            userToNotify.displayMessage(message);
-            // update orders count badge
-            userToNotify.updateIncomingOrdersCount(printOrdersCount);
+                // Number of waiting orders, not processed by current user
+                int printOrdersCount = new PrinterUnit().GetWaitingIncomingOrdersCount(clientUserID);
+
+                // notify by message
+                userToNotify.displayMessage(message, "/UserRecievedPrintOrderList/UserRecievedPrintOrderList");
+                // update orders count badge
+                userToNotify.updateIncomingOrdersCount(printOrdersCount);
+            }
+            catch (Exception ex)
+            {
+                _logUtility.Value.Error(ex, "Exception occurs in PushNotificationHub.NewIncomingOrder: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Notify printer operator about his inactivity.
+        /// </summary>
+        /// <param name="message">Message to display.</param>
+        /// <param name="clientUserID">User to notify.</param>
+        public void PrinterOperatorInactivityNotification(string message, int clientUserID)
+        {
+            try
+            {
+                var context = GlobalHost.ConnectionManager.GetHubContext<PushNotificationHub>();
+                var userToNotify = context.Clients.User(clientUserID.ToString());
+
+                // notify by message
+                userToNotify.displayMessage(message);
+            }
+            catch (Exception ex)
+            {
+                _logUtility.Value.Error(ex, "Exception occurs in PushNotificationHub.PrinterOperatorInactivityNotification: " + ex.Message);
+            }
         }
     }
 }
