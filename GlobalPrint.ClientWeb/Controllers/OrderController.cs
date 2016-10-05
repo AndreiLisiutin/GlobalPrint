@@ -88,7 +88,7 @@ namespace GlobalPrint.ClientWeb
             int userID = this.GetCurrentUserID();
             string app_data = HttpContext.Server.MapPath("~/App_Data");
             NewOrder newOrder = this._printOrderUnit.FromExisting(printOrderID, userID);
-            DocumentBusinessInfo document = this._printOrderUnit.GetPrintOrderDocument(printOrderID, app_data);
+            DocumentBusinessInfo document = this._printOrderUnit.GetPrintOrderDocument(printOrderID, userID, app_data);
             this._Uploaded[newOrder.FileToPrint] = document;
             return this._ORDER_NEW(newOrder);
         }
