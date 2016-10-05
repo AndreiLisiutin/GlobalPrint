@@ -13,6 +13,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Mail;
 using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
+using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Printers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
+using GlobalPrint.ServerBusinessLogic.Models.Business.Printers;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 {
@@ -246,17 +250,41 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
         /// <summary>
         /// Return all the inactive users during "threshold" period.
         /// </summary>
-        /// <param name="threshold">Period to search inactive users.</param>
+        /// <param name="threshold">Period from to search inactive users.</param>
+        /// <param name="callInterval">Period to to search inactive users.</param>
         /// <returns>List of inactive users.</returns>
-        public List<User> GetInactiveUsers(TimeSpan threshold)
+        public List<User> GetInactiveUsers(TimeSpan threshold, TimeSpan callInterval)
         {
+            // Now - threshold (30 min)
+            DateTime intervalTo = DateTime.Now.Subtract(threshold);
+            DateTime intervalFrom = intervalTo.Subtract(callInterval);
+
             using (IDataContext context = this.Context())
             {
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
+                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
+                PrinterUnit printerUnit = new PrinterUnit(); 
 
-                return userRepo.Get(e => e.LastActivityDate > DateTime.Now.Subtract(threshold)
-                        && e.EmailConfirmed == true)
+                // LastActivityDate > (Now - threshold)
+                var list = userRepo.Get(e => e.EmailConfirmed == true // user activated his account
+                        && e.LastActivityDate > intervalFrom // user was active between (Now - threshold) and (Now - threshold - callInterval) ~ 30-35 min before
+                        && e.LastActivityDate < intervalTo)
+                    .Join(printerRepo.GetAll(), u => u.ID, p => p.OperatorUserID, (u, p) => new { User = u, Printer = p })
+                    .Where(p => p.Printer != null && !p.Printer.IsDisabled)
                     .ToList();
+
+                // Build total list to notify users
+                var totalList = new List<User>();
+                foreach(var printer in list)
+                {
+                    PrinterFullInfoModel currentPrinter = printerUnit.GetFullByID(printer.Printer.ID, context);
+                    if (currentPrinter.IsAvailableNow && totalList.FindAll(x => x.ID == printer.User.ID).Count == 0)
+                    {
+                        totalList.Add(printer.User);
+                    }
+                }
+
+                return totalList;
             }
         }
     }

@@ -18,5 +18,6 @@ namespace GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users
         User DeleteUser(User user);
         User FillUpBalance(int userID, decimal upSumm);
         User UpdateUserActivity(int userID);
+        List<User> GetInactiveUsers(TimeSpan threshold, TimeSpan callInterval);
     }
 }

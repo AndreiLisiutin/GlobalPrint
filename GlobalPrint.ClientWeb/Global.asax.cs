@@ -2,6 +2,7 @@
 using GlobalPrint.ClientWeb.Binders;
 using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.LogUtility;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities.ScheduledActivityChecker;
 using Microsoft.AspNet.SignalR;
 using Ninject;
 using System;
@@ -30,6 +31,8 @@ namespace GlobalPrint.ClientWeb
             ModelBinders.Binders.Add(typeof(float), new FloatModelBinder());
 
             //ControllerBuilder.Current.SetControllerFactory(new DefaultControllerFactory(new LocalizedControllerActivator()));
+
+            //ActivityCheckerJobScheduler.Start();
 
             _logUtility.Info("Application Start");
         }
