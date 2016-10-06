@@ -66,6 +66,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Orders
         /// <returns></returns>
         private List<ExportableEntity> _PrepareFinanceRegister(int ownerUserID, DateTime? dateFrom, DateTime? dateTo)
         {
+            dateTo = dateTo.HasValue ? dateTo.Value.AddDays(1) : (DateTime?)null;
             using (IDataContext context = this.Context())
             {
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
@@ -80,7 +81,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Orders
                     where printer.OwnerUserID == ownerUserID
                         && order.PrintOrderStatusID == (int)PrintOrderStatusEnum.Printed
                         && (!dateFrom.HasValue || order.PrintedOn >= dateFrom)
-                        && (!dateTo.HasValue || order.PrintedOn <= dateTo)
+                        && (!dateTo.HasValue || order.PrintedOn < dateTo)
                     orderby order.PrintedOn descending
                     select new { order = order, userClient = userClient, userOperator = userOperator }
                  )
