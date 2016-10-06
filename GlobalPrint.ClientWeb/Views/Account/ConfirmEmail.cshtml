@@ -1,9 +1,8 @@
-﻿@using System.Globalization
-@using GlobalPrint.ClientWeb.Helpers
+﻿@using Resources.ClientWeb.Account
 
 @{
     Layout = "~/Views/Shared/_BaseLayout.cshtml";
-    ViewBag.Title = "Подтверждение email";
+    ViewBag.Title = ConfirmEmailViewResource.ConfirmEmailFormTabTitle;
 }
 
 @section Stylesheets {
@@ -11,9 +10,9 @@
 }
 
 <div class="display-form-content">
-    <h2>@ViewBag.Title.</h2>
+    <h2>@ConfirmEmailViewResource.ConfirmEmailFormHeader</h2>
     <p>
-        Спасибо за подтверждение вашего email. Пожалуйста, перейдите по
-        @Html.ActionLink("ссылке", "Login", "Account", null, new { id = "loginLink" })
+        @ConfirmEmailViewResource.LoginLinkString
+        @Html.ActionLink(ConfirmEmailViewResource.LoginLinkLabel, "Login", "Account")
     </p>
 </div>

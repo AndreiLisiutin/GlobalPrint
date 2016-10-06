@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Resources.ClientWeb.Account;
+using System.ComponentModel;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -49,18 +50,22 @@ namespace GlobalPrint.ClientWeb
 
     public class ResetPasswordViewModel
     {
-        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
-        [EmailAddress]
+        [Required(ErrorMessageResourceType = typeof(ResetPasswordViewResource), ErrorMessageResourceName = "EmailFieldRequiredError")]
+        [EmailAddress(ErrorMessageResourceType = typeof(ResetPasswordViewResource), ErrorMessageResourceName = "EmailFieldTypeError")]
+        [DataType(DataType.EmailAddress, ErrorMessageResourceType = typeof(ResetPasswordViewResource), ErrorMessageResourceName = "EmailFieldTypeError")]
+        [Display(ResourceType = typeof(ResetPasswordViewResource), Name = "EmailFieldLabel", Prompt = "EmailFieldLabel")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
-        [StringLength(100, ErrorMessage = "Минимальная длина пароля - {2} символов.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
+        [Required(ErrorMessageResourceType = typeof(ResetPasswordViewResource), ErrorMessageResourceName = "PasswordFieldRequiredError")]
+        [DataType(DataType.Password, ErrorMessageResourceType = typeof(ResetPasswordViewResource), ErrorMessageResourceName = "PasswordFieldTypeError")]
+        [StringLength(20, MinimumLength = 6, ErrorMessageResourceType = typeof(ResetPasswordViewResource), ErrorMessageResourceName = "PasswordFieldMinLengthError")]
+        [Display(ResourceType = typeof(ResetPasswordViewResource), Name = "PasswordFieldLabel", Prompt = "PasswordFieldLabel")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
+        [Required(ErrorMessageResourceType = typeof(ResetPasswordViewResource), ErrorMessageResourceName = "ConfirmPasswordFieldRequiredError")]
+        [DataType(DataType.Password, ErrorMessageResourceType = typeof(ResetPasswordViewResource), ErrorMessageResourceName = "ConfirmPasswordFieldTypeError")]
+        [Display(ResourceType = typeof(ResetPasswordViewResource), Name = "ConfirmPasswordFieldLabel", Prompt = "ConfirmPasswordFieldLabel")]
+        [Compare("Password", ErrorMessageResourceType = typeof(ResetPasswordViewResource), ErrorMessageResourceName = "ConfirmationNotEqualToPassword")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }

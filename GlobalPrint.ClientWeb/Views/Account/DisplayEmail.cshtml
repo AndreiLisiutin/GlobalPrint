@@ -1,6 +1,8 @@
-﻿@{
+﻿@using Resources.ClientWeb.Account
+
+@{
     Layout = "~/Views/Shared/_BaseLayout.cshtml";
-    ViewBag.Title = "Завершение регистрации";
+    ViewBag.Title = DisplayEmailViewResource.DisplayEmailFormTabTitle;
 }
 
 @section Stylesheets {
@@ -8,6 +10,6 @@
 }
 
 <div class="display-form-content">
-    <h2>@ViewBag.Title</h2>
-    <p>На указанный электронный адрес отправлены дальнейшие инструкции по завершению регистрации</p>
+    <h2>@DisplayEmailViewResource.DisplayEmailFormHeader</h2>
+    <p>@DisplayEmailViewResource.DisplayEmailString</p>
 </div>

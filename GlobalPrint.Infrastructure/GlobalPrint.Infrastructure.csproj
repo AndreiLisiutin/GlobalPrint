@@ -38,6 +38,11 @@
       <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\Microsoft.Office.Interop.Word.15.0.4797.1003\lib\net20\Microsoft.Office.Interop.Word.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
       <Private>True</Private>
@@ -94,8 +99,53 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Resources\ClientWeb\Account\ResetPasswordConfirmationViewResource.Designer.cs">
+      <DependentUpon>ResetPasswordConfirmationViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Account\ForgotPasswordConfirmationViewResource.Designer.cs">
+      <DependentUpon>ForgotPasswordConfirmationViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Account\ResetPasswordConfirmationViewResource.en.Designer.cs">
+      <DependentUpon>ResetPasswordConfirmationViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Account\ForgotPasswordConfirmationViewResource.en.Designer.cs">
+      <DependentUpon>ForgotPasswordConfirmationViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Account\DisplayEmailViewResource.Designer.cs">
+      <DependentUpon>DisplayEmailViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Account\DisplayEmailViewResource.en.Designer.cs">
+      <DependentUpon>DisplayEmailViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\ClientWeb\Account\ForgotPasswordViewResource.Designer.cs">
       <DependentUpon>ForgotPasswordViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Account\ConfirmEmailViewResource.Designer.cs">
+      <DependentUpon>ConfirmEmailViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Account\ResetPasswordViewResource.Designer.cs">
+      <DependentUpon>ResetPasswordViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Account\ResetPasswordViewResource.en.Designer.cs">
+      <DependentUpon>ResetPasswordViewResource.en.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -111,6 +161,11 @@
     </Compile>
     <Compile Include="Resources\ClientWeb\Account\ForgotPasswordViewResource.en.Designer.cs">
       <DependentUpon>ForgotPasswordViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Account\ConfirmEmailViewResource.en.Designer.cs">
+      <DependentUpon>ConfirmEmailViewResource.en.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -162,24 +217,6 @@
     <Folder Include="Enums\" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="Microsoft.Office.Core">
-      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>8</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="Microsoft.Office.Interop.Word">
-      <Guid>{00020905-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>8</VersionMajor>
-      <VersionMinor>7</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
     <COMReference Include="VBIDE">
       <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>5</VersionMajor>
@@ -213,6 +250,36 @@
     <None Include="Web References\CreditOrgInfo\CreditOrgInfo.disco" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\ResetPasswordConfirmationViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResetPasswordConfirmationViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\ResetPasswordConfirmationViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResetPasswordConfirmationViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\ForgotPasswordConfirmationViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ForgotPasswordConfirmationViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\ForgotPasswordConfirmationViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ForgotPasswordConfirmationViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\DisplayEmailViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DisplayEmailViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\DisplayEmailViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DisplayEmailViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ClientWeb\Account\ForgotPasswordViewResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ForgotPasswordViewResource.Designer.cs</LastGenOutput>
@@ -221,6 +288,26 @@
     <EmbeddedResource Include="Resources\ClientWeb\Account\ForgotPasswordViewResource.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ForgotPasswordViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\ConfirmEmailViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ConfirmEmailViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\ConfirmEmailViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ConfirmEmailViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\ResetPasswordViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResetPasswordViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Account\ResetPasswordViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResetPasswordViewResource.en.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ClientWeb\Account\RegisterViewResource.resx">
