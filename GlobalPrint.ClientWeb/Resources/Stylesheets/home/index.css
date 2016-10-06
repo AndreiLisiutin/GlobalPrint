@@ -59,10 +59,16 @@
         height: 30px;
         width: 30px;
     }
-
-    .printer-info-is-available:checked + label {
+    .printer-info-is-available:not(.operator-sleeping):checked + label {
         background: url('/Resources/Images/green_circle.ico');
         background-size: 30px 30px;
         background-repeat: no-repeat;
+    }
+    .printer-info-is-available:checked.operator-sleeping + label {
+        background: url('/Resources/Images/yellow_circle.ico');
+        background-size: 30px 30px;
+        background-repeat: no-repeat;
+        height: 30px;
+        width: 30px;
     }
 
