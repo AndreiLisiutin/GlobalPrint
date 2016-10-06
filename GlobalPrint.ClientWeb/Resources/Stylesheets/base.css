@@ -28,13 +28,14 @@
 }
 
 .badge-notify {
-   background:red;
-   position:relative;
+    background: red;
+    position: relative;
 }
-.badge-notify.badge-notify-incoming-orders {
-   top: -12px;
-   left: -5px;
-}
+
+    .badge-notify.badge-notify-incoming-orders {
+        top: -12px;
+        left: -5px;
+    }
 
 /*for vertical-align as center*/
 .vertical-center {
@@ -55,10 +56,12 @@
     width: 30%;
     text-align: center;
 }
+
 .progressbar-bar {
     display: table;
     background-image: linear-gradient(to bottom,#5bc0de 0,#337ab7 100%);
 }
+
 .progressbar-text {
     display: table-cell;
     vertical-align: middle;
@@ -68,18 +71,18 @@
 
 /* Logo "GlobalPrint" on main page */
 .main-page-logo {
-    max-height: 40px; 
+    max-height: 40px;
     margin-top: -10px;
 }
 
 /* last table column for buttons */
 .table-col-buttons {
-    text-align:center;
-    min-width:100px !important;
+    text-align: center;
+    min-width: 100px !important;
 }
 
 th {
-    text-align:center;
+    text-align: center;
 }
 
 .img-centred {
@@ -89,6 +92,7 @@ th {
 .h1, h1 {
     font-size: 20px;
 }
+
 .h2, h2 {
     font-size: 20px;
 }
@@ -98,6 +102,58 @@ th {
 }
 
 .nopadding {
-   padding: 0 !important;
-   margin: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+
+
+
+/* .modal-fullscreen */
+
+.modal-fullscreen {
+    background: transparent;
+}
+
+    .modal-fullscreen .modal-content {
+        background: transparent;
+        border: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+.modal-backdrop.modal-backdrop-fullscreen {
+    background: #ffffff;
+}
+
+    .modal-backdrop.modal-backdrop-fullscreen.in {
+        opacity: .99;
+        filter: alpha(opacity=99);
+    }
+
+/* .modal-fullscreen size: we use Bootstrap media query breakpoints */
+
+.modal-fullscreen .modal-dialog {
+    margin: 0;
+    margin-right: auto;
+    margin-left: auto;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .modal-fullscreen .modal-dialog {
+        width: 750px;
+    }
+}
+
+@media (min-width: 992px) {
+    .modal-fullscreen .modal-dialog {
+        width: 970px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .modal-fullscreen .modal-dialog {
+        width: 1170px;
+    }
 }

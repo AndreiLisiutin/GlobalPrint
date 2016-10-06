@@ -338,6 +338,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ActionLinkHelperExtensions.cs" />
+    <Compile Include="Helpers\HtmlHelpers.cs" />
     <Compile Include="Helpers\ScheduledActivityChecker\ActivityCheckerJob.cs" />
     <Compile Include="Helpers\ScheduledActivityChecker\ActivityCheckerJobScheduler.cs" />
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
@@ -421,6 +422,7 @@
     <Content Include="Resources\Libraries\bootstrap-rating\README.md" />
     <Content Include="Views\Offer\PrivacyPolicy.cshtml" />
     <Content Include="Views\Reports\PrintOrderRegister.cshtml" />
+    <Content Include="Views\UserProfile\UsersListPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -430,7 +432,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GlobalPrint.Configuration\GlobalPrint.Configuration.csproj">

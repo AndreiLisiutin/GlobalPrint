@@ -39,7 +39,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             }
         }
 
-        public PrinterEditionModel GetPrinterEditionModel(int printerID)
+        public PrinterEditionModel GetPrinterEditionModel(int printerID, int userID)
         {
             using (IDataContext context = this.Context())
             {
@@ -48,6 +48,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                 IPrinterServiceRepository printerServiceRepo = this.Repository<IPrinterServiceRepository>(context);
 
                 Printer printer = printerRepo.GetByID(printerID);
+                Argument.Require(userID == printer.OperatorUserID || userID ==  printer.OwnerUserID, 
+                    "Редактировать принтер может только хозяин или оператор.");
+
                 IEnumerable<PrinterSchedule> schedule = printerScheduleRepo
                     .Get(e => e.PrinterID == printerID)
                     .ToList();
