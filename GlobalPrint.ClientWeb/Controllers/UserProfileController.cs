@@ -9,11 +9,21 @@ using System;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Payments;
 using System.Collections.Generic;
+using GlobalPrint.Infrastructure.CommonUtils;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
+using GlobalPrint.ClientWeb.Helpers;
+using GlobalPrint.Infrastructure.CommonUtils.Pagination;
 
 namespace GlobalPrint.ClientWeb
 {
     public class UserProfileController : BaseController
     {
+        private UserUnit _userUnit;
+        public UserProfileController()
+        {
+            this._userUnit = IoC.Instance.Resolve<UserUnit>();
+        }
+
         /// <summary>
         /// Get user profile view.
         /// </summary>
@@ -86,7 +96,7 @@ namespace GlobalPrint.ClientWeb
                 return View("UserProfile");
             }
         }
-        
+
         /// <summary>
         /// Get list of user's payments.
         /// </summary>
@@ -95,18 +105,27 @@ namespace GlobalPrint.ClientWeb
         [Authorize]
         public ActionResult MyPayments()
         {
-            try
-            {
-                PaymentActionUnit paymentUnit = new PaymentActionUnit();
-                int userID = this.GetCurrentUserID();
-                List<PaymentActionFullInfo> actions = paymentUnit.GetByUserID(userID);
-                return View(actions);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-                return View("UserProfile");
-            }
+            PaymentActionUnit paymentUnit = new PaymentActionUnit();
+            int userID = this.GetCurrentUserID();
+            List<PaymentActionFullInfo> actions = paymentUnit.GetByUserID(userID);
+            return View(actions);
+        }
+
+        /// <summary>
+        /// Get list of users with ability to search. 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public ActionResult UsersListPartial(string emailPattern, Paging paging)
+        {
+            paging = paging ?? new Paging();
+
+            List<User> users = this._userUnit.GetByFilter(emailPattern, paging);
+            int count = this._userUnit.CountByFilter(emailPattern);
+            PagedList<User> pagedList = new PagedList<User>(users, count, paging.ItemsPerPage, paging.CurrentPage);
+            ViewBag.CurrentFilter = emailPattern;
+            return PartialView("UsersListPartial", pagedList);
         }
     }
 }

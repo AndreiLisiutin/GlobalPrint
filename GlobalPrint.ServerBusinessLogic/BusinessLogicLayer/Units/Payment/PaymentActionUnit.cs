@@ -29,7 +29,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
         }
 
         /// <summary>
-        /// Return list of user's successfull payments.
+        /// Return list of user's successful payments.
         /// </summary>
         /// <param name="userID"></param>
         /// <param name="dateFrom">Date from for the payments.</param>
@@ -37,6 +37,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
         /// <returns></returns>
         public List<PaymentActionFullInfo> GetByUserID(int userID, DateTime? dateFrom = null, DateTime? dateTo = null)
         {
+            dateTo = dateTo.HasValue ? dateTo.Value.AddDays(1) : dateTo;
             using (IDataContext context = this.Context())
             {
                 IPaymentTransactionRepository transactionRepo = this.Repository<IPaymentTransactionRepository>(context);
@@ -52,7 +53,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                     where action.UserID == userID 
                         && action.PaymentActionStatusID == (int)PaymentActionStatusEnum.ExecutedSuccessfully
                         && (!dateFrom.HasValue || action.FinishedOn >= dateFrom)
-                        && (!dateTo.HasValue || action.FinishedOn <= dateTo)
+                        && (!dateTo.HasValue || action.FinishedOn < dateTo)
                     orderby action.StartedOn descending, action.FinishedOn descending
                     select new { action = action, transaction = transaction, status = status, type = type }
                  )

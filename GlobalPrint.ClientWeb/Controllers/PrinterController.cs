@@ -73,7 +73,7 @@ namespace GlobalPrint.ClientWeb
 
             return viewModel;
         }
-        
+
         private PrinterEditionModel _PrinterEditionModel(Printer_EditViewMoel viewModel)
         {
             int userID = this.GetCurrentUserID();
@@ -127,42 +127,29 @@ namespace GlobalPrint.ClientWeb
             };
             return View("MyPrinters", myPrinters);
         }
-        
+
         [Authorize, HttpGet]
         public ActionResult Create()
         {
-            try
-            {
-                Printer_EditViewMoel viewModel = this._Printer_EditViewMoel();
-                
-                var latestPrinterOwnerOffer = new UserOfferUnit().GetLatestUserOfferByUserID(this.GetCurrentUserID(), OfferTypeEnum.PrinterOwnerOffer);
-                viewModel.NeedPrinterOwnerOffer = !latestPrinterOwnerOffer.HasUserOffer;
+            Printer_EditViewMoel viewModel = this._Printer_EditViewMoel();
 
-                return View("Edit", viewModel);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-                return View("Edit", null);
-            }
+            var latestPrinterOwnerOffer = new UserOfferUnit().GetLatestUserOfferByUserID(this.GetCurrentUserID(), OfferTypeEnum.PrinterOwnerOffer);
+            viewModel.NeedPrinterOwnerOffer = !latestPrinterOwnerOffer.HasUserOffer;
+
+            return View("Edit", viewModel);
         }
-        
+
         [Authorize, HttpGet]
         public ActionResult Edit(int PrinterID)
         {
-            try
-            {
-                PrinterEditionModel model = new PrinterUnit().GetPrinterEditionModel(PrinterID);
-                Printer_EditViewMoel viewModel = this._Printer_EditViewMoel(model);
-                return View("Edit", viewModel);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-                return View("Edit", null);
-            }
+            Argument.Positive(PrinterID, "Ключ принтера пустой.");
+
+            int userID = this.GetCurrentUserID();
+            PrinterEditionModel model = new PrinterUnit().GetPrinterEditionModel(PrinterID, userID);
+            Printer_EditViewMoel viewModel = this._Printer_EditViewMoel(model);
+            return View("Edit", viewModel);
         }
-        
+
         [Authorize, HttpPost ExportModelState]
         public ActionResult Delete(int PrinterID)
         {
@@ -182,9 +169,9 @@ namespace GlobalPrint.ClientWeb
             else
             {
                 return RedirectToAction("MyPrinters", "Printer");
-            }            
+            }
         }
-        
+
         [Authorize, HttpPost]
         public ActionResult Save(Printer_EditViewMoel model)
         {

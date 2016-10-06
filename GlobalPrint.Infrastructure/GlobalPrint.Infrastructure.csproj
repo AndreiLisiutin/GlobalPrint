@@ -81,6 +81,9 @@
     <Compile Include="CommonUtils\Argument.cs" />
     <Compile Include="CommonUtils\IMimeTypeUtility.cs" />
     <Compile Include="CommonUtils\MimeTypeUtility.cs" />
+    <Compile Include="CommonUtils\Pagination\IPagedCollection.cs" />
+    <Compile Include="CommonUtils\Pagination\PagedList.cs" />
+    <Compile Include="CommonUtils\Pagination\Paging.cs" />
     <Compile Include="CommonUtils\Validation.cs" />
     <Compile Include="CommonUtils\WeekUtility.cs" />
     <Compile Include="DI\BaseIoC.cs" />

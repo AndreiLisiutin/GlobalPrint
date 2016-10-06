@@ -1,0 +1,97 @@
+﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Users
+@using GlobalPrint.Infrastructure.CommonUtils.Pagination
+@model PagedList<User>
+@{
+    string CurrentFilter = ViewBag.CurrentFilter as string;
+}
+
+<div class="container">
+    @using (Html.BeginForm("UsersListPartial", "UserProfile", FormMethod.Get, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="form-inline gp-data-filter focus">
+            <div class="input-group">
+                @Html.TextBox("emailPattern", CurrentFilter, new { @class = "form-control", @id = "emailPattern" })
+                <span class="input-group-btn">
+                    <input type="submit" id="emailPatternSubmit" class="btn btn-default" value="Поиск" />
+                </span>
+            </div>
+        </div>
+    }
+    <div class="table-responsive">
+        <table class="table table-hover" id="userList">
+            <tr>
+                <th class="col-xs-1">
+                </th>
+                <th class="col-xs-5">
+                    Email
+                </th>
+                <th class="col-xs-4">
+                    Логин
+                </th>
+                <th class="col-xs-2">
+                    Дата последней активности
+                </th>
+            </tr>
+            <tbody>
+                @foreach (User item in Model.Entities)
+                {
+                    <tr>
+                        <td class="vcenter">
+                            <input type="checkbox" class="is-selected" value="1" />
+                        </td>
+                        <td>
+                            @item.Email
+                        </td>
+                        <td>
+                            @item.UserName
+                        </td>
+                        <td>
+                            @item.LastActivityDate.ToString("dd.MM.yyyy HH:mm:ss")
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (Model.PagesCount > 1)
+    {
+        <div class="pagination" id="userPagination">
+            @Html.Paging(Model, page => Url.Action("UsersListPartial", "UserProfile", new { CurrentPage = page, ItemsPerPage = Model.PagesCount, emailPattern = CurrentFilter }))
+        </div>
+    }
+</div>
+
+<script>
+        $(document).ready(function () {
+            //uncheck checked users on check current
+            $('.is-selected').click(function () {
+                $('.is-selected').not(this).attr('checked', false);
+            });
+
+            function updateLookup(CurrentPage, ItemsPerPage) {
+                var emailPattern = $('#emailPattern').val();
+                $.ajax({
+                    url: "/UserProfile/UsersListPartial",
+                    type: "GET",
+                    data: {
+                        CurrentPage: CurrentPage,
+                        ItemsPerPage: ItemsPerPage,
+                        emailPattern: emailPattern
+                    }
+                })
+                .done(function (partialViewResult) {
+                    $(".modal-body-content").html(partialViewResult);
+                });
+            };
+
+            $("#emailPatternSubmit").click(function (e) {
+                e.preventDefault();
+                updateLookup(1, null);
+            });
+            $('#userPagination a').on('click', function (e) {
+                e.preventDefault();
+                updateLookup(e.target.innerText, null);
+            });
+        });
+
+</script>

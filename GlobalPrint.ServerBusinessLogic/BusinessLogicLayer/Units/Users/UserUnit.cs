@@ -17,6 +17,8 @@ using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Printers;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Printers;
+using GlobalPrint.Infrastructure.CommonUtils;
+using GlobalPrint.Infrastructure.CommonUtils.Pagination;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 {
@@ -70,6 +72,59 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 return this.Repository<IUserRepository>(context)
                     .Get(filter)
                     .SingleOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// Get users by filter and paging.
+        /// </summary>
+        /// <param name="filter">Filter to user.</param>
+        /// <param name="paging">Pagination information.</param>
+        /// <returns>Found users by filter criteria and paging.</returns>
+        public List<User> GetByFilter(string filter, Paging paging = null)
+        {
+            int skip = paging?.Skip ?? 0;
+            using (IDataContext context = this.Context())
+            {
+                var query = this.Repository<IUserRepository>(context)
+                    .GetAll();
+
+                if (filter != null)
+                {
+                    query = query
+                        .Where(e => e.Email.Contains(filter));
+                }
+
+                query = query.OrderBy(e => e.Email);
+                if (paging != null)
+                {
+                    query = query
+                        .Skip(skip)
+                        .Take(paging.ItemsPerPage);
+                }
+
+                return query.ToList();
+            }
+        }
+
+        /// <summary>
+        /// Get users count by filter.
+        /// </summary>
+        /// <param name="filter">Filter to user.</param>
+        /// <returns>Count of users found by filter criteria.</returns>
+        public int CountByFilter(string filter)
+        {
+            using (IDataContext context = this.Context())
+            {
+                var query = this.Repository<IUserRepository>(context)
+                   .GetAll();
+
+                if (filter != null)
+                {
+                    query = query
+                        .Where(e => e.Email.Contains(filter));
+                }
+                return query.Count();
             }
         }
 
@@ -263,7 +318,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             {
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
                 IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
-                PrinterUnit printerUnit = new PrinterUnit(); 
+                PrinterUnit printerUnit = new PrinterUnit();
 
                 // LastActivityDate > (Now - threshold)
                 var list = userRepo.Get(e => e.EmailConfirmed == true // user activated his account
@@ -275,7 +330,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 
                 // Build total list to notify users
                 List<PrinterOperatorModel> totalList = new List<PrinterOperatorModel>();
-                foreach(var item in list)
+                foreach (var item in list)
                 {
                     PrinterFullInfoModel currentPrinter = printerUnit.GetFullByID(item.Printer.ID, context);
                     if (currentPrinter.IsAvailableNow && totalList.FindAll(x => x.PrinterOperator.ID == item.PrinterOperator.ID).Count == 0)

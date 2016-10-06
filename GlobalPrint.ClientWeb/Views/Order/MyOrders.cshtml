@@ -8,6 +8,31 @@
 
 @section Scripts {
     <script src="~/Resources/Scripts/GlobalPrint/PrintOrder/PrintOrder.js"></script>
+
+    @*<script>
+
+        $(".modal-fullscreen").on('show.bs.modal', function () {
+            setTimeout(function () {
+                $(".modal-backdrop").addClass("modal-backdrop-fullscreen");
+            }, 0);
+        });
+        $(".modal-fullscreen").on('hidden.bs.modal', function () {
+            $(".modal-backdrop").addClass("modal-backdrop-fullscreen");
+        });
+
+        $('#modalTest').click(function () {
+            $.ajax({
+                url: "/UserProfile/UsersListPartial",
+                type: "GET",
+                data: {}
+            })
+            .done(function (partialViewResult) {
+                $(".modal-body-content").html(partialViewResult);
+                $('#modal-fullscreen').modal('toggle');
+            });
+
+        });
+    </script>*@
 }
 
 <div class="container">
@@ -67,3 +92,23 @@
         </div>
     }
 </div>
+
+
+@*<!-- Button modal fullscreen -->
+<button type="button" class="btn btn-primary btn-lg" id="modalTest">
+    Launch modal fullscreen
+</button>
+
+
+<!-- Modal fullscreen -->
+<div class="modal modal-fullscreen fade" id="modal-fullscreen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="modal-body-content">
+                </div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>*@
