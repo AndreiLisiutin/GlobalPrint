@@ -1,7 +1,5 @@
 ﻿using GlobalPrint.Infrastructure.CommonUtils;
-using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
-using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Offers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Orders;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Payment;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Printers;

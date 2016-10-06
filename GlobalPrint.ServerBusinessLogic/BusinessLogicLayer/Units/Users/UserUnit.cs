@@ -1,11 +1,7 @@
 ﻿using GlobalPrint.Infrastructure.EmailUtility;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
-using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Offers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
-using GlobalPrint.ServerBusinessLogic.Models.Business.Users;
-using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -45,23 +41,23 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
         /// </summary>
         /// <param name="userID">User identifier.</param>
         /// <returns>User with latest signed user offer.</returns>
-        public UserExtended GetExtendedUserByID(int userID)
-        {
-            using (IDataContext context = this.Context())
-            {
-                IUserRepository userRepository = this.Repository<IUserRepository>(context);
-                UserOfferUnit userOfferUnit = new UserOfferUnit();
+        //public UserExtended GetExtendedUserByID(int userID)
+        //{
+        //    using (IDataContext context = this.Context())
+        //    {
+        //        IUserRepository userRepository = this.Repository<IUserRepository>(context);
+        //        UserOfferUnit userOfferUnit = new UserOfferUnit();
 
-                User user = userRepository.GetByID(userID);
-                var latestUserOfferExtended = userOfferUnit.GetLatestUserOfferByUserID(userID, OfferTypeEnum.UserOffer, context);
+        //        User user = userRepository.GetByID(userID);
+        //        var latestUserOfferExtended = userOfferUnit.GetLatestUserOfferByUserID(userID, OfferTypeEnum.UserOffer, context);
 
-                return new UserExtended()
-                {
-                    User = user,
-                    LatestUserOffer = latestUserOfferExtended
-                };
-            }
-        }
+        //        return new UserExtended()
+        //        {
+        //            User = user,
+        //            LatestUserOffer = latestUserOfferExtended
+        //        };
+        //    }
+        //}
 
         public User GetUserByFilter(Expression<Func<User, bool>> filter)
         {
@@ -133,34 +129,34 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
         /// </summary>
         /// <param name="user">User to insert.</param>
         /// <returns>Inserted user with new ID.</returns>
-        public User InsertUserWithOffer(User user)
-        {
-            using (IDataContext context = this.Context())
-            {
-                context.BeginTransaction();
-                try
-                {
-                    IUserRepository userRepo = this.Repository<IUserRepository>(context);
-                    UserOfferUnit userOfferUnit = new UserOfferUnit();
+        //public User InsertUserWithOffer(User user)
+        //{
+        //    using (IDataContext context = this.Context())
+        //    {
+        //        context.BeginTransaction();
+        //        try
+        //        {
+        //            IUserRepository userRepo = this.Repository<IUserRepository>(context);
+        //            UserOfferUnit userOfferUnit = new UserOfferUnit();
 
-                    // Insert new user
-                    userRepo.Insert(user);
-                    context.Save();
+        //            // Insert new user
+        //            userRepo.Insert(user);
+        //            context.Save();
 
-                    // Create user offer
-                    userOfferUnit.CreateUserOfferInTransaction(user.ID, OfferTypeEnum.UserOffer, context);
+        //            // Create user offer
+        //            userOfferUnit.CreateUserOfferInTransaction(user.ID, OfferTypeEnum.UserOffer, context);
 
-                    context.Save();
-                    context.CommitTransaction();
-                }
-                catch (Exception)
-                {
-                    context.RollbackTransaction();
-                    throw;
-                }
-                return user;
-            }
-        }
+        //            context.Save();
+        //            context.CommitTransaction();
+        //        }
+        //        catch (Exception)
+        //        {
+        //            context.RollbackTransaction();
+        //            throw;
+        //        }
+        //        return user;
+        //    }
+        //}
 
         /// <summary>
         /// Just insert new user.
@@ -219,14 +215,17 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 }
             }
         }
-
+        
         /// <summary>
-        /// Update last user activity.
+        /// Update last user activity date.
         /// </summary>
         /// <param name="userID">User identifier.</param>
+        /// <param name="lastActivityDate">Last user activity date. Optional parameter, default is DateTime.Now.</param>
         /// <returns>User instance.</returns>
-        public User UpdateUserActivity(int userID)
+        public User UpdateUserActivity(int userID, DateTime? lastActivityDate = null)
         {
+            DateTime _lastActivityDate = lastActivityDate.GetValueOrDefault(DateTime.Now);
+
             using (IDataContext context = this.Context())
             {
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
@@ -234,7 +233,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 
                 if (originalUser != null)
                 {
-                    originalUser.LastActivityDate = DateTime.Now;
+                    originalUser.LastActivityDate = _lastActivityDate;
                     userRepo.Update(originalUser);
                     context.Save();
 

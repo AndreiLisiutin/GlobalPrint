@@ -1,9 +1,7 @@
-﻿@using GlobalPrint.ServerBusinessLogic.Models.Business.Users
-@using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers
+﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Users
 @using GlobalPrint.ClientWeb.Helpers;
-@using System.Globalization;
 
-@model UserExtended
+@model User
 @{
     ViewBag.Title = "Профиль пользователя";
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
@@ -32,7 +30,7 @@
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">Имя</label>
             <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control", @placeholder = "Полное имя", @required = "true", @autofocus = true })
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Полное имя", @required = "true", @autofocus = true })
             </div>
         </div>
 
@@ -40,7 +38,7 @@
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">Email</label>
             <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control", @readonly = "true", @type = "email", @placeholder = "Email", @required = "true" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @readonly = "true", @type = "email", @placeholder = "Email", @required = "true" })
             </div>
         </div>
 
@@ -49,7 +47,7 @@
             <label class="col-sm-1 control-label text-left">Баланс</label>
             <div class="col-sm-11">
                 <div class="input-group">
-                    @Html.TextBoxFor(m => m.User.AmountOfMoney, new { @class = "form-control", @readonly = "true", @placeholder = "Баланс" })
+                    @Html.TextBoxFor(m => m.AmountOfMoney, new { @class = "form-control", @readonly = "true", @placeholder = "Баланс" })
                     <span class="input-group-btn">
                         <!-- Кнопка, вызывающее модальное окно -->
                         <a href="#FillUpBalanceModal" title="Пополнить счет" class="btn btn-default" data-toggle="modal">
@@ -67,7 +65,7 @@
                 <div class="input-group">
                     @Html.TextBox("UserOfferTitle", "Договор оферты пользователя", new { @class = "form-control", @readonly = "true", @placeholder = "Договор оферты пользователя" })
                     <span class="input-group-btn">
-                        <a href="@Url.Action("Offer", "Offer", new { @offerTypeID = OfferTypeEnum.UserOffer })" target="_blank" title="Открыть договор оферты" class="btn btn-default">
+                        <a href="@Url.Action("Offer", "Offer")" target="_blank" title="Открыть договор оферты" class="btn btn-default">
                             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                         </a>
                     </span>
@@ -75,8 +73,8 @@
             </div>
         </div>
 
-        @Html.HiddenFor(m => m.User.ID)
-        @Html.HiddenFor(m => m.User.PhoneNumber)
+        @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.PhoneNumber)
 
         <div class="form-group">
             <div class="col-xs-10">

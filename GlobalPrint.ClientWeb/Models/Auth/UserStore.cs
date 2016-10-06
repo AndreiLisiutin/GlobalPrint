@@ -30,7 +30,7 @@ namespace GlobalPrint.ClientWeb
                 throw new ArgumentNullException("user");
             }
 
-            this._userUnit.InsertUserWithOffer(user.User);
+            this._userUnit.InsertUser(user.User);
             return Task.FromResult<object>(user);
         }
 

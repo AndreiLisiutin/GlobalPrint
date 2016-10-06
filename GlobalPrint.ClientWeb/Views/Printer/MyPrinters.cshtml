@@ -1,5 +1,4 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers
-@using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers
 @using GlobalPrint.ClientWeb.Helpers
 @using System.Globalization
 
@@ -29,7 +28,7 @@
             </tr>
         </thead>
         <tbody>
-            @if (Model.PrinterList != null)
+            @if (Model != null && Model.PrinterList != null)
             {
                 foreach (Printer printer in Model.PrinterList)
                 {
@@ -46,7 +45,7 @@
         </tbody>
     </table>
 
-    @if (Model.LatestPrinterOwnerOffer.HasUserOffer)
+    @*@if (Model.LatestPrinterOwnerOffer.HasUserOffer)
     {
         // Оферта
         <form class="form-horizontal" role="form">
@@ -64,7 +63,7 @@
                 </div>
             </div>
         </form>
-    }
+    }*@
 
     <div class="form-group">
         @Html.ActionLink("Добавить", "Create", "Printer", new { }, new { @class = "btn btn-default" })

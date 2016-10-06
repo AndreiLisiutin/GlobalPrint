@@ -1,9 +1,7 @@
 ﻿using GlobalPrint.ClientWeb.Models.PrinterController;
 using GlobalPrint.Infrastructure.CommonUtils;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Printers;
-using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
 using System;
 using System.Collections.Generic;
@@ -118,12 +116,12 @@ namespace GlobalPrint.ClientWeb
             int userID = this.GetCurrentUserID();
 
             var printerList = new PrinterUnit().GetUserPrinterList(userID);
-            var latestPrinterOwnerOffer = new UserOfferUnit().GetLatestUserOfferByUserID(userID, OfferTypeEnum.PrinterOwnerOffer);
+            //var latestPrinterOwnerOffer = new UserOfferUnit().GetLatestUserOfferByUserID(userID, OfferTypeEnum.PrinterOwnerOffer);
 
             Printer_MyPrinters myPrinters = new Printer_MyPrinters()
             {
-                PrinterList = printerList,
-                LatestPrinterOwnerOffer = latestPrinterOwnerOffer
+                PrinterList = printerList
+                //LatestPrinterOwnerOffer = latestPrinterOwnerOffer
             };
             return View("MyPrinters", myPrinters);
         }
@@ -135,8 +133,8 @@ namespace GlobalPrint.ClientWeb
             {
                 Printer_EditViewMoel viewModel = this._Printer_EditViewMoel();
                 
-                var latestPrinterOwnerOffer = new UserOfferUnit().GetLatestUserOfferByUserID(this.GetCurrentUserID(), OfferTypeEnum.PrinterOwnerOffer);
-                viewModel.NeedPrinterOwnerOffer = !latestPrinterOwnerOffer.HasUserOffer;
+                //var latestPrinterOwnerOffer = new UserOfferUnit().GetLatestUserOfferByUserID(this.GetCurrentUserID(), OfferTypeEnum.PrinterOwnerOffer);
+                //viewModel.NeedPrinterOwnerOffer = !latestPrinterOwnerOffer.HasUserOffer;
 
                 return View("Edit", viewModel);
             }

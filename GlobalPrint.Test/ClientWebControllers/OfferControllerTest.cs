@@ -1,8 +1,5 @@
 ﻿using GlobalPrint.ClientWeb.Controllers;
 using GlobalPrint.ClientWeb.Models.OfferController;
-using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
-using GlobalPrint.ServerBusinessLogic.Models.Business.Offers;
-using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

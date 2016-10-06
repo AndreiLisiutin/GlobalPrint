@@ -6,9 +6,9 @@ using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
 using System.Web.Mvc;
 using System;
-using GlobalPrint.ServerBusinessLogic.Models.Business.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Payments;
 using System.Collections.Generic;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -24,8 +24,7 @@ namespace GlobalPrint.ClientWeb
         public ActionResult UserProfile()
         {
             UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
-
-            var user = userUnit.GetExtendedUserByID(this.GetCurrentUserID());
+            var user = userUnit.GetUserByID(this.GetCurrentUserID());
             return View(user);
         }
 
@@ -37,7 +36,7 @@ namespace GlobalPrint.ClientWeb
         [HttpPost]
         [Authorize]
         [MultipleButton(Name = "action", Argument = "Save")]
-        public ActionResult Save(UserExtended model)
+        public ActionResult Save(User model)
         {
             if (!ModelState.IsValid)
             {
@@ -47,7 +46,7 @@ namespace GlobalPrint.ClientWeb
 
             try
             {
-                userUnit.UpdateUserProfile(model?.User);
+                userUnit.UpdateUserProfile(model);
                 return RedirectToAction("UserProfile");
             }
             catch (Exception ex)

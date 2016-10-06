@@ -1,6 +1,5 @@
 ﻿using GlobalPrint.ClientWeb.App_Start;
 using GlobalPrint.Infrastructure.LogUtility;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -9,8 +8,6 @@ using System;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using GlobalPrint.ClientWeb.Helpers;
-using System.Globalization;
 using GlobalPrint.ClientWeb.Helpers;
 using System.Globalization;
 
@@ -194,9 +191,7 @@ namespace GlobalPrint.ClientWeb
             {
                 return View("Register", model);
             }
-
-            UserOfferUnit userOfferUnit = new UserOfferUnit();
-
+            
             var user = new ApplicationUser(model.Email, model.Email);
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)

@@ -11,11 +11,11 @@ namespace GlobalPrint.ClientWeb.Models.PrinterController
         public Printer Printer { get; set; }
         public List<_Schedule> Schedule { get; set; }
         public List<_Service> Services { get; set; }
-        public bool NeedPrinterOwnerOffer { get; set; }
+        //public bool NeedPrinterOwnerOffer { get; set; }
         
-        [Required(ErrorMessage = "Вы должны подтвердить свое согласие с условиями оферты.")]
-        [Range(typeof(bool), "true", "true", ErrorMessage = "Вы должны подтвердить свое согласие с условиями оферты.")]
-        public bool IsAgreeWithOffer { get; set; }
+        //[Required(ErrorMessage = "Вы должны подтвердить свое согласие с условиями оферты.")]
+        //[Range(typeof(bool), "true", "true", ErrorMessage = "Вы должны подтвердить свое согласие с условиями оферты.")]
+        //public bool IsAgreeWithOffer { get; set; }
 
         public class _Schedule
         {

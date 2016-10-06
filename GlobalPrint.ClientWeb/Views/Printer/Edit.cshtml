@@ -1,5 +1,4 @@
-﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
-@using GlobalPrint.ClientWeb.Models.PrinterController
+﻿@using GlobalPrint.ClientWeb.Models.PrinterController
 @using GlobalPrint.ClientWeb.Helpers
 @using System.Globalization
 
@@ -175,7 +174,7 @@
             </tbody>
         </table>
 
-        if (Model.NeedPrinterOwnerOffer)
+        @*if (Model.NeedPrinterOwnerOffer)
         {
             <div class="form-group">
                 <div class="col-sm-12 checkbox">
@@ -188,7 +187,7 @@
         else
         {
             @Html.HiddenFor(m => m.IsAgreeWithOffer, new { @required = "true", @Value = true })
-        }
+        }*@
 
         <div class="form-group">
             <div class="col-sm-12">

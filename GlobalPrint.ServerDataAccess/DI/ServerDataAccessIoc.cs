@@ -1,12 +1,10 @@
 ﻿using GlobalPrint.Infrastructure.DI;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
-using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Offers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Orders;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Payment;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Printers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext;
-using GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Offers;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Orders;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Payment;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Printers;
@@ -54,9 +52,9 @@ namespace GlobalPrint.ServerDataAccess.DI
             ioc.Kernel.Bind<IUserRoleRepository>().To<UserRoleRepository>().InTransientScope();
 
             // Repository/Offers
-            ioc.Kernel.Bind<IOfferRepository>().To<OfferRepository>().InTransientScope();
-            ioc.Kernel.Bind<IUserOfferRepository>().To<UserOfferRepository>().InTransientScope();
-            ioc.Kernel.Bind<IOfferTypeRepository>().To<OfferTypeRepository>().InTransientScope();
+            //ioc.Kernel.Bind<IOfferRepository>().To<OfferRepository>().InTransientScope();
+            //ioc.Kernel.Bind<IUserOfferRepository>().To<UserOfferRepository>().InTransientScope();
+            //ioc.Kernel.Bind<IOfferTypeRepository>().To<OfferTypeRepository>().InTransientScope();
 
             // Repository/Payment
             ioc.Kernel.Bind<IPaymentActionRepository>().To<PaymentActionRepository>().InTransientScope();

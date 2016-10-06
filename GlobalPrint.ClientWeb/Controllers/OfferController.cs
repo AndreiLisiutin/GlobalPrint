@@ -1,8 +1,5 @@
 ﻿using GlobalPrint.ClientWeb.Models.OfferController;
 using GlobalPrint.Infrastructure.CommonUtils;
-using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
-using GlobalPrint.ServerBusinessLogic.Models.Business.Offers;
-using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
 using System;
 using System.Web.Mvc;
 
@@ -10,13 +7,13 @@ namespace GlobalPrint.ClientWeb.Controllers
 {
     public class OfferController : BaseController
     {
-        private IUserOfferUnit _userOfferUnit { get; set; }
-        private IOfferUnit _offerUnit { get; set; }
+        //private IUserOfferUnit _userOfferUnit { get; set; }
+        //private IOfferUnit _offerUnit { get; set; }
 
-        public OfferController(IUserOfferUnit userOfferUnit, IOfferUnit offerUnit)
+        public OfferController(/*IUserOfferUnit userOfferUnit, IOfferUnit offerUnit*/)
         {
-            _userOfferUnit = userOfferUnit;
-            _offerUnit = offerUnit;
+            //_userOfferUnit = userOfferUnit;
+            //_offerUnit = offerUnit;
         }
 
         /// <summary>
@@ -58,7 +55,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         // GET: /Offer/Offer
         [HttpGet]
         [Authorize]
-        public ActionResult Offer(OfferTypeEnum offerTypeID)
+        public ActionResult Offer(/*OfferTypeEnum offerTypeID*/)
         {
             //UserOfferExtended userOffer = _userOfferUnit.GetLatestUserOfferByUserID(this.GetCurrentUserID(), offerTypeID);
 
