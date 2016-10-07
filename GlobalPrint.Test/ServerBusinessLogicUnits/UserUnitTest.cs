@@ -20,14 +20,9 @@ namespace GlobalPrint.Test.ServerBusinessLogicUnits
 
         public UserUnitTest()
         {
-            Mock<IEmailUtility> emailUtilityMoq = new Mock<IEmailUtility>();
-            emailUtilityMoq
-                .Setup(e => e.Send(It.IsAny<MailAddress>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MailAddress>(), It.IsAny<bool>()))
-                .Verifiable();
-
-            _userUnit = new UserUnit(new Lazy<IEmailUtility>(() => emailUtilityMoq.Object));
             _activityCheckerThreshold = Int32.Parse(WebConfigurationManager.AppSettings["ActivityCheckerThreshold"]);
-            _activityCheckerCallInterval = Int32.Parse(WebConfigurationManager.AppSettings["ActivityCheckerCallInterval"]);
+            _activityCheckerCallInterval = Int32.Parse(WebConfigurationManager.AppSettings["ActivityCheckerCallInterval"]);            
+            _userUnit = new UserUnit(new Lazy<IEmailUtility>(() => GetEmailMoq().Object));
         }
 
         [TestMethod]

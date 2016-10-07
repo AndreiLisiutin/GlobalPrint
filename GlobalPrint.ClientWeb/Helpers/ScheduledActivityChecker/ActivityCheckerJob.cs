@@ -73,7 +73,7 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
                      " Совершите какое-либо действие (обновите страницу сайта globalprint), чтобы обновить дату последней активности.",
                      item.Printer.Name,
                      item.Printer.Location,
-                     item.PrinterOperator.LastActivityDate.ToString("dd.MM.yyyy")
+                     item.PrinterOperator.LastActivityDate.ToString("dd.MM.yyyy HH:mm:ss")
                  );
 
                 _emailUtility.Send(destination, _emailSubject, messageBody);
