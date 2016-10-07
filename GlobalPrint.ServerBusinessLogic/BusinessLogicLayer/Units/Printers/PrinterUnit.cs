@@ -150,24 +150,27 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 
                 IQueryable<Printer> all = printerRepo
                         .GetAll();
-                var closest = 
-                (
-                    from printer in printerRepo.GetAll()
-                    join owner in userRepo.GetAll() on printer.OwnerUserID equals owner.ID
-                    where Math.Pow(printer.Latitude - latitude, 2) + Math.Pow(printer.Longtitude - longtitude, 2) ==
-                        all.Min(e => Math.Pow(printer.Latitude - latitude, 2) + Math.Pow(printer.Longtitude - longtitude, 2))
-                    select new { printer = printer, owner = owner }
-                )
+                Printer closest = printerRepo
+                    .GetAll()
+                    .Where(p => Math.Pow(p.Latitude - latitude, 2) + Math.Pow(p.Longtitude - longtitude, 2) ==
+                        all.Min(e => Math.Pow(e.Latitude - latitude, 2) + Math.Pow(e.Longtitude - longtitude, 2))
+                    )
                     .FirstOrDefault();
+                if (closest == null)
+                {
+                    return null;
+                }
+
+                User @operator = userRepo.GetByID(closest.OperatorUserID);
 
                 IEnumerable<PrinterSchedule> schedules = printerScheduleRepo
-                    .Get(s => s.PrinterID == closest.printer.ID)
+                    .Get(s => s.PrinterID == closest.ID)
                     .ToList();
                 IEnumerable<PrinterServiceExtended> services = new PrintServicesUnit()
-                    .GetPrinterServices(s => s.PrinterService.PrinterID == closest.printer.ID)
+                    .GetPrinterServices(s => s.PrinterService.PrinterID == closest.ID)
                     .ToList();
 
-                PrinterFullInfoModel model = new PrinterFullInfoModel(closest.printer, closest.owner, schedules, services);
+                PrinterFullInfoModel model = new PrinterFullInfoModel(closest, @operator, schedules, services);
                 return model;
             }
         }
