@@ -7,15 +7,15 @@ namespace GlobalPrint.ClientWeb
 {
     public class LoginViewModel
     {
-        [Required(ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "EmailFieldRequiredError")]
-        [EmailAddress(ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "EmailFieldTypeError")]
-        [DataType(DataType.EmailAddress, ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "EmailFieldTypeError")]
+        [Required(ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "EmailFieldRequiredError", ErrorMessage = null)]
+        [EmailAddress(ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "EmailFieldTypeError", ErrorMessage = null)]
+        [DataType(DataType.EmailAddress, ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "EmailFieldTypeError", ErrorMessage = null)]
         [Display(ResourceType = typeof(LoginViewResource), Name = "EmailFieldLabel", Prompt = "EmailFieldLabel")]
         public string Email { get; set; }
 
-        [Required(ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "PasswordFieldRequiredError")]
-        [DataType(DataType.Password, ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "PasswordFieldTypeError")]
-        [StringLength(20, MinimumLength = 6, ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "PasswordFieldMinLengthError")]
+        [Required(ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "PasswordFieldRequiredError", ErrorMessage = null)]
+        [DataType(DataType.Password, ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "PasswordFieldTypeError", ErrorMessage = null)]
+        [StringLength(20, MinimumLength = 6, ErrorMessageResourceType = typeof(LoginViewResource), ErrorMessageResourceName = "PasswordFieldMinLengthError", ErrorMessage = null)]
         [Display(ResourceType = typeof(LoginViewResource), Name = "PasswordFieldLabel", Prompt = "PasswordFieldLabel")]
         public string Password { get; set; }
         

@@ -234,6 +234,7 @@
     <Content Include="Resources\Images\red_circle.ico" />
     <Content Include="Resources\Images\run-printer.png" />
     <Content Include="Resources\Images\ru_32_round.png" />
+    <Content Include="Resources\Images\yellow_circle.ico" />
     <Content Include="Resources\Libraries\bootstrap-notify\bootstrap-notify.min.js" />
     <Content Include="Resources\Libraries\bootstrap-rating\bootstrap-rating.css" />
     <Content Include="Resources\Libraries\bootstrap-rating\bootstrap-rating.js" />

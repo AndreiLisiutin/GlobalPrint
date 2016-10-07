@@ -7,7 +7,7 @@
 
     //select printer's icon by its state
     var _getPrinterIcon = function (printerInfo) {
-        if (printerInfo.IsAvailableNow) {
+        if (printerInfo.IsAvailableNow && printerInfo.IsOperatorAlive) {
             return PRINTER_ONLINE_ICON_URL;
         }
         if (printerInfo.Printer.IsDisabled) {
@@ -215,7 +215,12 @@
         google.maps.event.addListener(marker, 'click', function () {
             $("#printerInfoPrinterID").val(printerInfo.Printer.ID);
             $("#printerInfoIsAvailable").prop('checked', printerInfo.IsAvailableNow);
-            if (!printerInfo.IsAvailableNow) {
+            if (!printerInfo.IsOperatorAlive) {
+                $("#printerInfoIsAvailable").addClass('operator-sleeping');
+            } else {
+                $("#printerInfoIsAvailable").removeClass('operator-sleeping');
+            }
+            if (!printerInfo.IsAvailableNow || !printerInfo.IsOperatorAlive) {
                 $("#printerInfoPrint").addClass('hidden');
             } else {
                 $("#printerInfoPrint").removeClass('hidden');
