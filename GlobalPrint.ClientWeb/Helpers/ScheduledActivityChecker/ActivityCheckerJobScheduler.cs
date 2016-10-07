@@ -14,7 +14,7 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
 
         public ActivityCheckerJobScheduler()
         {
-            _callInterval = TimeSpan.FromMinutes(Int32.Parse(WebConfigurationManager.AppSettings["ActivityCheckerCallInterval"]));
+            _callInterval = TimeSpan.FromMinutes(double.Parse(WebConfigurationManager.AppSettings["ActivityCheckerCallInterval"]));
         }
 
         public void Start()

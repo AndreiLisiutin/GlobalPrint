@@ -37,7 +37,7 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Business.Printers
         {
             get
             {
-                TimeSpan threshold = TimeSpan.FromMinutes(Int32.Parse(WebConfigurationManager.AppSettings["ActivityCheckerThreshold"]));
+                TimeSpan threshold = TimeSpan.FromMinutes(double.Parse(WebConfigurationManager.AppSettings["ActivityCheckerThreshold"]));
                 return this.Operator.LastActivityDate > DateTime.Now.Subtract(threshold);
             } 
         }

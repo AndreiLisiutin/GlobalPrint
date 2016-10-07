@@ -35,8 +35,8 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
             _userUnit = IoC.Instance.Resolve<IUserUnit>();
             _emailUtility = IoC.Instance.Resolve<IEmailUtility>();
 
-            _threshold = TimeSpan.FromMinutes(Int32.Parse(WebConfigurationManager.AppSettings["ActivityCheckerThreshold"]));
-            _callInterval = TimeSpan.FromMinutes(Int32.Parse(WebConfigurationManager.AppSettings["ActivityCheckerCallInterval"]));
+            _threshold = TimeSpan.FromMinutes(double.Parse(WebConfigurationManager.AppSettings["ActivityCheckerThreshold"]));
+            _callInterval = TimeSpan.FromMinutes(double.Parse(WebConfigurationManager.AppSettings["ActivityCheckerCallInterval"]));
         }
 
         public void Execute(IJobExecutionContext context)
@@ -70,7 +70,7 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
                 string messageBody = string.Format(
                      "Вы являетесь владельцем активного на данный момент принтера \"{0}\" по адресу {1}." +
                      " Однако вы давно не проявляли активность - последняя Ваша активность зафиксирована {2}." +
-                     " Совершите какое-либо действие (обновите страницу сайта globalprint), чтобы обновить дату последней активности.",
+                     " Совершите какое-либо действие (обновите страницу сайта www.globalprint.online), чтобы обновить дату последней активности.",
                      item.Printer.Name,
                      item.Printer.Location,
                      item.PrinterOperator.LastActivityDate.ToString("dd.MM.yyyy HH:mm:ss")
@@ -79,7 +79,7 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
                 _emailUtility.Send(destination, _emailSubject, messageBody);
 
                 PushNotificationHub pushNotificationHub = IoC.Instance.Resolve<PushNotificationHub>();
-                pushNotificationHub.PrinterOperatorInactivityNotification(messageBody, item.PrinterOperator.ID);
+                pushNotificationHub.NotifyUserByID(messageBody, item.PrinterOperator.ID);
             }
             catch (Exception e)
             {

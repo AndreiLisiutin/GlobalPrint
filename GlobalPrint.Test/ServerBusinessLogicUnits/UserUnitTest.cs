@@ -15,13 +15,13 @@ namespace GlobalPrint.Test.ServerBusinessLogicUnits
     public class UserUnitTest : BaseTest
     {
         private IUserUnit _userUnit;
-        private readonly int _activityCheckerThreshold;
-        private readonly int _activityCheckerCallInterval;
+        private readonly double _activityCheckerThreshold;
+        private readonly double _activityCheckerCallInterval;
 
         public UserUnitTest()
         {
-            _activityCheckerThreshold = Int32.Parse(WebConfigurationManager.AppSettings["ActivityCheckerThreshold"]);
-            _activityCheckerCallInterval = Int32.Parse(WebConfigurationManager.AppSettings["ActivityCheckerCallInterval"]);            
+            _activityCheckerThreshold = double.Parse(WebConfigurationManager.AppSettings["ActivityCheckerThreshold"]);
+            _activityCheckerCallInterval = double.Parse(WebConfigurationManager.AppSettings["ActivityCheckerCallInterval"]);            
             _userUnit = new UserUnit(new Lazy<IEmailUtility>(() => GetEmailMoq().Object));
         }
 
