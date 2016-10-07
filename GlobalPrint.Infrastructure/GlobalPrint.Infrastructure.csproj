@@ -99,6 +99,16 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Resources\ClientWeb\About\AboutViewResource.Designer.cs">
+      <DependentUpon>AboutViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\About\AboutViewResource.en.Designer.cs">
+      <DependentUpon>AboutViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\ClientWeb\Account\ResetPasswordConfirmationViewResource.Designer.cs">
       <DependentUpon>ResetPasswordConfirmationViewResource.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -250,6 +260,16 @@
     <None Include="Web References\CreditOrgInfo\CreditOrgInfo.disco" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ClientWeb\About\AboutViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AboutViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\About\AboutViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AboutViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ClientWeb\Account\ResetPasswordConfirmationViewResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ResetPasswordConfirmationViewResource.Designer.cs</LastGenOutput>

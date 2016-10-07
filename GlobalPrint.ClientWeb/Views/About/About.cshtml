@@ -1,8 +1,9 @@
 ﻿@using System.Globalization
 @using GlobalPrint.ClientWeb.Helpers
+@using Resources.ClientWeb.Account
 
 @{
-    ViewBag.Title = "О проекте";
+    ViewBag.Title = AboutViewResource.AboutFormTabTitle;
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
 
@@ -10,20 +11,20 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <h2 class="page-header text-center">Global Print - печать здесь и сейчас!</h2>
+            <h2 class="page-header text-center">@AboutViewResource.ProjectSlogan</h2>
         </div>
     </div>
 
     <div style="text-align:left;">
         <h4>
-            Компания ООО «Эвергрин» (ИНН 7706206824) предоставляет сервис удалённой печати документов. <br>
-            Печать документов платная (10-30 рублей). <br>
-            Оплата производится посредством системы ROBOKASSA.<br>
+            @AboutViewResource.AboutProjectHeader<br>
+            @AboutViewResource.AboutProjectPrintCost<br>
+            @AboutViewResource.AboutProjectPaymentWay<br>
         </h4>
-        <p>Техническая поддержка круглосуточная:</p>
-        <p>Тел.: +7 900 3259988</p>
-        <p>Email: support@globalprint.online</p>
-        <p>@Html.ActionLink("Обратная связь", "Feedback", "Feedback")</p>
+        <p>@AboutViewResource.TechSupport</p>
+        <p>@AboutViewResource.TechSupportPhone</p>
+        <p>@AboutViewResource.TechSupportEmail</p>
+        <p>@Html.ActionLink(AboutViewResource.FeedbackLinkLabel, "Feedback", "Feedback")</p>
     </div>
 
 </div>
