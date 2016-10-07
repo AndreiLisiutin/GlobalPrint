@@ -438,7 +438,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             Argument.Positive(printerID, "Выберите принтер для удаления.");
             IPrintOrderRepository printOrderRepository = this.Repository<IPrintOrderRepository>(context);
 
-            var printOrderList = printOrderRepository.GetAll();
+            var printOrderList = printOrderRepository.Get(e => e.PrinterID == printerID);
             Argument.Require(!printOrderList.Any(), "Существуют заказы, связанные с этим принтером.");
         }
 

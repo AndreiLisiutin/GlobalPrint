@@ -38,7 +38,7 @@ namespace GlobalPrint.ClientWeb.App_Start
                 },
                 CookieName = "GlobalPrintIdentityCookie",
                 SlidingExpiration = true,
-                ExpireTimeSpan = System.TimeSpan.FromMinutes(30)
+                ExpireTimeSpan = System.TimeSpan.FromDays(365) // Cookie valid for 1 year
             });
             
             app.MapSignalR();
