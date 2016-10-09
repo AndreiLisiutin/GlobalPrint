@@ -223,6 +223,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             using (IDataContext context = this.Context())
             {
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
+                user.LastActivityDate = DateTime.Now;
                 userRepo.Insert(user);
                 context.Save();
                 return user;

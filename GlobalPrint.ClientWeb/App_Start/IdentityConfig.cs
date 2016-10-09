@@ -24,9 +24,7 @@ namespace GlobalPrint.ClientWeb.App_Start
         {
             UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
             var manager = new ApplicationUserManager(new UserStore(userUnit));
-
-            manager.PasswordHasher = new CustomPasswordHasher();
-
+            
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<ApplicationUser, int>(manager)
             {
@@ -77,6 +75,7 @@ namespace GlobalPrint.ClientWeb.App_Start
         }
     }
 
+    [Obsolete("For testing only", true)]
     public class CustomPasswordHasher : IPasswordHasher
     {
         public string HashPassword(string password)
