@@ -1,11 +1,14 @@
-﻿@using GlobalPrint.ClientWeb.Models.PrinterController
-@using GlobalPrint.ClientWeb.Helpers
-@using System.Globalization
+﻿@using GlobalPrint.ServerBusinessLogic.Models.Business.Printers
+@using GlobalPrint.Infrastructure.CommonUtils
+@using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers
 
-@model Printer_EditViewMoel
+@model PrinterEditionModel
 @{
     ViewBag.Title = "Редактирование принтера";
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+
+    List<PrintServiceExtended> AllServices = (List<PrintServiceExtended>)ViewBag.AllServices;
+    WeekUtility WeekUtility = (WeekUtility)ViewBag.WeekUtility;
 }
 
 @section Scripts {
@@ -107,17 +110,25 @@
                 </tr>
             </thead>
             <tbody>
-                @for (int i = 0; i < Model.Schedule.Count; i++)
+                @{ 
+                    int index = -1;
+                    PrinterSchedule schedule = null;
+                }
+                @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
                 {
-                    @Html.HiddenFor(e => e.Schedule[i].DayOfWeek)
-                    @Html.HiddenFor(e => e.Schedule[i].PrinterScheduleID)
+                    {
+                        index++;
+                        schedule = Model.PrinterSchedule.FirstOrDefault(e => e.DayOfWeek == (int)day);
+                    }
+                    @Html.Hidden($"PrinterSchedule[{index}].ID", schedule?.ID ?? 0)
+                    @Html.Hidden($"PrinterSchedule[{index}].DayOfWeek", (int)day)
+                    @Html.Hidden($"PrinterSchedule[{index}].PrinterID", Model.Printer.ID)
                     <tr class="printer-schedule">
-                        <td class="col-xs-6 col-md-6" scope="row">@Html.DisplayTextFor(e => e.Schedule[i].DayOfWeekName)</td>
-                        @Html.HiddenFor(e => e.Schedule[i].DayOfWeekName)
-                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Schedule[i].isOpened, new { @class = "is-printer-schedule-open" })</td>
+                        <td class="col-xs-6 col-md-6" scope="row">@WeekUtility.DayName(day)</td>
+                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBox($"PrinterSchedule[{index}].IsOpened", schedule != null, new { @class = "is-printer-schedule-open" })</td>
                         <td class="col-xs-3 col-md-3">
                             <div class="input-group clockpicker" data-autoclose="true">
-                                @Html.TextBoxFor(e => e.Schedule[i].OpenTime, new { @class = "form-control printer-schedule-time" })
+                                @Html.TextBox($"PrinterSchedule[{index}].OpenTime", schedule?.OpenTime, new { @class = "form-control printer-schedule-time" })
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-time"></span>
                                 </span>
@@ -125,7 +136,7 @@
                         </td>
                         <td class="col-xs-3 col-md-3">
                             <div class="input-group clockpicker" data-autoclose="true">
-                                @Html.TextBoxFor(e => e.Schedule[i].CloseTime, new { @class = "form-control printer-schedule-time" })
+                                @Html.TextBox($"PrinterSchedule[{index}].CloseTime", schedule?.CloseTime, new { @class = "form-control printer-schedule-time" })
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-time"></span>
                                 </span>
@@ -151,21 +162,29 @@
                 </tr>
             </thead>
             <tbody>
-                @for (int i = 0; i < Model.Services.Count; i++)
+                @{
+                    index = -1;
+                    PrinterService printService = null;
+                }
+                @foreach (PrintServiceExtended service in AllServices)
                 {
-                    @Html.HiddenFor(e => e.Services[i].PrintServiceID)
-                    @Html.HiddenFor(e => e.Services[i].PrinterServiceID)
+                    {
+                        index++;
+                        printService = Model.PrinterServices.FirstOrDefault(e => e.PrintServiceID == service.PrintService.ID);
+                    }
+                    @Html.Hidden($"PrinterServices[{index}].ID", printService?.ID ?? 0)
+                    @Html.Hidden($"PrinterServices[{index}].PrintServiceID", service.PrintService.ID)
+                    @Html.Hidden($"PrinterServices[{index}].PrinterID", Model.Printer.ID)
+
                     <tr class="printer-service">
-                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Services[i].IsSupported, new { @class = "is-printer-service-supported" })</td>
-                        <td class="col-xs-3 col-md-3" scope="row">@Html.DisplayTextFor(e => e.Services[i].PrintType)</td>
-                        @Html.HiddenFor(e => e.Services[i].PrintType)
-                        <td class="col-xs-3 col-md-3" scope="row">@Html.DisplayTextFor(e => e.Services[i].PrintSize)</td>
-                        @Html.HiddenFor(e => e.Services[i].PrintSize)
-                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Services[i].IsColored, new { @class = "", disabled = "true" })</td>
-                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Services[i].IsTwoSided, new { @class = "", disabled = "true" })</td>
+                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBox($"PrinterServices[{index}].IsSupported", printService != null, new { @class = "is-printer-service-supported" })</td>
+                        <td class="col-xs-3 col-md-3" scope="row">@service.PrintType.Name</td>
+                        <td class="col-xs-3 col-md-3" scope="row">@service.PrintSize.Name</td>
+                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBox($"PrinterServices[{index}].IsColored", service.PrintService.IsColored, new { @class = "", disabled = "true" })</td>
+                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBox($"PrinterServices[{index}].IsTwoSided", service.PrintService.IsTwoSided, new { @class = "", disabled = "true" })</td>
                         <td class="col-xs-3 col-md-3" scope="row">
                             <div class="input-group">
-                                @Html.TextBoxFor(e => e.Services[i].Price, new { @class = "form-control text-right printer-service-price", @type = "number" })
+                                @Html.TextBox($"PrinterServices[{index}].PricePerPage", printService?.PricePerPage ?? 0, new { @class = "form-control text-right printer-service-price", @type = "number" })
                                 <div class="input-group-addon">руб.</div>
                             </div>
                         </td>

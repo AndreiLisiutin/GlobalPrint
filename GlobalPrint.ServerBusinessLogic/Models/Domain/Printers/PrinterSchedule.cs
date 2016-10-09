@@ -16,8 +16,7 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Printers
         public PrinterSchedule()
         {
         }
-
-        private int PrinterScheduleID { get; set; }
+        
         [Column("printer_id")]
         public int PrinterID { get; set; }
         [Column("day_of_week")]
@@ -30,11 +29,7 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Printers
         #region IDomainModel
         [Key]
         [Column("printer_schedule_id")]
-        public int ID
-        {
-            get { return this.PrinterScheduleID; }
-            set { this.PrinterScheduleID = value; }
-        }
+        public int ID { get; set; }
         #endregion
     }
 }

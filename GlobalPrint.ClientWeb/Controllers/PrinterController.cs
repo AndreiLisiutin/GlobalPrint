@@ -21,92 +21,6 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary> 
-        /// Generate view model for printer edition action.
-        /// </summary>
-        /// <param name="model">Business model for printer edition.</param>
-        /// <returns></returns>
-        private Printer_EditViewMoel _Printer_EditViewMoel(PrinterEditionModel model = null)
-        {
-            int userID = this.GetCurrentUserID();
-            var weekUtility = new WeekUtility();
-
-            Printer_EditViewMoel viewModel = new Printer_EditViewMoel();
-            viewModel.Printer = model?.Printer ?? new Printer()
-            {
-                OwnerUserID = userID,
-                OperatorUserID = userID,
-            };
-
-            var schedule = new List<Printer_EditViewMoel._Schedule>();
-            foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
-            {
-                PrinterSchedule dayFromDB = model?.PrinterSchedule
-                    ?.FirstOrDefault(e => e.DayOfWeek == (int)day);
-
-                string dayName = weekUtility.DayName(day);
-                bool isOpened = model?.Printer != null ? dayFromDB != null : true;
-                //new printer is opened every day from 9:00 to 18:00 by default
-                TimeSpan? openTime = model?.Printer != null ? dayFromDB?.OpenTime : TimeSpan.FromHours(9);
-                TimeSpan? closeTime = model?.Printer != null ? dayFromDB?.CloseTime : TimeSpan.FromHours(18);
-                schedule.Add(new Printer_EditViewMoel._Schedule((int)day, dayName, isOpened, openTime, closeTime, dayFromDB?.ID ?? 0));
-            }
-            viewModel.Schedule = schedule;
-
-            var services = new List<Printer_EditViewMoel._Service>();
-            IEnumerable<PrintServiceExtended> allServices = new PrintServicesUnit().GetPrintServices()
-                .OrderBy(e => e.PrintType.Name)
-                .ThenBy(e => e.PrintSize.Name)
-                .ThenBy(e => e.PrintService.IsColored)
-                .ThenBy(e => e.PrintService.IsTwoSided);
-            foreach (PrintServiceExtended service in allServices)
-            {
-                PrinterService fromDB = model?.PrinterServices
-                    ?.FirstOrDefault(e => e.PrintServiceID == service.PrintService.ID);
-
-                bool isSupported = fromDB != null;
-                services.Add(new Printer_EditViewMoel._Service(service, isSupported, fromDB?.PricePerPage, fromDB?.ID ?? 0));
-            }
-
-            viewModel.Services = services;
-
-            return viewModel;
-        }
-
-        private PrinterEditionModel _PrinterEditionModel(Printer_EditViewMoel viewModel)
-        {
-            int userID = this.GetCurrentUserID();
-
-            PrinterEditionModel model = new PrinterEditionModel();
-            model.Printer = viewModel.Printer;
-            model.Printer.OperatorUserID = model.Printer.OperatorUserID > 0 ? model.Printer.OperatorUserID : userID;
-            model.Printer.OwnerUserID = model.Printer.OwnerUserID > 0 ? model.Printer.OwnerUserID : userID;
-
-            model.PrinterSchedule = viewModel.Schedule
-                .Where(e => e.isOpened)
-                .Select(e => new PrinterSchedule()
-                {
-                    ID = e.PrinterScheduleID,
-                    DayOfWeek = e.DayOfWeek,
-                    CloseTime = e.CloseTime ?? TimeSpan.FromHours(-1),
-                    OpenTime = e.OpenTime ?? TimeSpan.FromHours(-1),
-                    PrinterID = model.Printer.ID
-                })
-                .ToList();
-
-            model.PrinterServices = viewModel.Services
-                .Where(e => e.IsSupported)
-                .Select(e => new PrinterService()
-                {
-                    ID = e.PrinterServiceID,
-                    PrintServiceID = e.PrintServiceID,
-                    PricePerPage = e.Price ?? 0
-                })
-                .ToList();
-
-            return model;
-        }
-
-        /// <summary> 
         /// Retrieves printers which are owned orr operated by current user.
         /// </summary>
         /// <returns></returns>
@@ -129,12 +43,28 @@ namespace GlobalPrint.ClientWeb
         [Authorize, HttpGet]
         public ActionResult Create()
         {
-            Printer_EditViewMoel viewModel = this._Printer_EditViewMoel();
+            PrinterEditionModel model = new PrinterEditionModel()
+            {
+                Printer = new Printer()
+                {
+                    OwnerUserID = this.GetCurrentUserID()
+                },
+                PrinterServices = new List<PrinterService>()
+            };
 
-                //var latestPrinterOwnerOffer = new UserOfferUnit().GetLatestUserOfferByUserID(this.GetCurrentUserID(), OfferTypeEnum.PrinterOwnerOffer);
-                //viewModel.NeedPrinterOwnerOffer = !latestPrinterOwnerOffer.HasUserOffer;
+            var schedule = new List<PrinterSchedule>();
+            foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                schedule.Add(new PrinterSchedule()
+                {
+                    OpenTime = TimeSpan.FromHours(9),
+                    CloseTime = TimeSpan.FromHours(18),
+                    DayOfWeek = (int)day
+                });
+            }
+            model.PrinterSchedule = schedule;
 
-            return View("Edit", viewModel);
+            return this._PRINTER_EDIT(model);
         }
 
         [Authorize, HttpGet]
@@ -144,8 +74,7 @@ namespace GlobalPrint.ClientWeb
 
             int userID = this.GetCurrentUserID();
             PrinterEditionModel model = new PrinterUnit().GetPrinterEditionModel(PrinterID, userID);
-            Printer_EditViewMoel viewModel = this._Printer_EditViewMoel(model);
-            return View("Edit", viewModel);
+            return this._PRINTER_EDIT(model);
         }
 
         [Authorize, HttpPost ExportModelState]
@@ -171,24 +100,42 @@ namespace GlobalPrint.ClientWeb
         }
 
         [Authorize, HttpPost]
-        public ActionResult Save(Printer_EditViewMoel model)
+        public ActionResult Save(PrinterEditionModel model)
         {
+            Argument.NotNull(model, "Модель редактирования принтера пустая.");
+            model.PrinterServices = model.PrinterServices ?? new List<PrinterService>();
+            model.PrinterServices = model.PrinterServices.Where(e => e.PricePerPage > 0);
+            model.PrinterSchedule = model.PrinterSchedule ?? new List<PrinterSchedule>();
+            model.PrinterSchedule = model.PrinterSchedule.Where(e => e.OpenTime != default(TimeSpan) || e.CloseTime != default(TimeSpan));
+
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return this._PRINTER_EDIT(model);
             }
 
             try
             {
-                PrinterEditionModel editionModel = this._PrinterEditionModel(model);
-                new PrinterUnit().SavePrinter(editionModel);
+                new PrinterUnit().SavePrinter(model);
                 return RedirectToAction("MyPrinters", "Printer");
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
-                return View("Edit", model);
+                return this._PRINTER_EDIT(model);
             }
+        }
+
+        private ViewResult _PRINTER_EDIT(PrinterEditionModel model)
+        {
+            List<PrintServiceExtended> allServices = new PrintServicesUnit().GetPrintServices()
+                .OrderBy(e => e.PrintType.Name)
+                .ThenBy(e => e.PrintSize.Name)
+                .ThenBy(e => e.PrintService.IsColored)
+                .ThenBy(e => e.PrintService.IsTwoSided)
+                .ToList();
+            ViewBag.AllServices = allServices;
+            ViewBag.WeekUtility = new WeekUtility();
+            return this.View("Edit", model);
         }
     }
 }
