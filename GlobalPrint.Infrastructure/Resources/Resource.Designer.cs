@@ -79,11 +79,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на На главную.
+        /// </summary>
+        public static string GotoMainPage {
+            get {
+                return ResourceManager.GetString("GotoMainPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Русский.
         /// </summary>
         public static string ru {
             get {
                 return ResourceManager.GetString("ru", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Ошибки.
+        /// </summary>
+        public static string ValidationErrors {
+            get {
+                return ResourceManager.GetString("ValidationErrors", resourceCulture);
             }
         }
     }

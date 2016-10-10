@@ -117,24 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="en" xml:space="preserve">
-    <value>English</value>
-    <comment>Английский язык</comment>
+  <data name="AvailableFieldLabel" xml:space="preserve">
+    <value>Доступность</value>
+    <comment>Лэйбл поля "Доступность"</comment>
   </data>
-  <data name="GlobalPrintWebSiteLink" xml:space="preserve">
-    <value>www.globalprint.online.ru</value>
-    <comment>Ссылка на сайт</comment>
+  <data name="CloseButtonLabel" xml:space="preserve">
+    <value>Закрыть</value>
+    <comment>Кнопка "Закрыть"</comment>
   </data>
-  <data name="ru" xml:space="preserve">
-    <value>Russian</value>
-    <comment>Русский язык</comment>
+  <data name="CurrentLocationButtonLabel" xml:space="preserve">
+    <value>Текущее положение</value>
+    <comment>Кнопка "Текущее местоположение"</comment>
   </data>
-  <data name="GotoMainPage" xml:space="preserve">
-    <value>Main page</value>
-    <comment>Вернуться на главную страницу</comment>
+  <data name="FormTabTitle" xml:space="preserve">
+    <value>Global Print</value>
+    <comment>Лэйбл табки в браузере</comment>
   </data>
-  <data name="ValidationErrors" xml:space="preserve">
-    <value>Errors</value>
-    <comment>Ошибки:</comment>
+  <data name="MyPrintersButtonLabel" xml:space="preserve">
+    <value>Только мои принтеры</value>
+    <comment>Кнопка "Только мои принтеры"</comment>
+  </data>
+  <data name="NearestPrinterButtonLabel" xml:space="preserve">
+    <value>Ближайший принтер</value>
+    <comment>Кнопка "Ближайший принтер"</comment>
+  </data>
+  <data name="PricingFieldLabel" xml:space="preserve">
+    <value>Услуги и цены</value>
+    <comment>Лэйбл поля "Цены"</comment>
+  </data>
+  <data name="PrintButtonLabel" xml:space="preserve">
+    <value>Печать</value>
+    <comment>Кнопка "Печать"</comment>
+  </data>
+  <data name="PrintOperatorFieldLabel" xml:space="preserve">
+    <value>Оператор печати</value>
+    <comment>Лэйбл поля "Оператор печати"</comment>
   </data>
 </root>

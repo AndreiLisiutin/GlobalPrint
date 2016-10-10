@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Resources.ClientWeb.About {
+namespace Resources.ClientWeb.Order {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Resources.ClientWeb.About {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class AboutViewResource {
+    public class DetailsViewResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AboutViewResource() {
+        internal DetailsViewResource() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Resources.ClientWeb.About {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GlobalPrint.Infrastructure.Resources.ClientWeb.About.AboutViewResource", typeof(AboutViewResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GlobalPrint.Infrastructure.Resources.ClientWeb.Order.DetailsViewResource", typeof(DetailsViewResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,83 +61,74 @@ namespace Resources.ClientWeb.About {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на О проекте.
+        ///   Ищет локализованную строку, похожую на Комментарий к заказу.
         /// </summary>
-        public static string AboutFormTabTitle {
+        public static string CommentFieldLabel {
             get {
-                return ResourceManager.GetString("AboutFormTabTitle", resourceCulture);
+                return ResourceManager.GetString("CommentFieldLabel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Компания ООО «Эвергрин» (ИНН 7706206824) предоставляет сервис удалённой печати документов..
+        ///   Ищет локализованную строку, похожую на Название документа.
         /// </summary>
-        public static string AboutProjectHeader {
+        public static string DocumentFieldLabel {
             get {
-                return ResourceManager.GetString("AboutProjectHeader", resourceCulture);
+                return ResourceManager.GetString("DocumentFieldLabel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Оплата производится посредством системы ROBOKASSA..
+        ///   Ищет локализованную строку, похожую на Информация о заказе печати печати.
         /// </summary>
-        public static string AboutProjectPaymentWay {
+        public static string FormHeaderText {
             get {
-                return ResourceManager.GetString("AboutProjectPaymentWay", resourceCulture);
+                return ResourceManager.GetString("FormHeaderText", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Печать документов платная (10-30 рублей)..
+        ///   Ищет локализованную строку, похожую на Детали заказа.
         /// </summary>
-        public static string AboutProjectPrintCost {
+        public static string FormTabTitle {
             get {
-                return ResourceManager.GetString("AboutProjectPrintCost", resourceCulture);
+                return ResourceManager.GetString("FormTabTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Обратная связь.
+        ///   Ищет локализованную строку, похожую на Стоимость заказа.
         /// </summary>
-        public static string FeedbackLinkLabel {
+        public static string PriceFieldLabel {
             get {
-                return ResourceManager.GetString("FeedbackLinkLabel", resourceCulture);
+                return ResourceManager.GetString("PriceFieldLabel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на GlobalPrint - печать здесь и сейчас!.
+        ///   Ищет локализованную строку, похожую на Принтер.
         /// </summary>
-        public static string ProjectSlogan {
+        public static string PrinterFieldLabel {
             get {
-                return ResourceManager.GetString("ProjectSlogan", resourceCulture);
+                return ResourceManager.GetString("PrinterFieldLabel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Техническая поддержка круглосуточная:.
+        ///   Ищет локализованную строку, похожую на Оценить.
         /// </summary>
-        public static string TechSupport {
+        public static string RateButtonLabel {
             get {
-                return ResourceManager.GetString("TechSupport", resourceCulture);
+                return ResourceManager.GetString("RateButtonLabel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Email: support@globalprint.online.
+        ///   Ищет локализованную строку, похожую на Оценить заказ.
         /// </summary>
-        public static string TechSupportEmail {
+        public static string RateFieldLabel {
             get {
-                return ResourceManager.GetString("TechSupportEmail", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Тел.: +7 900 325-99-88.
-        /// </summary>
-        public static string TechSupportPhone {
-            get {
-                return ResourceManager.GetString("TechSupportPhone", resourceCulture);
+                return ResourceManager.GetString("RateFieldLabel", resourceCulture);
             }
         }
     }

@@ -1,5 +1,7 @@
-﻿@{
-    ViewBag.Title = "GlobalPrint Home";
+﻿@using Resources.ClientWeb.Home
+
+@{
+    ViewBag.Title = IndexViewResource.FormTabTitle;
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
 
@@ -17,18 +19,18 @@
             <input type="hidden" id="printerInfoPrinterID" />
             <div>
                 <div class="form-group row">
-                    <label for="printerInfoIsAvailable" class="control-label vertical-center text-left">Доступность</label>
+                    <label for="printerInfoIsAvailable" class="control-label vertical-center text-left">@IndexViewResource.AvailableFieldLabel</label>
                     <input type="checkbox" class="printer-info-is-available form-control" disabled="disabled" id="printerInfoIsAvailable" />
                     <label class="control-label vertical-center" for="printerInfoIsAvailable"></label>
                 </div>
                 <div class="form-group">
-                    <label class="control-label text-left">Оператор печати</label>
+                    <label class="control-label text-left">@IndexViewResource.PrintOperatorFieldLabel</label>
                     <div>
                         <textarea rows="10" class="form-control" readonly="readonly" id="printerInfoOperator"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label text-left">Услуги и цены</label>
+                    <label class="control-label text-left">@IndexViewResource.PricingFieldLabel</label>
                     <div>
                         <textarea rows="5" class="form-control" readonly="readonly" id="printerInfoPrices"></textarea>
                     </div>
@@ -36,23 +38,23 @@
             </div>
             <div class="form-group">
                 <div>
-                    <button class="btn btn-default" type="button" id="printerInfoPrint">Печать</button>
-                    <button class="btn btn-default" type="button" id="printerInfoClose">Закрыть</button>
+                    <button class="btn btn-default" type="button" id="printerInfoPrint">@IndexViewResource.PrintButtonLabel</button>
+                    <button class="btn btn-default" type="button" id="printerInfoClose">@IndexViewResource.CloseButtonLabel</button>
                 </div>
             </div>
         </form>
     </div>
 
     <div class="home-info-controls">
-        <div id="homeIndoControlFindMe" class="home-info-control" data-toggle="tooltip" data-placement="left" data-container="body" title="Текущее положение">
+        <div id="homeIndoControlFindMe" class="home-info-control" data-toggle="tooltip" data-placement="left" data-container="body" title=@IndexViewResource.CurrentLocationButtonLabel>
             <div class="home-info-control-find-me home-info-control-image">
             </div>
         </div>
-        <div id="homeInfoControlClosestPrinter" class="home-info-control" data-toggle="tooltip" data-placement="left" data-container="body" title="Ближайший принтер">
+        <div id="homeInfoControlClosestPrinter" class="home-info-control" data-toggle="tooltip" data-placement="left" data-container="body" title=@IndexViewResource.NearestPrinterButtonLabel>
             <div class="home-info-control-closest-printer home-info-control-image">
             </div>
         </div>
-        <div id="homeInfoControlMyPrinters" class="home-info-control" data-toggle="tooltip" data-placement="left" data-container="body" title="Только мои принтеры">
+        <div id="homeInfoControlMyPrinters" class="home-info-control" data-toggle="tooltip" data-placement="left" data-container="body" title=@IndexViewResource.MyPrintersButtonLabel>
             <div class="home-info-control-my_printers home-info-control-image">
             </div>
         </div>

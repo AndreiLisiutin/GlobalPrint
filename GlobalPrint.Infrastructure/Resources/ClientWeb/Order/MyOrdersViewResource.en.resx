@@ -117,24 +117,44 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="en" xml:space="preserve">
-    <value>English</value>
-    <comment>Английский язык</comment>
+  <data name="CodeHeader" xml:space="preserve">
+    <value>Code</value>
+    <comment>Заголовок колонки "Код"</comment>
   </data>
-  <data name="GlobalPrintWebSiteLink" xml:space="preserve">
-    <value>www.globalprint.online.ru</value>
-    <comment>Ссылка на сайт</comment>
+  <data name="DetailsButtonLabel" xml:space="preserve">
+    <value>Order details</value>
+    <comment>Кнопка "Детали заказа на печать"</comment>
   </data>
-  <data name="ru" xml:space="preserve">
-    <value>Russian</value>
-    <comment>Русский язык</comment>
+  <data name="DocumentHeader" xml:space="preserve">
+    <value>Document</value>
+    <comment>Заголовок колонки "Документ"</comment>
   </data>
-  <data name="GotoMainPage" xml:space="preserve">
-    <value>Main page</value>
-    <comment>Вернуться на главную страницу</comment>
+  <data name="FormTabTitle" xml:space="preserve">
+    <value>My orders</value>
+    <comment>Лэйбл табки в браузере</comment>
   </data>
-  <data name="ValidationErrors" xml:space="preserve">
-    <value>Errors</value>
-    <comment>Ошибки:</comment>
+  <data name="OrderDateHeader" xml:space="preserve">
+    <value>Date</value>
+    <comment>Заголовок колонки "Дата заказа"</comment>
+  </data>
+  <data name="OrderIdFilter" xml:space="preserve">
+    <value>Order code</value>
+    <comment>Лэйбл поля "Код заказа"</comment>
+  </data>
+  <data name="OrderIdHeader" xml:space="preserve">
+    <value>Order code</value>
+    <comment>Заголовок колонки "Код заказа"</comment>
+  </data>
+  <data name="PriceHeader" xml:space="preserve">
+    <value>Price</value>
+    <comment>Заголовок колонки "Цена заказа"</comment>
+  </data>
+  <data name="PrinterHeader" xml:space="preserve">
+    <value>Printer</value>
+    <comment>Заголовок колонки "Принтер"</comment>
+  </data>
+  <data name="StatusHeader" xml:space="preserve">
+    <value>Status</value>
+    <comment>Заголовок колонки "Статус заказа"</comment>
   </data>
 </root>

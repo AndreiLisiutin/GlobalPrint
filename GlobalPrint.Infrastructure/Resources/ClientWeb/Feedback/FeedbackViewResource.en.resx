@@ -117,24 +117,68 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="en" xml:space="preserve">
-    <value>English</value>
-    <comment>Английский язык</comment>
+  <data name="EmailFieldLabel" xml:space="preserve">
+    <value>Your email</value>
+    <comment>Лэйбл поля "Email"</comment>
   </data>
-  <data name="GlobalPrintWebSiteLink" xml:space="preserve">
-    <value>www.globalprint.online.ru</value>
-    <comment>Ссылка на сайт</comment>
+  <data name="EmailFieldMaxLengthError" xml:space="preserve">
+    <value>Your email cannot exceed 50 characters.</value>
+    <comment>Ошибка о максимальной длине поля "Email"</comment>
   </data>
-  <data name="ru" xml:space="preserve">
-    <value>Russian</value>
-    <comment>Русский язык</comment>
+  <data name="EmailFieldRequiredError" xml:space="preserve">
+    <value>Field "Your email" is required.</value>
+    <comment>Ошибка о том, что поле "Email" обязательно для заполнения</comment>
   </data>
-  <data name="GotoMainPage" xml:space="preserve">
-    <value>Main page</value>
-    <comment>Вернуться на главную страницу</comment>
+  <data name="EmailFieldTypeError" xml:space="preserve">
+    <value>Field "Your email" should contain correct email address.</value>
+    <comment>Ошибка о типе поля "Email"</comment>
   </data>
-  <data name="ValidationErrors" xml:space="preserve">
-    <value>Errors</value>
-    <comment>Ошибки:</comment>
+  <data name="FormHeader" xml:space="preserve">
+    <value>Feedback</value>
+    <comment>Заголовок формы</comment>
+  </data>
+  <data name="FormTabTitle" xml:space="preserve">
+    <value>Feedback</value>
+    <comment>Лэйбл табки в браузере</comment>
+  </data>
+  <data name="MessageFieldLabel" xml:space="preserve">
+    <value>Message</value>
+    <comment>Лэйбл поля "Сообщение"</comment>
+  </data>
+  <data name="MessageFieldMaxLengthError" xml:space="preserve">
+    <value>Message cannot exceed 500 characters.</value>
+    <comment>Ошибка о максимальной длине поля "Сообщение"</comment>
+  </data>
+  <data name="MessageFieldRequiredError" xml:space="preserve">
+    <value>Field "Message" is required.</value>
+    <comment>Ошибка о том, что поле "Сообщение" обязательно для заполнения</comment>
+  </data>
+  <data name="SendButtonLabel" xml:space="preserve">
+    <value>Send</value>
+    <comment>Лэйбл кнопки "Отправить"</comment>
+  </data>
+  <data name="SubjectFieldLabel" xml:space="preserve">
+    <value>Subject</value>
+    <comment>Лэйбл поля "Тема"</comment>
+  </data>
+  <data name="SubjectFieldMaxLengthError" xml:space="preserve">
+    <value>Subject cannot exceed 50 characters.</value>
+    <comment>Ошибка о максимальной длине поля "Тема"</comment>
+  </data>
+  <data name="SubjectFieldRequiredError" xml:space="preserve">
+    <value>Field "Subject" is required.</value>
+    <comment>Ошибка о том, что поле "Тема" обязательно для заполнения</comment>
+  </data>
+  <data name="UserNameFieldLabel" xml:space="preserve">
+    <value>Your name</value>
+    <comment>Лэйбл поля "Ваше имя"</comment>
+  </data>
+  <data name="UserNameFieldMaxLengthError" xml:space="preserve">
+    <value>Your name cannot exceed 50 characters.</value>
+    <comment>Ошибка о максимальной длине поля "Ваше имя"</comment>
+  </data>
+  <data name="UserNameFieldRequiredError" xml:space="preserve">
+    <value>Field "Your name" is required.</value>
+    <comment>Ошибка о том, что поле "Ваше имя" обязательно для заполнения</comment>
   </data>
 </root>

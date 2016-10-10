@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Resources.ClientWeb.About {
+namespace Resources.ClientWeb.Order {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Resources.ClientWeb.About {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class AboutViewResource {
+    public class ConfirmViewResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal AboutViewResource() {
+        internal ConfirmViewResource() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Resources.ClientWeb.About {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GlobalPrint.Infrastructure.Resources.ClientWeb.About.AboutViewResource", typeof(AboutViewResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GlobalPrint.Infrastructure.Resources.ClientWeb.Order.ConfirmViewResource", typeof(ConfirmViewResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,83 +61,47 @@ namespace Resources.ClientWeb.About {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на О проекте.
+        ///   Ищет локализованную строку, похожую на Отмена.
         /// </summary>
-        public static string AboutFormTabTitle {
+        public static string CancelButtonLabel {
             get {
-                return ResourceManager.GetString("AboutFormTabTitle", resourceCulture);
+                return ResourceManager.GetString("CancelButtonLabel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Компания ООО «Эвергрин» (ИНН 7706206824) предоставляет сервис удалённой печати документов..
+        ///   Ищет локализованную строку, похожую на Подтверждение заказа.
         /// </summary>
-        public static string AboutProjectHeader {
+        public static string FormHeaderText {
             get {
-                return ResourceManager.GetString("AboutProjectHeader", resourceCulture);
+                return ResourceManager.GetString("FormHeaderText", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Оплата производится посредством системы ROBOKASSA..
+        ///   Ищет локализованную строку, похожую на Подтверждение заказа.
         /// </summary>
-        public static string AboutProjectPaymentWay {
+        public static string FormTabTitle {
             get {
-                return ResourceManager.GetString("AboutProjectPaymentWay", resourceCulture);
+                return ResourceManager.GetString("FormTabTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Печать документов платная (10-30 рублей)..
+        ///   Ищет локализованную строку, похожую на Количество страниц.
         /// </summary>
-        public static string AboutProjectPrintCost {
+        public static string PagesCountFieldLabel {
             get {
-                return ResourceManager.GetString("AboutProjectPrintCost", resourceCulture);
+                return ResourceManager.GetString("PagesCountFieldLabel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Обратная связь.
+        ///   Ищет локализованную строку, похожую на Стоимость заказа.
         /// </summary>
-        public static string FeedbackLinkLabel {
+        public static string PriceFieldLabel {
             get {
-                return ResourceManager.GetString("FeedbackLinkLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на GlobalPrint - печать здесь и сейчас!.
-        /// </summary>
-        public static string ProjectSlogan {
-            get {
-                return ResourceManager.GetString("ProjectSlogan", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Техническая поддержка круглосуточная:.
-        /// </summary>
-        public static string TechSupport {
-            get {
-                return ResourceManager.GetString("TechSupport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Email: support@globalprint.online.
-        /// </summary>
-        public static string TechSupportEmail {
-            get {
-                return ResourceManager.GetString("TechSupportEmail", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на Тел.: +7 900 325-99-88.
-        /// </summary>
-        public static string TechSupportPhone {
-            get {
-                return ResourceManager.GetString("TechSupportPhone", resourceCulture);
+                return ResourceManager.GetString("PriceFieldLabel", resourceCulture);
             }
         }
     }

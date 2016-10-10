@@ -129,4 +129,12 @@
     <value>Русский</value>
     <comment>Русский язык</comment>
   </data>
+  <data name="GotoMainPage" xml:space="preserve">
+    <value>На главную</value>
+    <comment>Вернуться на главную страницу</comment>
+  </data>
+  <data name="ValidationErrors" xml:space="preserve">
+    <value>Ошибки</value>
+    <comment>Ошибки:</comment>
+  </data>
 </root>

@@ -117,24 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="en" xml:space="preserve">
-    <value>English</value>
-    <comment>Английский язык</comment>
+  <data name="FormHeaderText" xml:space="preserve">
+    <value>Your order is in process</value>
+    <comment>Заголовок страницы</comment>
   </data>
-  <data name="GlobalPrintWebSiteLink" xml:space="preserve">
-    <value>www.globalprint.online.ru</value>
-    <comment>Ссылка на сайт</comment>
+  <data name="FormTabTitle" xml:space="preserve">
+    <value>Your order is in process</value>
+    <comment>Лэйбл табки в браузере</comment>
   </data>
-  <data name="ru" xml:space="preserve">
-    <value>Russian</value>
-    <comment>Русский язык</comment>
+  <data name="MyOrdersButtonLabel" xml:space="preserve">
+    <value>My orders</value>
+    <comment>Кнопка "Мои заказы"</comment>
   </data>
-  <data name="GotoMainPage" xml:space="preserve">
-    <value>Main page</value>
-    <comment>Вернуться на главную страницу</comment>
+  <data name="OrderDateFieldLabel" xml:space="preserve">
+    <value>Order date&amp;time</value>
+    <comment>Лэйбл поля "Дата и время заказа"</comment>
   </data>
-  <data name="ValidationErrors" xml:space="preserve">
-    <value>Errors</value>
-    <comment>Ошибки:</comment>
+  <data name="OrderNumberFieldLabel" xml:space="preserve">
+    <value>Order number</value>
+    <comment>Лэйбл поля "Номер заказа"</comment>
+  </data>
+  <data name="PagesCountFieldLabel" xml:space="preserve">
+    <value>Pages count</value>
+    <comment>Лэйбл поля "Количество страниц"</comment>
+  </data>
+  <data name="PriceFieldLabel" xml:space="preserve">
+    <value>Overall price</value>
+    <comment>Лэйбл поля "Стоимость"</comment>
   </data>
 </root>

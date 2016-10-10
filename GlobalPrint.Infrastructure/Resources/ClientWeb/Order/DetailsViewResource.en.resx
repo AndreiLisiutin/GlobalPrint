@@ -117,24 +117,36 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="en" xml:space="preserve">
-    <value>English</value>
-    <comment>Английский язык</comment>
+  <data name="CommentFieldLabel" xml:space="preserve">
+    <value>Comment</value>
+    <comment>Лэйбл поля "Комментарий к заказу"</comment>
   </data>
-  <data name="GlobalPrintWebSiteLink" xml:space="preserve">
-    <value>www.globalprint.online.ru</value>
-    <comment>Ссылка на сайт</comment>
+  <data name="DocumentFieldLabel" xml:space="preserve">
+    <value>Document</value>
+    <comment>Лэйбл поля "Название документа"</comment>
   </data>
-  <data name="ru" xml:space="preserve">
-    <value>Russian</value>
-    <comment>Русский язык</comment>
+  <data name="FormHeaderText" xml:space="preserve">
+    <value>Information about print order</value>
+    <comment>Заголовок страницы</comment>
   </data>
-  <data name="GotoMainPage" xml:space="preserve">
-    <value>Main page</value>
-    <comment>Вернуться на главную страницу</comment>
+  <data name="FormTabTitle" xml:space="preserve">
+    <value>Details of order</value>
+    <comment>Лэйбл табки в браузере</comment>
   </data>
-  <data name="ValidationErrors" xml:space="preserve">
-    <value>Errors</value>
-    <comment>Ошибки:</comment>
+  <data name="PriceFieldLabel" xml:space="preserve">
+    <value>Overall order price</value>
+    <comment>Лэйбл поля "Стоимость"</comment>
+  </data>
+  <data name="PrinterFieldLabel" xml:space="preserve">
+    <value>Printer</value>
+    <comment>Лэйбл поля "Принтер"</comment>
+  </data>
+  <data name="RateButtonLabel" xml:space="preserve">
+    <value>Rate</value>
+    <comment>Кнопка "Оценить"</comment>
+  </data>
+  <data name="RateFieldLabel" xml:space="preserve">
+    <value>Rate order</value>
+    <comment>Лэйбл поля "Оценить заказ"</comment>
   </data>
 </root>

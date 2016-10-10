@@ -1,10 +1,9 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders
-@using GlobalPrint.ClientWeb.Helpers
-@using System.Globalization
+@using Resources.ClientWeb.Order
 
 @model PrintOrder
 @{
-    ViewBag.Title = "Ваш заказ отправлен в печать";
+    ViewBag.Title = CompleteViewResource.FormTabTitle;
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
 
@@ -12,35 +11,35 @@
 
     @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { @class = "form-horizontal" }))
     {
-        <h2>Ваш заказ отправлен в печать</h2>
+        <h2>@CompleteViewResource.FormHeaderText</h2>
         <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Номер заказа</label>
+            <label class="col-sm-3 control-label text-left">@CompleteViewResource.OrderNumberFieldLabel</label>
             <div class="col-sm-9">
                 @Html.TextBoxFor(e => e.ID, new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Дата и время заказа</label>
+            <label class="col-sm-3 control-label text-left">@CompleteViewResource.OrderDateFieldLabel</label>
             <div class="col-sm-9">
                 @Html.TextBoxFor(e => e.OrderedOn, "{0:dd.MM.yyyy HH:mm:ss}", new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Количество страниц</label>
+            <label class="col-sm-3 control-label text-left">@CompleteViewResource.PagesCountFieldLabel</label>
             <div class="col-sm-9">
                 @Html.TextBoxFor(e => e.PagesCount, new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Стоимость</label>
+            <label class="col-sm-3 control-label text-left">@CompleteViewResource.PriceFieldLabel</label>
             <div class="col-sm-9">
                 @Html.TextBoxFor(e => e.PriceInCurrency, new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-10">
-                @Html.ActionLink("Мои заказы", "MyOrders", "Order", new { }, new { @class = "btn btn-default" })
-                @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
+                @Html.ActionLink(CompleteViewResource.MyOrdersButtonLabel, "MyOrders", "Order", new { }, new { @class = "btn btn-default" })
+                @Html.ActionLink(Resources.Resource.GotoMainPage, "Index", "Home", new { }, new { @class = "btn btn-default" })
             </div>
         </div>
     }

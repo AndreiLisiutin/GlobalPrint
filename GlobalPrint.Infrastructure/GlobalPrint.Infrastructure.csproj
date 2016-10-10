@@ -189,6 +189,66 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Resources\ClientWeb\Feedback\FeedbackViewResource.Designer.cs">
+      <DependentUpon>FeedbackViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Feedback\FeedbackViewResource.en.Designer.cs">
+      <DependentUpon>FeedbackViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Home\IndexViewResource.Designer.cs">
+      <DependentUpon>IndexViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Home\IndexViewResource.en.Designer.cs">
+      <DependentUpon>IndexViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Order\MyOrdersViewResource.Designer.cs">
+      <DependentUpon>MyOrdersViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Order\DetailsViewResource.Designer.cs">
+      <DependentUpon>DetailsViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Order\ConfirmViewResource.Designer.cs">
+      <DependentUpon>ConfirmViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Order\CompleteViewResource.Designer.cs">
+      <DependentUpon>CompleteViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Order\MyOrdersViewResource.en.Designer.cs">
+      <DependentUpon>MyOrdersViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Order\DetailsViewResource.en.Designer.cs">
+      <DependentUpon>DetailsViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Order\ConfirmViewResource.en.Designer.cs">
+      <DependentUpon>ConfirmViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Order\CompleteViewResource.en.Designer.cs">
+      <DependentUpon>CompleteViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -263,12 +323,12 @@
     <EmbeddedResource Include="Resources\ClientWeb\About\AboutViewResource.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AboutViewResource.en.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+      <CustomToolNamespace>Resources.ClientWeb.About</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ClientWeb\About\AboutViewResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AboutViewResource.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+      <CustomToolNamespace>Resources.ClientWeb.About</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ClientWeb\Account\ResetPasswordConfirmationViewResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -349,6 +409,66 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>LoginViewResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources.ClientWeb.Account</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Feedback\FeedbackViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FeedbackViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Feedback</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Feedback\FeedbackViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FeedbackViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Feedback</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Home\IndexViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IndexViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Home</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Home\IndexViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>IndexViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Home</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Order\MyOrdersViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MyOrdersViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Order</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Order\MyOrdersViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MyOrdersViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Order</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Order\DetailsViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DetailsViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Order</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Order\DetailsViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>DetailsViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Order</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Order\ConfirmViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ConfirmViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Order</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Order\ConfirmViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ConfirmViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Order</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Order\CompleteViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CompleteViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Order</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Order\CompleteViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CompleteViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Order</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Resource.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
