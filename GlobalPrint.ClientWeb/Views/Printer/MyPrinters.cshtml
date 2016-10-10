@@ -23,8 +23,8 @@
         <thead>
             <tr>
                 <th class="col-md-4">Название</th>
-                <th class="col-md-7">Расположение</th>
-                <th class="col-md-1">Действия</th>
+                <th class="col-md-6">Расположение</th>
+                <th class="col-md-2">Действия</th>
             </tr>
         </thead>
         <tbody>
@@ -34,8 +34,9 @@
                 {
                     <tr>
                         <td class="col-md-4">@Html.DisplayFor(c => printer.Name)</td>
-                        <td class="col-md-7">@Html.DisplayFor(c => printer.Location)</td>
+                        <td class="col-md-6">@Html.DisplayFor(c => printer.Location)</td>
                         <td class="table-col-buttons">
+                            <a href="@Url.Action("Clone", "Printer", new { @PrinterID = printer.ID })" title="Клонировать принтер" class="btn btn-default glyphicon glyphicon-plus"></a>
                             <a href="@Url.Action("Edit", "Printer", new { @PrinterID = printer.ID })" title="Изменить параметры принтера" class="btn btn-default glyphicon glyphicon-pencil"></a>
                             @Ajax.ActionLink(" ", "Delete", new { PrinterID = printer.ID }, new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-default glyphicon glyphicon-trash", @title = "Удалить принтер" })
                         </td>

@@ -2,11 +2,6 @@
 (function (Edit) {
 
     Edit.defineValidation = function () {
-        $.validator.addMethod('phone', function (value, element) {
-            debugger;
-            return this.optional(element) || /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(value);
-        }, "Укажите корректный номер телефона");
-
         $("#printerEditForm").validate({
             rules: {
                 "Printer.Name": {
@@ -17,79 +12,93 @@
                 },
                 "Printer.Latitude": {
                     required: true,
-                    number: true
+                    decimal: true
                 },
                 "Printer.Longtitude": {
                     required: true,
-                    number: true
+                    decimal: true
                 },
                 "Printer.Phone": {
                     phone: true
                 },
                 "Printer.Email": {
                     email: true
-                }
-            },
-            messages: {
-                "Printer.Name": {
-                    required: "Укажите название принтера"
                 },
-                "Printer.Location": {
-                    required: "Укажите расположение принтера. Отформатировать адрес принтера можно по кнопке Геолокация"
-                },
-                "Printer.Latitude": {
-                    required: "Укажите широту координат принтера",
-                    number: "Широта координат принтера должны быть корректным десятичным числом",
-                },
-                "Printer.Longtitude": {
-                    required: "Укажите долготу координат принтера",
-                    number: "Долгота координат принтера должны быть корректным десятичным числом",
-                },
-                //"Printer.Phone": {
-                //    phone: "Укажите корректный номер телефона. Номер телефона должен состоять из чисел и знаков (,),-",
-                //},
-                "Printer.Email": {
-                    email: "Укажите корректный адрес электронной почты.",
-                },
-            },
-            errorElement: "em",
-            errorPlacement: function (error, element) {
-                error.addClass("help-block");
-                $(element).closest('.input-wrapper').append(error);
-            },
-            highlight: function (element, errorClass, validClass) {
-                $(element).closest(".input-wrapper").addClass("has-error").removeClass("has-success");
-            },
-            unhighlight: function (element, errorClass, validClass) {
-                $(element).closest(".input-wrapper").addClass("has-success").removeClass("has-error");
             }
+        });
+        $('.printer-schedule-time').each(function () {
+            $(this).rules('add', {
+                time: true,
+                required: {
+                    depends: function (element) {
+                        return $(element)
+                            .closest('.printer-schedule-row')
+                            .find('.is-printer-schedule-open')
+                            .prop('checked');
+                    }
+                }
+            });
+        });
+        $('.printer-schedule-time-close').each(function () {
+            $(this).rules('add', {
+                custom: {
+                    depends: function (element) {
+                        var scheduleIsActive = $(element)
+                            .closest('.printer-schedule-row')
+                            .find('.is-printer-schedule-open')
+                            .prop('checked');
+
+                        if (!scheduleIsActive) {
+                            return false;
+                        }
+
+                        var openTime = $(element)
+                            .closest('.printer-schedule-row')
+                            .find('.printer-schedule-time-open')
+                            .val();
+                        var closeTime = $(element)
+                            .closest('.printer-schedule-row')
+                            .find('.printer-schedule-time-close')
+                            .val();
+
+                        if (!/\d\d:\d\d/.test(openTime) || !/\d\d:\d\d/.test(closeTime)) {
+                            return false;
+                        }
+
+                        var openHour = parseInt(openTime.substring(0, 2));
+                        var closeHour = parseInt(closeTime.substring(0, 2));
+                        var openMinute = parseInt(openTime.substring(3, 5));
+                        var closeMinute = parseInt(closeTime.substring(3, 5));
+
+                        var isOk = openHour < closeHour || (openHour == closeHour && openMinute < closeMinute);
+                        return !isOk;
+                    }
+                },
+                messages: {
+                    custom: "Дата завершения работы не может быть раньше даты начала рабты."
+                }
+            });
+        });
+        $('.printer-service-price').each(function () {
+            $(this).rules('add', {
+                required: {
+                    depends: function (element) {
+                        return $(element)
+                            .closest('.printer-schedule-row')
+                            .find('.is-printer-schedule-open')
+                            .prop('checked');
+                    }
+                }
+            });
         });
     };
 
-    Edit.isUserAuthenticated = function () {
-        var isAuthenticated = $("body").data('isAuthenticated');
-        return isAuthenticated && isAuthenticated.toLowerCase() == 'true';
-    };
-
-    Edit.getUserID = function () {
-        var userId = $("body").data('userId');
-        return userId && parseInt(userId);
-    };
-})(GlobalPrint.Printer.Edit);
-
-
-
-$(document).ready(function () {
-    $('.clockpicker').clockpicker();
-
-    GlobalPrint.Printer.Edit.defineValidation();
-
-    var disablePriceForNotSupported = function () {
+    Edit.disablePriceForNotSupported = function () {
         //disable price controls for print services which are not supported (by checkbox "Is supported") 
-        $('#printerServices .printer-service').each(function (index, item) {
+        $('.printer-service-row').each(function (index, item) {
             var isServiceSupported = $(item)
                 .find('.is-printer-service-supported')
-                .is(':checked');
+                .prop('checked');
 
             var prices = $(item)
                 .find('.printer-service-price');
@@ -101,13 +110,14 @@ $(document).ready(function () {
 
         });
     };
-    var disableTimeForClosed = function () {
+
+    Edit.disableTimeForClosed = function () {
         //disable time edition for those schedule items where 
         //"Open this day" checkbox is unchecked
-        $('#printerSchedules .printer-schedule').each(function (index, item) {
+        $('#printerSchedules .printer-schedule-row').each(function (index, item) {
             var isPrinterOpen = $(item)
                 .find('.is-printer-schedule-open')
-                .is(':checked');
+                .prop('checked');
 
             var clockpickers = $(item)
                 .find('.printer-schedule-time');
@@ -128,54 +138,37 @@ $(document).ready(function () {
         });
     };
 
-    disablePriceForNotSupported();
-    disableTimeForClosed();
-
-    $("#printerServices .is-printer-service-supported").change(function (event) {
-        disablePriceForNotSupported();
-    });
-    $("#printerSchedules .is-printer-schedule-open").change(function (event) {
-        disableTimeForClosed();
-    });
-
-    $('#geolocation').click(function () {
+    Edit.geolocateLatLong = function () {
         //call Google geolocation service to find out Latitude, Longtitude of a printer by its address string 
         //and format the address
         var location = $('#location').val();
         var protocol = window.location.protocol;
 
-        $.ajax({
-            url: protocol + '//maps.google.com/maps/api/geocode/json',
-            type: 'GET',
-            data: {
-                address: location,
-                sensor: false
-            },
-            async: false
-        }).done(function (json) {
-            if (!json) {
-                console.log('Error: ajax response is empty.');
-                return;
-            }
-
-            try {
-                if (!json.results || !json.results[0]) {
-                    return;
-                }
-                var position = {};
-                position.lat = json.results[0].geometry.location.lat;
-                position.lng = json.results[0].geometry.location.lng;
-
-                $('#latitude').val(position.lat);
-                $('#longtitude').val(position.lng);
-                $('#location').val(json.results[0].formatted_address);
-
-            } catch (err) {
-                position = null;
-            }
-        }).fail(function () {
-            console.log('Error: ajax call failed.');
+        GlobalPrint.Utils.Services.googleGeolocation(location, function (result) {
+            $('#latitude').val(result.latitude);
+            $('#longtitude').val(result.longtitude);
+            $('#location').val(result.address);
         });
+    };
 
+})(GlobalPrint.Printer.Edit);
+
+
+
+$(document).ready(function () {
+    $('.clockpicker').clockpicker();
+    GlobalPrint.Printer.Edit.defineValidation();
+
+    $(".is-printer-service-supported").change(function (event) {
+        GlobalPrint.Printer.Edit.disablePriceForNotSupported();
+    });
+    $(".is-printer-schedule-open").change(function (event) {
+        GlobalPrint.Printer.Edit.disableTimeForClosed();
+    });
+    GlobalPrint.Printer.Edit.disablePriceForNotSupported();
+    GlobalPrint.Printer.Edit.disableTimeForClosed();
+
+    $('#geolocation').click(function () {
+        GlobalPrint.Printer.Edit.geolocateLatLong();
     });
 });

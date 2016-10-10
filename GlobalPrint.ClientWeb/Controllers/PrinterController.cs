@@ -13,6 +13,16 @@ namespace GlobalPrint.ClientWeb
 {
     public class PrinterController : BaseController
     {
+        PrinterUnit _printerUnit = null;
+        public PrinterController(PrinterUnit printerUnit)
+        {
+            this._printerUnit = printerUnit;
+        }
+        public PrinterController()
+            : this(new PrinterUnit())
+        {
+        }
+
         [Authorize, HttpGet]
         public ActionResult GetPrinterServices(int printerID)
         {
@@ -29,7 +39,7 @@ namespace GlobalPrint.ClientWeb
         {
             int userID = this.GetCurrentUserID();
 
-            var printerList = new PrinterUnit().GetUserPrinterList(userID);
+            var printerList = this._printerUnit.GetUserPrinterList(userID);
             //var latestPrinterOwnerOffer = new UserOfferUnit().GetLatestUserOfferByUserID(userID, OfferTypeEnum.PrinterOwnerOffer);
 
             Printer_MyPrinters myPrinters = new Printer_MyPrinters()
@@ -47,7 +57,8 @@ namespace GlobalPrint.ClientWeb
             {
                 Printer = new Printer()
                 {
-                    OwnerUserID = this.GetCurrentUserID()
+                    OwnerUserID = this.GetCurrentUserID(),
+                    OperatorUserID = this.GetCurrentUserID()
                 },
                 PrinterServices = new List<PrinterService>()
             };
@@ -68,12 +79,35 @@ namespace GlobalPrint.ClientWeb
         }
 
         [Authorize, HttpGet]
+        public ActionResult Clone(int PrinterID)
+        {
+            Argument.Positive(PrinterID, "Ключ принтера пустой.");
+
+            int userID = this.GetCurrentUserID();
+            PrinterEditionModel model = this._printerUnit.GetPrinterEditionModel(PrinterID, userID);
+            model.Printer.ID = 0;
+            model.Printer.IsDisabled = false;
+
+            foreach (var schedule in model.PrinterSchedule)
+            {
+                schedule.ID = 0;
+                schedule.PrinterID = 0;
+            }
+            foreach (var service in model.PrinterServices)
+            {
+                service.ID = 0;
+                service.PrinterID = 0;
+            }
+            return this._PRINTER_EDIT(model);
+        }
+
+        [Authorize, HttpGet]
         public ActionResult Edit(int PrinterID)
         {
             Argument.Positive(PrinterID, "Ключ принтера пустой.");
 
             int userID = this.GetCurrentUserID();
-            PrinterEditionModel model = new PrinterUnit().GetPrinterEditionModel(PrinterID, userID);
+            PrinterEditionModel model = this._printerUnit.GetPrinterEditionModel(PrinterID, userID);
             return this._PRINTER_EDIT(model);
         }
 
@@ -82,7 +116,7 @@ namespace GlobalPrint.ClientWeb
         {
             try
             {
-                new PrinterUnit().DeletePrinter(PrinterID);
+                this._printerUnit.DeletePrinter(PrinterID);
             }
             catch (Exception ex)
             {
@@ -108,21 +142,8 @@ namespace GlobalPrint.ClientWeb
             model.PrinterSchedule = model.PrinterSchedule ?? new List<PrinterSchedule>();
             model.PrinterSchedule = model.PrinterSchedule.Where(e => e.OpenTime != default(TimeSpan) || e.CloseTime != default(TimeSpan));
 
-            if (!ModelState.IsValid)
-            {
-                return this._PRINTER_EDIT(model);
-            }
-
-            try
-            {
-                new PrinterUnit().SavePrinter(model);
-                return RedirectToAction("MyPrinters", "Printer");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-                return this._PRINTER_EDIT(model);
-            }
+            this._printerUnit.SavePrinter(model);
+            return RedirectToAction("MyPrinters", "Printer");
         }
 
         private ViewResult _PRINTER_EDIT(PrinterEditionModel model)
