@@ -18,7 +18,7 @@
 <div class="container">
     <h2>Редактирование принтера "@( Model?.Printer?.Name ?? "Новый" )"</h2>
 
-    @using (Html.BeginForm("Save", "Printer", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("Save", "Printer", FormMethod.Post, new { @class = "form-horizontal", @role = "form", @id="printerEditForm" }))
     {
 
         if (!ViewData.ModelState.IsValid)
@@ -37,17 +37,17 @@
             <div class="col-sm-2">
                 <label class="control-label text-left">Название</label>
             </div>
-            <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.Printer.Name, new { @class = "form-control", @type = "text", @placeholder = "Название принтера", @required = "true", @autofocus = true })
+            <div class="col-sm-10 input-wrapper">
+                @Html.TextBoxFor(m => m.Printer.Name, new { @class = "form-control", @type = "text", @placeholder = "Название принтера", @autofocus = true })
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-2">
                 <label class="control-label text-left">Расположение</label>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-10 input-wrapper">
                 <div class="input-group">
-                    @Html.TextBoxFor(m => m.Printer.Location, new { @class = "form-control", @type = "text", @placeholder = "Расположение", @required = "true", @id = "location" })
+                    @Html.TextBoxFor(m => m.Printer.Location, new { @class = "form-control", @type = "text", @placeholder = "Расположение", @id = "location" })
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button" id="geolocation">
                             <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
@@ -58,25 +58,25 @@
         </div>
         <div class="form-group">
             <div class="col-sm-2">
-                <label class="control-label text-left">Долгота</label>
+                <label class="control-label text-left">Широта</label>
             </div>
-            <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.Printer.Latitude, new { @class = "form-control", @type = "text", @placeholder = "Долгота", @required = "true", @id = "latitude" })
+            <div class="col-sm-10 input-wrapper">
+                @Html.TextBoxFor(m => m.Printer.Latitude, new { @class = "form-control", @type = "text", @placeholder = "Долгота", @id = "latitude" })
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-2">
-                <label class="control-label text-left">Широта</label>
+                <label class="control-label text-left">Долгота</label>
             </div>
-            <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.Printer.Longtitude, new { @class = "form-control", @type = "text", @placeholder = "Широта", @required = "true", @id = "longtitude" })
+            <div class="col-sm-10 input-wrapper">
+                @Html.TextBoxFor(m => m.Printer.Longtitude, new { @class = "form-control", @type = "text", @placeholder = "Широта", @id = "longtitude" })
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-2">
                 <label class="control-label text-left">Телефон</label>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-10 input-wrapper">
                 @Html.TextBoxFor(m => m.Printer.Phone, new { @class = "form-control", @type = "phone", @placeholder = "Телефон" })
             </div>
         </div>
@@ -84,7 +84,7 @@
             <div class="col-sm-2">
                 <label class="control-label text-left">Email</label>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-10 input-wrapper">
                 @Html.TextBoxFor(m => m.Printer.Email, new { @class = "form-control", @type = "email", @placeholder = "Email" })
             </div>
         </div>
@@ -92,7 +92,7 @@
             <div class="col-sm-2">
                 <label for="isDisabled" class="control-label text-left">Отключен</label>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-10 input-wrapper">
                 @Html.CheckBoxFor(m => m.Printer.IsDisabled, new { @class = "", @name = "isDisabled", @id = "isDisabled" })
             </div>
         </div>

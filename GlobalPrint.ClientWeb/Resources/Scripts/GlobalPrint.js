@@ -25,5 +25,31 @@
         // the parent is now constructed with empty namespaces and can be used.
         // we return the outermost namespace
         return parent;
-    }
+    };
+
+    GlobalPrint.initializeValidation = function () {
+        jQuery.extend(jQuery.validator.messages, {
+            required: "Это поле обязательное.",
+            remote: "Значение этого поля некорректно.",
+            email: "Укажите корректный адрес электронной почты.",
+            url: "Укажите корректный URL.",
+            date: "Укажите корректную дату.",
+            dateISO: "Укажите корректную дату в формате ISO.",
+            number: "Это поле допускает только числовые значения.",
+            digits: "Это поле допускает только целочисленные значения.",
+            creditcard: "Please enter a valid credit card number.",
+            equalTo: "Please enter the same value again.",
+            accept: "Please enter a value with a valid extension.",
+            maxlength: jQuery.validator.format("Please enter no more than {0} characters."),
+            minlength: jQuery.validator.format("Please enter at least {0} characters."),
+            rangelength: jQuery.validator.format("Укажите значение длиной от {0} до {1} символов."),
+            range: jQuery.validator.format("Укажите значение между {0} и {1}."),
+            max: jQuery.validator.format("Укажите значение меньшее или равное {0}."),
+            min: jQuery.validator.format("Укажите значение большее или равное {0}.")
+        });
+    };
+
+
+    GlobalPrint.initializeValidation();
+
 })(window.GlobalPrint);

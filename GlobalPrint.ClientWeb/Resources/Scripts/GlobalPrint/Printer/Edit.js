@@ -1,5 +1,88 @@
-﻿$(document).ready(function () {
+﻿GlobalPrint.namespace('GlobalPrint.Printer.Edit');
+(function (Edit) {
+
+    Edit.defineValidation = function () {
+        $.validator.addMethod('phone', function (value, element) {
+            debugger;
+            return this.optional(element) || /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(value);
+        }, "Укажите корректный номер телефона");
+
+        $("#printerEditForm").validate({
+            rules: {
+                "Printer.Name": {
+                    required: true
+                },
+                "Printer.Location": {
+                    required: true
+                },
+                "Printer.Latitude": {
+                    required: true,
+                    number: true
+                },
+                "Printer.Longtitude": {
+                    required: true,
+                    number: true
+                },
+                "Printer.Phone": {
+                    phone: true
+                },
+                "Printer.Email": {
+                    email: true
+                }
+            },
+            messages: {
+                "Printer.Name": {
+                    required: "Укажите название принтера"
+                },
+                "Printer.Location": {
+                    required: "Укажите расположение принтера. Отформатировать адрес принтера можно по кнопке Геолокация"
+                },
+                "Printer.Latitude": {
+                    required: "Укажите широту координат принтера",
+                    number: "Широта координат принтера должны быть корректным десятичным числом",
+                },
+                "Printer.Longtitude": {
+                    required: "Укажите долготу координат принтера",
+                    number: "Долгота координат принтера должны быть корректным десятичным числом",
+                },
+                //"Printer.Phone": {
+                //    phone: "Укажите корректный номер телефона. Номер телефона должен состоять из чисел и знаков (,),-",
+                //},
+                "Printer.Email": {
+                    email: "Укажите корректный адрес электронной почты.",
+                },
+            },
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                error.addClass("help-block");
+                $(element).closest('.input-wrapper').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).closest(".input-wrapper").addClass("has-error").removeClass("has-success");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).closest(".input-wrapper").addClass("has-success").removeClass("has-error");
+            }
+        });
+    };
+
+    Edit.isUserAuthenticated = function () {
+        var isAuthenticated = $("body").data('isAuthenticated');
+        return isAuthenticated && isAuthenticated.toLowerCase() == 'true';
+    };
+
+    Edit.getUserID = function () {
+        var userId = $("body").data('userId');
+        return userId && parseInt(userId);
+    };
+})(GlobalPrint.Printer.Edit);
+
+
+
+$(document).ready(function () {
     $('.clockpicker').clockpicker();
+
+    GlobalPrint.Printer.Edit.defineValidation();
 
     var disablePriceForNotSupported = function () {
         //disable price controls for print services which are not supported (by checkbox "Is supported") 
