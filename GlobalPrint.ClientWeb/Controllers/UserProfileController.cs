@@ -12,6 +12,7 @@ using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using GlobalPrint.ClientWeb.Helpers;
 using GlobalPrint.Infrastructure.CommonUtils.Pagination;
+using System.Linq;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -115,15 +116,139 @@ namespace GlobalPrint.ClientWeb
         /// <returns></returns>
         [HttpGet]
         [Authorize]
-        public ActionResult UsersListPartial(string emailPattern, Paging paging)
+        public ActionResult UsersListPartial(LookupTypeEnum lookupType, string searchText, Paging paging)
         {
             paging = paging ?? new Paging();
 
-            List<User> users = this._userUnit.GetByFilter(emailPattern, paging);
-            int count = this._userUnit.CountByFilter(emailPattern);
-            PagedList<User> pagedList = new PagedList<User>(users, count, paging.ItemsPerPage, paging.CurrentPage);
-            ViewBag.CurrentFilter = emailPattern;
-            return PartialView("UsersListPartial", pagedList);
+            ILookupManager lookupManager = new LookupManagerFactory().GetLookupManager(lookupType);
+
+            List<LookupResultValue> columns = lookupManager.GetColumns();
+            PagedList<List<LookupResultValue>> entities = lookupManager.GetEntitiesList(searchText, paging);
+            
+            ViewBag.SearchText = searchText;
+            ViewBag.LookupType = lookupType;
+
+            string actionName = this.ControllerContext.RouteData.Values["action"].ToString();
+            string controllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+            return PartialView("UsersListPartial", new LookupViewModel(columns, entities));
         }
+    }
+
+    public class LookupManagerFactory
+    {
+        public ILookupManager GetLookupManager(LookupTypeEnum lookupType)
+        {
+            switch (lookupType)
+            {
+                case LookupTypeEnum.User:
+                    return new UserLookupManager();
+                default:
+                    throw new InvalidOperationException("Unknown type of lookup manager.");
+            }
+        }
+    }
+
+    public interface ILookupManager
+    {
+        PagedList<List<LookupResultValue>> GetEntitiesList(string searchText, Paging paging);
+        List<LookupResultValue> GetColumns();
+    }
+
+    public abstract class BaseLookupManager<T> : ILookupManager
+    {
+        public abstract List<T> GetEntities(string searchText, Paging paging);
+        public abstract int GetCount(string searchText);
+        public abstract List<LookupResultValue> Convert(T entity);
+        public virtual T GetEmptyEntity()
+        {
+            return Activator.CreateInstance<T>();
+        }
+
+        public virtual PagedList<List<LookupResultValue>> GetEntitiesList(string searchText, Paging paging)
+        {
+            List<T> entities = this.GetEntities(searchText, paging);
+            List<List<LookupResultValue>> lookupList = entities.Select(e => this.Convert(e)).ToList();
+            int count = this.GetCount(searchText);
+
+            return new PagedList<List<LookupResultValue>>(lookupList, count, paging.ItemsPerPage, paging.CurrentPage);
+        }
+        public virtual List<LookupResultValue> GetColumns()
+        {
+            T entity = this.GetEmptyEntity();
+            List<LookupResultValue> lookupEntity = this.Convert(entity);
+            return lookupEntity;
+        }
+    }
+
+    public class UserLookupManager : BaseLookupManager<User>
+    {
+        private UserUnit _userUnit;
+        public UserLookupManager()
+            : this (IoC.Instance.Resolve<UserUnit>())
+        {
+        }
+        public UserLookupManager(UserUnit userUnit)
+        {
+            this._userUnit = userUnit;
+        }
+        public override List<User> GetEntities(string searchText, Paging paging)
+        {
+            return this._userUnit.GetByFilter(searchText, paging);
+        }
+        public override int GetCount(string searchText)
+        {
+            return this._userUnit.CountByFilter(searchText);
+        }
+        public override List<LookupResultValue> Convert(User entity)
+        {
+            return new List<LookupResultValue>()
+            {
+                new LookupResultValue("ID", entity.ID.ToString(), 0, isIdentifier: true),
+                new LookupResultValue("Email", entity.Email, 5, isText: true),
+                new LookupResultValue("Логин", entity.UserName, 4),
+                new LookupResultValue("Дата последней активности", entity.LastActivityDate.ToString("dd.MM.yyyy HH:mm:ss"), 2),
+            };
+        }
+    }
+
+    public enum LookupTypeEnum
+    {
+        User = 1
+    }
+
+    public class LookupViewModel
+    {
+        public LookupViewModel()
+        {
+
+        }
+        public LookupViewModel(List<LookupResultValue> columns, PagedList<List<LookupResultValue>> values)
+        {
+            this.Columns = columns;
+            this.Values = values;
+        }
+        public List<LookupResultValue> Columns { get; set; }
+        public PagedList<List<LookupResultValue>> Values { get; set; }
+    }
+    
+    public class LookupResultValue
+    {
+        public LookupResultValue()
+            :this("Column name", "Value", 1, false, false)
+        {
+        }
+        public LookupResultValue(string name, string value, int length, bool isIdentifier = false, bool isText = false)
+        {
+            this.Name = name;
+            this.Value = value;
+            this.Length = length;
+            this.IsIdentifier = isIdentifier;
+            this.IsText = isText;
+        }
+        public string Name { get; set; }
+        public string Value { get; set; }
+        public int Length { get; set; }
+        public bool IsIdentifier { get; set; }
+        public bool IsText { get; set; }
     }
 }

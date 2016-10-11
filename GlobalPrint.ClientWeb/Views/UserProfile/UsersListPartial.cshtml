@@ -1,97 +1,135 @@
-﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Users
-@using GlobalPrint.Infrastructure.CommonUtils.Pagination
-@model PagedList<User>
+﻿@using GlobalPrint.Infrastructure.CommonUtils.Pagination
+@model LookupViewModel
 @{
-    string CurrentFilter = ViewBag.CurrentFilter as string;
+    string SearchText = ViewBag.SearchText as string;
+    LookupTypeEnum LookupType = (LookupTypeEnum)ViewBag.LookupType;
 }
 
-<div class="container">
-    @using (Html.BeginForm("UsersListPartial", "UserProfile", FormMethod.Get, new { @class = "form-horizontal", role = "form" }))
+<div class="container" id="lookupWindow">
+    @using (Html.BeginForm("fake", "fake", FormMethod.Get, new { @class = "form-horizontal", role = "form" }))
     {
         <div class="form-inline gp-data-filter focus">
             <div class="input-group">
-                @Html.TextBox("emailPattern", CurrentFilter, new { @class = "form-control", @id = "emailPattern" })
+                @Html.TextBox("searchText", SearchText, new { @class = "form-control", @id = "searchText" })
+                @Html.Hidden("lookupType", (int)LookupType, new { @class = "form-control", @id = "lookupType" })
                 <span class="input-group-btn">
-                    <input type="submit" id="emailPatternSubmit" class="btn btn-default" value="Поиск" />
+                    <input type="submit" id="searchTextSubmit" class="btn btn-default" value="Поиск" />
                 </span>
             </div>
         </div>
     }
     <div class="table-responsive">
-        <table class="table table-hover" id="userList">
+        <table class="table table-hover">
             <tr>
-                <th class="col-xs-1">
-                </th>
-                <th class="col-xs-5">
-                    Email
-                </th>
-                <th class="col-xs-4">
-                    Логин
-                </th>
-                <th class="col-xs-2">
-                    Дата последней активности
-                </th>
+                <th class="col-xs-1"></th>
+                @foreach (LookupResultValue column in Model.Columns)
+                {
+                    <th class="col-xs-@column.Length @(column.IsIdentifier ? "hidden" : "")">
+                        @column.Name
+                    </th>
+                }
             </tr>
             <tbody>
-                @foreach (User item in Model.Entities)
+                @foreach (List<LookupResultValue> entity in Model.Values.Entities)
                 {
-                    <tr>
+                    <tr class="lookup-row">
                         <td class="vcenter">
-                            <input type="checkbox" class="is-selected" value="1" />
+                            <input type="checkbox" class="lookup-row-is-selected" value="1" />
                         </td>
-                        <td>
-                            @item.Email
-                        </td>
-                        <td>
-                            @item.UserName
-                        </td>
-                        <td>
-                            @item.LastActivityDate.ToString("dd.MM.yyyy HH:mm:ss")
-                        </td>
+                        @foreach (LookupResultValue property in entity)
+                        {
+                            if (property?.IsIdentifier ?? false)
+                            {
+                                <td class="hidden lookup-row-id">
+                                    @Html.Hidden("lookup-row-id-input", property.Value, new { @class = "lookup-row-id-input" })
+                                    @property.Value
+                                </td>
+                            }
+                            else if (property?.IsText ?? false)
+                            {
+                                <td class="lookup-row-text">
+                                    @Html.Hidden("lookup-row-text-input", property.Value, new { @class = "lookup-row-text-input" })
+                                    @property.Value
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @property.Value
+                                </td>
+                            }
+                        }
                     </tr>
                 }
             </tbody>
         </table>
     </div>
-    @if (Model.PagesCount > 1)
+    @if (Model.Values.PagesCount > 1)
     {
-        <div class="pagination" id="userPagination">
-            @Html.Paging(Model, page => Url.Action("UsersListPartial", "UserProfile", new { CurrentPage = page, ItemsPerPage = Model.PagesCount, emailPattern = CurrentFilter }))
+        <div class="pagination" id="lookupPagination">
+            @Html.Paging(Model.Values, page => Url.Action("Fake", "Fake", new { CurrentPage = page, ItemsPerPage = Model.Values.PagesCount, searchText = SearchText }))
         </div>
     }
+    <button type="button" class="btn btn-default" data-dismiss="modal" id="lookupClose">Закрыть</button>
+    <button type="button" class="btn btn-default" data-dismiss="modal" id="lookupSelect">Выбрать</button>
 </div>
 
 <script>
-        $(document).ready(function () {
-            //uncheck checked users on check current
-            $('.is-selected').click(function () {
-                $('.is-selected').not(this).attr('checked', false);
-            });
-
-            function updateLookup(CurrentPage, ItemsPerPage) {
-                var emailPattern = $('#emailPattern').val();
-                $.ajax({
-                    url: "/UserProfile/UsersListPartial",
-                    type: "GET",
-                    data: {
-                        CurrentPage: CurrentPage,
-                        ItemsPerPage: ItemsPerPage,
-                        emailPattern: emailPattern
-                    }
-                })
-                .done(function (partialViewResult) {
-                    $(".modal-body-content").html(partialViewResult);
-                });
-            };
-
-            $("#emailPatternSubmit").click(function (e) {
-                e.preventDefault();
-                updateLookup(1, null);
-            });
-            $('#userPagination a').on('click', function (e) {
-                e.preventDefault();
-                updateLookup(e.target.innerText, null);
-            });
+    $(document).ready(function () {
+        //uncheck checked users on check current
+        $('.lookup-row-is-selected').click(function () {
+            $('.lookup-row-is-selected').not(this).attr('checked', false);
         });
+        $('#lookupSelect').click(function () {
+            var anySelected = $('.lookup-row-is-selected:checked')
+                .length;
+            if (anySelected) {
+                var id = $('.lookup-row-is-selected:checked')
+                     .closest('.lookup-row')
+                     .find('.lookup-row-id-input')
+                     .val();
+                var text = $('.lookup-row-is-selected:checked')
+                     .closest('.lookup-row')
+                     .find('.lookup-row-text-input')
+                     .val();
+                $('#lookupWindow')
+                    .closest('.lookup-wrapper')
+                    .trigger('setValue', {
+                        id: id,
+                        name: text
+                    });
+            }
+        });
+
+        function updateLookup(CurrentPage, ItemsPerPage) {
+            var searchText = $('#searchText').val();
+            var lookupType = $('#lookupType').val();
+            var data = {
+                CurrentPage: CurrentPage,
+                ItemsPerPage: ItemsPerPage,
+                searchText: searchText,
+                lookupType: lookupType
+            };
+            $.ajax({
+                url: '/' + controllerName + '/' + actionName,
+                type: "GET",
+                data: data
+            })
+            .done(function (partialViewResult) {
+                $('#lookupWindow')
+                    .closest('.modal-body-content')
+                    .html(partialViewResult);
+            });
+        };
+
+        $("#searchTextSubmit").click(function (e) {
+            e.preventDefault();
+            updateLookup(1, null);
+        });
+        $('#lookupPagination a').on('click', function (e) {
+            e.preventDefault();
+            updateLookup(e.target.innerText, null);
+        });
+    });
 
 </script>

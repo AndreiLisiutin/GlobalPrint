@@ -58,19 +58,13 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                     .Get(e => e.PrinterID == printerID)
                     .ToList();
 
-                PrinterEditionModel model = this.CreatePrinterEditionModel();
+                PrinterEditionModel model = new PrinterEditionModel();
                 model.Printer = printer;
                 model.PrinterSchedule = schedule;
                 model.PrinterServices = services;
 
                 return model;
             }
-        }
-
-        public PrinterEditionModel CreatePrinterEditionModel()
-        {
-            PrinterEditionModel model = new PrinterEditionModel();
-            return model;
         }
 
         public IEnumerable<PrinterFullInfoModel> GetPrinters(PrinterSearchFilter filter)
@@ -292,6 +286,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                     "Начало работы в расписании работы принтера должен быть в промежутке от 0:00 до 24:00.");
                 Argument.Require(day.CloseTime >= TimeSpan.FromHours(0) && day.OpenTime <= TimeSpan.FromHours(24),
                     "Начало работы в расписании работы принтера должен быть в промежутке от 0:00 до 24:00.");
+                Argument.Require(day.CloseTime >= day.OpenTime,
+                    "Начало работы в расписании работы принтера не может быть позже конца работы.");
             }
 
             bool periodsAreIntersected = printerSchedule
