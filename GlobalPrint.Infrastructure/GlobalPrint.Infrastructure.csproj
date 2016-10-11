@@ -209,6 +209,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Resources\ClientWeb\Order\NewViewResource.Designer.cs">
+      <DependentUpon>NewViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Order\NewViewResource.en.Designer.cs">
+      <DependentUpon>NewViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\ClientWeb\Order\MyOrdersViewResource.Designer.cs">
       <DependentUpon>MyOrdersViewResource.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -429,6 +439,16 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>IndexViewResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources.ClientWeb.Home</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Order\NewViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NewViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Order</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Order\NewViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NewViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Order</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ClientWeb\Order\MyOrdersViewResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

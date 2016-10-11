@@ -1,11 +1,14 @@
-﻿@model Order_NewViewModel
+﻿@using Resources.ClientWeb.Order
+@model Order_NewViewModel
 @{
-    ViewBag.Title = "Заказ на печать";
+    ViewBag.Title = NewViewResource.FormTabTitle;
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
+
 @section Scripts{
     <script src="~/Resources/Scripts/GlobalPrint/Order/New.js"></script>
 }
+
 <div class="container">
     @using (Html.BeginForm("New", "Order", FormMethod.Post, new { @enctype = "multipart/form-data", @class = "form-horizontal" }))
     {
@@ -13,31 +16,33 @@
         {
             <div class="alert alert-danger container margin-top-20">
                 <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                @Html.ValidationSummary(false, "Ошибки: ")
+                @Html.ValidationSummary(false, Resources.Resource.ValidationErrors + ": ")
             </div>
         }
-        <h2>Информация для печати</h2>
+
+        <h2>@NewViewResource.FormHeaderText</h2>
+
         @Html.HiddenFor(e => e.Order.PrinterID, new { @id = "PrinterID" })
         @Html.HiddenFor(e => e.Order.UserID, new { @id = "UserID" })
         <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Название принтера</label>
+            <label class="col-sm-3 control-label text-left">@NewViewResource.PrinterNameFieldLabel</label>
             <div class="col-sm-9">
                 @Html.TextBoxFor(e => e.Printer.Name, new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Расположение принтера</label>
+            <label class="col-sm-3 control-label text-left">@NewViewResource.PrinterLocationFieldLabel</label>
             <div class="col-sm-9">
                 @Html.TextBoxFor(e => e.Printer.Location, new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Файл для печати</label>
+            <label class="col-sm-3 control-label text-left">@NewViewResource.DocumentFieldLabel</label>
             <div class="col-sm-9">
                 <div class="input-group">
                     <label class="input-group-btn">
                         <span class="btn btn-default">
-                            Выберите файл <input type="file" id="fileupload" style="display: none;">
+                            @NewViewResource.ChooseFileButtonLabel <input type="file" id="fileupload" style="display: none;">
                         </span>
                     </label>
                     <input type="text" class="form-control" readonly>
@@ -52,51 +57,51 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Секретный код</label>
+            <label class="col-sm-3 control-label text-left">@NewViewResource.SecretCodeFieldLabel</label>
             <div class="col-sm-9">
                 @Html.TextBoxFor(e => e.Order.SecretCode, new { @class = "form-control", @required = "required" })
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Тип</label>
+            <label class="col-sm-3 control-label text-left">@NewViewResource.ty</label>
             <div class="col-sm-9">
                 @Html.DropDownListFor(m => m.Order.PrintTypeID, new List<SelectListItem>(), new { @id = "printType", @class = "form-control", @required = "required" })
             </div>
         </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label text-left">Формат</label>
-                <div class="col-sm-9">
-                    @Html.DropDownListFor(m => m.Order.PrintSizeID, new List<SelectListItem>(), new { @id = "printSize", @class = "form-control", @required = "required" })
-                </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">@NewViewResource.PrintFormatLabel</label>
+            <div class="col-sm-9">
+                @Html.DropDownListFor(m => m.Order.PrintSizeID, new List<SelectListItem>(), new { @id = "printSize", @class = "form-control", @required = "required" })
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label text-left">Цветная печать</label>
-                <div class="col-sm-9">
-                    @Html.CheckBoxFor(e => e.Order.IsColored, new { @id = "IsColored" })
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">@NewViewResource.PrintColorLabel</label>
+            <div class="col-sm-9">
+                @Html.CheckBoxFor(e => e.Order.IsColored, new { @id = "IsColored" })
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label text-left">Двусторонняя печать</label>
-                <div class="col-sm-9">
-                    @Html.CheckBoxFor(e => e.Order.IsTwoSided, new { @id = "IsTwoSided" })
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">@NewViewResource.PrintTwoSideLabel</label>
+            <div class="col-sm-9">
+                @Html.CheckBoxFor(e => e.Order.IsTwoSided, new { @id = "IsTwoSided" })
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label text-left">Количество копий</label>
-                <div class="col-sm-9">
-                    @Html.TextBoxFor(e => e.Order.CopiesCount, new { @type = "number", @class = "form-control", @required = "required" })
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">@NewViewResource.PrintCopiesCountLabel</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(e => e.Order.CopiesCount, new { @type = "number", @class = "form-control", @required = "required" })
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label text-left">Комментарий</label>
-                <div class="col-sm-9">
-                    @Html.TextBoxFor(e => e.Order.Comment, new { @class = "form-control" })
-                </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label text-left">@NewViewResource.PrintCommentLabel</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(e => e.Order.Comment, new { @class = "form-control" })
             </div>
-            <div class="form-group">
-                <div class="col-sm-2">
-                    <input type="submit" id="printButton" value="Печать" class="btn btn-default" />
-                </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <input type="submit" id="printButton" value=@NewViewResource.PrintButtonLabel class="btn btn-default" />
             </div>
+        </div>
     }
 </div>
