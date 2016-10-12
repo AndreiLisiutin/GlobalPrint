@@ -20,7 +20,7 @@ namespace GlobalPrint.ClientWeb.Models.PushNotifications
         {
             if (request.User.Identity.IsAuthenticated)
             {
-                var currentUser = this._unit.GetUserByFilter(x => x.UserName == request.User.Identity.Name);
+                var currentUser = this._unit.GetByFilter(x => x.UserName == request.User.Identity.Name);
                 if (currentUser != null)
                 {
                     return currentUser.ID.ToString();

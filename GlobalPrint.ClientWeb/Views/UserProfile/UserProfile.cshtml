@@ -43,11 +43,12 @@
         </div>
 
         // Баланс
+        @Html.HiddenFor(m => m.AmountOfMoney)
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">Баланс</label>
             <div class="col-sm-11">
                 <div class="input-group">
-                    @Html.TextBoxFor(m => m.AmountOfMoney, new { @class = "form-control", @readonly = "true", @placeholder = "Баланс" })
+                    @Html.TextBox("AmountOfMoneyFormatted", Model.AmountOfMoney.ToString("0.00"), new { @class = "form-control", @readonly = "true", @placeholder = "Баланс" })
                     <span class="input-group-btn">
                         <!-- Кнопка, вызывающее модальное окно -->
                         <a href="#FillUpBalanceModal" title="Пополнить счет" class="btn btn-default" data-toggle="modal">
@@ -85,6 +86,7 @@
                 </a>
                 @Html.ActionLink("История платежей", "MyPayments", "UserProfile", new { }, new { @class = "btn btn-default" })
                 @Html.ActionLink("Реестр заказов", "PrintOrderRegister", "Reports", new { }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Перекинуть баланс", "SendMoney", "UserProfile", new { }, new { @class = "btn btn-default" })
             </div>
         </div>
     }

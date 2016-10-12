@@ -157,3 +157,7 @@ th {
         width: 1170px;
     }
 }
+
+.modal-body-content {
+    overflow: auto;
+}

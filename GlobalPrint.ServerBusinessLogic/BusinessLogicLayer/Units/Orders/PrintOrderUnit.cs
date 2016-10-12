@@ -421,7 +421,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             //perform main business logic
             order = this._paymentUnit.Value.InitializePrintOrder(order);
 
-            User client = IoC.Instance.Resolve<UserUnit>().GetUserByID(order.UserID);
+            User client = IoC.Instance.Resolve<UserUnit>().GetByID(order.UserID);
             User printerOperator = printerUnit.GetPrinterOperator(order.PrinterID);
 
             // send email to user about his new order

@@ -22,7 +22,7 @@ namespace GlobalPrint.ClientWeb.Binders
                     NumberFormatInfo format = new NumberFormatInfo();
                     format.CurrencyDecimalSeparator = ".";
                     format.CurrencyDecimalDigits = 99;
-                    return float.Parse(valueResult.AttemptedValue.Replace(",", "."), NumberStyles.Currency | NumberStyles.AllowDecimalPoint, format);
+                    return decimal.Parse(valueResult.AttemptedValue.Replace(",", "."), NumberStyles.Currency | NumberStyles.AllowDecimalPoint, format);
                 }
                 catch (FormatException e)
                 {

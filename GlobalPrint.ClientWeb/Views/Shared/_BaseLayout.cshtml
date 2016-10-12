@@ -59,6 +59,13 @@
     <script src="~/Resources/Scripts/GlobalPrint/Shared/PushNotifications.js"></script>
     <script src="~/Resources/Scripts/GlobalPrint/Shared/FileUpload.js"></script>
     <script src="~/Resources/Scripts/GlobalPrint/Shared/BaseLayout.js"></script>
+    <script>
+        GlobalPrint.Utils.CommonUtils.makeValidation();
+        $(document).on('ready', function () {
+            GlobalPrint.Utils.CommonUtils.makeLookups();
+            GlobalPrint.Utils.CommonUtils.makeClockPickers();
+        });
+    </script>
     @if (IsSectionDefined("Scripts"))
     {
         @RenderSection("Scripts")

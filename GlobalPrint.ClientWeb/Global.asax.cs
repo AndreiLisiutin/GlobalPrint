@@ -29,6 +29,8 @@ namespace GlobalPrint.ClientWeb
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             ModelBinders.Binders.Add(typeof(float?), new FloatModelBinder());
             ModelBinders.Binders.Add(typeof(float), new FloatModelBinder());
+            ModelBinders.Binders.Add(typeof(decimal), new FloatModelBinder());
+            ModelBinders.Binders.Add(typeof(decimal?), new FloatModelBinder());
 
             // Set controller factory implementing multilanguage stuff
             //ControllerBuilder.Current.SetControllerFactory(new DefaultControllerFactory(new LocalizedControllerActivator()));

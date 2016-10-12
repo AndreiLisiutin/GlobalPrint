@@ -1,5 +1,5 @@
-﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders
-@using GlobalPrint.ServerBusinessLogic.Models.Business.Orders
+﻿@using GlobalPrint.ServerBusinessLogic.Models.Business.Orders
+@using GlobalPrint.ClientWeb.Models.Lookup
 @model List<PrintOrderInfo>
 @{
     ViewBag.Title = "Мои Заказы";
@@ -8,19 +8,6 @@
 
 @section Scripts {
     <script src="~/Resources/Scripts/GlobalPrint/PrintOrder/PrintOrder.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            var id = GlobalPrint.Utils.CommonUtils.lookup(1, function (event, data) {
-                alert(data.name);
-            });
-            $('#modalTest').click(function () {
-                $('#' + id).modal('toggle');
-            });
-        });
-
-    </script>
-
 }
 
 <div class="container">
@@ -81,8 +68,3 @@
     }
 </div>
 
-
-@*<!-- Button modal fullscreen -->
-    <button type="button" class="btn btn-primary btn-lg" id="modalTest">
-        Launch modal fullscreen
-    </button>*@

@@ -32,7 +32,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         public ActionResult UserBalance()
         {
             UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
-            User currentUser = userUnit.GetUserByID(this.GetCurrentUserID());
+            User currentUser = userUnit.GetByID(this.GetCurrentUserID());
             if (currentUser != null)
             {
                 ViewData["UserBalance"] = currentUser.AmountOfMoney.ToString("0.00");

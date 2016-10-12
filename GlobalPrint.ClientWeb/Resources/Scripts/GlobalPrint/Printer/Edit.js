@@ -156,7 +156,6 @@
 
 
 $(document).ready(function () {
-    $('.clockpicker').clockpicker();
     GlobalPrint.Printer.Edit.defineValidation();
 
     $(".is-printer-service-supported").change(function (event) {

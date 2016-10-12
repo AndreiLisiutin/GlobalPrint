@@ -41,7 +41,7 @@ namespace GlobalPrint.ClientWeb
                 throw new ArgumentNullException("user");
             }
 
-            var userToRemove = this._userUnit.GetUserByID(user.Id);
+            var userToRemove = this._userUnit.GetByID(user.Id);
             if (userToRemove != null)
             {
                 this._userUnit.DeleteUser(userToRemove);
@@ -57,7 +57,7 @@ namespace GlobalPrint.ClientWeb
                 throw new ArgumentException("userId");
             }
 
-            User result = this._userUnit.GetUserByID(userId);
+            User result = this._userUnit.GetByID(userId);
             if (result != null)
             {
                 ApplicationUser appUser = new ApplicationUser(result);
@@ -160,7 +160,7 @@ namespace GlobalPrint.ClientWeb
                 throw new ArgumentException("user");
             }
 
-            User result = this._userUnit.GetUserByID(user.Id);
+            User result = this._userUnit.GetByID(user.Id);
             if (result != null)
             {
                 return Task.FromResult<string>(result.PasswordHash);
@@ -175,7 +175,7 @@ namespace GlobalPrint.ClientWeb
                 throw new ArgumentException("user");
             }
 
-            User result = this._userUnit.GetUserByID(user.Id);
+            User result = this._userUnit.GetByID(user.Id);
             bool hasPassword = !string.IsNullOrEmpty(result.PasswordHash);
             return Task.FromResult<bool>(hasPassword);
         }
@@ -301,7 +301,7 @@ namespace GlobalPrint.ClientWeb
                 throw new ArgumentException("email");
             }
 
-            User result = this._userUnit.GetUserByFilter(x => x.Email == email);
+            User result = this._userUnit.GetByFilter(x => x.Email == email);
             if (result != null)
             {
                 ApplicationUser appUser = new ApplicationUser(result);

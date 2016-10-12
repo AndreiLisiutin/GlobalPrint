@@ -1,4 +1,5 @@
-﻿using GlobalPrint.Infrastructure.CommonUtils.Pagination;
+﻿using GlobalPrint.ClientWeb.Models.Lookup;
+using GlobalPrint.Infrastructure.CommonUtils.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace GlobalPrint.ClientWeb.Helpers
                 return new MvcHtmlString("");
             }
 
-            List<int> pages = GetPagesToShow(pagedCollection.CurrentPage, pagedCollection.PagesCount);
+            List<int> pages = _GetPagesToShow(pagedCollection.CurrentPage, pagedCollection.PagesCount);
             var ul = new TagBuilder("ul");
             ul.AddCssClass("pagination");
             foreach (int page in pages)
@@ -37,6 +38,7 @@ namespace GlobalPrint.ClientWeb.Helpers
                 }
                 var a = new TagBuilder("a");
                 a.MergeAttribute("href", url(page));
+                a.MergeAttribute("data-page", page.ToString());
                 a.InnerHtml = page.ToString();
                 li.InnerHtml += a.ToString();
                 ul.InnerHtml += li.ToString();
@@ -51,7 +53,7 @@ namespace GlobalPrint.ClientWeb.Helpers
         /// <param name="pageCount">Count of all pages.</param>
         /// <param name="showMax">Maximum number of pages to show to user.</param>
         /// <returns>List of integers as page numbers.</returns>
-        private static List<int> GetPagesToShow(int currentPage, int pageCount, int showMax = 10)
+        private static List<int> _GetPagesToShow(int currentPage, int pageCount, int showMax = 10)
         {
             List<int> pages = new List<int>();
             int maxLeftShift = (int)Math.Ceiling(0.33 * showMax);
@@ -70,6 +72,76 @@ namespace GlobalPrint.ClientWeb.Helpers
                 .Distinct()
                 .OrderBy(e => e)
                 .ToList();
+        }
+
+        /// <summary>
+        /// Create lookup of a certain type.
+        /// </summary>
+        /// <param name="html"></param>
+        /// <param name="lookupType">Type of lookup.</param>
+        /// <returns></returns>
+        public static MvcHtmlString Lookup(this HtmlHelper html, LookupTypeEnum lookupType, string name = "lookupValueId", long? value = null, object htmlAttributes = null)
+        {
+            //< div class="input-group lookup-input-group" data-lookup-type="{lookupType}">
+            //    <input type = "text" class="hidden form-control lookup-value-id" name="lookupValueId" id="lookupValueId">
+            //    <input type = "text" class="form-control lookup-value-name" disabled="" name="lookupValueName" id="lookupValueName">
+            //    <div class="input-group-btn">
+            //        <button class="btn btn-default lookup-show-button" id="lookupButton" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+            //    </div>
+            //</div>
+
+            var inputGroup = new TagBuilder("div");
+            inputGroup.AddCssClass("input-group");
+            inputGroup.AddCssClass("lookup-input-group");
+            inputGroup.MergeAttribute("data-lookup-type", ((int)lookupType).ToString());
+            if (htmlAttributes != null)
+            {
+                foreach (var property in htmlAttributes.GetType().GetProperties())
+                {
+                    inputGroup.MergeAttribute(property.Name, (property.GetValue(htmlAttributes) ?? "").ToString());
+                }
+            }
+
+            var lookupValueId = new TagBuilder("input");
+            lookupValueId.AddCssClass("hidden");
+            lookupValueId.AddCssClass("form-control");
+            lookupValueId.AddCssClass("lookup-value-id");
+            lookupValueId.MergeAttribute("type", "text");
+            lookupValueId.MergeAttribute("name", name);
+            lookupValueId.MergeAttribute("id", "lookupValueId");
+            if (value.HasValue && value > 0)
+            {
+                lookupValueId.MergeAttribute("value", value.ToString());
+            }
+            inputGroup.InnerHtml += lookupValueId.ToString();
+
+            var lookupValueName = new TagBuilder("input");
+            lookupValueName.AddCssClass("form-control");
+            lookupValueName.AddCssClass("lookup-value-name");
+            lookupValueName.MergeAttribute("type", "text");
+            lookupValueName.MergeAttribute("name", "lookupValueName");
+            lookupValueName.MergeAttribute("id", "lookupValueName");
+            lookupValueName.MergeAttribute("disabled", "disabled");
+            inputGroup.InnerHtml += lookupValueName.ToString();
+
+            var inputGroupBtn = new TagBuilder("div");
+            inputGroupBtn.AddCssClass("input-group-btn");
+
+            var lookupButton = new TagBuilder("button");
+            lookupButton.AddCssClass("btn");
+            lookupButton.AddCssClass("btn-default");
+            lookupButton.AddCssClass("lookup-show-button");
+            lookupButton.MergeAttribute("id", "lookupButton");
+            lookupButton.MergeAttribute("type", "submit");
+
+            var lookupButtonCaption = new TagBuilder("i");
+            lookupButtonCaption.AddCssClass("glyphicon");
+            lookupButtonCaption.AddCssClass("glyphicon-search");
+            lookupButton.InnerHtml += lookupButtonCaption.ToString();
+            inputGroupBtn.InnerHtml += lookupButton.ToString();
+
+            inputGroup.InnerHtml += inputGroupBtn.ToString();
+            return new MvcHtmlString(inputGroup.ToString());
         }
     }
 }

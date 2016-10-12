@@ -227,6 +227,7 @@
     <Content Include="Resources\Images\en_32_round.png" />
     <Content Include="Resources\Images\geolocation.png" />
     <Content Include="Resources\Images\green_circle.ico" />
+    <Content Include="Resources\Images\loading_pony.gif" />
     <Content Include="Resources\Images\my_printers.png" />
     <Content Include="Resources\Images\printer_deactive.png" />
     <Content Include="Resources\Images\printer_offline.png" />
@@ -616,6 +617,7 @@
     <Content Include="Resources\Scripts\GlobalPrint\Shared\BaseLayout.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Shared\Navigation.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Shared\PushNotifications.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\UserProfile\SendMoney.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\CommonUtils.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\Services.js" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\css\jquery.fileupload.css" />
@@ -642,6 +644,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\Utils\LookupControlller.cs" />
     <Compile Include="Filters\BaseErrorHandleAttribute.cs" />
     <Compile Include="Controllers\_TestController.cs" />
     <Compile Include="Controllers\AboutController.cs" />
@@ -672,6 +675,14 @@
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
     <Compile Include="Models\Binders\FloatModelBinder.cs" />
     <Compile Include="Models\FeedbackController\FeedbackViewModel.cs" />
+    <Compile Include="Models\Lookup\BaseLookupManager.cs" />
+    <Compile Include="Models\Lookup\ILookupManager.cs" />
+    <Compile Include="Models\Lookup\ILookupManagerFactory.cs" />
+    <Compile Include="Models\Lookup\LookupManagerFactory.cs" />
+    <Compile Include="Models\Lookup\LookupManagers\UserLookupManager.cs" />
+    <Compile Include="Models\Lookup\LookupResultValue.cs" />
+    <Compile Include="Models\Lookup\LookupTypeEnum.cs" />
+    <Compile Include="Models\Lookup\LookupViewModel.cs" />
     <Compile Include="Models\OfferController\OfferViewModel.cs" />
     <Compile Include="Models\OrderController\Order_RateViewModel.cs" />
     <Compile Include="Models\PrinterController\Printer_EditViewMoel.cs" />
@@ -750,7 +761,6 @@
     <Content Include="Resources\Libraries\bootstrap-rating\README.md" />
     <Content Include="Views\Offer\PrivacyPolicy.cshtml" />
     <Content Include="Views\Reports\PrintOrderRegister.cshtml" />
-    <Content Include="Views\UserProfile\UsersListPartial.cshtml" />
     <Content Include="Resources\Libraries\jquery-validation\demo\captcha\fonts\Anorexia.ttf" />
     <Content Include="Resources\Libraries\jquery-validation\demo\captcha\images\image.php" />
     <Content Include="Resources\Libraries\jquery-validation\demo\captcha\image_req.php" />
@@ -760,6 +770,8 @@
     <Content Include="Resources\Libraries\jquery-validation\demo\captcha\rand.php" />
     <Content Include="Resources\Libraries\jquery-validation\package.json" />
     <Content Include="Resources\Libraries\jquery-validation\README.md" />
+    <Content Include="Views\Lookup\Lookup.cshtml" />
+    <Content Include="Views\UserProfile\SendMoney.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

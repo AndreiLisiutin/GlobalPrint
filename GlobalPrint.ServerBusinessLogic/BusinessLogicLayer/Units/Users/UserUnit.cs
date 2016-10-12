@@ -29,7 +29,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             _emailUtility = emailUtility;
         }
 
-        public User GetUserByID(int userID)
+        public User GetByID(int userID)
         {
             using (IDataContext context = this.Context())
             {
@@ -37,31 +37,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                     .GetByID(userID);
             }
         }
-
-        /// <summary>
-        /// Get user with latest signed user offer.
-        /// </summary>
-        /// <param name="userID">User identifier.</param>
-        /// <returns>User with latest signed user offer.</returns>
-        //public UserExtended GetExtendedUserByID(int userID)
-        //{
-        //    using (IDataContext context = this.Context())
-        //    {
-        //        IUserRepository userRepository = this.Repository<IUserRepository>(context);
-        //        UserOfferUnit userOfferUnit = new UserOfferUnit();
-
-        //        User user = userRepository.GetByID(userID);
-        //        var latestUserOfferExtended = userOfferUnit.GetLatestUserOfferByUserID(userID, OfferTypeEnum.UserOffer, context);
-
-        //        return new UserExtended()
-        //        {
-        //            User = user,
-        //            LatestUserOffer = latestUserOfferExtended
-        //        };
-        //    }
-        //}
-
-        public User GetUserByFilter(Expression<Func<User, bool>> filter)
+        
+        public User GetByFilter(Expression<Func<User, bool>> filter)
         {
             using (IDataContext context = this.Context())
             {
@@ -178,41 +155,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 }
             }
         }
-
-        /// <summary>
-        /// Insert new user and sing his offer in transaction.
-        /// </summary>
-        /// <param name="user">User to insert.</param>
-        /// <returns>Inserted user with new ID.</returns>
-        //public User InsertUserWithOffer(User user)
-        //{
-        //    using (IDataContext context = this.Context())
-        //    {
-        //        context.BeginTransaction();
-        //        try
-        //        {
-        //            IUserRepository userRepo = this.Repository<IUserRepository>(context);
-        //            UserOfferUnit userOfferUnit = new UserOfferUnit();
-
-        //            // Insert new user
-        //            userRepo.Insert(user);
-        //            context.Save();
-
-        //            // Create user offer
-        //            userOfferUnit.CreateUserOfferInTransaction(user.ID, OfferTypeEnum.UserOffer, context);
-
-        //            context.Save();
-        //            context.CommitTransaction();
-        //        }
-        //        catch (Exception)
-        //        {
-        //            context.RollbackTransaction();
-        //            throw;
-        //        }
-        //        return user;
-        //    }
-        //}
-
+        
         /// <summary>
         /// Just insert new user.
         /// </summary>
@@ -238,37 +181,6 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 userRepo.Delete(user);
                 context.Save();
                 return user;
-            }
-        }
-
-        public User FillUpBalance(int userID, decimal upSumm)
-        {
-            using (IDataContext context = this.Context())
-            {
-                IUserRepository userRepo = this.Repository<IUserRepository>(context);
-                User originalUser = userRepo.GetByID(userID);
-
-                if (originalUser != null)
-                {
-                    originalUser.AmountOfMoney += upSumm;
-                    userRepo.Update(originalUser);
-                    context.Save();
-
-                    // send email to user about up balance
-                    MailAddress userMail = new MailAddress(originalUser.Email, originalUser.UserName);
-                    string userMessageBody = string.Format(
-                        "Ваш баланс пополнен на {0} руб. и теперь составляет {1} руб.",
-                        upSumm.ToString("0.00"),
-                        originalUser.AmountOfMoney.ToString("0.00")
-                    );
-                    _emailUtility.Value.Send(userMail, "Global Print - Пополнение баланса", userMessageBody);
-
-                    return originalUser;
-                }
-                else
-                {
-                    throw new Exception("Не найден пользователь [ID=" + userID + "]");
-                }
             }
         }
         

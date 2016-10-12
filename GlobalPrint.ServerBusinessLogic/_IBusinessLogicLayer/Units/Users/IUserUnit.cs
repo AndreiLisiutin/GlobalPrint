@@ -11,13 +11,11 @@ namespace GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users
 {
     public interface IUserUnit
     {
-        User GetUserByID(int userID);
-        User GetUserByFilter(Expression<Func<User, bool>> filter);
+        User GetByID(int userID);
+        User GetByFilter(Expression<Func<User, bool>> filter);
         IUserProfile UpdateUserProfile(IUserProfile user);
-        //User InsertUserWithOffer(User user);
         User InsertUser(User user);
         User DeleteUser(User user);
-        User FillUpBalance(int userID, decimal upSumm);
         User UpdateUserActivity(int userID, DateTime? lastActivityDate = null);
         List<PrinterOperatorModel> GetInactiveUsers(TimeSpan threshold, TimeSpan callInterval);
     }
