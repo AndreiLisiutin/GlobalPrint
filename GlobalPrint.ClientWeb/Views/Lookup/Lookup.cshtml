@@ -6,8 +6,8 @@
     LookupTypeEnum LookupType = (LookupTypeEnum)ViewBag.LookupType;
 }
 
-<div class="container" id="lookupWindow">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<div id="lookupWindow">
+    <button type="button" class="close hidden-xs" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     @using (Html.BeginForm("fake", "fake", FormMethod.Get, new { @class = "form-horizontal", role = "form" }))
     {
         <div class="form-inline gp-data-filter focus">
@@ -15,7 +15,7 @@
                 @Html.TextBox("searchText", SearchText, new { @class = "form-control", @id = "searchText" })
                 @Html.Hidden("lookupType", (int)LookupType, new { @class = "form-control", @id = "lookupType" })
                 <span class="input-group-btn">
-                    <input type="submit" id="searchTextSubmit" class="btn btn-default" value="Поиск" />
+                    <input type="button" id="searchTextSubmit" class="btn btn-default" value="Поиск" />
                 </span>
             </div>
         </div>

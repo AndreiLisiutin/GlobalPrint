@@ -31,7 +31,7 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary> 
-        /// Retrieves printers which are owned orr operated by current user.
+        /// Retrieves printers which are owned or operated by current user.
         /// </summary>
         /// <returns></returns>
         [Authorize, HttpGet, ImportModelState]
@@ -39,13 +39,10 @@ namespace GlobalPrint.ClientWeb
         {
             int userID = this.GetCurrentUserID();
 
-            var printerList = this._printerUnit.GetUserPrinterList(userID);
-            //var latestPrinterOwnerOffer = new UserOfferUnit().GetLatestUserOfferByUserID(userID, OfferTypeEnum.PrinterOwnerOffer);
-
+            List<Printer> printerList = this._printerUnit.GetUserPrinterList(userID);
             Printer_MyPrinters myPrinters = new Printer_MyPrinters()
             {
                 PrinterList = printerList
-                //LatestPrinterOwnerOffer = latestPrinterOwnerOffer
             };
             return View("MyPrinters", myPrinters);
         }
@@ -78,6 +75,11 @@ namespace GlobalPrint.ClientWeb
             return this._PRINTER_EDIT(model);
         }
 
+        /// <summary>
+        /// Clone printer with its schedule and services.
+        /// </summary>
+        /// <param name="PrinterID">Identifier of the printer to clone.</param>
+        /// <returns>Printer edition view with fulfilled inputs.</returns>
         [Authorize, HttpGet]
         public ActionResult Clone(int PrinterID)
         {
@@ -133,6 +135,11 @@ namespace GlobalPrint.ClientWeb
             }
         }
 
+        /// <summary>
+        /// Save printer with its schedule and services.
+        /// </summary>
+        /// <param name="model">Save model for printer with its dependencies.</param>
+        /// <returns>Redirect to My printers page.</returns>
         [Authorize, HttpPost]
         public ActionResult Save(PrinterEditionModel model)
         {

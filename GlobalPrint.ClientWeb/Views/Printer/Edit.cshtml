@@ -1,6 +1,7 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.Models.Business.Printers
 @using GlobalPrint.Infrastructure.CommonUtils
 @using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers
+@using GlobalPrint.ClientWeb.Models.Lookup
 
 @model PrinterEditionModel
 @{
@@ -31,7 +32,6 @@
 
         @Html.HiddenFor(x => x.Printer.ID)
         @Html.HiddenFor(x => x.Printer.OwnerUserID)
-        @Html.HiddenFor(x => x.Printer.OperatorUserID)
 
         <div class="form-group">
             <div class="col-sm-2">
@@ -86,6 +86,14 @@
             </div>
             <div class="col-sm-10 input-wrapper">
                 @Html.TextBoxFor(m => m.Printer.Email, new { @class = "form-control", @type = "email", @placeholder = "Email" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label class="control-label text-left">Оператор</label>
+            </div>
+            <div class="col-sm-10 input-wrapper">
+                @Html.Lookup(LookupTypeEnum.User, "Printer.OperatorUserID", Model.Printer.OperatorUserID)
             </div>
         </div>
         <div class="form-group">

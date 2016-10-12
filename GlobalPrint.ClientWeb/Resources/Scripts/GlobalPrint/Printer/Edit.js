@@ -24,6 +24,9 @@
                 "Printer.Email": {
                     email: true
                 },
+                "Printer.OperatorUserID": {
+                    required: true
+                },
             }
         });
         $('.printer-schedule-time').each(function () {

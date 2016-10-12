@@ -132,7 +132,7 @@ namespace GlobalPrint.ClientWeb.Helpers
             lookupButton.AddCssClass("btn-default");
             lookupButton.AddCssClass("lookup-show-button");
             lookupButton.MergeAttribute("id", "lookupButton");
-            lookupButton.MergeAttribute("type", "submit");
+            lookupButton.MergeAttribute("type", "button");
 
             var lookupButtonCaption = new TagBuilder("i");
             lookupButtonCaption.AddCssClass("glyphicon");

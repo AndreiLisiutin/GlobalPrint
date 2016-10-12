@@ -191,9 +191,9 @@
         /// </summary>
         /// <param name="elementSelector" type="type">Selector for loading mask base element.</param>
         var loadingHtml =
-           '<div class="lookup-loading">                                                          ' +
+           '<div class="loading">                                                          ' +
            '   <img class="img-responsive img-centred" src="/Resources/Images/loading_pony.gif" />' +
-           '   <h2 class="text-center">Идет загрузка... </h2>                                     ' +
+           '   <h2 class="text-center">Идет загрузка<span class="one">.</span><span class="two">.</span><span class="three">.</span> </h2>                                     ' +
            '</div>                                                                                ';
 
 
