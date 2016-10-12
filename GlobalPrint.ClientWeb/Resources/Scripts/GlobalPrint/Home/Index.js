@@ -125,8 +125,9 @@
         } else {
             $('#homeInfoControlMyPrinters').removeClass('active');
         }
-        loadPrinters();
+        loadPrinters(_onlyMyPrinters);
     };
+
     HomeIndex.loadClosestPrinter = function () {
         GlobalPrint.Utils.CommonUtils.geolocate(
             function (position) {
@@ -154,7 +155,8 @@
         );
     };
 
-    var loadPrinters = function () {
+    var loadPrinters = function (fitBounds) {
+        fitBounds = fitBounds || false;
         //get google map geographical boundaries
         var lat0 = _map.getBounds().getNorthEast().lat();
         var lat1 = _map.getBounds().getSouthWest().lat();
@@ -182,9 +184,15 @@
             }
 
             deleteAllMarkers();
-            $.each(json, function (index, e) {
-                _addMarker(e);
+            var bounds = new google.maps.LatLngBounds();
+            $.each(json, function (index, printerInfo) {
+                _addMarker(printerInfo);
+                bounds.extend(new google.maps.LatLng(printerInfo.Printer.Latitude, printerInfo.Printer.Longtitude));
             });
+            if (fitBounds) {
+                _map.fitBounds(bounds);
+            }
+
         }).fail(function () {
             console.log('Error: ajax call failed.');
         });

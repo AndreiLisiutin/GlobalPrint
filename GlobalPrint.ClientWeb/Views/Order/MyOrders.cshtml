@@ -54,8 +54,8 @@
                         <td>@Html.DisplayFor(c => printOrder.Status.Status)</td>
                         <td>
                             <div class="table-col-buttons">
+                                <a href="@Url.Action("FromExisting", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title="Копировать заказ" class="btn btn-default glyphicon glyphicon-plus"></a>
                                 <a href="@Url.Action("Details", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title="Детали заказа на печать" class="btn btn-default glyphicon glyphicon-pencil"></a>
-                                <a href="@Url.Action("FromExisting", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title="Копировать заказ" class="btn btn-default glyphicon glyphicon-plus-sign"></a>
                             </div>
                         </td>
                     </tr>
