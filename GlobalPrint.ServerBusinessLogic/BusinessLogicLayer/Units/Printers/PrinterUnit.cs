@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Web.Configuration;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 {
@@ -87,10 +88,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             (
                 from printer in printerRepo.Get(e =>
                     (filter.UserID == null || e.OperatorUserID == filter.UserID || e.OwnerUserID == filter.UserID) &&
-                    (filter.PrinterID == null || e.ID == filter.PrinterID)
+                    (filter.PrinterID == null || e.ID == filter.PrinterID) &&
+                    (filter.IsDisabled == null || e.IsDisabled == filter.IsDisabled)
                 )
-                join owner in userRepo.GetAll() on printer.OwnerUserID equals owner.ID
-                select new { printer = printer, owner = owner }
+                join @operator in userRepo.GetAll() on printer.OperatorUserID equals @operator.ID
+                select new { printer = printer, @operator = @operator }
             )
                 .ToList();
             IEnumerable<int> printerIDs = printers.Select(p => p.printer.ID);
@@ -105,7 +107,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             IEnumerable<PrinterFullInfoModel> models = printers
                 .Select(p =>
                 new PrinterFullInfoModel(p.printer,
-                    p.owner,
+                    p.@operator,
                     schedules.Where(e => e.PrinterID == p.printer.ID).ToList(),
                     services.Where(e => e.PrinterService.PrinterID == p.printer.ID).ToList()
                 ))
@@ -142,29 +144,37 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                 IPrinterScheduleRepository printerScheduleRepo = this.Repository<IPrinterScheduleRepository>(context);
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
 
-                IQueryable<Printer> all = printerRepo
-                        .GetAll();
-                Printer closest = printerRepo
-                    .GetAll()
-                    .Where(p => Math.Pow(p.Latitude - latitude, 2) + Math.Pow(p.Longtitude - longtitude, 2) ==
-                        all.Min(e => Math.Pow(e.Latitude - latitude, 2) + Math.Pow(e.Longtitude - longtitude, 2))
-                    )
+                int today = (int)DateTime.Now.DayOfWeek;
+                TimeSpan now = DateTime.Now.TimeOfDay;
+                TimeSpan threshold = TimeSpan.FromMinutes(double.Parse(WebConfigurationManager.AppSettings["ActivityCheckerThreshold"]));
+                DateTime activityOkDate = DateTime.Now.Subtract(threshold);
+
+                var printers =
+                (
+                    from printer in printerRepo.Get(e => !e.IsDisabled)
+                    join schedule in printerScheduleRepo.Get(e => e.DayOfWeek == today && now >= e.OpenTime && now <= e.CloseTime)
+                        on printer.ID equals schedule.PrinterID
+                    join @operator in userRepo.Get(o => o.LastActivityDate > activityOkDate) on printer.OperatorUserID equals @operator.ID
+                    select new { printer = printer, @operator = @operator, range = Math.Pow(printer.Latitude - latitude, 2) + Math.Pow(printer.Longtitude - longtitude, 2) }
+                );
+
+                var closest = printers.
+                    Where(e => e.range == printers.Min(x => x.range))
                     .FirstOrDefault();
+                
                 if (closest == null)
                 {
                     return null;
                 }
-
-                User @operator = userRepo.GetByID(closest.OperatorUserID);
-
+                
                 IEnumerable<PrinterSchedule> schedules = printerScheduleRepo
-                    .Get(s => s.PrinterID == closest.ID)
+                    .Get(s => s.PrinterID == closest.printer.ID)
                     .ToList();
                 IEnumerable<PrinterServiceExtended> services = new PrintServicesUnit()
-                    .GetPrinterServices(s => s.PrinterService.PrinterID == closest.ID)
+                    .GetPrinterServices(s => s.PrinterService.PrinterID == closest.printer.ID)
                     .ToList();
 
-                PrinterFullInfoModel model = new PrinterFullInfoModel(closest, @operator, schedules, services);
+                PrinterFullInfoModel model = new PrinterFullInfoModel(closest.printer, closest.@operator, schedules, services);
                 return model;
             }
         }
@@ -200,43 +210,13 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
             IUserRepository userRepo = this.Repository<IUserRepository>(context);
 
-            User printerOwner = printerRepo.Get(e => e.ID == printerID)
+            User @operator = printerRepo.Get(e => e.ID == printerID)
                    .Join(userRepo.GetAll(), e => e.OperatorUserID, e => e.ID, (p, u) => u)
                    .FirstOrDefault();
 
-            if (printerOwner == null)
-            {
-                printerOwner = printerRepo.Get(e => e.ID == printerID)
-                   .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.ID, (p, u) => u)
-                   .First();
-            }
-
-            return printerOwner;
+            return @operator;
         }
-
-        /// <summary>
-        /// Get owner of chosen printer
-        /// </summary>
-        /// <param name="printerID">Printer identifier</param>
-        /// <returns>User instance for printer owner</returns>
-        public User GetPrinterOwner(int printerID)
-        {
-            using (IDataContext context = this.Context())
-            {
-                return GetPrinterOwner(printerID, context);
-            }
-        }
-        public User GetPrinterOwner(int printerID, IDataContext context)
-        {
-            IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
-            IUserRepository userRepo = this.Repository<IUserRepository>(context);
-
-            User printerOwner = printerRepo.Get(e => e.ID == printerID)
-                   .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.ID, (p, u) => u)
-                   .First();
-            return printerOwner;
-        }
-
+        
         /// <summary>
         /// Get waiting orders count of specified user
         /// </summary>

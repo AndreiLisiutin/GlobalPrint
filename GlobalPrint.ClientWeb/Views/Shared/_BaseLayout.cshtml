@@ -12,11 +12,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="~/Resources/Libraries/nprogress/nprogress.css" />
     <link rel="stylesheet" href="~/Resources/Libraries/clockpicker/dist/bootstrap-clockpicker.min.css" />
     <link rel="stylesheet" href="~/Resources/Stylesheets/base.css">
     <link rel="stylesheet" href="~/Resources/Libraries/jQuery-File-Upload-9.12.5/css/jquery.fileupload.css">
-    <link href="~/Resources/Libraries/bootstrap-rating/bootstrap-rating.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Resources/Libraries/bootstrap-rating/bootstrap-rating.css" />
     @if (IsSectionDefined("Stylesheets"))
     {
         @RenderSection("Stylesheets")
@@ -46,6 +46,7 @@
     <script src="~/Resources/Libraries/bootstrap.file-input/fileinput.js"></script>
     <script src="~/Resources/Libraries/bootstrap-rating/bootstrap-rating.js"></script>
     <script src="~/Resources/Libraries/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/Resources/Libraries/nprogress/nprogress.js"></script>
     <!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
     <script src="~/signalr/hubs"></script>
     <script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.fileupload.js"></script>
@@ -60,6 +61,7 @@
     <script src="~/Resources/Scripts/GlobalPrint/Shared/FileUpload.js"></script>
     <script src="~/Resources/Scripts/GlobalPrint/Shared/BaseLayout.js"></script>
     <script>
+        GlobalPrint.Utils.CommonUtils.makeProgressBar();
         GlobalPrint.Utils.CommonUtils.makeValidation();
         $(document).on('ready', function () {
             GlobalPrint.Utils.CommonUtils.makeLookups();

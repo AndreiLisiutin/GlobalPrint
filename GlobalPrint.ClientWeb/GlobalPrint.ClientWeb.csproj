@@ -607,6 +607,15 @@
     <Content Include="Resources\Libraries\jquery-validation\test\rules.js" />
     <Content Include="Resources\Libraries\jquery-validation\test\test.js" />
     <Content Include="Resources\Libraries\jQuery\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Resources\Libraries\nprogress\.gitignore" />
+    <Content Include="Resources\Libraries\nprogress\index.html" />
+    <Content Include="Resources\Libraries\nprogress\nprogress.css" />
+    <Content Include="Resources\Libraries\nprogress\nprogress.js" />
+    <Content Include="Resources\Libraries\nprogress\support\extras.css" />
+    <Content Include="Resources\Libraries\nprogress\support\style.css" />
+    <Content Include="Resources\Libraries\nprogress\test\component.html" />
+    <Content Include="Resources\Libraries\nprogress\test\index.html" />
+    <Content Include="Resources\Libraries\nprogress\test\test.js" />
     <Content Include="Resources\Libraries\underscore.js\underscore.js" />
     <Content Include="Resources\Scripts\GlobalPrint.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Home\Index.js" />
@@ -772,6 +781,15 @@
     <Content Include="Resources\Libraries\jquery-validation\README.md" />
     <Content Include="Views\Lookup\Lookup.cshtml" />
     <Content Include="Views\UserProfile\SendMoney.cshtml" />
+    <Content Include="Resources\Libraries\nprogress\.npmignore" />
+    <Content Include="Resources\Libraries\nprogress\.travis.yml" />
+    <Content Include="Resources\Libraries\nprogress\bower.json" />
+    <Content Include="Resources\Libraries\nprogress\component.json" />
+    <Content Include="Resources\Libraries\nprogress\History.md" />
+    <Content Include="Resources\Libraries\nprogress\License.md" />
+    <Content Include="Resources\Libraries\nprogress\Notes.md" />
+    <Content Include="Resources\Libraries\nprogress\package.json" />
+    <Content Include="Resources\Libraries\nprogress\Readme.md" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

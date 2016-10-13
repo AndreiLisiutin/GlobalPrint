@@ -42,7 +42,7 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         #region IDomainModel
         [Key]
         [Column("user_id")]
-        public int ID { get; set; } 
+        public int ID { get; set; }
         #endregion
     }
 }

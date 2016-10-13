@@ -35,7 +35,42 @@
         }
     };
 
+    CommonUtils.makeProgressBar = function () {
+        /// <summary>
+        /// Configuration of NProgress progress bar on AJAX and so on.
+        /// </summary>
+        //NProgress.configure({ showSpinner: false });
+        $(document).ready(function () {
+            GlobalPrint.Utils.CommonUtils.startProgressBar();
+        });
+        $(window).load(function () {
+            GlobalPrint.Utils.CommonUtils.finishProgressBar();
+        });
+        $.ajaxSetup({
+            beforeSend: function () {
+                GlobalPrint.Utils.CommonUtils.startProgressBar();
+            },
+            complete: function () {
+                GlobalPrint.Utils.CommonUtils.finishProgressBar();
+            },
+            success: function () {
+                GlobalPrint.Utils.CommonUtils.finishProgressBar();
+            }
+        });
+    };
+
+    CommonUtils.startProgressBar = function () {
+        NProgress.start();
+    };
+
+    CommonUtils.finishProgressBar = function () {
+        NProgress.done();
+    };
+
     CommonUtils.makeValidation = function () {
+        /// <summary>
+        /// Configuration of client jQuery validation.
+        /// </summary>
         jQuery.extend(jQuery.validator.messages, {
             required: "Это поле обязательное.",
             remote: "Значение этого поля некорректно.",
@@ -135,8 +170,11 @@
         $('#' + modalWindowId).on('show.bs.modal', function () {
             setTimeout(function () {
                 $('.modal-backdrop').addClass("modal-backdrop-fullscreen");
+                GlobalPrint.Utils.CommonUtils.startProgressBar();
                 GlobalPrint.Utils.CommonUtils.setLoading('#' + modalWindowId + ' .modal-body-content')
-                $('#' + modalWindowId + ' .modal-body-content').load(url);
+                $('#' + modalWindowId + ' .modal-body-content').load(url, function () {
+                    GlobalPrint.Utils.CommonUtils.finishProgressBar();
+                });
             }, 0);
         });
         $('#' + modalWindowId).on('hidden.bs.modal', function () {

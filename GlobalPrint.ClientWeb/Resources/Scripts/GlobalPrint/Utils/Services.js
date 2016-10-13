@@ -34,8 +34,8 @@
 
                 if (successCallback) {
                     successCallback({
-                        latitude: latitude,
-                        longtitude: longtitude,
+                        latitude: latitude.toFixed(4),
+                        longtitude: longtitude.toFixed(4),
                         address: address
                     });
                 }
