@@ -259,6 +259,36 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Resources\ClientWeb\Printer\EditViewResource.Designer.cs">
+      <DependentUpon>EditViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Printer\EditViewResource.en.Designer.cs">
+      <DependentUpon>EditViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Printer\MyPrintersViewResource.Designer.cs">
+      <DependentUpon>MyPrintersViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Printer\MyPrintersViewResource.en.Designer.cs">
+      <DependentUpon>MyPrintersViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Shared\NavigationViewResource.Designer.cs">
+      <DependentUpon>NavigationViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\Shared\NavigationViewResource.en.Designer.cs">
+      <DependentUpon>NavigationViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -489,6 +519,36 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>CompleteViewResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources.ClientWeb.Order</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Printer\EditViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Printer</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Printer\EditViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>EditViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Printer</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Printer\MyPrintersViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MyPrintersViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Order</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Printer\MyPrintersViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MyPrintersViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Order</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Shared\NavigationViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NavigationViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Shared</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\Shared\NavigationViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NavigationViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.Shared</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Resource.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
