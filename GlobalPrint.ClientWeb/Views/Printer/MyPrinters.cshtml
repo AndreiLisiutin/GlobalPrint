@@ -1,12 +1,11 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers
 @using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers
-@using GlobalPrint.ClientWeb.Helpers
-@using System.Globalization
+@using Resources.ClientWeb.Order
 
 @using GlobalPrint.ClientWeb.Models.PrinterController
 @model Printer_MyPrinters
 @{
-    ViewBag.Title = "Принтеры";
+    ViewBag.Title = MyPrintersViewResource.FormTabTitle;
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
 
@@ -16,16 +15,16 @@
     {
         <div class="alert alert-danger container margin-top-20">
             <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            @Html.ValidationSummary(false, "Ошибки: ")
+            @Html.ValidationSummary(false, Resources.Resource.ValidationErrors + ": ")
         </div>
     }
 
     <table class="table table-hover">
         <thead>
             <tr>
-                <th class="col-md-4">Название</th>
-                <th class="col-md-7">Расположение</th>
-                <th class="col-md-1">Действия</th>
+                <th class="col-md-4">@MyPrintersViewResource.PrinterNameHeader</th>
+                <th class="col-md-7">@MyPrintersViewResource.LocationHeader</th>
+                <th class="col-md-1">@MyPrintersViewResource.ActionsHeader</th>
             </tr>
         </thead>
         <tbody>
@@ -37,8 +36,10 @@
                         <td class="col-md-4">@Html.DisplayFor(c => printer.Name)</td>
                         <td class="col-md-7">@Html.DisplayFor(c => printer.Location)</td>
                         <td class="table-col-buttons">
-                            <a href="@Url.Action("Edit", "Printer", new { @PrinterID = printer.ID })" title="Изменить параметры принтера" class="btn btn-default glyphicon glyphicon-pencil"></a>
-                            @Ajax.ActionLink(" ", "Delete", new { PrinterID = printer.ID }, new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-default glyphicon glyphicon-trash", @title = "Удалить принтер" })
+                            <a href="@Url.Action("Edit", "Printer", new { @PrinterID = printer.ID })" title=@MyPrintersViewResource.EditButtonTooltip
+                                class="btn btn-default glyphicon glyphicon-pencil"></a>
+                            @Ajax.ActionLink(" ", "Delete", new { PrinterID = printer.ID }, new AjaxOptions { HttpMethod = "POST" }, 
+                                new { @class = "btn btn-default glyphicon glyphicon-trash", @title = MyPrintersViewResource.DeleteButtonTooltip })
                         </td>
                     </tr>
                 }
@@ -46,29 +47,9 @@
         </tbody>
     </table>
 
-    @if (Model.LatestPrinterOwnerOffer.HasUserOffer)
-    {
-        // Оферта
-        <form class="form-horizontal" role="form">
-            <div class="form-group">
-                <label class="col-sm-1 control-label text-left">Оферта</label>
-                <div class="col-sm-11">
-                    <div class="input-group">
-                        @Html.TextBox("UserOfferTitle", Model.LatestPrinterOwnerOffer.UserOfferTitle, new { @class = "form-control", @readonly = "true", @placeholder = "Договор оферты владельца принтера" })
-                        <span class="input-group-btn">
-                            <a href="@Url.Action("Offer", "Offer", new { @offerTypeID = OfferTypeEnum.PrinterOwnerOffer })" target="_blank" title="Открыть договор оферты" class="btn btn-default">
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                            </a>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </form>
-    }
-
     <div class="form-group">
         <div class="col-sm-12">
-            @Html.ActionLink("Добавить", "Create", "Printer", new { }, new { @class = "btn btn-default" })
+            @Html.ActionLink(MyPrintersViewResource.AddButtonLabel, "Create", "Printer", new { }, new { @class = "btn btn-default" })
         </div>
     </div>
 </div>

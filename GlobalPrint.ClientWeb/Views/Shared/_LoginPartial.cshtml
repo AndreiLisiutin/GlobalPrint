@@ -1,6 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
-@using GlobalPrint.ClientWeb.Helpers
-@using System.Globalization
+@using Resources.ClientWeb.Shared
 
 @if (Request.IsAuthenticated)
 {
@@ -10,10 +9,10 @@
 
         <ul id="main-nav-right" class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink("Мои Принтеры", "MyPrinters", "Printer")
+                @Html.ActionLink(NavigationViewResource.MyPrintersMenuItem, "MyPrinters", "Printer")
             </li>            
             <li>
-                @Html.ActionLink("Мои заказы", "MyOrders", "Order")
+                @Html.ActionLink(NavigationViewResource.MyOrdersMenuItem, "MyOrders", "Order")
             </li>
             <li>
                 @{Html.RenderAction("UserRecievedPrintOrder", "UserPrintInfo");}       
@@ -25,10 +24,10 @@
                 @{Html.RenderAction("UserBalance", "UserPrintInfo");}
             </li>
             <li>
-                <a href="javascript:document.getElementById('logoutForm').submit()" class="font-bold">Выйти</a>
+                <a href="javascript:document.getElementById('logoutForm').submit()" class="font-bold">@NavigationViewResource.SignOutMenuItem</a>
             </li>
             <li>
-                @Html.ActionLink("О проекте", "About", "About")
+                @Html.ActionLink(NavigationViewResource.AboutMenuItem, "About", "About")
             </li>
             @{Html.RenderAction("CountryPicker", "UserPrintInfo");}
         </ul>
@@ -38,13 +37,13 @@ else
 {
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Зарегистрироваться", "Register", "Account", null, new { @class = "font-bold", id = "registerLink" })
+            @Html.ActionLink(NavigationViewResource.RegisterMenuItem, "Register", "Account", null, new { @class = "font-bold", id = "registerLink" })
         </li>
         <li>
-            @Html.ActionLink("Войти", "Login", "Account", null, new { @class = "font-bold", id = "loginLink" })
+            @Html.ActionLink(NavigationViewResource.LoginMenuItem, "Login", "Account", null, new { @class = "font-bold", id = "loginLink" })
         </li>
         <li>
-            @Html.ActionLink("О проекте", "About", "About")
+            @Html.ActionLink(NavigationViewResource.AboutMenuItem, "About", "About")
         </li>
         @{Html.RenderAction("CountryPicker", "UserPrintInfo");}
     </ul>

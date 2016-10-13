@@ -1,16 +1,23 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
 @using GlobalPrint.ClientWeb.Models.PrinterController
-@using GlobalPrint.ClientWeb.Helpers
+@using Resources.ClientWeb.Printer
 @using System.Globalization
+
+@{ var isEdit = Model?.Printer?.ID > 0; }
 
 @model Printer_EditViewMoel
 @{
-    ViewBag.Title = "Редактирование принтера";
+    ViewBag.Title = isEdit ? EditViewResource.FormTabEditTitle : EditViewResource.FormTabNewTitle;
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
 
+
+@section Scripts {
+    <script src="~/Resources/Scripts/GlobalPrint/Printer/Edit.js"></script>
+}
+
 <div class="container">
-    <h2>Редактирование принтера "@( Model?.Printer?.Name ?? "Новый" )"</h2>
+    <h2>@(isEdit ? (EditViewResource.FormHeaderEditText + " \"" + Model?.Printer?.Name + "\"") : EditViewResource.FormTabNewTitle)</h2>
 
     @using (Html.BeginForm("Save", "Printer", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
@@ -19,7 +26,7 @@
         {
             <div class="alert alert-danger container margin-top-20">
                 <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                @Html.ValidationSummary(false, "Ошибки: ")
+                @Html.ValidationSummary(false, Resources.Resource.ValidationErrors + ": ")
             </div>
         }
 
@@ -29,19 +36,19 @@
 
         <div class="form-group">
             <div class="col-sm-2">
-                <label class="control-label text-left">Название</label>
+                <label class="control-label text-left">@EditViewResource.PrinterNameFieldLabel</label>
             </div>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.Printer.Name, new { @class = "form-control", @type = "text", @placeholder = "Название принтера", @required = "true", @autofocus = true })
+                @Html.TextBoxFor(m => m.Printer.Name, new { @class = "form-control", @type = "text", @placeholder = EditViewResource.PrinterNameFieldLabel, @required = "true", @autofocus = true })
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-2">
-                <label class="control-label text-left">Расположение</label>
+                <label class="control-label text-left">@EditViewResource.LocationFieldLabel</label>
             </div>
             <div class="col-sm-10">
                 <div class="input-group">
-                    @Html.TextBoxFor(m => m.Printer.Location, new { @class = "form-control", @type = "text", @placeholder = "Расположение", @required = "true", @id = "location" })
+                    @Html.TextBoxFor(m => m.Printer.Location, new { @class = "form-control", @type = "text", @placeholder = EditViewResource.LocationFieldLabel, @required = "true", @id = "location" })
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button" id="geolocation">
                             <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
@@ -52,39 +59,39 @@
         </div>
         <div class="form-group">
             <div class="col-sm-2">
-                <label class="control-label text-left">Долгота</label>
+                <label class="control-label text-left">@EditViewResource.LatitudeFieldLabel</label>
             </div>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.Printer.Latitude, new { @class = "form-control", @type = "text", @placeholder = "Долгота", @required = "true", @id = "latitude" })
+                @Html.TextBoxFor(m => m.Printer.Latitude, new { @class = "form-control", @type = "text", @placeholder = EditViewResource.LatitudeFieldLabel, @required = "true", @id = "latitude" })
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-2">
-                <label class="control-label text-left">Широта</label>
+                <label class="control-label text-left">@EditViewResource.LongtitudeFieldLabel</label>
             </div>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.Printer.Longtitude, new { @class = "form-control", @type = "text", @placeholder = "Широта", @required = "true", @id = "longtitude" })
+                @Html.TextBoxFor(m => m.Printer.Longtitude, new { @class = "form-control", @type = "text", @placeholder = EditViewResource.LongtitudeFieldLabel, @required = "true", @id = "longtitude" })
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-2">
-                <label class="control-label text-left">Телефон</label>
+                <label class="control-label text-left">@EditViewResource.PhoneFieldLabel</label>
             </div>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.Printer.Phone, new { @class = "form-control", @type = "phone", @placeholder = "Телефон" })
+                @Html.TextBoxFor(m => m.Printer.Phone, new { @class = "form-control", @type = "phone", @placeholder = EditViewResource.PhoneFieldLabel })
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-2">
-                <label class="control-label text-left">Email</label>
+                <label class="control-label text-left">@EditViewResource.EmailFieldLabel</label>
             </div>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.Printer.Email, new { @class = "form-control", @type = "email", @placeholder = "Email" })
+                @Html.TextBoxFor(m => m.Printer.Email, new { @class = "form-control", @type = "email", @placeholder = EditViewResource.EmailFieldLabel })
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-2">
-                <label for="isDisabled" class="control-label text-left">Отключен</label>
+                <label for="isDisabled" class="control-label text-left">@EditViewResource.DisabledFieldLabel</label>
             </div>
             <div class="col-sm-10">
                 @Html.CheckBoxFor(m => m.Printer.IsDisabled, new { @class = "", @name = "isDisabled", @id = "isDisabled" })
@@ -93,14 +100,14 @@
 
         //--------------------------------------------List of time---------------------------------------------
 
-        <h2>Расписание работы принтера</h2>
+        <h2>@EditViewResource.ScheduleTableHeader</h2>
         <table class="table table-hover" id="printerSchedules">
             <thead>
                 <tr>
-                    <th class="col-xs-6 col-md-6">День</th>
-                    <th class="col-xs-6 col-md-1">Открыто</th>
-                    <th class="col-xs-3 col-md-3">С</th>
-                    <th class="col-xs-3 col-md-3">По</th>
+                    <th class="col-xs-6 col-md-6">@EditViewResource.DayColumnHeader</th>
+                    <th class="col-xs-6 col-md-1">@EditViewResource.OpenColumnHeader</th>
+                    <th class="col-xs-3 col-md-3">@EditViewResource.OpenFromColumnHeader</th>
+                    <th class="col-xs-3 col-md-3">@EditViewResource.OpenToColumnHeader</th>
                 </tr>
             </thead>
             <tbody>
@@ -135,16 +142,16 @@
 
         //--------------------------------------------List of services---------------------------------------------
 
-        <h2>Услуги и цены</h2>
+        <h2>@EditViewResource.PricingTableHeader</h2>
         <table class="table table-hover" id="printerServices">
             <thead>
                 <tr>
-                    <th class="col-xs-1 col-md-1">Наличие</th>
-                    <th class="col-xs-3 col-md-3">Услуга</th>
-                    <th class="col-xs-3 col-md-3">Размер</th>
-                    <th class="col-xs-1 col-md-1">Цветная</th>
-                    <th class="col-xs-1 col-md-1">Двусторонняя</th>
-                    <th class="col-xs-3 col-md-3">Стоимость</th>
+                    <th class="col-xs-1 col-md-1">@EditViewResource.IsSupportedColumnHeader</th>
+                    <th class="col-xs-3 col-md-3">@EditViewResource.ServiceColumnHeader</th>
+                    <th class="col-xs-3 col-md-3">@EditViewResource.SizeColumnHeader</th>
+                    <th class="col-xs-1 col-md-1">@EditViewResource.IsColoredColumnHeader</th>
+                    <th class="col-xs-1 col-md-1">@EditViewResource.IsTwoSidedColumnHeader</th>
+                    <th class="col-xs-3 col-md-3">@EditViewResource.PriceColumnHeader</th>
                 </tr>
             </thead>
             <tbody>
@@ -188,12 +195,8 @@
 
         <div class="form-group">
             <div class="col-sm-12">
-                <button class="btn btn-default" type="submit">Сохранить</button>
+                <button class="btn btn-default" type="submit">@EditViewResource.SaveButtolLabel</button>
             </div>
         </div>
     }
 </div>
-
-@section Scripts {
-    <script src="~/Resources/Scripts/GlobalPrint/Printer/Edit.js"></script>
-}
