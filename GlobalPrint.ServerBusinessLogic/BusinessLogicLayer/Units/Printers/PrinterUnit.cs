@@ -247,8 +247,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             Argument.NotNullOrWhiteSpace(printer.Location, "Расположение принтера не может быть пустым.");
             Argument.Positive(printer.OwnerUserID, "Владелец принтера не может быть пустым.");
             Argument.Positive(printer.OperatorUserID, "Оператор принтера не может быть пустым.");
-            Argument.Positive(printer.Latitude, "Широта расположения принтера не может быть пустым.");
-            Argument.Positive(printer.Longtitude, "Долгота расположения принтера не может быть пустым.");
+            Argument.Positive(printer.Latitude, "Широта расположения принтера не может быть пустой.");
+            Argument.Positive(printer.Longtitude, "Долгота расположения принтера не может быть пустой.");
         }
         private void _ValidatePrinterSchedule(IEnumerable<PrinterSchedule> printerSchedule)
         {
