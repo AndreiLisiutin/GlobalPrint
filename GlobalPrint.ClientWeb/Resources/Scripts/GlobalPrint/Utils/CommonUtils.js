@@ -96,7 +96,7 @@
             return this.optional(element) || /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(value);
         }, "Укажите корректный номер телефона.");
         $.validator.addMethod("decimal", function (value, element) {
-            return this.optional(element) || /^(\d+([\.,]\d{1,9})?)$/.test(value);
+            return this.optional(element) || /^(\d+([\.,]\d{1,9})?)$/.test(value) && parseFloat(value.replace(',', '.')) > 0;
         }, "Это поле допускает только положительные числовые значения.");
         $.validator.addMethod('custom', function (value, element) {
             return false;
