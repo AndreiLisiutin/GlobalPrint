@@ -329,15 +329,21 @@ namespace GlobalPrint.ClientWeb
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
+                var user = await UserManager.FindByEmailAsync(model.Email);
 
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                if (user == null)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return View("ForgotPasswordConfirmation");
+                    ModelState.AddModelError("", "Не найден пользователь с указаным email.");
                 }
-
-                if (user.EmailConfirmed)
+                else if (!user.EmailConfirmed)
+                {
+                    ModelState.AddModelError("", "Не подтвержден email.");
+                }
+                else if (!(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                {
+                    ModelState.AddModelError("", "Не подтвержден email.");
+                }
+                else
                 {
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -347,10 +353,6 @@ namespace GlobalPrint.ClientWeb
 
                     await UserManager.SendEmailAsync(user.Id, "Сброс пароля", "Для сброса пароля, перейдите по <a href=\"" + callbackUrl + "\">ссылке</a>");
                     return RedirectToAction("ForgotPasswordConfirmation", "Account");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Не подтвержден email.");
                 }
             }
 

@@ -1,7 +1,6 @@
 ﻿using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
 using GlobalPrint.ServerBusinessLogic.DI;
-using GlobalPrint.ServerBusinessLogic.Models.Business.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using System;
 using System.Collections.Generic;
@@ -88,18 +87,18 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units
         /// <param name="logMessage">Text log message.</param>
         /// <param name="userID">Identifier of the acting user.</param>
         /// <param name="dataContext">Data context.</param>
-        protected void Log(UserActionTypeEnum userActionType, string logMessage, int userID, IDataContext dataContext)
-        {
-            IUserActionLogRepository repo = this.Repository<IUserActionLogRepository>(dataContext);
-            UserActionLog log = new UserActionLog()
-            {
-                ID = 0,
-                Date = DateTime.Now,
-                Log = logMessage,
-                UserID = userID,
-                UserActionTypeID = (int)userActionType
-            };
-            repo.Insert(log);
-        }
+        //protected void Log(UserActionTypeEnum userActionType, string logMessage, int userID, IDataContext dataContext)
+        //{
+        //    IUserActionLogRepository repo = this.Repository<IUserActionLogRepository>(dataContext);
+        //    UserActionLog log = new UserActionLog()
+        //    {
+        //        ID = 0,
+        //        Date = DateTime.Now,
+        //        Log = logMessage,
+        //        UserID = userID,
+        //        UserActionTypeID = (int)userActionType
+        //    };
+        //    repo.Insert(log);
+        //}
     }
 }
