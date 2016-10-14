@@ -84,9 +84,36 @@
         });
         return printSizes;
     };
+
+    OrderNew.defineValidation = function () {
+        $("#newOrderForm").validate({
+            rules: {
+                "FileToPrint": {
+                    required: true
+                },
+                "SecretCode": {
+                    required: true
+                },
+                "PrintTypeID": {
+                    required: true
+                },
+                "PrintSizeID": {
+                    required: true
+                },
+                "CopiesCount": {
+                    required: true,
+                    integer: true,
+                    positive: true
+                },
+            }
+        });
+    };
+
 })(GlobalPrint.Order.New);
 
 $(document).ready(function () {
+    GlobalPrint.Order.New.defineValidation();
+
     var reloadTypes = function () {
         var printTypes = GlobalPrint.Order.New.getPrintTypes();
         $('#printType')

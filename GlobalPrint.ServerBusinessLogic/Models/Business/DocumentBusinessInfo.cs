@@ -16,14 +16,14 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Business
     {
         public DocumentBusinessInfo()
         {
-
         }
 
         /// <summary>
         /// Create business document info from uploaded by http file.
         /// </summary>
         /// <param name="httpPostedFileBase">Uploaded by http file.</param>
-        private DocumentBusinessInfo(HttpPostedFileBase httpPostedFileBase)
+        /// <param name="userID">User who loaded this file.</param>
+        private DocumentBusinessInfo(HttpPostedFileBase httpPostedFileBase, int userID)
         {
             using (Stream inputStream = httpPostedFileBase.InputStream)
             {
@@ -38,6 +38,8 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Business
             this.Extension = new MimeTypeUtility().ConvertMimeTypeToExtension(httpPostedFileBase.ContentType)
                 .Trim('.');
             this.Name = httpPostedFileBase.FileName;
+            this.LoadedOn = DateTime.Now;
+            this.UserID = userID;
         }
         
         /// <summary>
@@ -52,15 +54,23 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Business
         /// File name with extension. Example: MyFile.txt.
         /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// User who loaded the file.
+        /// </summary>
+        public int UserID { get; set; }
+        /// <summary>
+        /// When the file was loaded.
+        /// </summary>
+        public DateTime LoadedOn { get; set; }
 
         /// <summary>
         /// Create business document info from uploaded by http file.
         /// </summary>
         /// <param name="httpPostedFileBase">Uploaded by http file.</param>
         /// <returns></returns>
-        public static DocumentBusinessInfo FromHttpPostedFileBase(HttpPostedFileBase httpPostedFileBase)
+        public static DocumentBusinessInfo FromHttpPostedFileBase(HttpPostedFileBase httpPostedFileBase, int userID)
         {
-            return new DocumentBusinessInfo(httpPostedFileBase);
+            return new DocumentBusinessInfo(httpPostedFileBase, userID);
         }
     }
 }

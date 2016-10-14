@@ -53,7 +53,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Orders
             {
                 SerializedFile = serializedReport,
                 Extension = extension,
-                Name = $"Реестр заказов за период с {filter.DateFrom?.ToString("dd.MM.yyyy") ?? "--"} по {filter.DateTo?.ToString("dd.MM.yyyy") ?? "--"}.{extension}"
+                Name = $"Реестр заказов за период с {filter.DateFrom?.ToString("dd.MM.yyyy") ?? "--"} по {filter.DateTo?.ToString("dd.MM.yyyy") ?? "--"}.{extension}",
+                LoadedOn = DateTime.Now,
+                UserID = filter.OwnerUserID
             };
             return documentInfo;
         }

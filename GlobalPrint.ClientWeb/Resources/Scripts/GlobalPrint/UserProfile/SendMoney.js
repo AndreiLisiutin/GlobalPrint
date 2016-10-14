@@ -6,9 +6,8 @@
             rules: {
                 "AmountOfMoney": {
                     required: true,
-                    decimal: true,
+                    money: true,
                     max: userAmountOfMoney,
-                    min: 1,
                 },
                 "ReceiverUserId": {
                     required: true,

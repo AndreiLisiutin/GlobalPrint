@@ -1,9 +1,13 @@
-﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
+﻿using GlobalPrint.ClientWeb.Models;
+using GlobalPrint.ClientWeb.Models.FilesRepository;
+using GlobalPrint.Infrastructure.CommonUtils;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 using GlobalPrint.ServerBusinessLogic.Models.Business;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Timers;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
@@ -12,6 +16,26 @@ namespace GlobalPrint.ClientWeb
 {
     public class BaseController : Controller
     {
+        private const string _uploadedFilesDictionaryKey = "_UploadFiles";
+        protected IUploadFilesRepository _uploadedFilesRepo;
+        public BaseController()
+        {
+            Func<Dictionary<Guid, DocumentBusinessInfo>> uploadFilesDict = () =>
+            {
+                Dictionary<Guid, DocumentBusinessInfo> dict = this.Session[_uploadedFilesDictionaryKey] as Dictionary<Guid, DocumentBusinessInfo>;
+                if (dict == null)
+                {
+                    this.Session[_uploadedFilesDictionaryKey] = dict = new Dictionary<Guid, DocumentBusinessInfo>();
+                }
+                return dict;
+            };
+            this._uploadedFilesRepo = new UploadFilesRepository(uploadFilesDict);
+        }
+        public BaseController(Func<Dictionary<Guid, DocumentBusinessInfo>> uploadFilesDict)
+        {
+            this._uploadedFilesRepo = new UploadFilesRepository(uploadFilesDict);
+        }
+
         protected new JsonResult Json(object data)
         {
             return base.Json(data, JsonRequestBehavior.AllowGet);
@@ -38,46 +62,29 @@ namespace GlobalPrint.ClientWeb
         {
             return User.Identity.GetUserName();
         }
-        
+
         /// <summary>
-        /// Upload file into session.
+        /// Upload file into session. File is storing inside the session one hour then it is to be removed.
         /// </summary>
         /// <returns></returns>
         [HttpPost]
         [Authorize]
         public virtual ActionResult UploadFile()
         {
+            int userID = this.GetCurrentUserID();
             HttpPostedFileBase file = Request.Files["gpUserFile"];
             bool isUploaded = false;
             string message = "Ошибка загрузки файла.";
-            Guid fileId = new Guid();
+            Guid? fileId = null;
 
             if (file != null && file.ContentLength != 0)
             {
-                fileId = Guid.NewGuid();
-                DocumentBusinessInfo printFile = DocumentBusinessInfo.FromHttpPostedFileBase(file);
-                this._Uploaded.Add(fileId, printFile);
+                fileId = this._uploadedFilesRepo.Add(file, userID);
                 isUploaded = true;
                 message = "Файл успешно загружен.";
             }
 
             return Json(new { isUploaded = isUploaded, message = message, fileId = fileId }, "text/html");
-        }
-
-        /// <summary> Uploaded files in memory. Will die if user will decide not to print them.
-        /// </summary>
-        protected Dictionary<Guid, DocumentBusinessInfo> _Uploaded
-        {
-            get
-            {
-                Dictionary<Guid, DocumentBusinessInfo> _uploaded = this.Session["UploadFiles"]
-                    as Dictionary<Guid, DocumentBusinessInfo>;
-                if (_uploaded == null)
-                {
-                    this.Session["UploadFiles"] = _uploaded = new Dictionary<Guid, DocumentBusinessInfo>();
-                }
-                return _uploaded;
-            }
         }
     }
 }

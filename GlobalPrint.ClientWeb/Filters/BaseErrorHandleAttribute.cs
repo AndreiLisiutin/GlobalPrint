@@ -55,10 +55,28 @@ namespace GlobalPrint.ClientWeb.Filters
                 ? ((HttpException)filterContext.Exception).GetHttpCode()
                 : new HttpException(null, filterContext.Exception).GetHttpCode();
 
+            this.View = this.ErrorPageView(filterContext.HttpContext.Response.StatusCode);
+
             // Certain versions of IIS will sometimes use their own error page when
             // they detect a server error. Setting this property indicates that we
             // want it to try to render ASP.NET MVC's error page instead.
             filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
+        }
+
+        /// <summary>
+        /// Get error page by status code.
+        /// </summary>
+        /// <param name="statusCode">Status code.</param>
+        /// <returns>View page name.</returns>
+        public string ErrorPageView(int statusCode)
+        {
+            switch (statusCode)
+            {
+                case 404:
+                    return $"Errors/{statusCode}";
+                default:
+                    return this.View;
+            }
         }
     }
 }

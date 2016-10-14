@@ -96,8 +96,17 @@
             return this.optional(element) || /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(value);
         }, "Укажите корректный номер телефона.");
         $.validator.addMethod("decimal", function (value, element) {
-            return this.optional(element) || /^(\d+([\.,]\d{1,9})?)$/.test(value) && parseFloat(value.replace(',', '.')) > 0;
+            return this.optional(element) || /^(-?\d+([\.,]\d{1,7})?)$/.test(value) && !isNaN(parseFloat(value.replace(',', '.')));
+        }, "Это поле допускает только числовые значения с плавающей точкой.");
+        $.validator.addMethod("integer", function (value, element) {
+            return this.optional(element) || /^(-?\d+)$/.test(value) && !isNaN(parseInt(value));
+        }, "Это поле допускает только целочисленные значения.");
+        $.validator.addMethod("positive", function (value, element) {
+            return this.optional(element) || parseFloat(value.replace(',', '.')) > 0;
         }, "Это поле допускает только положительные числовые значения.");
+        $.validator.addMethod("money", function (value, element) {
+            return this.optional(element) || /^(\d+([\.,]\d{2})?)$/.test(value) && parseFloat(value.replace(',', '.')) > 0;
+        }, "Укажите корректную денежную сумму.");
         $.validator.addMethod('custom', function (value, element) {
             return false;
         }, "Значение этого поля некорректно.");
@@ -105,9 +114,9 @@
             return this.optional(element) || value != $(param).val();
         }, "Значение этого поля не может быть таким же. Задайте другое значение.");
         $.validator.addMethod('time', function (value, element) {
-            return this.optional(element) || /\d\d:\d\d/.test(value)
+            return this.optional(element) || /^(\d{2}:\d{2}(:\d{2})?)$/.test(value)
                 && parseInt(value.substring(0, 2)) <= 23 && parseInt(value.substring(3, 5)) <= 59;
-        }, "Укажите корректное время дня в формате ЧЧ:ММ.");
+        }, "Укажите корректное время дня в формате ЧЧ:ММ или ЧЧ:ММ:СС.");
 
 
         $.validator.setDefaults({
@@ -221,6 +230,24 @@
 
     CommonUtils.LookupType = {
         User: 1
+    };
+
+    /// <summary>
+    /// Initialize swithers like in iOS.
+    /// </summary>
+    CommonUtils.initializeSwitchers = function () {
+        var smallSwithcers = Array.prototype.slice.call(document.querySelectorAll('.js-switch-small'));
+        var mediumSwithcers = Array.prototype.slice.call(document.querySelectorAll('.js-switch-medium'));
+        var largeSwithcers = Array.prototype.slice.call(document.querySelectorAll('.js-switch-large'));
+        smallSwithcers.forEach(function (html) {
+            var switchery = new Switchery(html, { size: 'small' });
+        });
+        mediumSwithcers.forEach(function (html) {
+            var switchery = new Switchery(html);
+        });
+        largeSwithcers.forEach(function (html) {
+            var switchery = new Switchery(html, { size: 'large' });
+        });
     };
 
     CommonUtils.setLoading = function (elementSelector) {

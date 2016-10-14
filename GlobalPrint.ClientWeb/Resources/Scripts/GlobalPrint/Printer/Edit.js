@@ -12,11 +12,13 @@
                 },
                 "Printer.Latitude": {
                     required: true,
-                    decimal: true
+                    decimal: true,
+                    positive: true
                 },
                 "Printer.Longtitude": {
                     required: true,
-                    decimal: true
+                    decimal: true,
+                    positive: true
                 },
                 "Printer.Phone": {
                     phone: true
@@ -91,7 +93,8 @@
                             .find('.is-printer-schedule-open')
                             .prop('checked');
                     }
-                }
+                },
+                money: true
             });
         });
     };

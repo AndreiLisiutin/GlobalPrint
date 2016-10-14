@@ -31,7 +31,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 
         #region Get
 
-        public Printer GetPrinterByID(int printerID)
+        public Printer GetByID(int printerID)
         {
             using (IDataContext context = this.Context())
             {
@@ -68,15 +68,15 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             }
         }
 
-        public IEnumerable<PrinterFullInfoModel> GetPrinters(PrinterSearchFilter filter)
+        public IEnumerable<PrinterFullInfoModel> GetFullByFilter(PrinterSearchFilter filter)
         {
             filter = filter ?? new PrinterSearchFilter();
             using (IDataContext context = this.Context())
             {
-                return this.GetPrinters(filter, context);
+                return this.GetFullByFilter(filter, context);
             }
         }
-        public IEnumerable<PrinterFullInfoModel> GetPrinters(PrinterSearchFilter filter, IDataContext context)
+        public IEnumerable<PrinterFullInfoModel> GetFullByFilter(PrinterSearchFilter filter, IDataContext context)
         {
             Argument.NotNull(context, "Контекст подключения к базе данных не может быть пустым.");
             filter = filter ?? new PrinterSearchFilter();
@@ -122,7 +122,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             {
                 PrinterID = printerID
             };
-            return this.GetPrinters(filter, context)
+            return this.GetFullByFilter(filter, context)
                 .FirstOrDefault();
         }
         public PrinterFullInfoModel GetFullByID(int printerID)
@@ -132,11 +132,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             {
                 PrinterID = printerID
             };
-            return this.GetPrinters(filter)
+            return this.GetFullByFilter(filter)
                 .FirstOrDefault();
         }
 
-        public PrinterFullInfoModel GetClosestPrinter(float latitude, float longtitude)
+        public PrinterFullInfoModel GetClosest(float latitude, float longtitude)
         {
             using (IDataContext context = this.Context())
             {
@@ -240,33 +240,39 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
 
         #region Save
 
-        private void _ValidatePrinter(Printer printer)
+        private Validation _ValidatePrinter(Printer printer)
         {
-            Argument.NotNull(printer, "Модель принтера не может быть пустым.");
-            Argument.NotNullOrWhiteSpace(printer.Name, "Название принтера не может быть пустым.");
-            Argument.NotNullOrWhiteSpace(printer.Location, "Расположение принтера не может быть пустым.");
-            Argument.Positive(printer.OwnerUserID, "Владелец принтера не может быть пустым.");
-            Argument.Positive(printer.OperatorUserID, "Оператор принтера не может быть пустым.");
-            Argument.Positive(printer.Latitude, "Широта расположения принтера не может быть пустой.");
-            Argument.Positive(printer.Longtitude, "Долгота расположения принтера не может быть пустой.");
+            Validation validation = new Validation();
+
+            validation.NotNull(printer, "Модель принтера не может быть пустым.");
+            validation.NotNullOrWhiteSpace(printer.Name, "Название принтера не может быть пустым.");
+            validation.NotNullOrWhiteSpace(printer.Location, "Расположение принтера не может быть пустым.");
+            validation.Positive(printer.OwnerUserID, "Владелец принтера не может быть пустым.");
+            validation.Positive(printer.OperatorUserID, "Оператор принтера не может быть пустым.");
+            validation.Positive(printer.Latitude, "Широта расположения принтера не может быть пустой.");
+            validation.Positive(printer.Longtitude, "Долгота расположения принтера не может быть пустой.");
+
+            return validation;
         }
-        private void _ValidatePrinterSchedule(IEnumerable<PrinterSchedule> printerSchedule)
+        private Validation _ValidatePrinterSchedule(IEnumerable<PrinterSchedule> printerSchedule)
         {
+            Validation validation = new Validation();
+
             IEnumerable<int> allDays = Enum.GetValues(typeof(DayOfWeek))
                 .Cast<DayOfWeek>()
                 .Select(e => (int)e);
 
-            Argument.NotNull(printerSchedule, "Расписание принтера не может быть пустым.");
-            Argument.Require(printerSchedule.Count() > 0, "Расписание принтера не может быть пустым.");
+            validation.NotNull(printerSchedule, "Расписание принтера не может быть пустым.");
+            validation.Require(printerSchedule.Count() > 0, "Расписание принтера не может быть пустым.");
 
             foreach (PrinterSchedule day in printerSchedule)
             {
-                Argument.Require(allDays.Contains(day.DayOfWeek), "День расписания принтера не может быть пустым.");
-                Argument.Require(day.OpenTime >= TimeSpan.FromHours(0) && day.OpenTime <= TimeSpan.FromHours(24),
+                validation.Require(allDays.Contains(day.DayOfWeek), "День расписания принтера некорректно задан.");
+                validation.Require(day.OpenTime >= TimeSpan.FromHours(0) && day.OpenTime <= TimeSpan.FromHours(24),
                     "Начало работы в расписании работы принтера должен быть в промежутке от 0:00 до 24:00.");
-                Argument.Require(day.CloseTime >= TimeSpan.FromHours(0) && day.OpenTime <= TimeSpan.FromHours(24),
+                validation.Require(day.CloseTime >= TimeSpan.FromHours(0) && day.OpenTime <= TimeSpan.FromHours(24),
                     "Начало работы в расписании работы принтера должен быть в промежутке от 0:00 до 24:00.");
-                Argument.Require(day.CloseTime >= day.OpenTime,
+                validation.Require(day.CloseTime >= day.OpenTime,
                     "Начало работы в расписании работы принтера не может быть позже конца работы.");
             }
 
@@ -279,40 +285,66 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                 )
                 .Any();
 
-            Argument.Require(!periodsAreIntersected, "Расписание принтера не должно пересекаться.");
+            validation.Require(!periodsAreIntersected, "Расписание принтера не должно пересекаться.");
+
+            return validation;
         }
-        private void _ValidatePrinterServices(IEnumerable<PrinterService> printerServices)
+        private Validation _ValidatePrinterServices(IEnumerable<PrinterService> printerServices)
         {
-            Argument.NotNull(printerServices, "Список сервисов принтера не может быть пустым.");
-            Argument.Require(printerServices.Count() > 0, "Список сервисов принтера не может быть пустым.");
-            Argument.Require(printerServices.Select(e => e.PrintServiceID).Distinct().Count() == printerServices.Count()
+            Validation validation = new Validation();
+
+            validation.NotNull(printerServices, "Список сервисов принтера не может быть пустым.");
+            validation.Require(printerServices.Count() > 0, "Список сервисов принтера не может быть пустым.");
+            validation.Require(printerServices.Select(e => e.PrintServiceID).Distinct().Count() == printerServices.Count()
                 , "Сервисы принтера должны быть уникальны.");
             foreach (PrinterService service in printerServices)
             {
-                Argument.Positive(service.PricePerPage, "Цены на услуги принтера должны быть положительными.");
-                Argument.Positive(service.PrintServiceID, "Услуга для принтера не может быть неопределенной.");
+                validation.Positive(service.PricePerPage, "Цены на услуги принтера должны быть положительными.");
+                validation.Positive(service.PrintServiceID, "Услуга для принтера не может быть неопределенной.");
             }
+
+            return validation;
         }
 
-        public PrinterEditionModel SavePrinter(PrinterEditionModel model)
+        /// <summary>
+        /// Validate printer save model.
+        /// </summary>
+        /// <param name="model">Printer save model to validate.</param>
+        /// <returns>Validation results for printer.</returns>
+        public Validation Validate(PrinterEditionModel model)
+        {
+            Validation validation = new Validation();
+            validation.NotNull(model, "Модель для сохранения принтера пустая.");
+
+            validation.Merge(this._ValidatePrinter(model.Printer));
+            validation.Merge(this._ValidatePrinterSchedule(model.PrinterSchedule));
+            validation.Merge(this._ValidatePrinterServices(model.PrinterServices));
+
+            return validation;
+        }
+
+        /// <summary>
+        /// Save printer with its schedule and services.
+        /// </summary>
+        /// <param name="model">Printer edition model.</param>
+        /// <returns>Updated printer edition model.</returns>
+        public PrinterEditionModel Save(PrinterEditionModel model)
         {
             bool isEdit = (model?.Printer?.ID ?? 0) > 0;
             if (isEdit)
             {
-                return this.EditPrinter(model);
+                return this._Update(model);
             }
             else
             {
-                return this.CreatePrinter(model);
+                return this._Insert(model);
             }
         }
 
-        public PrinterEditionModel CreatePrinter(PrinterEditionModel model)
+        private PrinterEditionModel _Insert(PrinterEditionModel model)
         {
             Argument.NotNull(model, "Значение NULL невозможно сохранить как принтер.");
-            this._ValidatePrinter(model.Printer);
-            this._ValidatePrinterSchedule(model.PrinterSchedule);
-            this._ValidatePrinterServices(model.PrinterServices);
+            this.Validate(model).ThrowExceptionIfNotValid();
             int printerOwnerID = model.Printer.OwnerUserID;
 
             using (IDataContext context = this.Context())
@@ -360,12 +392,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             }
         }
 
-        public PrinterEditionModel EditPrinter(PrinterEditionModel model)
+        private PrinterEditionModel _Update(PrinterEditionModel model)
         {
             Argument.NotNull(model, "Значение NULL невозможно сохранить как принтер.");
-            this._ValidatePrinter(model.Printer);
-            this._ValidatePrinterSchedule(model.PrinterSchedule);
-            this._ValidatePrinterServices(model.PrinterServices);
+            this.Validate(model).ThrowExceptionIfNotValid();
 
             using (IDataContext context = this.Context())
             {
