@@ -289,6 +289,14 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Resources\ClientWeb\UserProfile\FillBalanceViewResource.Designer.cs" />
+    <Compile Include="Resources\ClientWeb\UserProfile\FillBalanceViewResource.en1.Designer.cs" />
+    <Compile Include="Resources\ClientWeb\UserProfile\MyPaymentsViewResource.Designer.cs" />
+    <Compile Include="Resources\ClientWeb\UserProfile\MyPaymentsViewResource.en.Designer.cs" />
+    <Compile Include="Resources\ClientWeb\UserProfile\UserProfileViewResource.Designer.cs" />
+    <Compile Include="Resources\ClientWeb\UserProfile\UserProfileViewResource.en.Designer.cs" />
+    <Compile Include="Resources\ClientWeb\UserRecievedPrintOrderList\ConfirmPrintOrderViewResource.Designer.cs" />
+    <Compile Include="Resources\ClientWeb\UserRecievedPrintOrderList\ConfirmPrintOrderViewResource.en.Designer.cs" />
     <Compile Include="Resources\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -550,6 +558,14 @@
       <LastGenOutput>NavigationViewResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources.ClientWeb.Shared</CustomToolNamespace>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\FillBalanceViewResource.en.resx" />
+    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\FillBalanceViewResource.resx" />
+    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\MyPaymentsViewResource.en.resx" />
+    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\MyPaymentsViewResource.resx" />
+    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\UserProfileViewResource.en.resx" />
+    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\UserProfileViewResource.resx" />
+    <EmbeddedResource Include="Resources\ClientWeb\UserRecievedPrintOrderList\ConfirmPrintOrderViewResource.en.resx" />
+    <EmbeddedResource Include="Resources\ClientWeb\UserRecievedPrintOrderList\ConfirmPrintOrderViewResource.resx" />
     <EmbeddedResource Include="Resources\Resource.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.en.Designer.cs</LastGenOutput>
