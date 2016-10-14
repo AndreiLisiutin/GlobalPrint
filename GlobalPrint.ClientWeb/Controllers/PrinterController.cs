@@ -149,7 +149,7 @@ namespace GlobalPrint.ClientWeb
             model.PrinterSchedule = model.PrinterSchedule ?? new List<PrinterSchedule>();
             model.PrinterSchedule = model.PrinterSchedule.Where(e => e.OpenTime != default(TimeSpan) || e.CloseTime != default(TimeSpan));
 
-            this._printerUnit.SavePrinter(model);
+            this._printerUnit.Save(model);
             return RedirectToAction("MyPrinters", "Printer");
         }
 

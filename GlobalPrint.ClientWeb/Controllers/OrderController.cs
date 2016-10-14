@@ -24,9 +24,13 @@ namespace GlobalPrint.ClientWeb
         PrintOrderUnit _printOrderUnit;
         Random _random;
         public OrderController()
+            : this (IoC.Instance.Resolve<PrintOrderUnit>(), new Random())
         {
-            this._printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-            this._random = new Random();
+        }
+        public OrderController(PrintOrderUnit printerOrderUnit, Random random)
+        {
+            this._printOrderUnit = printerOrderUnit;
+            this._random = random;
         }
 
         /// <summary>
@@ -89,7 +93,7 @@ namespace GlobalPrint.ClientWeb
             string app_data = HttpContext.Server.MapPath("~/App_Data");
             NewOrder newOrder = this._printOrderUnit.FromExisting(printOrderID, userID);
             DocumentBusinessInfo document = this._printOrderUnit.GetPrintOrderDocument(printOrderID, userID, app_data);
-            this._Uploaded[newOrder.FileToPrint] = document;
+            this._uploadedFilesRepo.Add(newOrder.FileToPrint, document);
             return this._ORDER_NEW(newOrder);
         }
 
@@ -131,14 +135,13 @@ namespace GlobalPrint.ClientWeb
             {
                 return this._ORDER_NEW(newOrder);
             }
-            if (!this._Uploaded.ContainsKey(newOrder.FileToPrint))
+            if (!this._uploadedFilesRepo.Contains(newOrder.FileToPrint))
             {
                 //файл не найден
                 ModelState.AddModelError("", "Файл для печати не найден.");
                 return this._ORDER_NEW(newOrder);
             }
-            DocumentBusinessInfo document = null;
-            this._Uploaded.TryGetValue(newOrder.FileToPrint, out document);
+            DocumentBusinessInfo document = this._uploadedFilesRepo.Get(newOrder.FileToPrint);
             Validation validation = this._printOrderUnit.Validate(newOrder, document);
             if (!validation.IsValid)
             {
@@ -159,7 +162,7 @@ namespace GlobalPrint.ClientWeb
         public ActionResult Confirm(NewOrder newOrder)
         {
             Argument.NotNull(newOrder, "Подготовленный для печати заказ не может быть пустым.");
-            if (!this._Uploaded.ContainsKey(newOrder.FileToPrint))
+            if (!this._uploadedFilesRepo.Contains(newOrder.FileToPrint))
             {
                 //файл не найден
                 ModelState.AddModelError("", "Файл для печати не найден.");
@@ -178,7 +181,7 @@ namespace GlobalPrint.ClientWeb
         public ActionResult Create(NewOrder newOrder)
         {
             Argument.NotNull(newOrder, "Подготовленный для печати заказ не может быть пустым.");
-            if (!this._Uploaded.ContainsKey(newOrder.FileToPrint))
+            if (!this._uploadedFilesRepo.Contains(newOrder.FileToPrint))
             {
                 //файл не найден
                 ModelState.AddModelError("", "Файл для печати не найден.");
@@ -189,7 +192,8 @@ namespace GlobalPrint.ClientWeb
                 return this._ORDER_CONFIRM(newOrder);
             }
 
-            Validation validation = this._printOrderUnit.Validate(newOrder, this._Uploaded[newOrder.FileToPrint]);
+            DocumentBusinessInfo document = this._uploadedFilesRepo.Get(newOrder.FileToPrint);
+            Validation validation = this._printOrderUnit.Validate(newOrder, document);
             if (!validation.IsValid)
             {
                 validation.Errors.ForEach(e => ModelState.AddModelError("", e));
@@ -198,7 +202,7 @@ namespace GlobalPrint.ClientWeb
 
             string app_data = HttpContext.Server.MapPath("~/App_Data");
             int userID = this.GetCurrentUserID();
-            PrintOrder createdOrder = this._printOrderUnit.Create(newOrder, userID, app_data, this._Uploaded[newOrder.FileToPrint]);
+            PrintOrder createdOrder = this._printOrderUnit.Create(newOrder, userID, app_data, document);
 
             #region Notifications
 
@@ -217,7 +221,7 @@ namespace GlobalPrint.ClientWeb
 
             #endregion Notifications
 
-            this._Uploaded.Remove(newOrder.FileToPrint);
+            this._uploadedFilesRepo.Remove(newOrder.FileToPrint.Value);
             return RedirectToAction("Complete", new { printOrderID = createdOrder.ID });
         }
 
@@ -251,12 +255,14 @@ namespace GlobalPrint.ClientWeb
             return File(fileInfo.SerializedFile, System.Net.Mime.MediaTypeNames.Application.Octet, fileInfo.Name);
         }
 
+
+
         private ViewResult _ORDER_NEW(NewOrder newOrder)
         {
             Argument.NotNull(newOrder, "Модель для нового заказа не может быть пустой.");
             Argument.Positive(newOrder.PrinterID, "Ключ принтера в модели для нового заказа не может быть пустым.");
 
-            Printer printer = new PrinterUnit().GetPrinterByID(newOrder.PrinterID);
+            Printer printer = new PrinterUnit().GetByID(newOrder.PrinterID);
             ViewBag.Printer = printer;
             return View("New", newOrder);
         }
@@ -265,9 +271,10 @@ namespace GlobalPrint.ClientWeb
         {
             Argument.NotNull(newOrder, "Модель для нового заказа не может быть пустой.");
             Argument.Positive(newOrder.PrinterID, "Ключ принтера в модели для нового заказа не может быть пустым.");
-            Argument.Require(this._Uploaded.ContainsKey(newOrder.FileToPrint), "Не найден файл для печати.");
+            Argument.Require(this._uploadedFilesRepo.Contains(newOrder.FileToPrint), "Не найден файл для печати.");
 
-            int pagesCount = this._printOrderUnit.CalculatePagesCount(this._Uploaded[newOrder.FileToPrint]);
+            DocumentBusinessInfo document = this._uploadedFilesRepo.Get(newOrder.FileToPrint);
+            int pagesCount = this._printOrderUnit.CalculatePagesCount(document);
             PrinterServiceExtended printService = this._printOrderUnit.GetPrintService(newOrder);
             decimal fullPrice = PrintOrderUnit.CALCULATE_FULL_PRICE(printService.PrinterService.PricePerPage, pagesCount, newOrder.CopiesCount);
 

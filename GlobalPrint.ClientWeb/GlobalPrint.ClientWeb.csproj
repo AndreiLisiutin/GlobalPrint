@@ -223,6 +223,7 @@
     <Content Include="Resources\Documents\TeamPhoto\Viktor.jpg" />
     <Content Include="Resources\Images\add-printer-button.png" />
     <Content Include="Resources\Images\closest_printer.png" />
+    <Content Include="Resources\Images\Errors\404-error-pony.png" />
     <Content Include="Resources\Images\Errors\default-error-pony.png" />
     <Content Include="Resources\Images\en_32_round.png" />
     <Content Include="Resources\Images\geolocation.png" />
@@ -684,6 +685,7 @@
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
     <Compile Include="Models\Binders\FloatModelBinder.cs" />
     <Compile Include="Models\FeedbackController\FeedbackViewModel.cs" />
+    <Compile Include="Models\FilesRepository\IUploadFilesRepository.cs" />
     <Compile Include="Models\Lookup\BaseLookupManager.cs" />
     <Compile Include="Models\Lookup\ILookupManager.cs" />
     <Compile Include="Models\Lookup\ILookupManagerFactory.cs" />
@@ -706,6 +708,7 @@
     <Compile Include="Models\PrinterController\PreparedOrder.cs" />
     <Compile Include="Models\PrinterController\Printer_PrintConfirmationViewModel.cs" />
     <Compile Include="Models\OrderController\Order_NewViewModel.cs" />
+    <Compile Include="Models\FilesRepository\UploadFilesRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -790,6 +793,7 @@
     <Content Include="Resources\Libraries\nprogress\Notes.md" />
     <Content Include="Resources\Libraries\nprogress\package.json" />
     <Content Include="Resources\Libraries\nprogress\Readme.md" />
+    <Content Include="Views\Shared\Errors\404.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

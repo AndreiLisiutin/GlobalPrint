@@ -98,6 +98,9 @@
         $.validator.addMethod("decimal", function (value, element) {
             return this.optional(element) || /^(-?\d+([\.,]\d{1,7})?)$/.test(value) && !isNaN(parseFloat(value.replace(',', '.')));
         }, "Это поле допускает только числовые значения с плавающей точкой.");
+        $.validator.addMethod("integer", function (value, element) {
+            return this.optional(element) || /^(-?\d+)$/.test(value) && !isNaN(parseInt(value));
+        }, "Это поле допускает только целочисленные значения.");
         $.validator.addMethod("positive", function (value, element) {
             return this.optional(element) || parseFloat(value.replace(',', '.')) > 0;
         }, "Это поле допускает только положительные числовые значения.");

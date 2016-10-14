@@ -83,6 +83,16 @@ namespace GlobalPrint.Infrastructure.CommonUtils
         }
 
         /// <summary>
+        /// Merge validation results and create united validation result.
+        /// </summary>
+        /// <param name="validation">Merged validation result.</param>
+        public void Merge(Validation validation)
+        {
+            this._errors = this.Errors ?? new List<string>();
+            this._errors.AddRange(validation.Errors);
+        }
+
+        /// <summary>
         /// Throw exception if validation wasn't passed.
         /// </summary>
         public void ThrowExceptionIfNotValid()

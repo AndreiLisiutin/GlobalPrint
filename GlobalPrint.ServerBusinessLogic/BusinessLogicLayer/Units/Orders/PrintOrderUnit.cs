@@ -179,7 +179,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 }
             }
 
-            // send email to client about order statuc change
+            // send email to client about order status change
             MailAddress userMail = new MailAddress(client.Email, client.UserName);
             string userMessageBody = string.Format(
                 "Ваш заказ № {0} {1}.",
@@ -190,7 +190,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
         }
 
         /// <summary>
-        /// Createt new order object from already existing order.
+        /// Create new order object from already existing order.
         /// </summary>
         /// <param name="printOrderID">Order identifier.</param>
         /// <param name="userID">Current user identifier.</param>
@@ -262,7 +262,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             {
                 SerializedFile = fileArray,
                 Name = order.DocumentName,
-                Extension = order.DocumentExtension
+                Extension = order.DocumentExtension,
+                LoadedOn = order.OrderedOn,
+                UserID = order.UserID
             };
 
             return fileInfo;
@@ -287,7 +289,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             validation.NotNullOrWhiteSpace(newOrder.SecretCode, "Секретный код не может быть пустым.");
             validation.Positive(newOrder.PrintSizeID, "Размер печати не может быть пустым.");
             validation.Positive(newOrder.PrintTypeID, "Тип печати не может быть пустым.");
-            validation.Require(newOrder.FileToPrint != Guid.Empty, "Для нового заказа не задан .");
+            validation.Require(newOrder.FileToPrint.HasValue && newOrder.FileToPrint != Guid.Empty, "Для нового заказа не задан .");
             validation.Positive(newOrder.CopiesCount, "Количество копий не может быть меньше 1.");
             validation.Positive(newOrder.UserID, "Заказчик не может быть пустым.");
 
