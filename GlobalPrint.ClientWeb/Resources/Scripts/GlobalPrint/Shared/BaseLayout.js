@@ -13,4 +13,7 @@ $(document).ready(function () {
     //Initialization of fileupload
     GlobalPrint.Shared.FileUpload.initFileUpload();
 
+    // Initialize swithers like in iOS
+    GlobalPrint.Utils.CommonUtils.initializeSwitchers();
+
 })(GlobalPrint.Shared.BaseLayout, GlobalPrint);

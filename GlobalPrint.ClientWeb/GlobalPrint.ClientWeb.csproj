@@ -617,6 +617,8 @@
     <Content Include="Resources\Libraries\nprogress\test\component.html" />
     <Content Include="Resources\Libraries\nprogress\test\index.html" />
     <Content Include="Resources\Libraries\nprogress\test\test.js" />
+    <Content Include="Resources\Libraries\switchery\switchery.css" />
+    <Content Include="Resources\Libraries\switchery\switchery.js" />
     <Content Include="Resources\Libraries\underscore.js\underscore.js" />
     <Content Include="Resources\Scripts\GlobalPrint.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Home\Index.js" />

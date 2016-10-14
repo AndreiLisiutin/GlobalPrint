@@ -75,13 +75,13 @@
         <div class="form-group">
             <label class="col-sm-3 control-label text-left">Цветная печать</label>
             <div class="col-sm-9 input-wrapper">
-                @Html.CheckBoxFor(m => m.IsColored, new { @id = "IsColored" })
+                    @Html.CheckBoxFor(m => m.IsColored, new { @id = "IsColored", @class = "js-switch-small" })
             </div>
         </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label text-left">Двусторонняя печать</label>
                 <div class="col-sm-9 input-wrapper">
-                    @Html.CheckBoxFor(m => m.IsTwoSided, new { @id = "IsTwoSided" })
+                    @Html.CheckBoxFor(m => m.IsTwoSided, new { @id = "IsTwoSided", @class = "js-switch-small" })
                 </div>
             </div>
             <div class="form-group">
