@@ -117,16 +117,44 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GlobalPrintWebSiteLink" xml:space="preserve">
-    <value>www.globalprint.online.ru</value>
-    <comment>Ссылка на сайт</comment>
+  <data name="DocumentFieldLalel" xml:space="preserve">
+    <value>Документ</value>
+    <comment>Лэйбл поля "Документ"</comment>
   </data>
-  <data name="GotoMainPage" xml:space="preserve">
-    <value>На главную</value>
-    <comment>Вернуться на главную страницу</comment>
+  <data name="EnterSecretCode" xml:space="preserve">
+    <value>Введите секретный код</value>
+    <comment>Введите секретный код</comment>
   </data>
-  <data name="ValidationErrors" xml:space="preserve">
-    <value>Ошибки</value>
-    <comment>Ошибки:</comment>
+  <data name="FormTabTitle" xml:space="preserve">
+    <value>Печать заказа</value>
+    <comment>Заголовок табки</comment>
+  </data>
+  <data name="OrderInfo" xml:space="preserve">
+    <value>Данные о заказе</value>
+    <comment>Данные о заказе</comment>
+  </data>
+  <data name="OrderNumberFieldLabel" xml:space="preserve">
+    <value>Номер заказа</value>
+    <comment>Лэйбл поля "Номер заказа"</comment>
+  </data>
+  <data name="PriceFieldLalel" xml:space="preserve">
+    <value>Стоимость</value>
+    <comment>Лэйбл поля "Стоимость"</comment>
+  </data>
+  <data name="PrintButtonLabel" xml:space="preserve">
+    <value>Распечатать</value>
+    <comment>Кнопка "Распечатать"</comment>
+  </data>
+  <data name="PrinterLocationFieldLalel" xml:space="preserve">
+    <value>Расположение принтера</value>
+    <comment>Лэйбл поля "Расположение принтера"</comment>
+  </data>
+  <data name="PrinterNameFieldLabel" xml:space="preserve">
+    <value>Название принтера</value>
+    <comment>Лэйбл поля "Название принтера"</comment>
+  </data>
+  <data name="SecretCodeFieldLabel" xml:space="preserve">
+    <value>Секретный код</value>
+    <comment>Лэйбл поля "Секретный код"</comment>
   </data>
 </root>

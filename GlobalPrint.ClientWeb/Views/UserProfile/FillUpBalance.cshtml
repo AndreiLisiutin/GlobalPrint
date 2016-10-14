@@ -1,23 +1,25 @@
-﻿<div class="modal fade" id="FillUpBalanceModal" tabindex="-1" role="dialog">
+﻿@using Resources.ClientWeb.UserProfile
+
+<div class="modal fade" id="FillUpBalanceModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Пополнение баланса</h4>
+                <h4 class="modal-title" id="exampleModalLabel">@FillBalanceViewResource.FormHeaderText</h4>
             </div>
             @using (Html.BeginForm("UserProfile", "UserProfile", new { @class = "form-horizontal", role = "form" }))
             {
                 <div class="modal-body" id="modal-body">
                     <div class="form-group row">
-                        <label class="col-sm-3 control-label text-left">Сумма</label>
+                        <label class="col-sm-3 control-label text-left">@FillBalanceViewResource.SumFieldLabel</label>
                         <div class="col-sm-9">
                             <input class="form-control currency bottom-component" id="summ" name="upSumm" type="number" value="300" min="1" step="any" max="10000">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" value="FillUpBalance" name="action:FillUpBalance">Пополнить</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-primary" value="FillUpBalance" name="action:FillUpBalance">@FillBalanceViewResource.FillButtonLabel</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">@FillBalanceViewResource.CancelButtonLabel</button>
                 </div>
             }
         </div>

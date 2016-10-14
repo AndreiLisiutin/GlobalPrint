@@ -117,17 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="en" xml:space="preserve">
-    <value>English</value>
-    <comment>Английский язык</comment>
-  </data>
   <data name="GlobalPrintWebSiteLink" xml:space="preserve">
     <value>www.globalprint.online.ru</value>
     <comment>Ссылка на сайт</comment>
-  </data>
-  <data name="ru" xml:space="preserve">
-    <value>Russian</value>
-    <comment>Русский язык</comment>
   </data>
   <data name="GotoMainPage" xml:space="preserve">
     <value>Main page</value>

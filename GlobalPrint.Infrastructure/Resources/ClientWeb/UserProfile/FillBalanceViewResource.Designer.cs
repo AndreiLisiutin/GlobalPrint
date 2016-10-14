@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Resources {
+namespace Resources.ClientWeb.UserProfile {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resource {
+    public class FillBalanceViewResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resource() {
+        internal FillBalanceViewResource() {
         }
         
         /// <summary>
@@ -39,7 +39,8 @@ namespace Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GlobalPrint.Infrastructure.Resources.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GlobalPrint.Infrastructure.Resources.ClientWeb.UserProfile.FillBalanceViewResourc" +
+                            "e", typeof(FillBalanceViewResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,29 +62,38 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to www.globalprint.online.ru.
+        ///   Looks up a localized string similar to Отмена.
         /// </summary>
-        public static string GlobalPrintWebSiteLink {
+        public static string CancelButtonLabel {
             get {
-                return ResourceManager.GetString("GlobalPrintWebSiteLink", resourceCulture);
+                return ResourceManager.GetString("CancelButtonLabel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to На главную.
+        ///   Looks up a localized string similar to Пополнить.
         /// </summary>
-        public static string GotoMainPage {
+        public static string FillButtonLabel {
             get {
-                return ResourceManager.GetString("GotoMainPage", resourceCulture);
+                return ResourceManager.GetString("FillButtonLabel", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ошибки.
+        ///   Looks up a localized string similar to Пополнение баланса.
         /// </summary>
-        public static string ValidationErrors {
+        public static string FormHeaderText {
             get {
-                return ResourceManager.GetString("ValidationErrors", resourceCulture);
+                return ResourceManager.GetString("FormHeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Сумма.
+        /// </summary>
+        public static string SumFieldLabel {
+            get {
+                return ResourceManager.GetString("SumFieldLabel", resourceCulture);
             }
         }
     }

@@ -117,16 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GlobalPrintWebSiteLink" xml:space="preserve">
-    <value>www.globalprint.online.ru</value>
-    <comment>Ссылка на сайт</comment>
+  <data name="CancelButtonLabel" xml:space="preserve">
+    <value>Отмена</value>
+    <comment>Кнопка "Отмена"</comment>
   </data>
-  <data name="GotoMainPage" xml:space="preserve">
-    <value>На главную</value>
-    <comment>Вернуться на главную страницу</comment>
+  <data name="FillButtonLabel" xml:space="preserve">
+    <value>Пополнить</value>
+    <comment>Кнопка "Пополнить"</comment>
   </data>
-  <data name="ValidationErrors" xml:space="preserve">
-    <value>Ошибки</value>
-    <comment>Ошибки:</comment>
+  <data name="FormHeaderText" xml:space="preserve">
+    <value>Пополнение баланса</value>
+    <comment>Заголовок страницы</comment>
+  </data>
+  <data name="SumFieldLabel" xml:space="preserve">
+    <value>Сумма</value>
+    <comment>Лэйбл поля "Сумма"</comment>
   </data>
 </root>

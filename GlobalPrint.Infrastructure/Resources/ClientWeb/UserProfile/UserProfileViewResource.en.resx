@@ -117,16 +117,48 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GlobalPrintWebSiteLink" xml:space="preserve">
-    <value>www.globalprint.online.ru</value>
-    <comment>Ссылка на сайт</comment>
+  <data name="BalanceFieldLabel" xml:space="preserve">
+    <value>Balance</value>
+    <comment>Лэйбл поля "Баланс"</comment>
   </data>
-  <data name="GotoMainPage" xml:space="preserve">
-    <value>На главную</value>
-    <comment>Вернуться на главную страницу</comment>
+  <data name="EmailFieldLabel" xml:space="preserve">
+    <value>Email</value>
+    <comment>Лэйбл поля "Email"</comment>
   </data>
-  <data name="ValidationErrors" xml:space="preserve">
-    <value>Ошибки</value>
-    <comment>Ошибки:</comment>
+  <data name="FillBalanceButtonLabel" xml:space="preserve">
+    <value>Fill balance</value>
+    <comment>Кнопка "Пополнить счет"</comment>
+  </data>
+  <data name="FormHeaderText" xml:space="preserve">
+    <value>User profile</value>
+    <comment>Заголовок страницы</comment>
+  </data>
+  <data name="FormTabTitle" xml:space="preserve">
+    <value>User profile</value>
+    <comment>Заголовок табки</comment>
+  </data>
+  <data name="NameFieldLabel" xml:space="preserve">
+    <value>Name</value>
+    <comment>Лэйбл поля "Имя"</comment>
+  </data>
+  <data name="OfferFieldLabel" xml:space="preserve">
+    <value>Offer</value>
+    <comment>Лэйбл поля "Оферта"</comment>
+  </data>
+  <data name="OfferFieldPlaceholder" xml:space="preserve">
+    <value>User offer</value>
+    <comment>Плейсхолдер поля "Оферта"</comment>
+  </data>
+  <data name="OpenOfferButtonLabel" xml:space="preserve">
+    <value>Open user offer</value>
+    <comment>Кнопка "Открыть договор оферты"</comment>
+  </data>
+  <data name="PaymentsHistoryButtonLabel" xml:space="preserve">
+    <value>Payments history</value>
+    <comment>Кнопка "История платежей"</comment>
+  </data>
+  <data name="SaveButtonLabel" xml:space="preserve">
+    <value>Save</value>
+    <comment>Кнопка "Сохранить"</comment>
   </data>
 </root>
