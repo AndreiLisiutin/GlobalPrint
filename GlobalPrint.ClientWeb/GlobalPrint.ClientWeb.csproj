@@ -156,6 +156,10 @@
       <HintPath>..\packages\NLog.4.4.0-betaV15\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.Web.4.2\lib\net35\NLog.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Npgsql, Version=3.1.7.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>..\packages\Npgsql.3.1.7\lib\net451\Npgsql.dll</HintPath>
       <Private>True</Private>
@@ -681,6 +685,7 @@
     <Compile Include="Helpers\HtmlHelpers.cs" />
     <Compile Include="Helpers\ScheduledActivityChecker\ActivityCheckerJob.cs" />
     <Compile Include="Helpers\ScheduledActivityChecker\ActivityCheckerJobScheduler.cs" />
+    <Compile Include="Helpers\SystemConfigLayoutRenderer.cs" />
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
     <Compile Include="Models\Binders\FloatModelBinder.cs" />
     <Compile Include="Models\FeedbackController\FeedbackViewModel.cs" />
