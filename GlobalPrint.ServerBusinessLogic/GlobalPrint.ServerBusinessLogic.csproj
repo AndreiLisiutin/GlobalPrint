@@ -80,6 +80,7 @@
     <Compile Include="Models\Business\Printers\PrinterFullInfoModel.cs" />
     <Compile Include="Models\Business\Printers\PrinterSearchFilter.cs" />
     <Compile Include="Models\Business\DocumentBusinessInfo.cs" />
+    <Compile Include="Models\Business\Users\UserActionTypeEnum.cs" />
     <Compile Include="Models\Domain\IDomainModel.cs" />
     <Compile Include="Models\Business\Printers\PrinterServiceExtended.cs" />
     <Compile Include="Models\Business\Printers\PrintServiceExtended.cs" />
@@ -149,9 +150,7 @@
       <Name>GlobalPrint.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\Business\Users\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -29,6 +29,16 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Business.Printers
         public PrintSizePrintType PrintSizePrintType { get; set; }
         public PrintSize PrintSize { get; set; }
         public PrintType PrintType { get; set; }
+
+        public override string ToString()
+        {
+            if (this.PrintService == null || this.PrintSize == null || this.PrintType == null)
+            {
+                return null;
+            }
+
+            return $"{this.PrintType?.Name} {this.PrintSize?.Name} {(this.PrintService.IsColored ? "Цветная" : "Черно-белая")} {(this.PrintService.IsTwoSided ? "Двусторонняя" : "")}"; 
+        }
     }
 
 

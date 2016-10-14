@@ -24,6 +24,17 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Printers
         [Column("price_per_page")]
         public decimal PricePerPage { get; set; }
 
+        /// <summary>
+        /// Formatted value (2 decimals after point) for price per page.
+        /// </summary>
+        public string PricePerPageString
+        {
+            get
+            {
+                return this.PricePerPage.ToString("0.00");
+            }
+        }
+
         #region IDomainModel
         [Key]
         [Column("printer_service_id")]
