@@ -229,6 +229,24 @@
         User: 1
     };
 
+    /// <summary>
+    /// Initialize swithers like in iOS.
+    /// </summary>
+    CommonUtils.initializeSwitchers = function () {
+        var smallSwithcers = Array.prototype.slice.call(document.querySelectorAll('.js-switch-small'));
+        var mediumSwithcers = Array.prototype.slice.call(document.querySelectorAll('.js-switch-medium'));
+        var largeSwithcers = Array.prototype.slice.call(document.querySelectorAll('.js-switch-large'));
+        smallSwithcers.forEach(function (html) {
+            var switchery = new Switchery(html, { size: 'small' });
+        });
+        mediumSwithcers.forEach(function (html) {
+            var switchery = new Switchery(html);
+        });
+        largeSwithcers.forEach(function (html) {
+            var switchery = new Switchery(html, { size: 'large' });
+        });
+    };
+
     CommonUtils.setLoading = function (elementSelector) {
         /// <summary>
         /// Create loading mask on element by CSS selector of elementSelector.
