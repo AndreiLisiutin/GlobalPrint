@@ -241,6 +241,25 @@
         var largeSwithcers = Array.prototype.slice.call(document.querySelectorAll('.js-switch-large'));
         smallSwithcers.forEach(function (html) {
             var switchery = new Switchery(html, { size: 'small' });
+
+            var observer = new MutationObserver(function (mutations) {
+                for (var i = 0, mutation; mutation = mutations[i]; i++) {
+                    if (mutation.attributeName == 'disabled') {
+                        if (mutation.target.disabled) {
+                            switchery.disable();
+                        } else {
+                            switchery.enable();
+                        }
+                    }
+                };
+            });
+
+            // Observe attributes change
+            observer.observe(html, { attributes: true });
+
+            html.onchange = function () {
+                switchery.setPosition();
+            };
         });
         mediumSwithcers.forEach(function (html) {
             var switchery = new Switchery(html);
