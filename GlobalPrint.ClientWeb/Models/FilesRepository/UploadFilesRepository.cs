@@ -19,9 +19,9 @@ namespace GlobalPrint.ClientWeb.Models.FilesRepository
         public UploadFilesRepository(Func<Dictionary<Guid, DocumentBusinessInfo>> sessionDictionary)
         {
             this._sessionDictionary = sessionDictionary;
-            Timer timer = new Timer(60 * 60 * 1000);
-            timer.Elapsed += ClearOldFiles;
-            timer.Start();
+            //Timer timer = new Timer(60 * 1000);
+            //timer.Elapsed += ClearOldFiles;
+            //timer.Start();
         }
 
         /// <summary>
