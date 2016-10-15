@@ -106,8 +106,11 @@
         </div>
 
         //--------------------------------------------List of time---------------------------------------------
-
-        <h2>Расписание работы принтера</h2>
+        
+        <div class="input-wrapper">
+            <h2>Расписание работы принтера</h2>
+            @Html.Hidden("PrinterScheduleArray")
+        </div>
         <table class="table table-hover" id="printerSchedules">
             <thead>
                 <tr>
@@ -159,8 +162,10 @@
         </table>
 
         //--------------------------------------------List of services---------------------------------------------
-
-        <h2>Услуги и цены</h2>
+        <div class="input-wrapper">
+            <h2>Услуги и цены</h2>
+            @Html.Hidden("PrinterServicesArray")
+        </div>
         <table class="table table-hover" id="printerServices">
             <thead>
                 <tr>
@@ -205,21 +210,6 @@
                 }
             </tbody>
         </table>
-
-        @*if (Model.NeedPrinterOwnerOffer)
-            {
-                <div class="form-group">
-                    <div class="col-sm-12 checkbox">
-                        <label>
-                            @Html.CheckBoxFor(m => m.IsAgreeWithOffer, new { @required = "true" }) <span>Настоящим подтверждаю, что я ознакомлен и согласен с условиями @Html.ActionLink("оферты владельца принтера", "Offer", "Offer", new { @offerTypeID = OfferTypeEnum.PrinterOwnerOffer }, new { target = "_blank" }).</span>
-                        </label>
-                    </div>
-                </div>
-            }
-            else
-            {
-                @Html.HiddenFor(m => m.IsAgreeWithOffer, new { @required = "true", @Value = true })
-            }*@
 
         <div class="form-group">
             <div class="col-sm-12">

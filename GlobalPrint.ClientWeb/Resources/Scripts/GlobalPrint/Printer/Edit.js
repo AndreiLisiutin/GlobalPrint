@@ -29,6 +29,34 @@
                 "Printer.OperatorUserID": {
                     required: true
                 },
+                "PrinterServicesArray": {
+                    custom: {
+                        depends: function (element) {
+                            //check if no single printer service is selected
+                            return !$('#printerServices')
+                                .find('.is-printer-service-supported:checked')
+                                .length;
+                        }
+                    }
+                },
+                "PrinterScheduleArray": {
+                    custom: {
+                        depends: function (element) {
+                            //check if no single printer schedule day is marked as opened today
+                            return !$('#printerSchedules')
+                                .find('.is-printer-schedule-open:checked')
+                                .length;
+                        }
+                    }
+                },
+            },
+            messages: {
+                "PrinterServicesArray": {
+                    custom: "Укажите хотя бы одну услугу печати."
+                },
+                "PrinterScheduleArray": {
+                    custom: "Укажите хотя бы один день работы прнтера."
+                },
             }
         });
         $('.printer-schedule-time').each(function () {
@@ -36,6 +64,7 @@
                 time: true,
                 required: {
                     depends: function (element) {
+                        //check if selected row is checked as opened, so time is required
                         return $(element)
                             .closest('.printer-schedule-row')
                             .find('.is-printer-schedule-open')
@@ -48,6 +77,11 @@
             $(this).rules('add', {
                 custom: {
                     depends: function (element) {
+                        //check if inside selected row:
+                        //1) day is marked as opened today
+                        //2) open and close time are fullfilled correctly
+                        //3) open time is larger than close time
+                        //then error is to be raised
                         var scheduleIsActive = $(element)
                             .closest('.printer-schedule-row')
                             .find('.is-printer-schedule-open')
@@ -88,15 +122,18 @@
             $(this).rules('add', {
                 required: {
                     depends: function (element) {
+                        //check if selected row service is marked as supported. Then its price should be considered
                         return $(element)
-                            .closest('.printer-schedule-row')
-                            .find('.is-printer-schedule-open')
+                            .closest('.printer-service-row')
+                            .find('.is-printer-service-supported')
                             .prop('checked');
                     }
                 },
                 money: true
             });
         });
+
+        
     };
 
     Edit.disablePriceForNotSupported = function () {
