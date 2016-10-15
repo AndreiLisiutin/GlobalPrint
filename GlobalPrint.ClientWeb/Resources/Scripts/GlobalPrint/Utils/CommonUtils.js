@@ -239,34 +239,36 @@
         var smallSwithcers = Array.prototype.slice.call(document.querySelectorAll('.js-switch-small'));
         var mediumSwithcers = Array.prototype.slice.call(document.querySelectorAll('.js-switch-medium'));
         var largeSwithcers = Array.prototype.slice.call(document.querySelectorAll('.js-switch-large'));
-        smallSwithcers.forEach(function (html) {
-            var switchery = new Switchery(html, { size: 'small' });
 
-            var observer = new MutationObserver(function (mutations) {
-                for (var i = 0, mutation; mutation = mutations[i]; i++) {
-                    if (mutation.attributeName == 'disabled') {
-                        if (mutation.target.disabled) {
-                            switchery.disable();
-                        } else {
-                            switchery.enable();
-                        }
-                    }
-                };
-            });
+        var processSwitchers = function (array, size) {
+            if (array && array.length > 0) {
+                array.forEach(function (html) {
+                    var switchery = new Switchery(html, { size: size || 'default' });
 
-            // Observe attributes change
-            observer.observe(html, { attributes: true });
+                    var observer = new MutationObserver(function (mutations) {
+                        for (var i = 0, mutation; mutation = mutations[i]; i++) {
+                            if (mutation.attributeName == 'disabled') {
+                                if (mutation.target.disabled) {
+                                    switchery.disable();
+                                } else {
+                                    switchery.enable();
+                                }
+                            }
+                        };
+                    });
 
-            html.onchange = function () {
-                switchery.setPosition();
-            };
-        });
-        mediumSwithcers.forEach(function (html) {
-            var switchery = new Switchery(html);
-        });
-        largeSwithcers.forEach(function (html) {
-            var switchery = new Switchery(html, { size: 'large' });
-        });
+                    // Observe attributes change
+                    observer.observe(html, { attributes: true });
+
+                    html.onchange = function () {
+                        switchery.setPosition();
+                    };
+                });
+            }
+        }
+        processSwitchers(smallSwithcers, 'small');
+        processSwitchers(mediumSwithcers);
+        processSwitchers(largeSwithcers, 'large');
     };
 
     CommonUtils.setLoading = function (elementSelector) {
@@ -282,6 +284,16 @@
 
 
         $(elementSelector).html(loadingHtml);
+    };
+
+    CommonUtils.setCheckboxValueById = function (id, checked) {
+        var elm = document.getElementById(id.replace('#', ''));
+        CommonUtils.setCheckboxValue(elm, checked);
+    };
+    CommonUtils.setCheckboxValue = function (elm, checked) {
+        if (elm && checked != elm.checked) {
+            elm.click();
+        }
     };
 
 })(GlobalPrint.Utils.CommonUtils);

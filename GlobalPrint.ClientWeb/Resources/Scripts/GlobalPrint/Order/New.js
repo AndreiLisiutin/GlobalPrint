@@ -152,7 +152,7 @@ $(document).ready(function () {
     var reloadColored = function () {
         var printTypeID = $('#printType').val();
         var printSizeID = $('#printSize').val();
-        $('#IsColored').prop('checked', false).change();
+        GlobalPrint.Utils.CommonUtils.setCheckboxValueById('IsColored', false);
         if (!printTypeID || !printSizeID) {
             $('#IsColored').attr('disabled', 'disabled');
             return;
@@ -160,7 +160,7 @@ $(document).ready(function () {
 
         var coloredTypes = GlobalPrint.Order.New.getColoredTypes(printTypeID, printSizeID);
         if (coloredTypes.length == 1) {
-            $('#IsColored').prop('checked', coloredTypes[0]).change(); 
+            GlobalPrint.Utils.CommonUtils.setCheckboxValueById('IsColored', coloredTypes[0]);
             $('#IsColored').attr('disabled', 'disabled');
         } else {
             $('#IsColored').attr('disabled', null);
@@ -170,7 +170,7 @@ $(document).ready(function () {
     var reloadTwoSided = function () {
         var printTypeID = $('#printType').val();
         var printSizeID = $('#printSize').val();
-        $('#IsTwoSided').prop('checked', false).change();
+        GlobalPrint.Utils.CommonUtils.setCheckboxValueById('IsTwoSided', false);
         if (!printTypeID || !printSizeID) {
             $('#IsTwoSided').attr('disabled', 'disabled');
             return;
@@ -178,7 +178,7 @@ $(document).ready(function () {
 
         var twoSidedTypes = GlobalPrint.Order.New.getTwoSidedTypes(printTypeID, printSizeID);
         if (twoSidedTypes.length == 1) {
-            $('#IsTwoSided').prop('checked', twoSidedTypes[0]).change();
+            GlobalPrint.Utils.CommonUtils.setCheckboxValueById('IsTwoSided', twoSidedTypes[0]);
             $('#IsTwoSided').attr('disabled', 'disabled');
         } else {
             $('#IsTwoSided').attr('disabled', null);
