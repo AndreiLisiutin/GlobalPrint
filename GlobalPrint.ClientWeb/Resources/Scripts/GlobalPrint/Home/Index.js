@@ -261,13 +261,7 @@
 
             var averallServices = '';
             $.each(marker.printerInfo.PrinterServices, function (index, item) {
-                var service = ''
-                service += item.PrintService.PrintType.Name + ' ' +
-                    item.PrintService.PrintSize.Name + ' ' +
-                    (item.PrintService.IsColored ? 'Цветная' : 'Ч/Б') +
-                    (item.PrintService.IsTwoSided ? 'Двусторонняя' : '');
-
-                service += ':.....' + item.PrinterService.PricePerPage + ' руб.';
+                var service = item.PrintService.FullName + ':.....' + item.PrinterService.PricePerPage + ' руб.';
                 averallServices += (averallServices ? '\n' : '') + service;
             });
             $("#printerInfoPrices").val(averallServices);

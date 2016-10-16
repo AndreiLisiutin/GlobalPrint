@@ -109,7 +109,12 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                 new PrinterFullInfoModel(p.printer,
                     p.@operator,
                     schedules.Where(e => e.PrinterID == p.printer.ID).ToList(),
-                    services.Where(e => e.PrinterService.PrinterID == p.printer.ID).ToList()
+                    services.Where(e => e.PrinterService.PrinterID == p.printer.ID)
+                        .OrderBy(e => e.PrintService.PrintType.Name)
+                        .ThenBy(e => e.PrintService.PrintSize.Name)
+                        .ThenBy(e => e.PrintService.PrintService.IsColored)
+                        .ThenBy(e => e.PrintService.PrintService.IsTwoSided)
+                        .ToList()
                 ))
                 .ToList();
 

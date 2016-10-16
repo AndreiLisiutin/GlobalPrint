@@ -39,13 +39,12 @@
         /// <summary>
         /// Configuration of NProgress progress bar on AJAX and so on.
         /// </summary>
-        //NProgress.configure({ showSpinner: false });
-        $(document).ready(function () {
-            GlobalPrint.Utils.CommonUtils.startProgressBar();
-        });
-        $(window).load(function () {
-            GlobalPrint.Utils.CommonUtils.finishProgressBar();
-        });
+        //$(document).ready(function () {
+        //    GlobalPrint.Utils.CommonUtils.startProgressBar();
+        //});
+        //$(window).load(function () {
+        //    GlobalPrint.Utils.CommonUtils.finishProgressBar();
+        //});
         $.ajaxSetup({
             beforeSend: function () {
                 GlobalPrint.Utils.CommonUtils.startProgressBar();
@@ -56,6 +55,22 @@
             success: function () {
                 GlobalPrint.Utils.CommonUtils.finishProgressBar();
             }
+        });
+    };
+
+    CommonUtils.disabledCheckboxFix = function () {
+        /// <summary>
+        /// Fix disabled checkbox to send to server.
+        /// </summary>
+        $("input[type=checkbox]").on('change', function (event) {
+            var name = $(event.target).attr('name');
+            if (!name) {
+                return;
+            }
+            $(event.target)
+                .closest('form')
+                .find('input[type=hidden][name="' + name + '"]')
+                .val($(event.target).prop('checked'));
         });
     };
 

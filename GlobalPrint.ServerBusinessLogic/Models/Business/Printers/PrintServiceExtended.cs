@@ -30,14 +30,21 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Business.Printers
         public PrintSize PrintSize { get; set; }
         public PrintType PrintType { get; set; }
 
+        public string FullName
+        {
+            get
+            {
+                if (this.PrintService == null || this.PrintSize == null || this.PrintType == null)
+                {
+                    return null;
+                }
+                return $"{this.PrintType?.Name} {this.PrintSize?.Name} {(this.PrintService.IsColored ? "Цветная" : "Черно-белая")} {(this.PrintService.IsTwoSided ? "Двусторонняя" : "")}";
+            }
+        }
+
         public override string ToString()
         {
-            if (this.PrintService == null || this.PrintSize == null || this.PrintType == null)
-            {
-                return null;
-            }
-
-            return $"{this.PrintType?.Name} {this.PrintSize?.Name} {(this.PrintService.IsColored ? "Цветная" : "Черно-белая")} {(this.PrintService.IsTwoSided ? "Двусторонняя" : "")}"; 
+            return this.FullName;
         }
     }
 
