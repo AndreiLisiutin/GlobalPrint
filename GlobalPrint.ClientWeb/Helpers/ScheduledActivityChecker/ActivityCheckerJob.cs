@@ -22,7 +22,7 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
     {
         private readonly TimeSpan _threshold;
         private readonly TimeSpan _callInterval;
-        private readonly string _emailSubject = "Activity in GlobalPrint";
+        private readonly string _emailSubject = "Активность в GlobalPrint";
         
         private IUserUnit _userUnit;
         private IEmailUtility _emailUtility;
