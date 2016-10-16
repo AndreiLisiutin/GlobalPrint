@@ -251,7 +251,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                     }
                 }
 
-                //User andrei = userRepo.Get(e => e.Email == "lisutin.andrey@gmail.com").FirstOrDefault();
+                //User andrei = userRepo.Get(e => e.Email == "93Grey10@mail.ru").FirstOrDefault();
                 //Printer andreiPrinter = printerRepo.Get(e => e.OwnerUserID == andrei.ID).FirstOrDefault();
                 //totalList.Add(new PrinterOperatorModel() { Printer = andreiPrinter, PrinterOperator = andrei });
                 return totalList;
