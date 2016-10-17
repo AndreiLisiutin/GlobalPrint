@@ -113,7 +113,7 @@ namespace GlobalPrint.ClientWeb
             return this._PRINTER_EDIT(model);
         }
 
-        [Authorize, HttpPost ExportModelState]
+        [Authorize, HttpPost, ExportModelState]
         public ActionResult Delete(int PrinterID)
         {
             try
