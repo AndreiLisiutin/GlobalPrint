@@ -36,9 +36,8 @@
                         <td class="col-md-6">@Html.DisplayFor(c => printer.Location)</td>
                         <td class="table-col-buttons">
                             <a href="@Url.Action("Edit", "Printer", new { @PrinterID = printer.ID })" title=@MyPrintersViewResource.EditButtonTooltip class="btn btn-default glyphicon glyphicon-pencil"></a>
-                            <a href="@Url.Action("Clone", "Printer", new { @PrinterID = printer.ID })" title="Клонировать принтер" class="btn btn-default glyphicon glyphicon-plus"></a>
-                                class="btn btn-default glyphicon glyphicon-pencil"></a>
-                            @Ajax.ActionLink(" ", "Delete", new { PrinterID = printer.ID }, new AjaxOptions { HttpMethod = "POST" }, 
+                            <a href="@Url.Action("Clone", "Printer", new { @PrinterID = printer.ID })" title=@MyPrintersViewResource.ClonePrinterButtonTooltip class="btn btn-default glyphicon glyphicon-plus"></a>
+                            @Ajax.ActionLink(" ", "Delete", new { PrinterID = printer.ID }, new AjaxOptions { HttpMethod = "POST" },
                                 new { @class = "btn btn-default glyphicon glyphicon-trash", @title = MyPrintersViewResource.DeleteButtonTooltip })
                         </td>
                     </tr>
@@ -48,7 +47,7 @@
     </table>
 
     <div class="form-group">
-            @Html.ActionLink(MyPrintersViewResource.AddButtonLabel, "Create", "Printer", new { }, new { @class = "btn btn-default" })
-        <a href="@Request.UrlReferrer" class="btn btn-default"><i class="icon-circle-arrow-left"></i>Назад</a>
+        @Html.ActionLink(MyPrintersViewResource.AddButtonLabel, "Create", "Printer", new { }, new { @class = "btn btn-default" })
+        <a href="@Request.UrlReferrer" class="btn btn-default"><i class="icon-circle-arrow-left"></i>@MyPrintersViewResource.BackButtonLabel</a>
     </div>
 </div>

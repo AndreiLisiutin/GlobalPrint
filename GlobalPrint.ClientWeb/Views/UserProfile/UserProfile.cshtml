@@ -64,7 +64,7 @@
                 <label class="col-sm-1 control-label text-left">@UserProfileViewResource.OfferFieldLabel</label>
             <div class="col-sm-11">
                 <div class="input-group">
-                        @Html.TextBox("UserOfferTitle", Model.LatestUserOffer.UserOfferTitle, new { @class = "form-control", @readonly = "true", @placeholder = UserProfileViewResource.OfferFieldPlaceholder })
+                    @Html.TextBox("UserOfferTitle", UserProfileViewResource.OfferFieldPlaceholder, new { @class = "form-control", @readonly = "true", @placeholder = UserProfileViewResource.OfferFieldPlaceholder })
                     <span class="input-group-btn">
                             <a href="@Url.Action("Offer", "Offer")" target="_blank" title=@UserProfileViewResource.OpenOfferButtonLabel class="btn btn-default">
                             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -85,8 +85,8 @@
                     @UserProfileViewResource.FillBalanceButtonLabel
                 </a>
                 @Html.ActionLink(UserProfileViewResource.PaymentsHistoryButtonLabel, "MyPayments", "UserProfile", new { }, new { @class = "btn btn-default" })
-                @Html.ActionLink("Реестр заказов", "PrintOrderRegister", "Reports", new { }, new { @class = "btn btn-default" })
-                @Html.ActionLink("Перекинуть баланс", "SendMoney", "UserProfile", new { }, new { @class = "btn btn-default" })
+                @Html.ActionLink(UserProfileViewResource.OrdersRegistryButtonLabel, "PrintOrderRegister", "Reports", new { }, new { @class = "btn btn-default" })
+                @Html.ActionLink(UserProfileViewResource.SendMoneyButtonLabel, "SendMoney", "UserProfile", new { }, new { @class = "btn btn-default" })
             </div>
         </div>
     }

@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CancelButtonLabel" xml:space="preserve">
+    <value>Отмена</value>
+    <comment>Кнопка "Отмена"</comment>
+  </data>
   <data name="DayColumnHeader" xml:space="preserve">
     <value>День</value>
     <comment>Заголовок колонки "День"</comment>

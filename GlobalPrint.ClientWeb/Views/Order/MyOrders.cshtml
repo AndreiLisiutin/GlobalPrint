@@ -52,10 +52,9 @@
                         <td>@Html.DisplayFor(c => printOrder.PrintOrder.SecretCode)</td>
                         <td>@Html.DisplayFor(c => printOrder.Status.Status)</td>
                         <td>
-                            <a href="@Url.Action("Details", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title=@MyOrdersViewResource.DetailsButtonLabel class="btn btn-default glyphicon glyphicon-pencil"></a>
                             <div class="table-col-buttons">
-                                <a href="@Url.Action("FromExisting", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title="Копировать заказ" class="btn btn-default glyphicon glyphicon-plus"></a>
-                                <a href="@Url.Action("Details", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title="Детали заказа на печать" class="btn btn-default glyphicon glyphicon-pencil"></a>
+                                <a href="@Url.Action("FromExisting", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title=@MyOrdersViewResource.CloneOrderButtonLabel class="btn btn-default glyphicon glyphicon-plus"></a>
+                                <a href="@Url.Action("Details", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title=@MyOrdersViewResource.DetailsButtonLabel class="btn btn-default glyphicon glyphicon-pencil"></a>
                             </div>
                         </td>
                     </tr>
@@ -63,7 +62,7 @@
             </tbody>
         </table>
         <div class="form-group">
-            <a href="@Request.UrlReferrer" class="btn btn-default"><i class="icon-circle-arrow-left"></i>Назад</a>
+            <a href="@Request.UrlReferrer" class="btn btn-default"><i class="icon-circle-arrow-left"></i>@MyOrdersViewResource.BackButtonLabel</a>
         </div>
     }
 </div>

@@ -79,6 +79,24 @@ namespace Resources.ClientWeb.Order {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Назад.
+        /// </summary>
+        public static string BackButtonLabel {
+            get {
+                return ResourceManager.GetString("BackButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Клонировать принтер.
+        /// </summary>
+        public static string ClonePrinterButtonTooltip {
+            get {
+                return ResourceManager.GetString("ClonePrinterButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Удалить принтер.
         /// </summary>
         public static string DeleteButtonTooltip {

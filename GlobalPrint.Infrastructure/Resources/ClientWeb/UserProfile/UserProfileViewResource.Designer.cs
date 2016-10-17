@@ -143,6 +143,15 @@ namespace Resources.ClientWeb.UserProfile {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Реестр заказов.
+        /// </summary>
+        public static string OrdersRegistryButtonLabel {
+            get {
+                return ResourceManager.GetString("OrdersRegistryButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to История платежей.
         /// </summary>
         public static string PaymentsHistoryButtonLabel {
@@ -157,6 +166,15 @@ namespace Resources.ClientWeb.UserProfile {
         public static string SaveButtonLabel {
             get {
                 return ResourceManager.GetString("SaveButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Перекинуть баланс.
+        /// </summary>
+        public static string SendMoneyButtonLabel {
+            get {
+                return ResourceManager.GetString("SendMoneyButtonLabel", resourceCulture);
             }
         }
     }

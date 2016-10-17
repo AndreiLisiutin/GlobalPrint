@@ -122,7 +122,7 @@
     <comment>Ошибка о том, что пароль и подтверждение пароля не совпадают.</comment>
   </data>
   <data name="ConfirmOfferLinkLabel" xml:space="preserve">
-    <value>terms and conditions</value>
+    <value>Terms and Conditions</value>
     <comment>Ссылка на оферту в тексте о согласии с офертой</comment>
   </data>
   <data name="ConfirmOfferLinkString" xml:space="preserve">
@@ -192,5 +192,13 @@
   <data name="RegisterFormTabTitle" xml:space="preserve">
     <value>Registration</value>
     <comment>Лэйбл табки в браузере</comment>
+  </data>
+  <data name="AndWord" xml:space="preserve">
+    <value>and</value>
+    <comment>Слово "и"</comment>
+  </data>
+  <data name="PrivacyPolicyLinkLabel" xml:space="preserve">
+    <value>Privacy Policy</value>
+    <comment>Ссылка на Политику Конфиденциальности в тексте о согласии с офертой</comment>
   </data>
 </root>

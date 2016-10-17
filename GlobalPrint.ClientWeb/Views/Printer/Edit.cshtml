@@ -2,11 +2,12 @@
 @using GlobalPrint.Infrastructure.CommonUtils
 @using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers
 @using GlobalPrint.ClientWeb.Models.Lookup
+@using Resources.ClientWeb.Printer
 
-@{ var isEdit = Model?.Printer?.ID > 0; }
 @model PrinterEditionModel
 
 @{
+    var isEdit = Model?.Printer?.ID > 0;
     ViewBag.Title = isEdit ? EditViewResource.FormTabEditTitle : EditViewResource.FormTabNewTitle;
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 
@@ -18,17 +19,11 @@
     <script src="~/Resources/Scripts/GlobalPrint/Printer/Edit.js"></script>
 }
 
-
-@section Scripts {
-    <script src="~/Resources/Scripts/GlobalPrint/Printer/Edit.js"></script>
-}
-
 <div class="container">
     <h2>@(isEdit ? (EditViewResource.FormHeaderEditText + " \"" + Model?.Printer?.Name + "\"") : EditViewResource.FormTabNewTitle)</h2>
 
     @using (Html.BeginForm("Save", "Printer", FormMethod.Post, new { @class = "form-horizontal", @role = "form", @id = "printerEditForm" }))
     {
-
         if (!ViewData.ModelState.IsValid)
         {
             <div class="alert alert-danger container margin-top-20">
@@ -220,7 +215,7 @@
         <div class="form-group">
             <div class="col-sm-12">
                 <button class="btn btn-default" type="submit">@EditViewResource.SaveButtolLabel</button>
-                <a href="@Request.UrlReferrer" class="btn btn-default"><i class="icon-circle-arrow-left"></i>Отмена</a>
+                <a href="@Request.UrlReferrer" class="btn btn-default"><i class="icon-circle-arrow-left"></i>@EditViewResource.CancelButtonLabel</a>
             </div>
         </div>
     }

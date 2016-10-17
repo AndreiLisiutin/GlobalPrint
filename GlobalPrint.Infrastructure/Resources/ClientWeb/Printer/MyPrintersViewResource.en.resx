@@ -125,6 +125,14 @@
     <value>New</value>
     <comment>Кнопка "Добавить"</comment>
   </data>
+  <data name="BackButtonLabel" xml:space="preserve">
+    <value>Back</value>
+    <comment>Кнопка "Назад"</comment>
+  </data>
+  <data name="ClonePrinterButtonTooltip" xml:space="preserve">
+    <value>Clone printer</value>
+    <comment>Кнопка "Клонировать принтер"</comment>
+  </data>
   <data name="DeleteButtonTooltip" xml:space="preserve">
     <value>Delete printer</value>
     <comment>Тултип кнопки "Удалить"</comment>

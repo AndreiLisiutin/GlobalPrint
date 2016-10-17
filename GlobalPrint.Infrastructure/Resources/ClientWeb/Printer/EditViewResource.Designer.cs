@@ -61,6 +61,15 @@ namespace Resources.ClientWeb.Printer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Отмена.
+        /// </summary>
+        public static string CancelButtonLabel {
+            get {
+                return ResourceManager.GetString("CancelButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to День.
         /// </summary>
         public static string DayColumnHeader {

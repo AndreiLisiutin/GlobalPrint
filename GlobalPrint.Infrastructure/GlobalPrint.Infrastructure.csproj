@@ -38,7 +38,7 @@
       <HintPath>..\packages\iTextSharp.5.5.9\lib\itextsharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-<Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
       <Private>True</Private>
@@ -48,7 +48,6 @@
       <HintPath>..\packages\Microsoft.Office.Interop.Word.15.0.4420.1017\lib\net20\Microsoft.Office.Interop.Word.dll</HintPath>
       <Private>True</Private>
     </Reference>
-
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
       <Private>True</Private>
@@ -297,6 +296,36 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Resources\ClientWeb\UserProfile\MyPaymentsViewResource.Designer.cs">
+      <DependentUpon>MyPaymentsViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\UserProfile\MyPaymentsViewResource.en.Designer.cs">
+      <DependentUpon>MyPaymentsViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\UserProfile\FillBalanceViewResource.Designer.cs">
+      <DependentUpon>FillBalanceViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\UserProfile\FillBalanceViewResource.en.Designer.cs">
+      <DependentUpon>FillBalanceViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\UserProfile\UserProfileViewResource.Designer.cs">
+      <DependentUpon>UserProfileViewResource.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Resources\ClientWeb\UserProfile\UserProfileViewResource.en.Designer.cs">
+      <DependentUpon>UserProfileViewResource.en.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\ClientWeb\Shared\NavigationViewResource.Designer.cs">
       <DependentUpon>NavigationViewResource.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -307,12 +336,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Resources\ClientWeb\UserProfile\FillBalanceViewResource.Designer.cs" />
-    <Compile Include="Resources\ClientWeb\UserProfile\FillBalanceViewResource.en1.Designer.cs" />
-    <Compile Include="Resources\ClientWeb\UserProfile\MyPaymentsViewResource.Designer.cs" />
-    <Compile Include="Resources\ClientWeb\UserProfile\MyPaymentsViewResource.en.Designer.cs" />
-    <Compile Include="Resources\ClientWeb\UserProfile\UserProfileViewResource.Designer.cs" />
-    <Compile Include="Resources\ClientWeb\UserProfile\UserProfileViewResource.en.Designer.cs" />
     <Compile Include="Resources\ClientWeb\UserRecievedPrintOrderList\ConfirmPrintOrderViewResource.Designer.cs" />
     <Compile Include="Resources\ClientWeb\UserRecievedPrintOrderList\ConfirmPrintOrderViewResource.en.Designer.cs" />
     <Compile Include="Resources\Resource.Designer.cs">
@@ -564,6 +587,36 @@
       <LastGenOutput>MyPrintersViewResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources.ClientWeb.Order</CustomToolNamespace>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\MyPaymentsViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MyPaymentsViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.UserProfile</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\MyPaymentsViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MyPaymentsViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.UserProfile</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\FillBalanceViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FillBalanceViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.UserProfile</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\FillBalanceViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FillBalanceViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.UserProfile</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\UserProfileViewResource.en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserProfileViewResource.en.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.UserProfile</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\UserProfileViewResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UserProfileViewResource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Resources.ClientWeb.UserProfile</CustomToolNamespace>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ClientWeb\Shared\NavigationViewResource.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>NavigationViewResource.en.Designer.cs</LastGenOutput>
@@ -574,12 +627,6 @@
       <LastGenOutput>NavigationViewResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Resources.ClientWeb.Shared</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\FillBalanceViewResource.en.resx" />
-    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\FillBalanceViewResource.resx" />
-    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\MyPaymentsViewResource.en.resx" />
-    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\MyPaymentsViewResource.resx" />
-    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\UserProfileViewResource.en.resx" />
-    <EmbeddedResource Include="Resources\ClientWeb\UserProfile\UserProfileViewResource.resx" />
     <EmbeddedResource Include="Resources\ClientWeb\UserRecievedPrintOrderList\ConfirmPrintOrderViewResource.en.resx" />
     <EmbeddedResource Include="Resources\ClientWeb\UserRecievedPrintOrderList\ConfirmPrintOrderViewResource.resx" />
     <EmbeddedResource Include="Resources\Resource.en.resx">

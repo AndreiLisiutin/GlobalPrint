@@ -153,6 +153,10 @@
     <value>Открыть договор оферты</value>
     <comment>Кнопка "Открыть договор оферты"</comment>
   </data>
+  <data name="OrdersRegistryButtonLabel" xml:space="preserve">
+    <value>Реестр заказов</value>
+    <comment>Кнопка "Реестр заказов"</comment>
+  </data>
   <data name="PaymentsHistoryButtonLabel" xml:space="preserve">
     <value>История платежей</value>
     <comment>Кнопка "История платежей"</comment>
@@ -160,5 +164,9 @@
   <data name="SaveButtonLabel" xml:space="preserve">
     <value>Сохранить</value>
     <comment>Кнопка "Сохранить"</comment>
+  </data>
+  <data name="SendMoneyButtonLabel" xml:space="preserve">
+    <value>Перекинуть баланс</value>
+    <comment>Кнопка "Перекинуть баланс"</comment>
   </data>
 </root>
