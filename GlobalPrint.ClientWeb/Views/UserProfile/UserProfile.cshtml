@@ -1,8 +1,7 @@
-﻿@using GlobalPrint.ServerBusinessLogic.Models.Business.Users
-@using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers
+﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Users
 @using Resources.ClientWeb.UserProfile
 
-@model UserExtended
+@model User
 @{
     ViewBag.Title = UserProfileViewResource.FormTabTitle;
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
@@ -31,7 +30,7 @@
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">@UserProfileViewResource.NameFieldLabel</label>
             <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control", @placeholder = UserProfileViewResource.NameFieldLabel, @required = "true", @autofocus = true })
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = UserProfileViewResource.NameFieldLabel, @required = "true", @autofocus = true })
             </div>
         </div>
 
@@ -39,17 +38,18 @@
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">@UserProfileViewResource.EmailFieldLabel</label>
             <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control", @readonly = "true", @type = "email", @placeholder = UserProfileViewResource.EmailFieldLabel, @required = "true" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @readonly = "true", @type = "email", @placeholder = UserProfileViewResource.EmailFieldLabel, @required = "true" })
             </div>
         </div>
 
         // Баланс
+        @Html.HiddenFor(m => m.AmountOfMoney)
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">@UserProfileViewResource.BalanceFieldLabel</label>
             <div class="col-sm-11">
                 <div class="input-group">
-                    @Html.TextBoxFor(m => m.User.AmountOfMoney, new { @class = "form-control", @readonly = "true", @placeholder = UserProfileViewResource.BalanceFieldLabel })
-                    <span class="input-group-btn">                        
+                    @Html.TextBox("AmountOfMoneyFormatted", Model.AmountOfMoney.ToString("0.00"), new { @class = "form-control", @readonly = "true", @placeholder = UserProfileViewResource.BalanceFieldLabel })
+                    <span class="input-group-btn">
                         <!-- Кнопка, вызывающее модальное окно -->
                         <a href="#FillUpBalanceModal" title=@UserProfileViewResource.FillBalanceButtonLabel class="btn btn-default" data-toggle="modal">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -60,25 +60,22 @@
         </div>
 
         // Оферта
-        if (Model.LatestUserOffer.HasUserOffer)
-        {
-            <div class="form-group">
+        <div class="form-group">
                 <label class="col-sm-1 control-label text-left">@UserProfileViewResource.OfferFieldLabel</label>
-                <div class="col-sm-11">
-                    <div class="input-group">
+            <div class="col-sm-11">
+                <div class="input-group">
                         @Html.TextBox("UserOfferTitle", Model.LatestUserOffer.UserOfferTitle, new { @class = "form-control", @readonly = "true", @placeholder = UserProfileViewResource.OfferFieldPlaceholder })
-                        <span class="input-group-btn">
-                            <a href="@Url.Action("Offer", "Offer", new { @offerTypeID = OfferTypeEnum.UserOffer })" target="_blank" title=@UserProfileViewResource.OpenOfferButtonLabel class="btn btn-default">
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                            </a>
-                        </span>
-                    </div>
+                    <span class="input-group-btn">
+                            <a href="@Url.Action("Offer", "Offer")" target="_blank" title=@UserProfileViewResource.OpenOfferButtonLabel class="btn btn-default">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </a>
+                    </span>
                 </div>
             </div>
-        }
+        </div>
 
-        @Html.HiddenFor(m => m.User.UserID)
-        @Html.HiddenFor(m => m.User.PhoneNumber)
+        @Html.HiddenFor(m => m.ID)
+        @Html.HiddenFor(m => m.PhoneNumber)
 
         <div class="form-group">
             <div class="col-xs-10">
@@ -86,8 +83,10 @@
                 <!-- Кнопка, вызывающее модальное окно -->
                 <a href="#FillUpBalanceModal" title=@UserProfileViewResource.FillBalanceButtonLabel class="btn btn-default" data-toggle="modal">
                     @UserProfileViewResource.FillBalanceButtonLabel
-                </a>  
-                @Html.ActionLink(UserProfileViewResource.PaymentsHistoryButtonLabel, "MyPayments", "UserProfile", new { @class = "btn btn-default" })
+                </a>
+                @Html.ActionLink(UserProfileViewResource.PaymentsHistoryButtonLabel, "MyPayments", "UserProfile", new { }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Реестр заказов", "PrintOrderRegister", "Reports", new { }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Перекинуть баланс", "SendMoney", "UserProfile", new { }, new { @class = "btn btn-default" })
             </div>
         </div>
     }

@@ -1,5 +1,6 @@
 ﻿using GlobalPrint.Configuration.DI;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order;
+using GlobalPrint.ServerBusinessLogic.Models.Business;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Orders;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders;
 using Microsoft.AspNet.Identity;
@@ -32,7 +33,8 @@ namespace GlobalPrint.ClientWeb
         public ActionResult AcceptOrder(int printOrderID)
         {
             PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-            printOrderUnit.UpdateStatus(printOrderID, PrintOrderStatusEnum.Accepted, this.GetSmsParams());
+            int userID = this.GetCurrentUserID();
+            printOrderUnit.UpdateStatus(printOrderID, PrintOrderStatusEnum.Accepted, userID);
             return RedirectToAction("UserRecievedPrintOrderList");
         }
 
@@ -41,7 +43,8 @@ namespace GlobalPrint.ClientWeb
         public ActionResult RejectOrder(int printOrderID)
         {
             PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-            printOrderUnit.UpdateStatus(printOrderID, PrintOrderStatusEnum.Rejected, this.GetSmsParams());
+            int userID = this.GetCurrentUserID();
+            printOrderUnit.UpdateStatus(printOrderID, PrintOrderStatusEnum.Rejected, userID);
             return RedirectToAction("UserRecievedPrintOrderList");
         }
 
@@ -50,7 +53,7 @@ namespace GlobalPrint.ClientWeb
         public ActionResult PrintOrder(int printOrderID, string secretCode)
         {
             PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-            PrintOrder order = printOrderUnit.GetPrintOrderByID(printOrderID);
+            PrintOrder order = printOrderUnit.GetByID(printOrderID);
             
             if (order.SecretCode.ToUpper() != (secretCode ?? "").ToUpper())
             {
@@ -58,7 +61,8 @@ namespace GlobalPrint.ClientWeb
                 var vm = ViewModelConfirmPrintOrder(printOrderID);
                 return View("ConfirmPrintOrder", vm);
             }
-            printOrderUnit.UpdateStatus(printOrderID, PrintOrderStatusEnum.Printed, this.GetSmsParams());
+            int userID = this.GetCurrentUserID();
+            printOrderUnit.UpdateStatus(printOrderID, PrintOrderStatusEnum.Printed, userID);
             return RedirectToAction("UserRecievedPrintOrderList");
         }
 
@@ -74,19 +78,6 @@ namespace GlobalPrint.ClientWeb
         {
             var vm = ViewModelConfirmPrintOrder(printOrderID);
             return View(vm);
-        }
-
-        [HttpGet]
-        [Authorize]
-        public ActionResult DownloadOrder(int printOrderID)
-        {
-            PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-
-            PrintOrder order = printOrderUnit.GetPrintOrderByID(printOrderID);
-
-            byte[] fileBytes = System.IO.File.ReadAllBytes(order.Document);
-            string fileName = new FileInfo(order.Document).Name;
-            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
         }
     }
 }

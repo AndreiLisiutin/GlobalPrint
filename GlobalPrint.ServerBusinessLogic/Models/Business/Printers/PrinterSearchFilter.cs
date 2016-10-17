@@ -12,5 +12,6 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Business.Printers
         /// </summary>
         public int? UserID { get; set; }
         public int? PrinterID { get; set; }
+        public bool? IsDisabled { get; set; }
     }
 }

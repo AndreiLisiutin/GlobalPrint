@@ -8,11 +8,19 @@ using System.Threading.Tasks;
 
 namespace GlobalPrint.Infrastructure.CommonUtils
 {
-    public class MimeTypeUtility
+    /// <summary>
+    /// Utility for processing mime types and file extensions.
+    /// </summary>
+    public class MimeTypeUtility : IMimeTypeUtility
     {
         private static ConcurrentDictionary<string, string> MimeTypeToExtension = new ConcurrentDictionary<string, string>();
         private static ConcurrentDictionary<string, string> ExtensionToMimeType = new ConcurrentDictionary<string, string>();
 
+        /// <summary>
+        /// Get file extension from mime type.
+        /// </summary>
+        /// <param name="mimeType">Mime type for file extensions search.</param>
+        /// <returns>Found file extension.</returns>
         public string ConvertMimeTypeToExtension(string mimeType)
         {
             if (string.IsNullOrWhiteSpace(mimeType))
@@ -34,6 +42,11 @@ namespace GlobalPrint.Infrastructure.CommonUtils
             return result;
         }
 
+        /// <summary>
+        /// Get mime type from file extension.
+        /// </summary>
+        /// <param name="extension">File extension for mime types search.</param>
+        /// <returns>Found mime type.</returns>
         public string ConvertExtensionToMimeType(string extension)
         {
 

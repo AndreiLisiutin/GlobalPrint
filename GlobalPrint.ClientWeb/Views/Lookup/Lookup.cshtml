@@ -1,0 +1,137 @@
+﻿@using GlobalPrint.Infrastructure.CommonUtils.Pagination
+@using GlobalPrint.ClientWeb.Models.Lookup
+@model LookupViewModel
+@{
+    string SearchText = ViewBag.SearchText as string;
+    LookupTypeEnum LookupType = (LookupTypeEnum)ViewBag.LookupType;
+}
+
+<div id="lookupWindow">
+    <button type="button" class="close hidden-xs" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    @using (Html.BeginForm("fake", "fake", FormMethod.Get, new { @class = "form-horizontal", role = "form" }))
+    {
+        <div class="form-inline gp-data-filter focus">
+            <div class="input-group">
+                @Html.TextBox("searchText", SearchText, new { @class = "form-control", @id = "searchText" })
+                @Html.Hidden("lookupType", (int)LookupType, new { @class = "form-control", @id = "lookupType" })
+                <span class="input-group-btn">
+                    <input type="button" id="searchTextSubmit" class="btn btn-default" value="Поиск" />
+                </span>
+            </div>
+        </div>
+    }
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <tr>
+                <th class="col-xs-1"></th>
+                @foreach (LookupResultValue column in Model.Columns)
+                {
+                    <th class="col-xs-@column.Length @(column.IsIdentifier ? "hidden" : "")">
+                        @column.Name
+                    </th>
+                }
+            </tr>
+            <tbody>
+                @foreach (List<LookupResultValue> entity in Model.Values.Entities)
+                {
+                    <tr class="lookup-row">
+                        <td class="vcenter">
+                            <input type="checkbox" class="lookup-row-is-selected" value="1" />
+                        </td>
+                        @foreach (LookupResultValue property in entity)
+                        {
+                            if (property?.IsIdentifier ?? false)
+                            {
+                                <td class="hidden lookup-row-id">
+                                    @Html.Hidden("lookup-row-id-input", property.Value, new { @class = "lookup-row-id-input" })
+                                    @property.Value
+                                </td>
+                            }
+                            else if (property?.IsText ?? false)
+                            {
+                                <td class="lookup-row-text">
+                                    @Html.Hidden("lookup-row-text-input", property.Value, new { @class = "lookup-row-text-input" })
+                                    @property.Value
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @property.Value
+                                </td>
+                            }
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (Model.Values.PagesCount > 1)
+    {
+        <div class="pagination" id="lookupPagination">
+            @Html.Paging(Model.Values, page => Url.Action("Fake", "Fake", new { CurrentPage = page, ItemsPerPage = Model.Values.PagesCount, searchText = SearchText }))
+        </div>
+    }
+    <button type="button" class="btn btn-default" data-dismiss="modal" id="lookupSelect">Выбрать</button>
+    <button type="button" class="btn btn-default pull-right" data-dismiss="modal" id="lookupClose">Закрыть</button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        //uncheck checked users on check current
+        $('.lookup-row-is-selected').click(function () {
+            $('.lookup-row-is-selected').not(this).attr('checked', false);
+        });
+        $('#lookupSelect').click(function () {
+            var anySelected = $('.lookup-row-is-selected:checked')
+                .length;
+            if (anySelected) {
+                var id = $('.lookup-row-is-selected:checked')
+                     .closest('.lookup-row')
+                     .find('.lookup-row-id-input')
+                     .val();
+                var text = $('.lookup-row-is-selected:checked')
+                     .closest('.lookup-row')
+                     .find('.lookup-row-text-input')
+                     .val();
+                $('#lookupWindow')
+                    .closest('.lookup-wrapper')
+                    .trigger('setValue', {
+                        id: id,
+                        name: text
+                    });
+            }
+        });
+
+        function updateLookup(CurrentPage, ItemsPerPage) {
+            var searchText = $('#searchText').val();
+            var lookupType = $('#lookupType').val();
+            var data = {
+                CurrentPage: CurrentPage,
+                ItemsPerPage: ItemsPerPage,
+                searchText: searchText,
+                lookupType: lookupType
+            };
+            $.ajax({
+                url: '/Lookup/Lookup',
+                type: "GET",
+                data: data
+            })
+            .done(function (partialViewResult) {
+                $('#lookupWindow')
+                    .closest('.modal-body-content')
+                    .html(partialViewResult);
+            });
+        };
+
+        $("#searchTextSubmit").click(function (e) {
+            e.preventDefault();
+            updateLookup(1, null);
+        });
+        $('#lookupPagination a').on('click', function (e) {
+            e.preventDefault();
+            updateLookup(e.target.attr('data-page'), null);
+        });
+    });
+
+</script>

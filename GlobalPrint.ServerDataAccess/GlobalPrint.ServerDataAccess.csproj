@@ -66,9 +66,6 @@
     <Compile Include="DataAccessLayer\DataContext\DbConnectionContext.cs" />
     <Compile Include="DataAccessLayer\EF\DB.cs" />
     <Compile Include="DataAccessLayer\Repository\BaseRepository.cs" />
-    <Compile Include="DataAccessLayer\Repository\Offers\OfferTypeRepository.cs" />
-    <Compile Include="DataAccessLayer\Repository\Offers\UserOfferRepository.cs" />
-    <Compile Include="DataAccessLayer\Repository\Offers\OfferRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\Orders\PrintOrderRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\Orders\PrintOrderStatusRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\Payment\PaymentActionRepository.cs" />

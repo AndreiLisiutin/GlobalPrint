@@ -1,6 +1,5 @@
 ﻿using GlobalPrint.ClientWeb.App_Start;
 using GlobalPrint.Infrastructure.LogUtility;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -9,8 +8,6 @@ using System;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using GlobalPrint.ClientWeb.Helpers;
-using System.Globalization;
 using GlobalPrint.ClientWeb.Helpers;
 using System.Globalization;
 
@@ -194,9 +191,7 @@ namespace GlobalPrint.ClientWeb
             {
                 return View("Register", model);
             }
-
-            UserOfferUnit userOfferUnit = new UserOfferUnit();
-
+            
             var user = new ApplicationUser(model.Email, model.Email);
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
@@ -334,15 +329,21 @@ namespace GlobalPrint.ClientWeb
         {
             if (ModelState.IsValid)
             {
-                var user = await UserManager.FindByNameAsync(model.Email);
+                var user = await UserManager.FindByEmailAsync(model.Email);
 
-                if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                if (user == null)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return View("ForgotPasswordConfirmation");
+                    ModelState.AddModelError("", "Не найден пользователь с указаным email.");
                 }
-
-                if (user.EmailConfirmed)
+                else if (!user.EmailConfirmed)
+                {
+                    ModelState.AddModelError("", "Не подтвержден email.");
+                }
+                else if (!(await UserManager.IsEmailConfirmedAsync(user.Id)))
+                {
+                    ModelState.AddModelError("", "Не подтвержден email.");
+                }
+                else
                 {
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -352,10 +353,6 @@ namespace GlobalPrint.ClientWeb
 
                     await UserManager.SendEmailAsync(user.Id, "Сброс пароля", "Для сброса пароля, перейдите по <a href=\"" + callbackUrl + "\">ссылке</a>");
                     return RedirectToAction("ForgotPasswordConfirmation", "Account");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Не подтвержден email.");
                 }
             }
 

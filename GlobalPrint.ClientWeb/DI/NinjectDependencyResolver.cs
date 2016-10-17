@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using GlobalPrint.ClientWeb.Models.Lookup;
+using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace GlobalPrint.ClientWeb.DI
 
         private void RegisterClientDependencies(IKernel kernel)
         {
-
+            kernel.Bind<ILookupManagerFactory>().To<LookupManagerFactory>().InSingletonScope();
         }
     }
 }

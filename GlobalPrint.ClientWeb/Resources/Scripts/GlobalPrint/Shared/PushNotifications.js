@@ -7,18 +7,22 @@
         $("#incomingOrdersCountBadge").text(count > 0 ? count : null);
     };
 
-    PushNotifications.notify = function (message) {
-        PushNotifications.displayMessage(message);
+    PushNotifications.notify = function (message, url) {       
+        PushNotifications.displayMessage(message, url);
         PushNotifications.playSound(audioFile);
     };
 
-    PushNotifications.displayMessage = function (message) {
-        $.notify({
+    PushNotifications.displayMessage = function (message, url) {
+        var obj = {
             icon: 'glyphicon glyphicon-info-sign',
-            message: message,
-            url: '/UserRecievedPrintOrderList/UserRecievedPrintOrderList',
+            message: message,            
             target: "_self"
-        }, {
+        }
+        if (url) {
+            obj.url = url;
+        }
+
+        $.notify(obj, {
             type: "info",
             allow_dismiss: true,
             newest_on_top: false,

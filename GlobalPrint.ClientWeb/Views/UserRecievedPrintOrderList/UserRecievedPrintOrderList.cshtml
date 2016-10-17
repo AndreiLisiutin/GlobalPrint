@@ -76,7 +76,7 @@
                         <td class="col-md-3">
                             <div class="form-group">
                                 <div class="col-md-5">
-                                    @using (Html.BeginForm("DownloadOrder", "UserRecievedPrintOrderList", FormMethod.Get, new { @class = "form-horizontal" }))
+                                    @using (Html.BeginForm("DownloadOrder", "Order", FormMethod.Get, new { @class = "form-horizontal" }))
                                     {
                                         @Html.Hidden("printOrderID", printOrder.PrintOrder.ID, new { @class = "btn btn-default" })
                                         <input type="submit" value="Скачать" class="btn btn-default" />
@@ -100,4 +100,7 @@
             }
         </tbody>
     </table>
+    <div class="form-group">
+        <a href="@Request.UrlReferrer" class="btn btn-default"><i class="icon-circle-arrow-left"></i>Назад</a>
+    </div>
 </div>

@@ -1,7 +1,5 @@
 ﻿using GlobalPrint.Infrastructure.CommonUtils;
-using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Offers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
-using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Offers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Orders;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Payment;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Printers;
@@ -29,12 +27,15 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
         }
 
         /// <summary>
-        /// Return list of user's successfull payments.
+        /// Return list of user's successful payments.
         /// </summary>
         /// <param name="userID"></param>
+        /// <param name="dateFrom">Date from for the payments.</param>
+        /// <param name="dateTo">Date to for the payments.</param>
         /// <returns></returns>
-        public List<PaymentActionFullInfo> GetByUserID(int userID)
+        public List<PaymentActionFullInfo> GetByUserID(int userID, DateTime? dateFrom = null, DateTime? dateTo = null)
         {
+            dateTo = dateTo.HasValue ? dateTo.Value.AddDays(1) : dateTo;
             using (IDataContext context = this.Context())
             {
                 IPaymentTransactionRepository transactionRepo = this.Repository<IPaymentTransactionRepository>(context);
@@ -47,8 +48,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                     join transaction in transactionRepo.GetAll() on action.PaymentTransactionID equals transaction.ID
                     join status in actionStatusRepo.GetAll() on action.PaymentActionStatusID equals status.ID
                     join type in actionTypeRepo.GetAll() on action.PaymentActionTypeID equals type.ID
-                    where action.UserID == userID && action.PaymentActionStatusID == (int)PaymentActionStatusEnum.ExecutedSuccessfully
-                    orderby action.FinishedOn descending
+                    where action.UserID == userID
+                        && action.PaymentActionStatusID == (int)PaymentActionStatusEnum.ExecutedSuccessfully
+                        && (!dateFrom.HasValue || action.FinishedOn >= dateFrom)
+                        && (!dateTo.HasValue || action.FinishedOn < dateTo)
+                    orderby action.StartedOn descending, action.FinishedOn descending
                     select new { action = action, transaction = transaction, status = status, type = type }
                  )
                  .ToList()
@@ -176,7 +180,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
         }
 
         #endregion Fill up user's account balance
-        
+
         #region Print order payment
 
         /// <summary>
@@ -235,7 +239,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                         AmountOfMoney = -order.FullPrice
                     };
                     actionRepo.Insert(action);
-                    
+
                     //performs action
                     client.AmountOfMoney -= order.FullPrice;
                     userRepo.Update(client);
@@ -271,10 +275,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
 
                 PrintOrder order = orderRepo.GetByID(printOrderID);
                 Argument.NotNull(order, $"Print order (ID={printOrderID}) not found.");
-                Argument.NotNull(order.PaymentTransactionID, $"Print order (ID={printOrderID}) has no payment transaction 0o.");
+                Argument.Positive(order.PaymentTransactionID, $"Print order (ID={printOrderID}) has no payment transaction 0o.");
 
-                PaymentTransaction transaction = transactionRepo.GetByID(order.PaymentTransactionID.Value);
-                Argument.NotNull(transaction, $"Payment transaction (ID={order.PaymentTransactionID.Value}) not found.");
+                PaymentTransaction transaction = transactionRepo.GetByID(order.PaymentTransactionID);
+                Argument.NotNull(transaction, $"Payment transaction (ID={order.PaymentTransactionID}) not found.");
                 if (transaction.PaymentTransactionStatusID == (int)PaymentTransactionStatusEnum.Committed)
                 {
                     //done
@@ -282,7 +286,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                 }
 
                 User printerOwner = printerRepo.Get(e => e.ID == order.PrinterID)
-                   .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.UserID, (p, u) => u)
+                   .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.ID, (p, u) => u)
                    .First();
 
                 context.BeginTransaction();
@@ -305,8 +309,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                     };
                     actionRepo.Insert(action);
                     context.Save();
-                    
-                    this._CommitTransaction(order.PaymentTransactionID.Value, context);
+
+                    this._CommitTransaction(order.PaymentTransactionID, context);
 
                     //mark order as printed
                     order.PrintedOn = DateTime.Now;
@@ -340,10 +344,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
 
                 PrintOrder order = orderRepo.GetByID(printOrderID);
                 Argument.NotNull(order, $"Print order (ID={printOrderID}) not found.");
-                Argument.NotNull(order.PaymentTransactionID, $"Print order (ID={printOrderID}) has no payment transaction 0o.");
+                Argument.Positive(order.PaymentTransactionID, $"Print order (ID={printOrderID}) has no payment transaction 0o.");
 
-                PaymentTransaction transaction = transactionRepo.GetByID(order.PaymentTransactionID.Value);
-                Argument.NotNull(transaction, $"Payment transaction (ID={order.PaymentTransactionID.Value}) not found.");
+                PaymentTransaction transaction = transactionRepo.GetByID(order.PaymentTransactionID);
+                Argument.NotNull(transaction, $"Payment transaction (ID={order.PaymentTransactionID}) not found.");
                 if (transaction.PaymentTransactionStatusID == (int)PaymentTransactionStatusEnum.RolledBack)
                 {
                     //done
@@ -352,8 +356,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                 context.BeginTransaction();
                 try
                 {
-                    this._RollBackTransaction(order.PaymentTransactionID.Value, context);
-                    
+                    this._RollBackTransaction(order.PaymentTransactionID, context);
+
                     //mark order as not printed
                     order.PrintOrderStatusID = (int)PrintOrderStatusEnum.Rejected;
                     orderRepo.Update(order);
@@ -371,7 +375,87 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
 
         #endregion Print order payment
 
+        /// <summary>
+        /// Send money from one user to another operation. Method creates and executes transaction and its actions.
+        /// </summary>
+        /// <param name="package">Data for operation.</param>
+        /// <returns>Transaction.</returns>
+        public PaymentTransaction InitializeAndCommitSendMoney(SendModeyPackage package)
+        {
+            Argument.NotNull(package, "Модель для пересылки денег пустая.");
+            Argument.Positive(package.SenderUserId, "Пересылающий деньги пользователь пустой.");
+            Argument.Positive(package.ReceiverUserId, "Принимающий деньги пользователь пустой.");
+            Argument.Require(package.SenderUserId != package.ReceiverUserId, "а смысл отсылать деньги самому себе?");
+            Argument.Positive(package.AmountOfMoney, "КОличество посылаемых денег должно быть положительно.");
 
+            using (IDataContext context = this.Context())
+            {
+                IUserRepository userRepo = this.Repository<IUserRepository>(context);
+                IPaymentTransactionRepository transactionRepo = this.Repository<IPaymentTransactionRepository>(context);
+                IPaymentActionRepository actionRepo = this.Repository<IPaymentActionRepository>(context);
+
+                User sender = userRepo.GetByID(package.SenderUserId);
+                Argument.NotNull(sender, "Пересылающий деньги пользователь не найден");
+                Argument.Require(sender.AmountOfMoney > package.AmountOfMoney, "Недостаточно средств для пересылки их другому пользователю.");
+                User receiver = userRepo.GetByID(package.ReceiverUserId);
+                Argument.NotNull(sender, "Принимающий деньги пользователь не найден");
+
+                context.BeginTransaction();
+                try
+                {
+                    string amountOfMoneyString = package.AmountOfMoney.ToString("#.00");
+                    PaymentTransaction transaction = new PaymentTransaction()
+                    {
+                        ID = 0,
+                        Comment = $"Пересылка денег со счета {sender.Email} на счет {receiver.Email} в размере {amountOfMoneyString} у.е.",
+                        FinishedOn = DateTime.Now,
+                        StartedOn = DateTime.Now,
+                        PaymentTransactionStatusID = (int)PaymentTransactionStatusEnum.InProgress
+                    };
+                    transactionRepo.Insert(transaction);
+                    context.Save();
+                    PaymentAction action = new PaymentAction()
+                    {
+                        ID = 0,
+                        Comment = $"Отправка денег на счет {receiver.Email} в размере {amountOfMoneyString} у.е.",
+                        ExternalIdentifier = null,
+                        FinishedOn = null,
+                        PaymentActionStatusID = (int)PaymentActionStatusEnum.InProgress,
+                        PaymentActionTypeID = (int)PaymentActionTypeEnum.SendMoney,
+                        PaymentTransactionID = transaction.ID,
+                        StartedOn = DateTime.Now,
+                        UserID = package.SenderUserId,
+                        AmountOfMoney = -package.AmountOfMoney
+                    };
+                    actionRepo.Insert(action);
+                    PaymentAction action2 = new PaymentAction()
+                    {
+                        ID = 0,
+                        Comment = $"Получение денег со счета {sender.Email} в размере {amountOfMoneyString} у.е.",
+                        ExternalIdentifier = null,
+                        FinishedOn = null,
+                        PaymentActionStatusID = (int)PaymentActionStatusEnum.InProgress,
+                        PaymentActionTypeID = (int)PaymentActionTypeEnum.SendMoney,
+                        PaymentTransactionID = transaction.ID,
+                        StartedOn = DateTime.Now,
+                        UserID = package.ReceiverUserId,
+                        AmountOfMoney = package.AmountOfMoney
+                    };
+                    actionRepo.Insert(action2);
+                    context.Save();
+                    this._CommitTransaction(transaction.ID, context);
+                    context.Save();
+                    context.CommitTransaction();
+                    return transaction;
+                }
+                catch (Exception ex)
+                {
+                    context.RollbackTransaction();
+                    throw;
+                }
+            }
+        }
+        
         /// <summary>
         /// Roll back whole payment transaction. If there are already executed actions, roll back them logically. 
         /// It means that not only payment_action entities will change their statuses, 

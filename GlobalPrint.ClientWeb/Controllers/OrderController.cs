@@ -6,12 +6,14 @@ using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order;
 using GlobalPrint.ServerBusinessLogic.Models.Business;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Orders;
+using GlobalPrint.ServerBusinessLogic.Models.Business.Printers;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -19,54 +21,16 @@ namespace GlobalPrint.ClientWeb
 {
     public class OrderController : BaseController
     {
-
-        private Order_NewViewModel _CreatePrintViewModel(int printerID, NewOrder newOrder)
+        PrintOrderUnit _printOrderUnit;
+        Random _random;
+        public OrderController()
+            : this (IoC.Instance.Resolve<PrintOrderUnit>(), new Random())
         {
-            Argument.Require(printerID > 0, "printerID не может быть меньше 0.");
-            Printer printer = new PrinterUnit().GetPrinterByID(printerID);
-            if (newOrder == null)
-            {
-                //placing a new order
-                var rnd = new Random();
-                newOrder = new NewOrder()
-                {
-                    PrinterID = printerID,
-                    SecretCode = new string(rnd.Next(1, 9).ToString()[0], 2)
-                        + new string(rnd.Next(1, 9).ToString()[0], 2),
-                    CopiesCount = 1,
-                    UserID = this.GetCurrentUserID()
-                };
-            }
-
-            var model = new Order_NewViewModel(newOrder, printer);
-            return model;
         }
-
-        private Order_ConfirmViewModel _CreatePrintConfirmationViewModel(NewOrder order, PrintOrder prepared = null)
+        public OrderController(PrintOrderUnit printerOrderUnit, Random random)
         {
-            if (prepared == null)
-            {
-                prepared = _OrderEditionModel(order).Item1;
-            }
-
-            var model = new Order_ConfirmViewModel()
-            {
-                NewOrder = order,
-                PreparedOrder = prepared
-            };
-            return model;
-        }
-
-        private Tuple<PrintOrder, PrintFile> _OrderEditionModel(NewOrder newOrder)
-        {
-            Argument.NotNull(newOrder, "Не заполнены поля на форме нового заказа");
-            Argument.Require(this._Uploaded.ContainsKey(newOrder.FileToPrint), "Файл заказа не найден.");
-            PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-
-            string app_data = HttpContext.Server.MapPath("~/App_Data");
-            PrintFile file = this._Uploaded[newOrder.FileToPrint];
-            PrintOrder order = printOrderUnit.New(newOrder, app_data, file);
-            return new Tuple<PrintOrder, PrintFile>(order, file);
+            this._printOrderUnit = printerOrderUnit;
+            this._random = random;
         }
 
         /// <summary>
@@ -78,13 +42,14 @@ namespace GlobalPrint.ClientWeb
         [Authorize]
         public ActionResult Details(int printOrderID)
         {
-            PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-            PrintOrderInfo orderInfo = printOrderUnit.GetPrintOrderInfoByID(printOrderID);
+            Argument.Positive(printOrderID, "Ключ заказа пустой.");
+
+            PrintOrderInfo orderInfo = this._printOrderUnit.GetPrintOrderInfoByID(printOrderID);
             return View("Details", orderInfo);
         }
 
         /// <summary>
-        /// Rate the order.
+        /// Rate the order action. Associate star rating and comment with order.
         /// </summary>
         /// <param name="rateModel">Info about order's rating.</param>
         /// <returns></returns>
@@ -93,180 +58,230 @@ namespace GlobalPrint.ClientWeb
         public ActionResult Rate(Order_RateViewModel rateModel)
         {
             Argument.NotNull(rateModel, "Модель оценки заказа пустая.");
-            Argument.Positive(rateModel.PrintOrderID, "Модель оценки заказа пустая.");
+            Argument.Positive(rateModel.PrintOrderID, "Ключ заказа в модели оценки заказа пустой.");
 
-            try
-            {
-                int userID = this.GetCurrentUserID();
-                PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-                printOrderUnit.Rate(rateModel.PrintOrderID, rateModel.Rating, rateModel.Comment, userID);
-                return RedirectToAction("MyOrders", "Order");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-                return RedirectToAction("Details", "Order");
-            }
+            int userID = this.GetCurrentUserID();
+            this._printOrderUnit.Rate(rateModel.PrintOrderID, rateModel.Rating, rateModel.Comment, userID);
+            return RedirectToAction("MyOrders", "Order");
         }
 
+        /// <summary>
+        /// Returns a view with list of current user's orders. 
+        /// </summary>
+        /// <param name="printOrderID">Mask for order filtering. Optional.</param>
+        /// <returns>View with list of current user's orders.</returns>
         [HttpGet]
         [Authorize]
         public ActionResult MyOrders(string printOrderID)
         {
-            PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-
-            int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            var printOrderList = printOrderUnit.GetUserPrintOrderList(userID, printOrderID);
+            int userID = this.GetCurrentUserID();
+            var printOrderList = this._printOrderUnit.GetUserPrintOrderList(userID, printOrderID);
             return View("MyOrders", printOrderList);
         }
 
+        /// <summary>
+        /// Create a new order using old document and printer where such an order was performed.
+        /// </summary>
+        /// <param name="printOrderID">Identifier of an order.</param>
+        /// <returns>New order creation view.</returns>
+        [HttpGet]
+        [Authorize]
+        public ActionResult FromExisting(int printOrderID)
+        {
+            Argument.Positive(printOrderID, "printOrderID не может быть меньше 0.");
+            int userID = this.GetCurrentUserID();
+            string app_data = HttpContext.Server.MapPath("~/App_Data");
+            NewOrder newOrder = this._printOrderUnit.FromExisting(printOrderID, userID);
+            DocumentBusinessInfo document = this._printOrderUnit.GetPrintOrderDocument(printOrderID, userID, app_data);
+            this._uploadedFilesRepo.Add(newOrder.FileToPrint, document);
+            return this._ORDER_NEW(newOrder);
+        }
+
+        /// <summary>
+        /// Place a new order for a certain printer.
+        /// </summary>
+        /// <param name="printerID">Identifier of the printer.</param>
+        /// <returns>View with printer edition possibility.</returns>
         [HttpGet]
         [Authorize]
         public ActionResult New(int printerID)
         {
             Argument.Require(printerID > 0, "printerID не может быть меньше 0.");
-            var model = this._CreatePrintViewModel(printerID, null);
-            return View(model);
+
+            int userId = this.GetCurrentUserID();
+            //creating an empty order
+            NewOrder newOrder = new NewOrder()
+            {
+                PrinterID = printerID,
+                SecretCode = new string(this._random.Next(1, 9).ToString()[0], 2)
+                    + new string(this._random.Next(1, 9).ToString()[0], 2),
+                CopiesCount = 1,
+                UserID = userId
+            };
+
+            return this._ORDER_NEW(newOrder);
         }
 
+        /// <summary>
+        /// Accept new order and check it for validity.
+        /// </summary>
+        /// <param name="newOrder">New order model.</param>
+        /// <returns>Redirect to order confirmation page.</returns>
         [HttpPost]
-        public ActionResult New(Order_NewPostModel model)
+        public ActionResult New(NewOrder newOrder)
         {
-            Argument.NotNull(model, "Модель не может быть пустой.");
-            Argument.NotNull(model.Order, "Заказ не может быть пустым.");
+            Argument.NotNull(newOrder, "Модель нового заказа не может быть пустой.");
+            if (!ModelState.IsValid)
+            {
+                return this._ORDER_NEW(newOrder);
+            }
+            if (!this._uploadedFilesRepo.Contains(newOrder.FileToPrint))
+            {
+                //файл не найден
+                ModelState.AddModelError("", "Файл для печати не найден.");
+                return this._ORDER_NEW(newOrder);
+            }
+            DocumentBusinessInfo document = this._uploadedFilesRepo.Get(newOrder.FileToPrint);
+            Validation validation = this._printOrderUnit.Validate(newOrder, document);
+            if (!validation.IsValid)
+            {
+                validation.Errors.ForEach(e => ModelState.AddModelError("", e));
+                return this._ORDER_NEW(newOrder);
+            }
 
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    var printerModel = this._CreatePrintViewModel(model.Order.PrinterID, model.Order);
-                    return View("New", printerModel);
-                }
-                PrintOrder order = this._OrderEditionModel(model.Order).Item1;
-                Guid guid = Guid.NewGuid();
-                this._PreparedOrders.Add(guid, new Tuple<NewOrder, PrintOrder>(model.Order, order));
-                return RedirectToAction("Confirm", new { preparedOrderID = guid });
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-                var printerModel = this._CreatePrintViewModel(model.Order.PrinterID, model.Order);
-                return View("New", printerModel);
-            }
+            return RedirectToAction("Confirm", newOrder);
         }
 
+        /// <summary>
+        /// Show confirmation page with new order details.
+        /// </summary>
+        /// <param name="newOrder">New order model.</param>
+        /// <returns></returns>
         [HttpGet]
         [Authorize]
-        public ActionResult Confirm(Guid preparedOrderID)
+        public ActionResult Confirm(NewOrder newOrder)
         {
-            Argument.Require(preparedOrderID != Guid.Empty, "Ключ подготовленного для печати заказа не может быть пустым.");
-            Argument.Require(this._PreparedOrders.ContainsKey(preparedOrderID), "Подготовленный для печати заказ не найден. Создайте его заново.");
-
-            Tuple<NewOrder, PrintOrder> preparedOrder = this._PreparedOrders[preparedOrderID];
-            var model = this._CreatePrintConfirmationViewModel(preparedOrder.Item1, preparedOrder.Item2);
-            return View(model);
+            Argument.NotNull(newOrder, "Подготовленный для печати заказ не может быть пустым.");
+            if (!this._uploadedFilesRepo.Contains(newOrder.FileToPrint))
+            {
+                //файл не найден
+                ModelState.AddModelError("", "Файл для печати не найден.");
+                return RedirectToAction("New", newOrder);
+            }
+            return this._ORDER_CONFIRM(newOrder);
         }
 
+        /// <summary>
+        /// Creates exactly a new order. After successful creation redirects to Order.Complete page.
+        /// </summary>
+        /// <param name="newOrder"></param>
+        /// <returns></returns>
         [HttpPost]
         [Authorize]
-        public ActionResult Confirm(NewOrder NewOrder)
+        public ActionResult Create(NewOrder newOrder)
         {
-            Argument.NotNull(NewOrder, "Заказ не может быть пустым.");
-            PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-
-            try
+            Argument.NotNull(newOrder, "Подготовленный для печати заказ не может быть пустым.");
+            if (!this._uploadedFilesRepo.Contains(newOrder.FileToPrint))
             {
-                string app_data = HttpContext.Server.MapPath("~/App_Data");
-                PrintFile file = this._Uploaded[NewOrder.FileToPrint];
-                PrintOrder createdOrder = printOrderUnit.Create(NewOrder, app_data, file);
-
-                // Push notification about new order
-                User printerOperator = new PrinterUnit().GetPrinterOperator(createdOrder.PrinterID);
-                string notificationMessage = string.Format(
-                    "{0}: поступил новый заказ № {1}." + Environment.NewLine +
-                    "Количество страниц: {2}, сумма заказа: {3}р.",
-                    createdOrder.OrderedOn.ToString("HH:mm:ss"),
-                    createdOrder.ID,
-                    createdOrder.PagesCount,
-                    createdOrder.FullPrice
-                );
-                new PushNotificationHub().NewIncomingOrder(notificationMessage, printerOperator.UserID);
-
-                this._Uploaded.Remove(NewOrder.FileToPrint);
-                return RedirectToAction("Complete", new { printOrderID = createdOrder.ID });
+                //файл не найден
+                ModelState.AddModelError("", "Файл для печати не найден.");
+                return RedirectToAction("New", newOrder);
             }
-            catch (Exception ex)
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", ex.Message);
-                var model = this._CreatePrintConfirmationViewModel(NewOrder);
-                return View(model);
+                return this._ORDER_CONFIRM(newOrder);
             }
+
+            DocumentBusinessInfo document = this._uploadedFilesRepo.Get(newOrder.FileToPrint);
+            Validation validation = this._printOrderUnit.Validate(newOrder, document);
+            if (!validation.IsValid)
+            {
+                validation.Errors.ForEach(e => ModelState.AddModelError("", e));
+                return this._ORDER_CONFIRM(newOrder);
+            }
+
+            string app_data = HttpContext.Server.MapPath("~/App_Data");
+            int userID = this.GetCurrentUserID();
+            PrintOrder createdOrder = this._printOrderUnit.Create(newOrder, userID, app_data, document);
+
+            #region Notifications
+
+            #warning remove it from here
+            // Push notification about new order
+            User printerOperator = new PrinterUnit().GetPrinterOperator(createdOrder.PrinterID);
+            string notificationMessage = string.Format(
+                "{0}: поступил новый заказ № {1}." + Environment.NewLine +
+                "Количество страниц: {2}, сумма заказа: {3}р.",
+                createdOrder.OrderedOn.ToString("HH:mm:ss"),
+                createdOrder.ID,
+                createdOrder.PagesCount,
+                createdOrder.FullPrice
+            );
+            IoC.Instance.Resolve<PushNotificationHub>().NewIncomingOrder(notificationMessage, printerOperator.ID);
+
+            #endregion Notifications
+
+            this._uploadedFilesRepo.Remove(newOrder.FileToPrint.Value);
+            return RedirectToAction("Complete", new { printOrderID = createdOrder.ID });
         }
 
+        /// <summary>
+        /// Shows page with congratulations to user for completeness of his new order.
+        /// </summary>
+        /// <param name="printOrderID">New order identifier.</param>
+        /// <returns>Page with congratulations.</returns>
         [HttpGet]
         [Authorize]
         public ActionResult Complete(int printOrderID)
         {
-            PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
-            PrintOrder order = printOrderUnit.GetPrintOrderByID(printOrderID);
+            Argument.Positive(printOrderID, "Ключ заказа пустой.");
+
+            PrintOrder order = this._printOrderUnit.GetByID(printOrderID);
             return View(order);
         }
 
         /// <summary>
-        /// Upload file into session
+        /// Download order from the App_data folder of the application.
         /// </summary>
-        /// <returns></returns>
-        [HttpPost]
+        /// <param name="printOrderID">Identifier of the order.</param>
+        /// <returns>File stram with order file.</returns>
+        [HttpGet]
         [Authorize]
-        public virtual ActionResult UploadFile()
+        public ActionResult DownloadOrder(int printOrderID)
         {
-            HttpPostedFileBase file = Request.Files["gpUserFile"];
-            bool isUploaded = false;
-            string message = "Ошибка загрузки файла.";
-            Guid fileId = new Guid();
-
-            if (file != null && file.ContentLength != 0)
-            {
-                fileId = Guid.NewGuid();
-                PrintFile printFile = PrintFile.FromHttpPostedFileBase(file);
-                this._Uploaded.Add(fileId, printFile);
-                isUploaded = true;
-                message = "Файл успешно загружен.";
-            }
-
-            return Json(new { isUploaded = isUploaded, message = message, fileId = fileId }, "text/html");
+            string app_data = HttpContext.Server.MapPath("~/App_Data");
+            int userID = this.GetCurrentUserID();
+            DocumentBusinessInfo fileInfo = this._printOrderUnit.GetPrintOrderDocument(printOrderID, userID, app_data);
+            return File(fileInfo.SerializedFile, System.Net.Mime.MediaTypeNames.Application.Octet, fileInfo.Name);
         }
 
-        /// <summary> Uplioaded files in memory. Will die if user will decide not to print them.
-        /// </summary>
-        private Dictionary<Guid, PrintFile> _Uploaded
+
+
+        private ViewResult _ORDER_NEW(NewOrder newOrder)
         {
-            get
-            {
-                Dictionary<Guid, PrintFile> _uploaded = this.Session["UploadFiles"]
-                    as Dictionary<Guid, PrintFile>;
-                if (_uploaded == null)
-                {
-                    this.Session["UploadFiles"] = _uploaded = new Dictionary<Guid, PrintFile>();
-                }
-                return _uploaded;
-            }
+            Argument.NotNull(newOrder, "Модель для нового заказа не может быть пустой.");
+            Argument.Positive(newOrder.PrinterID, "Ключ принтера в модели для нового заказа не может быть пустым.");
+
+            Printer printer = new PrinterUnit().GetByID(newOrder.PrinterID);
+            ViewBag.Printer = printer;
+            return View("New", newOrder);
         }
 
-        /// <summary> Prepared orders.
-        /// </summary>
-        private Dictionary<Guid, Tuple<NewOrder, PrintOrder>> _PreparedOrders
+        private ViewResult _ORDER_CONFIRM(NewOrder newOrder)
         {
-            get
-            {
-                Dictionary<Guid, Tuple<NewOrder, PrintOrder>> _prepared = this.Session["PreparedOrders"]
-                    as Dictionary<Guid, Tuple<NewOrder, PrintOrder>>;
-                if (_prepared == null)
-                {
-                    this.Session["PreparedOrders"] = _prepared = new Dictionary<Guid, Tuple<NewOrder, PrintOrder>>();
-                }
-                return _prepared;
-            }
+            Argument.NotNull(newOrder, "Модель для нового заказа не может быть пустой.");
+            Argument.Positive(newOrder.PrinterID, "Ключ принтера в модели для нового заказа не может быть пустым.");
+            Argument.Require(this._uploadedFilesRepo.Contains(newOrder.FileToPrint), "Не найден файл для печати.");
+
+            DocumentBusinessInfo document = this._uploadedFilesRepo.Get(newOrder.FileToPrint);
+            int pagesCount = this._printOrderUnit.CalculatePagesCount(document);
+            PrinterServiceExtended printService = this._printOrderUnit.GetPrintService(newOrder);
+            decimal fullPrice = PrintOrderUnit.CALCULATE_FULL_PRICE(printService.PrinterService.PricePerPage, pagesCount, newOrder.CopiesCount);
+
+            ViewBag.PagesCount = pagesCount;
+            ViewBag.PrinterService = printService;
+            ViewBag.FullPrice = fullPrice;
+            return View("Confirm", newOrder);
         }
     }
 }

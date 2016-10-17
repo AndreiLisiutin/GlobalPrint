@@ -13,5 +13,9 @@ namespace GlobalPrint.Infrastructure.CommonUtils
         {
             return CultureInfo.GetCultureInfo("RU-ru").DateTimeFormat.GetDayName(day);
         }
+        public string ShortDayName(DayOfWeek day)
+        {
+            return CultureInfo.GetCultureInfo("RU-ru").DateTimeFormat.GetShortestDayName(day);
+        }
     }
 }

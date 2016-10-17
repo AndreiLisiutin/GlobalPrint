@@ -52,7 +52,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Offers
                     from _userOffer in userOfferRepo.Get(e => e.UserID == userID)
                     join _offer in offerRepo.Get(e => e.OfferTypeID == (int)offerType) on _userOffer.OfferID equals _offer.ID
                     join _offerType in offerTypeRepo.Get(e => e.ID == (int)offerType) on _offer.OfferTypeID equals _offerType.ID
-                    join _user in userRepo.Get(e => e.UserID == userID) on _userOffer.UserID equals _user.UserID
+                    join _user in userRepo.Get(e => e.ID == userID) on _userOffer.UserID equals _user.ID
                     orderby _userOffer.OfferDate descending
                     select new UserOfferExtended() { Offer = _offer, LatestUserOffer = _userOffer, OfferType = _offerType, User = _user }
                 ).FirstOrDefault();

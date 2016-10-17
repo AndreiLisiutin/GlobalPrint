@@ -16,10 +16,7 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         public User()
         {
         }
-
-        [Key]
-        [Column("user_id")]
-        public int UserID { get; set; }
+        
         [Column("name")]
         public string UserName { get; set; }
         [Column("email")]
@@ -29,7 +26,6 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         public decimal AmountOfMoney { get; set; }
         [Column("bic")]
         public string Bic { get; set; }
-
         [Column("phone")]
         public string PhoneNumber { get; set; }
         [Column("password_hash")]
@@ -40,14 +36,13 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         public bool PhoneNumberConfirmed { get; set; }
         [Column("email_confirmed")]
         public bool EmailConfirmed { get; set; }
+        [Column("last_activity_date")]
+        public DateTime LastActivityDate { get; set; }
 
         #region IDomainModel
-        [NotMapped]
-        public int ID
-        {
-            get { return this.UserID; }
-            set { this.UserID = value; }
-        }
+        [Key]
+        [Column("user_id")]
+        public int ID { get; set; }
         #endregion
     }
 }

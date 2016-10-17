@@ -6,14 +6,31 @@ using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
 using System.Web.Mvc;
 using System;
-using GlobalPrint.ServerBusinessLogic.Models.Business.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Payments;
 using System.Collections.Generic;
+using GlobalPrint.Infrastructure.CommonUtils;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
+using GlobalPrint.ClientWeb.Helpers;
+using GlobalPrint.Infrastructure.CommonUtils.Pagination;
+using System.Linq;
+using GlobalPrint.ClientWeb.Models.Lookup;
 
 namespace GlobalPrint.ClientWeb
 {
     public class UserProfileController : BaseController
     {
+        private UserUnit _userUnit;
+        private PaymentActionUnit _paymentActionUnit;
+        public UserProfileController()
+            : this(IoC.Instance.Resolve<UserUnit>(), new PaymentActionUnit())
+        {
+        }
+        public UserProfileController(UserUnit userUnit, PaymentActionUnit paymentActionUnit)
+        {
+            this._userUnit = userUnit;
+            this._paymentActionUnit = paymentActionUnit;
+        }
+
         /// <summary>
         /// Get user profile view.
         /// </summary>
@@ -24,8 +41,7 @@ namespace GlobalPrint.ClientWeb
         public ActionResult UserProfile()
         {
             UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
-
-            var user = userUnit.GetExtendedUserByID(this.GetCurrentUserID());
+            var user = userUnit.GetByID(this.GetCurrentUserID());
             return View(user);
         }
 
@@ -37,7 +53,7 @@ namespace GlobalPrint.ClientWeb
         [HttpPost]
         [Authorize]
         [MultipleButton(Name = "action", Argument = "Save")]
-        public ActionResult Save(UserExtended model)
+        public ActionResult Save(User model)
         {
             if (!ModelState.IsValid)
             {
@@ -47,7 +63,7 @@ namespace GlobalPrint.ClientWeb
 
             try
             {
-                userUnit.UpdateUserProfile(model?.User);
+                userUnit.UpdateUserProfile(model);
                 return RedirectToAction("UserProfile");
             }
             catch (Exception ex)
@@ -73,7 +89,7 @@ namespace GlobalPrint.ClientWeb
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Некорректно введена ссума пополнения", ex);
+                    throw new Exception("Некорректно введена сумма пополнения", ex);
                 }
                 //create payment action in DB for filling up balance and redirect to robokassa
                 PaymentAction action = new PaymentActionUnit().InitializeFillUpBalance(userID, decimalUpSumm, null);
@@ -86,7 +102,27 @@ namespace GlobalPrint.ClientWeb
                 return View("UserProfile");
             }
         }
-        
+
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult SendMoney()
+        {
+            SendModeyPackage moneyPackage = new SendModeyPackage();
+            moneyPackage.SenderUserId = this.GetCurrentUserID();
+            return this._USER_PROFILE_SEND_MONEY(moneyPackage);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult ExecuteSendMoney(SendModeyPackage package)
+        {
+            Argument.NotNull(package, "Модель для пересылки денег от одного пользователя другому пустая.");
+            Argument.Require(package.SenderUserId == this.GetCurrentUserID(), "Нельзя посылать деньги от лица других пользователей.");
+            PaymentTransaction transaction = this._paymentActionUnit.InitializeAndCommitSendMoney(package);
+            return RedirectToAction("UserProfile");
+        }
+
         /// <summary>
         /// Get list of user's payments.
         /// </summary>
@@ -95,18 +131,19 @@ namespace GlobalPrint.ClientWeb
         [Authorize]
         public ActionResult MyPayments()
         {
-            try
-            {
-                PaymentActionUnit paymentUnit = new PaymentActionUnit();
-                int userID = this.GetCurrentUserID();
-                List<PaymentActionFullInfo> actions = paymentUnit.GetByUserID(userID);
-                return View(actions);
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-                return View("UserProfile");
-            }
+            PaymentActionUnit paymentUnit = new PaymentActionUnit();
+            int userID = this.GetCurrentUserID();
+            List<PaymentActionFullInfo> actions = paymentUnit.GetByUserID(userID);
+            return View(actions);
+        }
+
+
+        private ViewResult _USER_PROFILE_SEND_MONEY(SendModeyPackage package)
+        {
+            int userID = this.GetCurrentUserID();
+            User user = this._userUnit.GetByID(userID);
+            ViewBag.SenderUser = user;
+            return this.View("SendMoney", package);
         }
     }
 }

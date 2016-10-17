@@ -1,5 +1,4 @@
-﻿using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
-using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders;
+﻿using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
@@ -45,9 +44,9 @@ namespace GlobalPrint.ServerDataAccess.EF
         public DbSet<UserActionType> UserActionTypes { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         // Models/Domain/Offers
-        public DbSet<Offer> Offers { get; set; }
-        public DbSet<UserOffer> UserOffers { get; set; }
-        public DbSet<OfferType> OfferTypes { get; set; }
+        //public DbSet<Offer> Offers { get; set; }
+        //public DbSet<UserOffer> UserOffers { get; set; }
+        //public DbSet<OfferType> OfferTypes { get; set; }
         // Models/Domain/Payment
         public DbSet<PaymentAction> PaymentActions { get; set; }
         public DbSet<PaymentTransaction> PaymentTransactions { get; set; }

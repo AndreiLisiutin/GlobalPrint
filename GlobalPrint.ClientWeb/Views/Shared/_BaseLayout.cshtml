@@ -12,11 +12,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="~/Resources/Libraries/nprogress/nprogress.css" />
     <link rel="stylesheet" href="~/Resources/Libraries/clockpicker/dist/bootstrap-clockpicker.min.css" />
     <link rel="stylesheet" href="~/Resources/Stylesheets/base.css">
     <link rel="stylesheet" href="~/Resources/Libraries/jQuery-File-Upload-9.12.5/css/jquery.fileupload.css">
-    <link href="~/Resources/Libraries/bootstrap-rating/bootstrap-rating.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Resources/Libraries/bootstrap-rating/bootstrap-rating.css" />
+    <link rel="stylesheet" href="~/Resources/Libraries/switchery/switchery.css" />
     @if (IsSectionDefined("Stylesheets"))
     {
         @RenderSection("Stylesheets")
@@ -37,7 +38,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-
+    
     <script src="~/Resources/Libraries/jQuery/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Resources/Libraries/underscore.js/underscore.js"></script>
     <script src="~/Resources/Libraries/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
@@ -45,6 +46,9 @@
     <script src="~/Resources/Libraries/signalR/jquery.signalR-2.2.1.min.js"></script>
     <script src="~/Resources/Libraries/bootstrap.file-input/fileinput.js"></script>
     <script src="~/Resources/Libraries/bootstrap-rating/bootstrap-rating.js"></script>
+    <script src="~/Resources/Libraries/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/Resources/Libraries/nprogress/nprogress.js"></script>
+    <script src="~/Resources/Libraries/switchery/switchery.js"></script>
     <!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
     <script src="~/signalr/hubs"></script>
     <script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.fileupload.js"></script>
@@ -54,6 +58,7 @@
 
     <script src="~/Resources/Scripts/GlobalPrint.js"></script>
     <script src="~/Resources/Scripts/GlobalPrint/Utils/CommonUtils.js"></script>
+    <script src="~/Resources/Scripts/GlobalPrint/Utils/Services.js"></script>
     <script src="~/Resources/Scripts/GlobalPrint/Shared/PushNotifications.js"></script>
     <script src="~/Resources/Scripts/GlobalPrint/Shared/FileUpload.js"></script>
     <script src="~/Resources/Scripts/GlobalPrint/Shared/BaseLayout.js"></script>

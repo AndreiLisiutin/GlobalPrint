@@ -1,17 +1,15 @@
 ﻿using GlobalPrint.ClientWeb;
+using Microsoft.AspNet.Identity;
 using Moq;
+using System;
+using System.Configuration;
 using System.Security.Principal;
 using System.Web.Mvc;
 
 namespace GlobalPrint.Test.ClientWebControllers
 {
-    public class BaseControllerTest
+    public class BaseControllerTest : BaseTest
     {
-        /// <summary>
-        /// User name for identity config for some fun.
-        /// </summary>
-        protected string UserName = "Bob Tester";
-
         /// <summary>
         /// After controller being created, we need to fake it user identity properties.
         /// </summary>
@@ -21,7 +19,8 @@ namespace GlobalPrint.Test.ClientWebControllers
             var controllerContext = new Mock<ControllerContext>();
             var principal = new Mock<IPrincipal>();
             principal.Setup(p => p.IsInRole("Administrator")).Returns(true);
-            principal.SetupGet(x => x.Identity.Name).Returns(UserName);
+            principal.SetupGet(x => x.Identity.Name).Returns(CurrentUserName);
+            principal.Setup(p => p.Identity.GetUserId<int>()).Returns(CurrentUserID);
             controllerContext.SetupGet(x => x.HttpContext.User).Returns(principal.Object);
             controller.ControllerContext = controllerContext.Object;
         }

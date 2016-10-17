@@ -16,6 +16,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// <param name="confirmationRequest">Data about payment operation from Robokassa.</param>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
         [AuthorizeByUrl(new string[] { "auth.robokassa.ru" })]
 
         public ActionResult Result(RobokassaConfirmationRequest confirmationRequest)
@@ -49,6 +50,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// <param name="confirmationRequest">Data about payment operation from Robokassa.</param>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
         [AuthorizeByUrl(new string[] { "auth.robokassa.ru" })]
         public ActionResult Success(RobokassaConfirmationRequest confirmationRequest)
         {
@@ -80,6 +82,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// <param name="confirmationRequest">Data about payment operation from Robokassa.</param>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
         [AuthorizeByUrl(new string[] { "auth.robokassa.ru" })]
         public ActionResult Fail(RobokassaConfirmationRequest confirmationRequest)
         {

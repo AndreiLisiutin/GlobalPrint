@@ -1,14 +1,21 @@
-﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Offers;
-@using GlobalPrint.ClientWeb.Models.PrinterController
-@using Resources.ClientWeb.Printer
-@using System.Globalization
+﻿@using GlobalPrint.ServerBusinessLogic.Models.Business.Printers
+@using GlobalPrint.Infrastructure.CommonUtils
+@using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers
+@using GlobalPrint.ClientWeb.Models.Lookup
 
 @{ var isEdit = Model?.Printer?.ID > 0; }
+@model PrinterEditionModel
 
-@model Printer_EditViewMoel
 @{
     ViewBag.Title = isEdit ? EditViewResource.FormTabEditTitle : EditViewResource.FormTabNewTitle;
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+
+    List<PrintServiceExtended> AllServices = (List<PrintServiceExtended>)ViewBag.AllServices;
+    WeekUtility WeekUtility = (WeekUtility)ViewBag.WeekUtility;
+}
+
+@section Scripts {
+    <script src="~/Resources/Scripts/GlobalPrint/Printer/Edit.js"></script>
 }
 
 
@@ -19,7 +26,7 @@
 <div class="container">
     <h2>@(isEdit ? (EditViewResource.FormHeaderEditText + " \"" + Model?.Printer?.Name + "\"") : EditViewResource.FormTabNewTitle)</h2>
 
-    @using (Html.BeginForm("Save", "Printer", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("Save", "Printer", FormMethod.Post, new { @class = "form-horizontal", @role = "form", @id = "printerEditForm" }))
     {
 
         if (!ViewData.ModelState.IsValid)
@@ -32,13 +39,12 @@
 
         @Html.HiddenFor(x => x.Printer.ID)
         @Html.HiddenFor(x => x.Printer.OwnerUserID)
-        @Html.HiddenFor(x => x.Printer.OperatorUserID)
 
         <div class="form-group">
             <div class="col-sm-2">
                 <label class="control-label text-left">@EditViewResource.PrinterNameFieldLabel</label>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-10 input-wrapper">
                 @Html.TextBoxFor(m => m.Printer.Name, new { @class = "form-control", @type = "text", @placeholder = EditViewResource.PrinterNameFieldLabel, @required = "true", @autofocus = true })
             </div>
         </div>
@@ -46,7 +52,7 @@
             <div class="col-sm-2">
                 <label class="control-label text-left">@EditViewResource.LocationFieldLabel</label>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-10 input-wrapper">
                 <div class="input-group">
                     @Html.TextBoxFor(m => m.Printer.Location, new { @class = "form-control", @type = "text", @placeholder = EditViewResource.LocationFieldLabel, @required = "true", @id = "location" })
                     <span class="input-group-btn">
@@ -61,7 +67,7 @@
             <div class="col-sm-2">
                 <label class="control-label text-left">@EditViewResource.LatitudeFieldLabel</label>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-10 input-wrapper">
                 @Html.TextBoxFor(m => m.Printer.Latitude, new { @class = "form-control", @type = "text", @placeholder = EditViewResource.LatitudeFieldLabel, @required = "true", @id = "latitude" })
             </div>
         </div>
@@ -69,7 +75,7 @@
             <div class="col-sm-2">
                 <label class="control-label text-left">@EditViewResource.LongtitudeFieldLabel</label>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-10 input-wrapper">
                 @Html.TextBoxFor(m => m.Printer.Longtitude, new { @class = "form-control", @type = "text", @placeholder = EditViewResource.LongtitudeFieldLabel, @required = "true", @id = "longtitude" })
             </div>
         </div>
@@ -77,7 +83,7 @@
             <div class="col-sm-2">
                 <label class="control-label text-left">@EditViewResource.PhoneFieldLabel</label>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-10 input-wrapper">
                 @Html.TextBoxFor(m => m.Printer.Phone, new { @class = "form-control", @type = "phone", @placeholder = EditViewResource.PhoneFieldLabel })
             </div>
         </div>
@@ -85,51 +91,72 @@
             <div class="col-sm-2">
                 <label class="control-label text-left">@EditViewResource.EmailFieldLabel</label>
             </div>
-            <div class="col-sm-10">
+            <div class="col-sm-10 input-wrapper">
                 @Html.TextBoxFor(m => m.Printer.Email, new { @class = "form-control", @type = "email", @placeholder = EditViewResource.EmailFieldLabel })
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-2">
-                <label for="isDisabled" class="control-label text-left">@EditViewResource.DisabledFieldLabel</label>
+                <label class="control-label text-left">@EditViewResource.DisabledFieldLabel</label>
             </div>
-            <div class="col-sm-10">
-                @Html.CheckBoxFor(m => m.Printer.IsDisabled, new { @class = "", @name = "isDisabled", @id = "isDisabled" })
+            <div class="col-sm-10 input-wrapper">
+                @Html.Lookup(LookupTypeEnum.User, "Printer.OperatorUserID", Model.Printer.OperatorUserID)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+            </div>
+            <div class="col-sm-10 input-wrapper">
+                @Html.CheckBoxFor(m => m.Printer.IsDisabled, new { @class = "js-switch-small", @name = "isDisabled", @id = "isDisabled" })
             </div>
         </div>
 
         //--------------------------------------------List of time---------------------------------------------
-
+        
+        <div class="input-wrapper">
         <h2>@EditViewResource.ScheduleTableHeader</h2>
+            @Html.Hidden("PrinterScheduleArray")
+        </div>
         <table class="table table-hover" id="printerSchedules">
             <thead>
                 <tr>
-                    <th class="col-xs-6 col-md-6">@EditViewResource.DayColumnHeader</th>
-                    <th class="col-xs-6 col-md-1">@EditViewResource.OpenColumnHeader</th>
+                    <th class="hidden-xs col-sm-6">@EditViewResource.DayColumnHeader</th>
+                    <th class="visible-xs"></th>
+                    <th class="hidden-xs col-md-1">@EditViewResource.OpenColumnHeader</th>
+                    <th class="visible-xs"></th>
                     <th class="col-xs-3 col-md-3">@EditViewResource.OpenFromColumnHeader</th>
                     <th class="col-xs-3 col-md-3">@EditViewResource.OpenToColumnHeader</th>
                 </tr>
             </thead>
             <tbody>
-                @for (int i = 0; i < Model.Schedule.Count; i++)
+                @{
+                    int index = -1;
+                    PrinterSchedule schedule = null;
+                }
+                @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
                 {
-                    @Html.HiddenFor(e => e.Schedule[i].DayOfWeek)
-                    @Html.HiddenFor(e => e.Schedule[i].PrinterScheduleID)
-                    <tr class="printer-schedule">
-                        <td class="col-xs-6 col-md-6" scope="row">@Html.DisplayTextFor(e => e.Schedule[i].DayOfWeekName)</td>
-                        @Html.HiddenFor(e => e.Schedule[i].DayOfWeekName)
-                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Schedule[i].isOpened, new { @class = "is-printer-schedule-open" })</td>
-                        <td class="col-xs-3 col-md-3">
+                    {
+                        index++;
+                        schedule = Model.PrinterSchedule.FirstOrDefault(e => e.DayOfWeek == (int)day);
+                    }
+                    @Html.Hidden($"PrinterSchedule[{index}].ID", schedule?.ID ?? 0)
+                    @Html.Hidden($"PrinterSchedule[{index}].DayOfWeek", (int)day)
+                    @Html.Hidden($"PrinterSchedule[{index}].PrinterID", Model.Printer.ID)
+                    <tr class="printer-schedule-row">
+                        <td class="visible-xs" scope="row">@WeekUtility.ShortDayName(day)</td>
+                        <td class="hidden-xs" scope="row">@WeekUtility.DayName(day)</td>
+                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBox($"PrinterSchedule[{index}].IsOpened", schedule != null, new { @class = "is-printer-schedule-open js-switch-small" })</td>
+                        <td class="col-xs-3 col-md-3 input-wrapper">
                             <div class="input-group clockpicker" data-autoclose="true">
-                                @Html.TextBoxFor(e => e.Schedule[i].OpenTime, new { @class = "form-control printer-schedule-time" })
+                                @Html.TextBox($"PrinterSchedule[{index}].OpenTime", schedule?.OpenTime, new { @class = "form-control printer-schedule-time printer-schedule-time-open" })
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-time"></span>
                                 </span>
                             </div>
                         </td>
-                        <td class="col-xs-3 col-md-3">
+                        <td class="col-xs-3 col-md-3 input-wrapper">
                             <div class="input-group clockpicker" data-autoclose="true">
-                                @Html.TextBoxFor(e => e.Schedule[i].CloseTime, new { @class = "form-control printer-schedule-time" })
+                                @Html.TextBox($"PrinterSchedule[{index}].CloseTime", schedule?.CloseTime, new { @class = "form-control printer-schedule-time printer-schedule-time-close" })
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-time"></span>
                                 </span>
@@ -141,35 +168,47 @@
         </table>
 
         //--------------------------------------------List of services---------------------------------------------
-
+        <div class="input-wrapper">
         <h2>@EditViewResource.PricingTableHeader</h2>
+            @Html.Hidden("PrinterServicesArray")
+        </div>
         <table class="table table-hover" id="printerServices">
             <thead>
                 <tr>
                     <th class="col-xs-1 col-md-1">@EditViewResource.IsSupportedColumnHeader</th>
-                    <th class="col-xs-3 col-md-3">@EditViewResource.ServiceColumnHeader</th>
-                    <th class="col-xs-3 col-md-3">@EditViewResource.SizeColumnHeader</th>
-                    <th class="col-xs-1 col-md-1">@EditViewResource.IsColoredColumnHeader</th>
-                    <th class="col-xs-1 col-md-1">@EditViewResource.IsTwoSidedColumnHeader</th>
-                    <th class="col-xs-3 col-md-3">@EditViewResource.PriceColumnHeader</th>
+                    <th class="visible-xs">@EditViewResource.ServiceColumnHeader</th>
+                    <th class="hidden-xs col-md-3">@EditViewResource.ServiceColumnHeader</th>
+                    <th class="hidden-xs col-md-3">@EditViewResource.SizeColumnHeader</th>
+                    <th class="hidden-xs col-md-1">@EditViewResource.IsColoredColumnHeader</th>
+                    <th class="hidden-xs col-md-1">@EditViewResource.IsTwoSidedColumnHeader</th>
+                    <th class="col-xs-4 col-md-4">@EditViewResource.PriceColumnHeader</th>                    
                 </tr>
             </thead>
             <tbody>
-                @for (int i = 0; i < Model.Services.Count; i++)
+                @{
+                    index = -1;
+                    PrinterService printService = null;
+                }
+                @foreach (PrintServiceExtended service in AllServices)
                 {
-                    @Html.HiddenFor(e => e.Services[i].PrintServiceID)
-                    @Html.HiddenFor(e => e.Services[i].PrinterServiceID)
-                    <tr class="printer-service">
-                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Services[i].IsSupported, new { @class = "is-printer-service-supported" })</td>
-                        <td class="col-xs-3 col-md-3" scope="row">@Html.DisplayTextFor(e => e.Services[i].PrintType)</td>
-                        @Html.HiddenFor(e => e.Services[i].PrintType)
-                        <td class="col-xs-3 col-md-3" scope="row">@Html.DisplayTextFor(e => e.Services[i].PrintSize)</td>
-                        @Html.HiddenFor(e => e.Services[i].PrintSize)
-                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Services[i].IsColored, new { @class = "", disabled = "true" })</td>
-                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBoxFor(e => e.Services[i].IsTwoSided, new { @class = "", disabled = "true" })</td>
-                        <td class="col-xs-3 col-md-3" scope="row">
-                            <div class="input-group">
-                                @Html.TextBoxFor(e => e.Services[i].Price, new { @class = "form-control text-right printer-service-price", @type = "number" })
+                    {
+                        index++;
+                        printService = Model.PrinterServices.FirstOrDefault(e => e.PrintServiceID == service.PrintService.ID);
+                    }
+                    @Html.Hidden($"PrinterServices[{index}].ID", printService?.ID ?? 0)
+                    @Html.Hidden($"PrinterServices[{index}].PrintServiceID", service.PrintService.ID)
+                    @Html.Hidden($"PrinterServices[{index}].PrinterID", Model.Printer.ID)
+
+                    <tr class="printer-service-row">
+                        <td scope="row">@Html.CheckBox($"PrinterServices[{index}].IsSupported", printService != null, new { @class = "is-printer-service-supported js-switch-small" })</td>
+                        <td class="visible-xs" scope="row">@service.ToString()</td>
+                        <td class="hidden-xs col-md-3" scope="row">@service.PrintType.Name</td>
+                        <td class="hidden-xs col-md-3" scope="row">@service.PrintSize.Name</td>
+                        <td class="hidden-xs col-md-1" scope="row">@Html.CheckBox($"PrinterServices[{index}].IsColored", service.PrintService.IsColored, new { @class = "js-switch-small", disabled = "true" })</td>
+                        <td class="hidden-xs col-md-1" scope="row">@Html.CheckBox($"PrinterServices[{index}].IsTwoSided", service.PrintService.IsTwoSided, new { @class = "js-switch-small", disabled = "true" })</td>
+                        <td class="col-xs-3 col-md-3 input-wrapper" scope="row">
+                            <div class="input-group currency-input-group">
+                                @Html.TextBox($"PrinterServices[{index}].PricePerPage", printService?.PricePerPageString, new { @class = "form-control text-right printer-service-price currency-input" })
                                 <div class="input-group-addon">руб.</div>
                             </div>
                         </td>
@@ -178,24 +217,10 @@
             </tbody>
         </table>
 
-        if (Model.NeedPrinterOwnerOffer)
-        {
-            <div class="form-group">
-                <div class="col-sm-12 checkbox">
-                    <label>
-                        @Html.CheckBoxFor(m => m.IsAgreeWithOffer, new { @required = "true" }) <span>Настоящим подтверждаю, что я ознакомлен и согласен с условиями @Html.ActionLink("оферты владельца принтера", "Offer", "Offer", new { @offerTypeID = OfferTypeEnum.PrinterOwnerOffer }, new { target = "_blank" }).</span>
-                    </label>
-                </div>
-            </div>
-        }
-        else
-        {
-            @Html.HiddenFor(m => m.IsAgreeWithOffer, new { @required = "true", @Value = true })
-        }
-
         <div class="form-group">
             <div class="col-sm-12">
                 <button class="btn btn-default" type="submit">@EditViewResource.SaveButtolLabel</button>
+                <a href="@Request.UrlReferrer" class="btn btn-default"><i class="icon-circle-arrow-left"></i>Отмена</a>
             </div>
         </div>
     }

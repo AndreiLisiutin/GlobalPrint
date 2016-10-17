@@ -1,5 +1,6 @@
 ﻿using GlobalPrint.ClientWeb.App_Start;
 using GlobalPrint.ClientWeb.Binders;
+using GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker;
 using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.LogUtility;
 using Microsoft.AspNet.SignalR;
@@ -28,8 +29,13 @@ namespace GlobalPrint.ClientWeb
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             ModelBinders.Binders.Add(typeof(float?), new FloatModelBinder());
             ModelBinders.Binders.Add(typeof(float), new FloatModelBinder());
+            ModelBinders.Binders.Add(typeof(decimal), new FloatModelBinder());
+            ModelBinders.Binders.Add(typeof(decimal?), new FloatModelBinder());
 
             ControllerBuilder.Current.SetControllerFactory(new DefaultControllerFactory(new LocalizedControllerActivator()));
+
+            // run web service to check inactive users with - printer operators and send notifications to them
+            new ActivityCheckerJobScheduler().Start();
 
             _logUtility.Info("Application Start");
         }

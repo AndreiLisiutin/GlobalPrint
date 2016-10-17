@@ -25,5 +25,6 @@
         // the parent is now constructed with empty namespaces and can be used.
         // we return the outermost namespace
         return parent;
-    }
+    };
+
 })(window.GlobalPrint);

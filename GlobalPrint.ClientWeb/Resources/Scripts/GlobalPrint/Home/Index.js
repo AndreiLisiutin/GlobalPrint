@@ -7,7 +7,7 @@
 
     //select printer's icon by its state
     var _getPrinterIcon = function (printerInfo) {
-        if (printerInfo.IsAvailableNow) {
+        if (printerInfo.IsAvailableNow && printerInfo.IsOperatorAlive) {
             return PRINTER_ONLINE_ICON_URL;
         }
         if (printerInfo.Printer.IsDisabled) {
@@ -125,8 +125,9 @@
         } else {
             $('#homeInfoControlMyPrinters').removeClass('active');
         }
-        loadPrinters();
+        loadPrinters(_onlyMyPrinters);
     };
+
     HomeIndex.loadClosestPrinter = function () {
         GlobalPrint.Utils.CommonUtils.geolocate(
             function (position) {
@@ -154,7 +155,8 @@
         );
     };
 
-    var loadPrinters = function () {
+    var loadPrinters = function (fitBounds) {
+        fitBounds = fitBounds || false;
         //get google map geographical boundaries
         var lat0 = _map.getBounds().getNorthEast().lat();
         var lat1 = _map.getBounds().getSouthWest().lat();
@@ -182,9 +184,15 @@
             }
 
             deleteAllMarkers();
-            $.each(json, function (index, e) {
-                _addMarker(e);
+            var bounds = new google.maps.LatLngBounds();
+            $.each(json, function (index, printerInfo) {
+                _addMarker(printerInfo);
+                bounds.extend(new google.maps.LatLng(printerInfo.Printer.Latitude, printerInfo.Printer.Longtitude));
             });
+            if (fitBounds) {
+                _map.fitBounds(bounds);
+            }
+
         }).fail(function () {
             console.log('Error: ajax call failed.');
         });
@@ -215,7 +223,12 @@
         google.maps.event.addListener(marker, 'click', function () {
             $("#printerInfoPrinterID").val(printerInfo.Printer.ID);
             $("#printerInfoIsAvailable").prop('checked', printerInfo.IsAvailableNow);
-            if (!printerInfo.IsAvailableNow) {
+            if (!printerInfo.IsOperatorAlive) {
+                $("#printerInfoIsAvailable").addClass('operator-sleeping');
+            } else {
+                $("#printerInfoIsAvailable").removeClass('operator-sleeping');
+            }
+            if (!printerInfo.IsAvailableNow || !printerInfo.IsOperatorAlive) {
                 $("#printerInfoPrint").addClass('hidden');
             } else {
                 $("#printerInfoPrint").removeClass('hidden');
@@ -248,13 +261,7 @@
 
             var averallServices = '';
             $.each(marker.printerInfo.PrinterServices, function (index, item) {
-                var service = ''
-                service += item.PrintService.PrintType.Name + ' ' +
-                    item.PrintService.PrintSize.Name + ' ' +
-                    (item.PrintService.IsColored ? 'Цветная' : 'Ч/Б') +
-                    (item.PrintService.IsTwoSided ? 'Двусторонняя' : '');
-
-                service += ':.....' + item.PrinterService.PricePerPage + ' руб.';
+                var service = item.PrintService.FullName + ':.....' + item.PrinterService.PricePerPage + ' руб.';
                 averallServices += (averallServices ? '\n' : '') + service;
             });
             $("#printerInfoPrices").val(averallServices);

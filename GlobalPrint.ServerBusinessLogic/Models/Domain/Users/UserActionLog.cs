@@ -16,10 +16,7 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         public UserActionLog()
         {
         }
-
-        [Key]
-        [Column("user_action_log_id")]
-        public int UserActionLogID { get; set; }
+        
         [Column("user_action_type_id")]
         public int UserActionTypeID { get; set; }
         [Column("date")]
@@ -30,12 +27,9 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         public int UserID { get; set; }
 
         #region IDomainModel
-        [NotMapped]
-        public int ID
-        {
-            get { return this.UserActionLogID; }
-            set { this.UserActionLogID = value; }
-        }
+        [Key]
+        [Column("user_action_log_id")]
+        public int ID { get; set; }
         #endregion
     }
 }
