@@ -36,6 +36,10 @@ namespace GlobalPrint.ClientWeb
         public ActionResult GetClosestPrinter(float latitude, float longtitude)
         {
             PrinterFullInfoModel printer = this._printerUnit.GetClosest(latitude, longtitude);
+            if (printer == null)
+            {
+                return Json("");
+            }
             return Json(printer);
         }
     }

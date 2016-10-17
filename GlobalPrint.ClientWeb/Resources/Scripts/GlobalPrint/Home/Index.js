@@ -139,7 +139,7 @@
                     url: '/Home/GetClosestPrinter'
                 }).done(function (json) {
                     if (!json) {
-                        console.log('Error: ajax response is empty.');
+                        GlobalPrint.Shared.PushNotifications.displayMessage("Не найдено ни одного активного принтера.");
                         return;
                     }
                     deleteMarkerByPrinterID(json.Printer.ID);
