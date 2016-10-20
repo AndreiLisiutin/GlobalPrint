@@ -23,7 +23,12 @@ namespace GlobalPrint.ClientWeb.Binders
                     format.CurrencyDecimalSeparator = ".";
                     format.CurrencyDecimalDigits = 99;
                     double result = double.Parse(valueResult.AttemptedValue.Replace(",", "."), NumberStyles.Currency | NumberStyles.AllowDecimalPoint, format);
-                    return Convert.ChangeType(result, bindingContext.ModelMetadata.ModelType);
+
+                    //define destination type, in case of Nullable use underlying rype
+                    Type destinationType = bindingContext.ModelMetadata.ModelType;
+                    destinationType = Nullable.GetUnderlyingType(destinationType) ?? destinationType;
+                    
+                    return Convert.ChangeType(result, destinationType);
                 }
                 catch (FormatException e)
                 {

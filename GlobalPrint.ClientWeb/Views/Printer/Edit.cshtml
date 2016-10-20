@@ -215,7 +215,7 @@
         <div class="form-group">
             <div class="col-sm-12">
                 <button class="btn btn-default" type="submit">Сохранить</button>
-                <a href="@Request.UrlReferrer" class="btn btn-default"><i class="icon-circle-arrow-left"></i>Отмена</a>
+                @Html.ActionLink("Назад", "MyPrinters", "Printer", new { @class="btn btn-default" })
             </div>
         </div>
     }

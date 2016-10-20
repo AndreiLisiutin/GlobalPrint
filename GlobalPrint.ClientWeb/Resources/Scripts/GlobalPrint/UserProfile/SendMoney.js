@@ -1,7 +1,7 @@
 ﻿GlobalPrint.namespace('GlobalPrint.UserProfile.SendMoney');
 (function (SendMoney) {
     SendMoney.defineValidation = function () {
-        var userAmountOfMoney = $('#userAmountOfMoney').val();
+        var userAmountOfMoney = parseInt($('#userAmountOfMoney').val());
         $("#sendModeyForm").validate({
             rules: {
                 "AmountOfMoney": {

@@ -35,6 +35,10 @@
         }
     };
 
+    CommonUtils.logException = function (exception) {
+
+    };
+
     CommonUtils.makeProgressBar = function () {
         /// <summary>
         /// Configuration of NProgress progress bar on AJAX and so on.
@@ -247,10 +251,10 @@
         User: 1
     };
 
-    /// <summary>
-    /// Initialize swithers like in iOS.
-    /// </summary>
     CommonUtils.initializeSwitchers = function () {
+        /// <summary>
+        /// Initialize swithers like in iOS.
+        /// </summary>
         var smallSwithcers = Array.prototype.slice.call(document.querySelectorAll('.js-switch-small'));
         var mediumSwithcers = Array.prototype.slice.call(document.querySelectorAll('.js-switch-medium'));
         var largeSwithcers = Array.prototype.slice.call(document.querySelectorAll('.js-switch-large'));

@@ -46,28 +46,8 @@
         </tbody>
     </table>
 
-    @*@if (Model.LatestPrinterOwnerOffer.HasUserOffer)
-    {
-        // Оферта
-        <form class="form-horizontal" role="form">
-            <div class="form-group">
-                <label class="col-sm-1 control-label text-left">Оферта</label>
-                <div class="col-sm-11">
-                    <div class="input-group">
-                        @Html.TextBox("UserOfferTitle", Model.LatestPrinterOwnerOffer.UserOfferTitle, new { @class = "form-control", @readonly = "true", @placeholder = "Договор оферты владельца принтера" })
-                        <span class="input-group-btn">
-                            <a href="@Url.Action("Offer", "Offer", new { @offerTypeID = OfferTypeEnum.PrinterOwnerOffer })" target="_blank" title="Открыть договор оферты" class="btn btn-default">
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                            </a>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </form>
-    }*@
-
     <div class="form-group">
         @Html.ActionLink("Добавить", "Create", "Printer", new { }, new { @class = "btn btn-default" })
-        <a href="@Request.UrlReferrer" class="btn btn-default"><i class="icon-circle-arrow-left"></i>Назад</a>
+        @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
     </div>
 </div>

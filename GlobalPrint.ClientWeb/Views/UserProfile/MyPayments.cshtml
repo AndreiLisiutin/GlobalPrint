@@ -35,6 +35,7 @@
         </tbody>
     </table>
     <div class="form-group">
-        <a href="@Request.UrlReferrer" class="btn btn-default"><i class="icon-circle-arrow-left"></i>Назад</a>
+        @Html.ActionLink("В профиль", "UserProfile", "UserProfile", new { }, new { @class = "btn btn-default" })
+        @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
     </div>
 </div>

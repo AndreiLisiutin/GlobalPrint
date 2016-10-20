@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GlobalPrint.Infrastructure.CommonUtils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,14 +14,18 @@ namespace GlobalPrint.ClientWeb.Filters
     {
         public AuthorizeByUrlAttribute(string[] authorizedHosts)
         {
-            this.AuthorizedHosts = authorizedHosts ?? new string[] {};
+            this.AuthorizedHosts = authorizedHosts ?? new string[] { };
         }
         public string[] AuthorizedHosts { get; set; }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            string host = HttpContext.Current.Request.UrlReferrer.Host;
-            string referer = HttpContext.Current.Request.UrlReferrer.ToString();
+            string host = HttpContext.Current?.Request?.UrlReferrer?.Host;
+            string referer = HttpContext.Current?.Request?.UrlReferrer?.ToString();
+
+            Argument.NotNullOrWhiteSpace(host, "Host текущей сессии пустой.");
+            Argument.NotNullOrWhiteSpace(host, "UrlReferrer текущей сессии пустой.");
+            Argument.NotNull(this.AuthorizedHosts, "authorizedHosts пустой.");
 
             if (!this.AuthorizedHosts.Contains(host.Trim()) && !this.AuthorizedHosts.Contains(referer.Trim()))
             {
@@ -29,6 +34,7 @@ namespace GlobalPrint.ClientWeb.Filters
             }
 
             base.OnActionExecuting(filterContext);
+
         }
     }
 }
