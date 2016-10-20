@@ -1,9 +1,14 @@
 ﻿using GlobalPrint.Infrastructure.CommonUtils;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace GlobalPrint.ClientWeb.Filters
 {
@@ -22,7 +27,16 @@ namespace GlobalPrint.ClientWeb.Filters
         {
             string host = HttpContext.Current?.Request?.UrlReferrer?.Host;
             string referer = HttpContext.Current?.Request?.UrlReferrer?.ToString();
-
+            string request = JsonConvert.SerializeObject(HttpContext.Current.Request, Formatting.Indented, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                Error = delegate(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
+                {
+                    args.ErrorContext.Handled = true;
+                }
+            });
+            throw new Exception(request);
+            
             Argument.NotNullOrWhiteSpace(host, "Host текущей сессии пустой.");
             Argument.NotNullOrWhiteSpace(host, "UrlReferrer текущей сессии пустой.");
             Argument.NotNull(this.AuthorizedHosts, "authorizedHosts пустой.");
