@@ -16,6 +16,7 @@
     GlobalPrint.Utils.CommonUtils.makeProgressBar();
     GlobalPrint.Utils.CommonUtils.disabledCheckboxFix();
     GlobalPrint.Utils.CommonUtils.makeValidation();
+    GlobalPrint.Utils.CommonUtils.initializeClearableInputs();
 
     $(document).ready(function () {
         //usage of tooltip.js

@@ -429,15 +429,19 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             // send email to user about his new order
             MailAddress userMail = new MailAddress(client.Email, client.UserName);
             string userMessageBody = string.Format(
-                "Ваш новый заказ № {0} от {1} успешно зарегистрирован.",
+                "Ваш новый заказ № {0} от {1} на принтер \"{2}\" ({3}) успешно зарегистрирован.",
                 order.ID,
-                order.OrderedOn.ToString("dd.MM.yyyy HH:mm")
+                order.OrderedOn.ToString("dd.MM.yyyy HH:mm"),
+                printer.Printer.Name,
+                printer.Printer.Location
             );
             _emailUtility.Value.Send(userMail, "Global Print - Новый заказ на печать", userMessageBody);
             // send email to printer operator about new order
             MailAddress userOperatorMail = new MailAddress(printerOperator.Email, printerOperator.UserName);
             string userOperatorMessageBody = string.Format(
-                "На Ваш принтер поступил новый заказ № {0} от {1}.",
+                "На Ваш принтер \"{0}\" ({1}) поступил новый заказ № {2} от {3}.",
+                printer.Printer.Name,
+                printer.Printer.Location,
                 order.ID,
                 order.OrderedOn.ToString("dd.MM.yyyy HH:mm")
             );

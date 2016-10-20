@@ -311,4 +311,15 @@
         }
     };
 
+    // Add clear "x" button to input
+    CommonUtils.initializeClearableInputs = function () {
+        var clearableInputs = Array.prototype.slice.call(document.querySelectorAll('.js-clearable'));
+        clearableInputs.forEach(function (item) {
+            $(item).addClear({
+                showOnLoad: true,
+                zindex: 1000
+            });
+        });
+    }
+
 })(GlobalPrint.Utils.CommonUtils);
