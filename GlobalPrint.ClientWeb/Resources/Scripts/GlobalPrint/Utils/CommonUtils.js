@@ -35,6 +35,10 @@
         }
     };
 
+    CommonUtils.logException = function (exception) {
+
+    };
+
     CommonUtils.makeProgressBar = function () {
         /// <summary>
         /// Configuration of NProgress progress bar on AJAX and so on.
