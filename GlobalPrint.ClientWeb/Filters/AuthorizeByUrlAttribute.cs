@@ -1,4 +1,6 @@
-﻿using GlobalPrint.Infrastructure.CommonUtils;
+﻿using GlobalPrint.Configuration.DI;
+using GlobalPrint.Infrastructure.CommonUtils;
+using GlobalPrint.Infrastructure.LogUtility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -25,30 +27,37 @@ namespace GlobalPrint.ClientWeb.Filters
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            string host = HttpContext.Current?.Request?.UrlReferrer?.Host;
-            string referer = HttpContext.Current?.Request?.UrlReferrer?.ToString();
-            string request = JsonConvert.SerializeObject(HttpContext.Current.Request, Formatting.Indented, new JsonSerializerSettings()
+            try
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                Error = delegate(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
+                string host = HttpContext.Current?.Request?.UrlReferrer?.Host;
+                string referer = HttpContext.Current?.Request?.UrlReferrer?.ToString();
+                string request = JsonConvert.SerializeObject(HttpContext.Current.Request, Formatting.Indented, new JsonSerializerSettings()
                 {
-                    args.ErrorContext.Handled = true;
-                }
-            });
-            throw new Exception(request);
-            
-            Argument.NotNullOrWhiteSpace(host, "Host текущей сессии пустой.");
-            Argument.NotNullOrWhiteSpace(host, "UrlReferrer текущей сессии пустой.");
-            Argument.NotNull(this.AuthorizedHosts, "authorizedHosts пустой.");
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    Error = delegate (object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
+                    {
+                        args.ErrorContext.Handled = true;
+                    }
+                });
 
-            if (!this.AuthorizedHosts.Contains(host.Trim()) && !this.AuthorizedHosts.Contains(referer.Trim()))
-            {
-                //Send back a HTTP Status code of 403 Forbidden
-                filterContext.Result = new HttpStatusCodeResult(403);
+                ILoggerFactory loggerFactory = IoC.Instance.Resolve<ILoggerFactory>();
+                loggerFactory.GetLogger<AuthorizeByUrlAttribute>().Debug(request);
+
+                //Argument.NotNullOrWhiteSpace(host, "Host текущей сессии пустой.");
+                //Argument.NotNullOrWhiteSpace(host, "UrlReferrer текущей сессии пустой.");
+                //Argument.NotNull(this.AuthorizedHosts, "authorizedHosts пустой.");
+
+                //if (!this.AuthorizedHosts.Contains(host.Trim()) && !this.AuthorizedHosts.Contains(referer.Trim()))
+                //{
+                //    //Send back a HTTP Status code of 403 Forbidden
+                //    filterContext.Result = new HttpStatusCodeResult(403);
+                //}
+                base.OnActionExecuting(filterContext);
             }
+            catch (Exception ex)
+            {
 
-            base.OnActionExecuting(filterContext);
-
+            }
         }
     }
 }
