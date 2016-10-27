@@ -26,10 +26,10 @@
             @foreach (PaymentActionFullInfo action in Model)
             {
                 <tr>
-                    <td class="col-xs-1">@Html.DisplayFor(c => action.PaymentAction.StartedOn, "{0:dd.MM.yyyy HH:mm:ss}")</td>
+                    <td class="col-lg-2 col-xs-1" align="center">@Html.DisplayFor(c => action.PaymentAction.StartedOn, "{0:dd.MM.yyyy HH:mm:ss}")</td>
                     <td class="col-xs-2">@Html.DisplayFor(c => action.PaymentActionType.Name)</td>
-                    <td class="col-xs-8">@Html.DisplayFor(c => action.PaymentAction.Comment)</td>
-                    <td class="col-xs-1">@Html.DisplayFor(c => action.PaymentAction.AmountOfMoney)</td>
+                    <td class="col-lg-7 col-xs-8">@Html.DisplayFor(c => action.PaymentAction.Comment)</td>
+                    <td class="col-xs-1" align="right">@Html.DisplayFor(c => action.PaymentAction.AmountOfMoney)</td>
                 </tr>
             }
         </tbody>

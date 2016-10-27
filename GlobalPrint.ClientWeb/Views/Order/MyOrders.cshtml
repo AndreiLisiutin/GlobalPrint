@@ -45,14 +45,14 @@
                 @foreach (PrintOrderInfo printOrder in Model)
                 {
                     <tr>
-                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.ID)</td>
+                        <td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.ID)</td>
                         <td>@Html.DisplayFor(c => printOrder.Printer.Name)</td>
                         <td>@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>
-                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, "{0:dd.MM.yyyy HH:mm:ss}")</td>
-                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.FullPrice, "{0:0.00}")</td>
-                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.SecretCode)</td>
-                        <td>@Html.DisplayFor(c => printOrder.Status.Status)</td>
-                        <td>
+                        <td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, "{0:dd.MM.yyyy HH:mm:ss}")</td>
+                        <td align="right">@Html.DisplayFor(c => printOrder.PrintOrder.FullPrice, "{0:0.00}")</td>
+                        <td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.SecretCode)</td>
+                        <td align="center">@Html.DisplayFor(c => printOrder.Status.Status)</td>
+                        <td align="center">
                             <div class="table-col-buttons">
                                 <a href="@Url.Action("FromExisting", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title="Копировать заказ" class="btn btn-default glyphicon glyphicon-plus"></a>
                                 <a href="@Url.Action("Details", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title="Детали заказа на печать" class="btn btn-default glyphicon glyphicon-pencil"></a>

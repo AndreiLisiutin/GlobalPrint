@@ -43,15 +43,15 @@
             @foreach (PrintOrderInfo printOrder in Model)
             {
                 <tr>
-                    <td class="col-md-1">@Html.DisplayFor(c => printOrder.PrintOrder.ID)</td>
+                    <td class="col-md-1" align="center">@Html.DisplayFor(c => printOrder.PrintOrder.ID)</td>
                     <td class="col-md-3">@Html.DisplayFor(c => printOrder.Printer.Name)</td>
                     <td class="col-md-2">@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>
-                    <td class="col-md-2">@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, "{0:dd.MM.yyyy HH:mm:ss}")</td>
-                    <td class="col-md-2">@Html.DisplayFor(c => printOrder.PrintOrder.FullPrice, "{0:0.00}")</td>
-                    <td class="col-md-1">@Html.DisplayFor(c => printOrder.Status.Status)</td>
+                    <td class="col-md-2" align="center">@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, "{0:dd.MM.yyyy HH:mm:ss}")</td>
+                    <td class="col-md-2" align="right">@Html.DisplayFor(c => printOrder.PrintOrder.FullPrice, "{0:0.00}")</td>
+                    <td class="col-md-1" align="center">@Html.DisplayFor(c => printOrder.Status.Status)</td>
                     @if (printOrder.PrintOrder.PrintOrderStatusID == (int)PrintOrderStatusEnum.Waiting)
                     {
-                        <td class="table-col-buttons">
+                        <td class="table-col-buttons" align="right">
                             @Ajax.ActionLink(" ", "AcceptOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID },
                                 new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-default glyphicon glyphicon-ok", @title = "Распечатать" })
 
@@ -61,12 +61,12 @@
                     }
                     else if (printOrder.PrintOrder.PrintOrderStatusID == (int)PrintOrderStatusEnum.Accepted)
                     {
-                        <td class="table-col-buttons">
+                        <td class="table-col-buttons" align="right">
                             <a href="@Url.Action("DownloadOrder", "Order", new { printOrderID = printOrder.PrintOrder.ID })" 
                                title="Скачать" class="btn btn-default glyphicon glyphicon-download-alt"></a>
 
                             <a href="@Url.Action("ConfirmPrintOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID })"
-                               title="Распечатать" class="btn btn-default glyphicon glyphicon-print"></a>
+                               title="Распечатать" class="btn btn-default glyphicon glyphicon glyphicon-usd"></a>
                         </td>
                     }
                     else
