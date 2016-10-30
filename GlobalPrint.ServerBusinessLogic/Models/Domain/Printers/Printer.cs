@@ -17,8 +17,6 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Printers
         {
         }
 
-        [NotMapped]
-        private int PrinterID { get; set; }
         [Column("name")]
         public string Name { get; set; }
         [Column("location")]
@@ -38,14 +36,26 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Printers
         [Column("is_disabled")]
         public bool IsDisabled { get; set; }
 
+        /// <summary>
+        /// Is this printer active at all. Printer owner could set printer as disabled.
+        /// </summary>
+        [NotMapped]
+        public bool IsEnabled
+        {
+            get
+            {
+                return !this.IsDisabled;
+            }
+            set
+            {
+                this.IsDisabled = !value;
+            }
+        }
+
         #region IDomainModel
         [Key]
         [Column("printer_id")]
-        public int ID
-        {
-            get { return this.PrinterID; }
-            set { this.PrinterID = value; }
-        }
+        public int ID { get; set; }
         #endregion
     }
 }
