@@ -225,6 +225,46 @@
         $('#' + lookupID).modal('toggle');
     };
 
+    CommonUtils.showModalQuestion = function (confuguration) {
+        /// <summary>
+        /// Ask user a question. 
+        /// </summary>
+        /// <param name="confuguration" type="object">{ question:text, answers:[{ text: text, handler: function() {} }, ...] } </param>
+
+        var modalWindowId = "modal_" + Math.floor(Math.random() * 100000000000);
+        var modalHtml =
+            '<div class="modal modal-fullscreen fade lookup-wrapper" id="' + modalWindowId + '" tabindex="-1" role="dialog" aria-hidden="true">                         ' +
+            '    <div class="modal-dialog">                                                                                                                             ' +
+            '        <div class="modal-content">                                                                                                                        ' +
+            '            <div class="modal-body">                                                                                                                       ' +
+            '                <div class="modal-body-content row">                                                                                                       ' +
+            '                   <button type="button" class="close hidden-xs" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>  ' + 
+            '                </div>                                                                                                                                     ' +
+            '            </div>                                                                                                                                         ' +
+            '        </div>                                                                                                                                             ' +
+            '    </div>                                                                                                                                                 ';
+        $('body').append(modalHtml);
+        $('#' + modalWindowId + ' .modal-body-content').append('<h3 class="text-center">' + confuguration.question + '</h3>');
+        $('#' + modalWindowId + ' .modal-body-content').append('<div class="text-center btn-toolbar"></div>');
+        $.each(confuguration.answers, function (index, answer) {
+            var buttonId = "answer_" + Math.floor(Math.random() * 100000000000);
+            var button = $('#' + modalWindowId + ' .modal-body-content .btn-toolbar').append('<button type="button" class="btn btn-default" data-dismiss="modal" id=' + buttonId + '>' + answer.text + '</button>');
+            $('#' + buttonId).click(function () {
+                answer.handler();
+            });
+        });
+
+        $('#' + modalWindowId).on('show.bs.modal', function () {
+            setTimeout(function () {
+                $('.modal-backdrop').addClass("modal-backdrop-fullscreen");
+            }, 0);
+        });
+        $('#' + modalWindowId).on('hidden.bs.modal', function () {
+            $('#' + modalWindowId + ' .modal-backdrop').addClass("modal-backdrop-fullscreen");
+        });
+        $('#' + modalWindowId).modal('toggle');
+    };
+
     CommonUtils.initializeLookupValue = function (lookup) {
         /// <summary>
         /// Set lookup text value according to its selected identifier value.
