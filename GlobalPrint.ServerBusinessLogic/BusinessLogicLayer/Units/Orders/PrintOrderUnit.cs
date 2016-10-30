@@ -247,11 +247,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
         {
             Argument.NotNull(printOrderID, "Ключ заказа на печать должен быть положительным.");
 
-            PrintOrder order = this.GetByID(printOrderID);
+            var order = this.GetPrintOrderInfoByID(printOrderID);
             Argument.NotNull(order, $"Заказ на печать не найден (PrintOrderID={printOrderID}).");
-            Argument.Require(order.UserID == userID, "Нельзя скачивать чужие заказы.");
+            Argument.Require(order.PrintOrder.UserID == userID || order.Printer.OperatorUserID == userID || order.Printer.OwnerUserID == userID, "Нельзя скачивать чужие заказы.");
 
-            string _physicalPathToFile = PrintOrderUnit.PRINT_ORDER_FILE_PATH(baseDirectory, order.UserID, order.InternalDocumentName);
+            string _physicalPathToFile = PrintOrderUnit.PRINT_ORDER_FILE_PATH(baseDirectory, order.PrintOrder.UserID, order.PrintOrder.InternalDocumentName);
             FileInfo physicalFile = new FileInfo(_physicalPathToFile);
             if (!physicalFile.Directory.Exists)
             {
@@ -261,10 +261,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             DocumentBusinessInfo fileInfo = new DocumentBusinessInfo()
             {
                 SerializedFile = fileArray,
-                Name = order.DocumentName,
-                Extension = order.DocumentExtension,
-                LoadedOn = order.OrderedOn,
-                UserID = order.UserID
+                Name = order.PrintOrder.DocumentName,
+                Extension = order.PrintOrder.DocumentExtension,
+                LoadedOn = order.PrintOrder.OrderedOn,
+                UserID = order.PrintOrder.UserID
             };
 
             return fileInfo;

@@ -4,6 +4,9 @@
     var PRINTER_ONLINE_ICON_URL = "/Resources/Images/printer_online.png";
     var PRINTER_OFFLINE_ICON_URL = "/Resources/Images/printer_offline.png";
     var PRINTER_DEACTIVE_ICON_URL = "/Resources/Images/printer_deactive.png";
+    var PRINTER_ONLINE_Z_INDEX = 10000;
+    var PRINTER_OFFLINE_Z_INDEX = 5000;
+    var PRINTER_DEACTIVE_Z_INDEX = 1000;
 
     //select printer's icon by its state
     var _getPrinterIcon = function (printerInfo) {
@@ -14,6 +17,15 @@
             return PRINTER_DEACTIVE_ICON_URL;
         }
         return PRINTER_OFFLINE_ICON_URL;
+    };
+    var _getPrinterZIndex = function (printerInfo) {
+        if (printerInfo.IsAvailableNow && printerInfo.IsOperatorAlive) {
+            return PRINTER_ONLINE_Z_INDEX;
+        }
+        if (printerInfo.Printer.IsDisabled) {
+            return PRINTER_DEACTIVE_Z_INDEX;
+        }
+        return PRINTER_OFFLINE_Z_INDEX;
     };
 
     var _map = null;
@@ -198,15 +210,6 @@
         });
     };
 
-    var DayOfWeek = {
-        ПН: 1,
-        ВТ: 2,
-        СР: 3,
-        ЧТ: 4,
-        ПТ: 5,
-        СБ: 6,
-        ВС: 0
-    };
     var _addMarker = function (printerInfo, animation) {
         //adding new marker to the map.
         //printerInfo is a model for C# PrinterFullInfoModel class.
@@ -214,6 +217,8 @@
             position: new google.maps.LatLng(printerInfo.Printer.Latitude, printerInfo.Printer.Longtitude),
             map: _map,
             icon: _getPrinterIcon(printerInfo),
+            optimized: false,
+            zIndex: _getPrinterZIndex(printerInfo),
             title: printerInfo.Printer.Name,
             animation: animation ? google.maps.Animation.DROP : null,
             printerID: printerInfo.Printer.ID,
@@ -240,24 +245,7 @@
             }
             var name = printerInfo.Printer.Name;
             var location = printerInfo.Printer.Location;
-            var averallSchedule = '';
-            for (var day in DayOfWeek) {
-                var daySchedules = $.grep(printerInfo.PrinterSchedule, function (item, index) {
-                    return item.DayOfWeek == DayOfWeek[day];
-                }).sort(function (x, y) {
-                    return x.OpenTime.TotalMilliseconds - y.OpenTime.TotalMilliseconds;
-                });
-
-                var scheduleString = '';
-                $.each(daySchedules, function (index, item) {
-                    scheduleString += (scheduleString ? ' ... ' : '') +
-                        toFixedInt2(item.OpenTime.Hours) + ':' + toFixedInt2(item.OpenTime.Minutes) + '-' +
-                        toFixedInt2(item.CloseTime.Hours) + ':' + toFixedInt2(item.CloseTime.Minutes);
-                });
-                scheduleString = scheduleString || 'Не работает';
-                averallSchedule += (averallSchedule ? '\n' : '') + day + ':.....' + scheduleString;
-            }
-            $("#printerInfoOperator").val(name + '\n' + location + '\n' + averallSchedule);
+            $("#printerInfoOperator").val(name + '\n' + location);
 
             var averallServices = '';
             $.each(marker.printerInfo.PrinterServices, function (index, item) {
