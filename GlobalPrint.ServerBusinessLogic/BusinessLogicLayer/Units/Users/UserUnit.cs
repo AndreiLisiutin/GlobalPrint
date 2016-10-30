@@ -120,6 +120,18 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                     originalUser.PhoneNumber = user.PhoneNumber;
                     originalUser.AmountOfMoney = user.AmountOfMoney;
 
+                    originalUser.BankBic = user.BankBic;
+                    originalUser.BankCorrespondentAccount = user.BankCorrespondentAccount;
+                    originalUser.BankName = user.BankName;
+                    originalUser.Inn = user.Inn;
+                    originalUser.Kpp = user.Kpp;
+                    originalUser.LegalAddress = user.LegalAddress;
+                    originalUser.LegalFullName = user.LegalFullName;
+                    originalUser.LegalShortName = user.LegalShortName;
+                    originalUser.Ogrn = user.Ogrn;
+                    originalUser.PaymentAccount = user.PaymentAccount;
+                    originalUser.PostAddress = user.PostAddress;
+
                     userRepo.Update(originalUser);
                     context.Save();
                     return originalUser;

@@ -9,7 +9,7 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
     /// <summary>
     /// Interface only for user profile without authentification fields
     /// </summary>
-    public interface IUserProfile
+    public interface IUserProfile : ILegalRequisites
     {
         int ID { get; set; }
         string UserName { get; set; }

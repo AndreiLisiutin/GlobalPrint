@@ -635,6 +635,7 @@
     <Content Include="Resources\Scripts\GlobalPrint\Shared\Navigation.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Shared\PushNotifications.js" />
     <Content Include="Resources\Scripts\GlobalPrint\UserProfile\SendMoney.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\UserProfile\UserProfile.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\CommonUtils.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\Services.js" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\css\jquery.fileupload.css" />

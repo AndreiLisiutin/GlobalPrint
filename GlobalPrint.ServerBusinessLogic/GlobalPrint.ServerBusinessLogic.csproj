@@ -103,6 +103,7 @@
     <Compile Include="Models\Domain\Printers\PrintSize.cs" />
     <Compile Include="Models\Domain\Printers\PrintSizePrintType.cs" />
     <Compile Include="Models\Domain\Printers\PrintType.cs" />
+    <Compile Include="Models\Domain\Users\ILegalRequisites.cs" />
     <Compile Include="Models\Domain\Users\IUserAccount.cs" />
     <Compile Include="Models\Domain\Users\Role.cs" />
     <Compile Include="Models\Domain\Users\User.cs" />

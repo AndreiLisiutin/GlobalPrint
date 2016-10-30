@@ -97,7 +97,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Orders
                         new ExportableProperty(e.order.PrintedOn?.ToString("dd.MM.yyyy HH:mm:ss") ?? "--", "Дата выполнения заказа", 40),
                         new ExportableProperty(e.order.FullPrice.ToString("#.00", CultureInfo.InvariantCulture), "Стоимость заказа", 20),
                         new ExportableProperty(e.userClient.Email ?? "--", "Email клиента", 60),
-                        new ExportableProperty(e.userOperator.Bic ?? "--", "БИК оператора принтера", 30),
+                        new ExportableProperty(e.userOperator.BankBic ?? "--", "БИК банка оператора принтера", 30),
                         new ExportableProperty(e.userOperator.Email ?? "--", "Email оператора принтера", 60)
                     };
                     ExportableEntity entity = new ExportableEntity(properties);

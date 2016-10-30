@@ -14,6 +14,7 @@ using GlobalPrint.ClientWeb.Helpers;
 using GlobalPrint.Infrastructure.CommonUtils.Pagination;
 using System.Linq;
 using GlobalPrint.ClientWeb.Models.Lookup;
+using GlobalPrint.Infrastructure.BankUtility;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -137,6 +138,17 @@ namespace GlobalPrint.ClientWeb
             return View(actions);
         }
 
+        /// <summary>
+        /// Get bank info by bic code.
+        /// </summary>
+        /// <param name="bic">Bic code of bank.</param>
+        /// <returns>Bank info in JSON.</returns>
+        [HttpGet, Authorize]
+        public ActionResult GetBankInfo(string bic)
+        {
+            var bankInfo = new BankUtility().GetBankInfo(bic);
+            return Json(bankInfo);
+        }
 
         private ViewResult _USER_PROFILE_SEND_MONEY(SendModeyPackage package)
         {
