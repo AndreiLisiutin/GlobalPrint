@@ -210,7 +210,7 @@ namespace GlobalPrint.ClientWeb
             // Push notification about new order
             User printerOperator = new PrinterUnit().GetPrinterOperator(createdOrder.PrinterID);
             string notificationMessage = string.Format(
-                "{0}: поступил новый заказ № {1}." + Environment.NewLine +
+                "{0}: поступил заказ № {1}." + Environment.NewLine +
                 "Количество страниц: {2}, сумма заказа: {3}р.",
                 createdOrder.OrderedOn.ToString("HH:mm:ss"),
                 createdOrder.ID,

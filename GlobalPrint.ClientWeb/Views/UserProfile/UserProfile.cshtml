@@ -30,7 +30,7 @@
         <div class="form-group">
             <label class="col-sm-1 control-label text-left">Имя</label>
             <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "Имя пользователя", @required = "true", @autofocus = true })
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control js-clearable", @placeholder = "Имя пользователя", @required = "true", @autofocus = true })
             </div>
         </div>
 
@@ -86,62 +86,62 @@
         <div class="form-group">
             <label class="col-sm-2 control-label text-left">Полное наименование</label>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.LegalFullName, new { @class = "form-control", @placeholder = "Полное наименование" })
+                @Html.TextBoxFor(m => m.LegalFullName, new { @class = "form-control js-clearable", @placeholder = "Полное наименование" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label text-left">Краткое наименование</label>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.LegalShortName, new { @class = "form-control", @placeholder = "Краткое наименование" })
+                @Html.TextBoxFor(m => m.LegalShortName, new { @class = "form-control js-clearable", @placeholder = "Краткое наименование" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label text-left">Юридический адрес</label>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.LegalAddress, new { @class = "form-control", @placeholder = "Юридический адрес" })
+                @Html.TextBoxFor(m => m.LegalAddress, new { @class = "form-control js-clearable", @placeholder = "Юридический адрес" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label text-left">Почтовый адрес</label>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.PostAddress, new { @class = "form-control", @placeholder = "Почтовый адрес" })
+                @Html.TextBoxFor(m => m.PostAddress, new { @class = "form-control js-clearable", @placeholder = "Почтовый адрес" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label text-left">Телефон</label>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", @placeholder = "Телефон" })
+                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control js-clearable", @placeholder = "Телефон" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label text-left">ИНН</label>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.Inn, new { @class = "form-control", @placeholder = "ИНН" })
+                @Html.TextBoxFor(m => m.Inn, new { @class = "form-control js-clearable", @placeholder = "ИНН" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label text-left">КПП</label>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.Kpp, new { @class = "form-control", @placeholder = "КПП" })
+                @Html.TextBoxFor(m => m.Kpp, new { @class = "form-control js-clearable", @placeholder = "КПП" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label text-left">ОГРН</label>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.Ogrn, new { @class = "form-control", @placeholder = "ОГРН" })
+                @Html.TextBoxFor(m => m.Ogrn, new { @class = "form-control js-clearable", @placeholder = "ОГРН" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label text-left">Расчетный счет</label>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.PaymentAccount, new { @class = "form-control", @placeholder = "Расчетный счет" })
+                @Html.TextBoxFor(m => m.PaymentAccount, new { @class = "form-control js-clearable", @placeholder = "Расчетный счет" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label text-left">БИК банка</label>
             <div class="col-sm-10">
                 <div class="input-group">
-                    @Html.TextBoxFor(m => m.BankBic, new { @class = "form-control", @placeholder = "БИК банка", @id = "bankBic" })
+                    @Html.TextBoxFor(m => m.BankBic, new { @class = "form-control js-clearable", @placeholder = "БИК банка", @id = "bankBic" })
                     <span class="input-group-btn">
                         <button title="Автозаполнение данных банка" class="btn btn-default" id="autoFillBankData">
                             <span class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"></span>
@@ -153,13 +153,13 @@
         <div class="form-group">
             <label class="col-sm-2 control-label text-left">Наименование банка</label>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.BankName, new { @class = "form-control", @placeholder = "Наименование банка", @id = "bankName" })
+                @Html.TextBoxFor(m => m.BankName, new { @class = "form-control js-clearable", @placeholder = "Наименование банка", @id = "bankName" })
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label text-left">Корр. счет банка</label>
             <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.BankCorrespondentAccount, new { @class = "form-control", @placeholder = "Корреспондентский счет банка", @id = "bankCorrespondentAccount" })
+                @Html.TextBoxFor(m => m.BankCorrespondentAccount, new { @class = "form-control js-clearable", @placeholder = "Корреспондентский счет банка", @id = "bankCorrespondentAccount" })
             </div>
         </div>
 

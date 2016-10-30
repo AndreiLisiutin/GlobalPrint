@@ -23,7 +23,7 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
         private readonly TimeSpan _threshold;
         private readonly TimeSpan _callInterval;
         private readonly string _emailSubject = "Активность в GlobalPrint";
-        
+
         private IUserUnit _userUnit;
         private IEmailUtility _emailUtility;
         private Lazy<ILogger> _logUtility;
@@ -68,12 +68,14 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
             {
                 MailAddress destination = new MailAddress(item.PrinterOperator.Email, item.PrinterOperator.UserName);
                 string messageBody = string.Format(
-                     "Вы являетесь владельцем активного на данный момент принтера \"{0}\" по адресу {1}." +
-                     " Однако вы давно не проявляли активность - последняя Ваша активность зафиксирована {2}." +
-                     " Совершите какое-либо действие (обновите страницу сайта www.globalprint.online), чтобы обновить дату последней активности.",
+                     "Вы являетесь оператором принтера \"{0}\" по адресу {1}." +
+                     " В {2} ваш принтер стал неактивным на карте и клиенты больше не могут отправлять вам заказы." +
+                     " Совершите какое-либо действие в системе (обновите страницу сайта www.globalprint.online)," +
+                     " чтобы продлить период доступности для клиентов вашего принтера на {3} минут.",
                      item.Printer.Name,
                      item.Printer.Location,
-                     item.PrinterOperator.LastActivityDate.ToString("dd.MM.yyyy HH:mm:ss")
+                     DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"),
+                     _threshold.TotalMinutes
                  );
 
                 _emailUtility.Send(destination, _emailSubject, messageBody);

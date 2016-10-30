@@ -53,7 +53,7 @@
                     {
                         <td class="table-col-buttons" align="right">
                             @Ajax.ActionLink(" ", "AcceptOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID },
-                                new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-default glyphicon glyphicon-ok", @title = "Распечатать" })
+                                new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-default glyphicon glyphicon-ok", @title = "Подтверждение от клиента для получения оплаты" })
 
                             @Ajax.ActionLink(" ", "RejectOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID },
                                 new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-default glyphicon glyphicon-remove", @title = "Отклонить" })
