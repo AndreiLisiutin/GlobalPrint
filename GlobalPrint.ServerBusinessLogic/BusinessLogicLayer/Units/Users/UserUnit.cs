@@ -38,6 +38,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
             }
         }
         
+        /// <summary>
+        /// Get single user by filter.
+        /// </summary>
+        /// <param name="filter">Filter on user.</param>
+        /// <returns>Single found user.</returns>
         public User GetByFilter(Expression<Func<User, bool>> filter)
         {
             using (IDataContext context = this.Context())

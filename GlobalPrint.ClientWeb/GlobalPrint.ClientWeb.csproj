@@ -692,6 +692,8 @@
     <Compile Include="Helpers\ScheduledActivityChecker\ActivityCheckerJobScheduler.cs" />
     <Compile Include="Helpers\SystemConfigLayoutRenderer.cs" />
     <Compile Include="Helpers\UrlHelperExtensions.cs" />
+    <Compile Include="Models\Auth\IdentityRole.cs" />
+    <Compile Include="Models\Auth\RoleStore.cs" />
     <Compile Include="Models\Binders\FloatModelBinder.cs" />
     <Compile Include="Models\FeedbackController\FeedbackViewModel.cs" />
     <Compile Include="Models\FilesRepository\IUploadFilesRepository.cs" />

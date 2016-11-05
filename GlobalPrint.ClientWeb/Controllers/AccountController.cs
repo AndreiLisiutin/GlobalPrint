@@ -17,7 +17,15 @@ namespace GlobalPrint.ClientWeb
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationRoleManager _roleManager = null;
 
+        protected ApplicationRoleManager RoleManager
+        {
+            get
+            {
+                return _roleManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationRoleManager>();
+            }
+        }
         private IAuthenticationManager AuthenticationManager
         {
             get
@@ -56,6 +64,7 @@ namespace GlobalPrint.ClientWeb
 
         #region Old (Phone, ...)
 
+        /*
         [HttpPost]
         [AllowAnonymous]
         [Obsolete]
@@ -72,7 +81,7 @@ namespace GlobalPrint.ClientWeb
             //smsUtility.Send(model.Phone, "Ваш пароль: " + password);
             this.Session["SmsLoginValidationPassword"] = password;
 
-            return RedirectToAction("VerifyPhoneNumber", new { /*PhoneNumber = model.Phone,*/ FromRegistration = false });
+            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Phone, FromRegistration = false });
         }
 
         [HttpPost]
@@ -91,7 +100,7 @@ namespace GlobalPrint.ClientWeb
             //smsUtility.Send(model.Phone, "Ваш пароль: " + password);
             this.Session["SmsValidationPassword"] = password;
 
-            return RedirectToAction("VerifyPhoneNumber", new { /*PhoneNumber = phoneNumber, */FromRegistration = true });
+            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = phoneNumber, FromRegistration = true });
         }
 
         [Obsolete]
@@ -158,6 +167,7 @@ namespace GlobalPrint.ClientWeb
             ModelState.AddModelError("", "Не найден пользователь");
             return View(fromRegistration ? "Register" : "Login");
         }
+        **/
 
         #endregion
 
@@ -167,9 +177,7 @@ namespace GlobalPrint.ClientWeb
         /// Get register page
         /// </summary>
         /// <returns></returns>
-        // GET: Account/Register
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public ActionResult Register()
         {
             return View();
@@ -180,10 +188,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="model">Register view model.</param>
         /// <returns>Redirects to page with email confirmation message (DisplayEmail).</returns>
-        // POST: /Account/Register
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             // If we got this far, something failed, redisplay form
@@ -243,9 +248,7 @@ namespace GlobalPrint.ClientWeb
         /// <summary>
         /// Login page
         /// </summary>
-        // GET: /Account/Login
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public ActionResult Login()
         {
             return View();
@@ -257,10 +260,7 @@ namespace GlobalPrint.ClientWeb
         /// <param name="model">Login wiew model with user data</param>
         /// <param name="returnUrl">Fucking shit</param>
         /// <returns></returns>
-        // POST: /Account/Login
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (ModelState.IsValid)
@@ -309,8 +309,7 @@ namespace GlobalPrint.ClientWeb
         /// Get ForgotPassword view
         /// </summary>
         /// <returns></returns>
-        // GET: /Account/ForgotPassword
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public ActionResult ForgotPassword()
         {
             return View();
@@ -321,10 +320,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="model">Forgot password model</param>
         /// <returns></returns>
-        // POST: /Account/ForgotPassword
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -364,8 +360,7 @@ namespace GlobalPrint.ClientWeb
         /// Get ForgotPasswordConfirmation view
         /// </summary>
         /// <returns></returns>
-        // GET: /Account/ForgotPasswordConfirmation
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
         {
             return View();
@@ -376,8 +371,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        // GET: /Account/ResetPassword
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public ActionResult ResetPassword(string code, string email)
         {
             return code == null || string.IsNullOrEmpty(email)
@@ -390,10 +384,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        // POST: /Account/ResetPassword
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -427,8 +418,7 @@ namespace GlobalPrint.ClientWeb
         /// Get ResetPasswordConfirmation view
         /// </summary>
         /// <returns></returns>
-        // GET: /Account/ResetPasswordConfirmation
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
         {
             return View();
@@ -442,8 +432,7 @@ namespace GlobalPrint.ClientWeb
         /// <param name="userId">Registred user ID</param>
         /// <param name="code">Confirmation code</param>
         /// <returns></returns>
-        // GET: /Account/ConfirmEmail
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(int userId, string code)
         {
             if (userId > 0 && !string.IsNullOrEmpty(code))
@@ -465,9 +454,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="printerID">Printer ID to remember</param>
         /// <returns></returns>
-        // GET: /Account/LoginAndPrint
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public ActionResult LoginAndPrint(int printerID)
         {
             Session["Account_PrinterID"] = printerID.ToString();
@@ -478,9 +465,7 @@ namespace GlobalPrint.ClientWeb
         /// Log off from the application
         /// </summary>
         /// <returns>Redirect to the Index/Home</returns>
-        // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
             this.AuthenticationManager.SignOut();

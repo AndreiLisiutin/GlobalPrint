@@ -17,21 +17,24 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         {
         }
 
+        #region IDomainModel
+
         [Key]
         [Column("user_role_id")]
-        public int UserRoleID { get; set; }
+        public int ID { get; set; }
+
+        #endregion
+        
+        /// <summary>
+        /// User identifier.
+        /// </summary>
         [Column("user_id")]
         public int UserID { get; set; }
+
+        /// <summary>
+        /// Role identifier.
+        /// </summary>
         [Column("role_id")]
         public int RoleID { get; set; }
-
-        #region IDomainModel
-        [NotMapped]
-        public int ID
-        {
-            get { return this.UserRoleID; }
-            set { this.UserRoleID = value; }
-        }
-        #endregion
     }
 }

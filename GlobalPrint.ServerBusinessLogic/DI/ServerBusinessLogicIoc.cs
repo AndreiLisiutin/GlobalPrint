@@ -31,6 +31,8 @@ namespace GlobalPrint.ServerBusinessLogic.DI
 
             // Units/User
             ioc.Kernel.Bind<IUserUnit>().To<UserUnit>().InTransientScope();
+            ioc.Kernel.Bind<IRoleUnit>().To<RoleUnit>().InTransientScope();
+            ioc.Kernel.Bind<IUserRoleUnit>().To<UserRoleUnit>().InTransientScope();
 
         }
     }

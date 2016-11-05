@@ -1,7 +1,9 @@
-﻿using GlobalPrint.Configuration.DI;
+﻿using GlobalPrint.ClientWeb.Models.Auth;
+using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.EmailUtility;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
@@ -23,7 +25,9 @@ namespace GlobalPrint.ClientWeb.App_Start
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
-            var manager = new ApplicationUserManager(new UserStore(userUnit));
+            RoleUnit roleUnit = IoC.Instance.Resolve<RoleUnit>();
+            UserRoleUnit userRoleUnit = IoC.Instance.Resolve<UserRoleUnit>();
+            var manager = new ApplicationUserManager(new UserStore(userUnit, roleUnit, userRoleUnit));
             
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<ApplicationUser, int>(manager)
@@ -74,6 +78,23 @@ namespace GlobalPrint.ClientWeb.App_Start
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }
     }
+
+    // Configure the application role manager which is used in this application.
+    public class ApplicationRoleManager : RoleManager<GlobalPrint.ClientWeb.Models.Auth.IdentityRole, int>
+    {
+        public ApplicationRoleManager(IRoleStore<GlobalPrint.ClientWeb.Models.Auth.IdentityRole, int> roleStore)
+            : base(roleStore)
+        {
+        }
+
+        public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options, IOwinContext context)
+        {
+            RoleUnit roleUnit = IoC.Instance.Resolve<RoleUnit>();
+            var manager = new ApplicationRoleManager(new RoleStore(roleUnit));
+            return manager;
+        }
+    }
+
 
     [Obsolete("For testing only", true)]
     public class CustomPasswordHasher : IPasswordHasher

@@ -3,22 +3,31 @@ using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
 
 namespace GlobalPrint.ClientWeb
 {
-    public class UserStore : IUserStore<ApplicationUser, int>,
+    public class UserStore :
+        IUserStore<ApplicationUser, int>,
         IUserLockoutStore<ApplicationUser, int>,
         IUserPasswordStore<ApplicationUser, int>,
         IUserTwoFactorStore<ApplicationUser, int>,
         IUserPhoneNumberStore<ApplicationUser, int>,
         IUserEmailStore<ApplicationUser, int>,
-        IUserSecurityStampStore<ApplicationUser, int>
+        IUserSecurityStampStore<ApplicationUser, int>,
+        IUserRoleStore<ApplicationUser, int>
     {
         private UserUnit _userUnit { get; set; }
+        private IRoleUnit _roleUnit { get; set; }
+        private IUserRoleUnit _userRoleUnit { get; set; }
 
-        public UserStore(UserUnit userUnit)
+        public UserStore(UserUnit userUnit, IRoleUnit roleUnit, IUserRoleUnit userRoleUnit)
         {
             this._userUnit = userUnit;
+            this._roleUnit = roleUnit;
+            this._userRoleUnit = userRoleUnit;
         }
 
         #region IUserStore
@@ -90,12 +99,11 @@ namespace GlobalPrint.ClientWeb
 
         public void Dispose()
         {
-
         }
 
         #endregion
 
-        #region LockoutStore
+        #region IUserLockoutStore
 
         public Task<int> GetAccessFailedCountAsync(ApplicationUser user)
         {
@@ -314,7 +322,7 @@ namespace GlobalPrint.ClientWeb
         #endregion
 
         #region IUserSecurityStampStore
-        
+
         public Task<string> GetSecurityStampAsync(ApplicationUser user)
         {
             if (user == null || user.User == null)
@@ -336,6 +344,113 @@ namespace GlobalPrint.ClientWeb
             //UpdateAsync(user);
 
             return Task.FromResult(0);
+        }
+
+        #endregion
+
+        #region IUserRoleStore
+
+        /// <summary>
+        /// Add role to user.
+        /// </summary>
+        /// <param name="user">User to add role.</param>
+        /// <param name="roleName">Role name to add.</param>
+        /// <returns>Nothing.</returns>
+        public Task AddToRoleAsync(ApplicationUser user, string roleName)
+        {
+            if (user == null || user.User == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+            if (string.IsNullOrEmpty(roleName))
+            {
+                throw new ArgumentException("roleName");
+            }
+
+            int roleID = _roleUnit.GetRoleID(roleName);
+            UserRole userRole = new UserRole()
+            {
+                RoleID = roleID,
+                UserID = user.Id
+            };
+
+            _userRoleUnit.Save(userRole);
+
+            return Task.FromResult<object>(null);
+        }
+
+        /// <summary>
+        /// Get role names of user.
+        /// </summary>
+        /// <param name="user">User to find roles.</param>
+        /// <returns>Role names list.</returns>
+        public Task<IList<string>> GetRolesAsync(ApplicationUser user)
+        {
+            if (user == null || user.User == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+
+            List<string> roles = _userRoleUnit.GetUserRoles(user.Id);
+            if (roles != null)
+            {
+                return Task.FromResult<IList<string>>(roles);
+            }
+
+            return Task.FromResult<IList<string>>(null);
+        }
+
+        /// <summary>
+        /// Is user has role.
+        /// </summary>
+        /// <param name="user">User.</param>
+        /// <param name="roleName">Role name.</param>
+        /// <returns>Flag - is user has role.</returns>
+        public Task<bool> IsInRoleAsync(ApplicationUser user, string roleName)
+        {
+            if (user == null || user.User == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+            if (string.IsNullOrEmpty(roleName))
+            {
+                throw new ArgumentNullException("roleName");
+            }
+
+            List<string> roles = _userRoleUnit.GetUserRoles(user.Id);
+            if (roles != null && roles.Contains(roleName))
+            {
+                return Task.FromResult<bool>(true);
+            }
+
+            return Task.FromResult<bool>(false);
+        }
+
+        /// <summary>
+        /// Remove user roles.
+        /// </summary>
+        /// <param name="user">User to remove role.</param>
+        /// <param name="roleName">Role name.</param>
+        /// <returns></returns>
+        public Task RemoveFromRoleAsync(ApplicationUser user, string roleName)
+        {
+            if (user == null || user.User == null)
+            {
+                throw new ArgumentNullException("user");
+            }
+            if (string.IsNullOrEmpty(roleName))
+            {
+                throw new ArgumentException("roleName");
+            }
+
+            int roleID = _roleUnit.GetRoleID(roleName);
+            var userRole = _userRoleUnit.GetByFilter(x => x.UserID == user.Id && x.RoleID == roleID).ToList();
+            if (userRole != null && userRole.Count > 0)
+            {
+                _userRoleUnit.Delete(userRole[0].ID);
+            }
+            
+            return Task.FromResult<object>(null);
         }
 
         #endregion

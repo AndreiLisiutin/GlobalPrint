@@ -9,6 +9,12 @@
         @Html.AntiForgeryToken()
 
         <ul id="main-nav-right" class="nav navbar-nav navbar-right">
+            @if (!ViewContext.HttpContext.User.IsInRole("Admin"))
+            {
+                <li>
+                    @Html.ActionLink("Администрирование", "MyPrinters", "Printer")
+                </li>
+            }
             <li>
                 @Html.ActionLink("Мои Принтеры", "MyPrinters", "Printer")
             </li>            

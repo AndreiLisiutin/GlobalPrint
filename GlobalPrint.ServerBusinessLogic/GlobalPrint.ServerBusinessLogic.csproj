@@ -69,7 +69,9 @@
     <Compile Include="BusinessLogicLayer\Units\Orders\PrintOrderRegistersUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Printers\PrinterUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Printers\PrintServicesUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Users\RoleUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Users\UserActionUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\Users\UserRoleUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Users\UserUnit.cs" />
     <Compile Include="BusinessLogicLayer\Utilities\SmsUtility.cs" />
     <Compile Include="Models\Business\Orders\NewOrder.cs" />
@@ -115,6 +117,8 @@
     <Compile Include="DI\IoC.cs" />
     <Compile Include="DI\ServerBusinessLogicIoC.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="_IBusinessLogicLayer\Units\Users\IRoleUnit.cs" />
+    <Compile Include="_IBusinessLogicLayer\Units\Users\IUserRoleUnit.cs" />
     <Compile Include="_IBusinessLogicLayer\Units\Users\IUserUnit.cs" />
     <Compile Include="_IDataAccessLayer\DataContext\IDataContext.cs" />
     <Compile Include="_IDataAccessLayer\DataContext\IDataContextFactory.cs" />

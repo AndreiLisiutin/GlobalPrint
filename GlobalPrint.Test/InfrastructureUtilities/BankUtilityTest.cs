@@ -39,7 +39,7 @@ namespace GlobalPrint.Test.InfrastructureUtilities
             Assert.IsNotNull(bankInfo);
             Assert.IsNotNull(bankInfo.ShortName);
             Assert.IsTrue(bankInfo.ShortName.ToUpper().Contains("СБЕРБАНК"));
-            Assert.IsTrue(bankInfo.CorrespondentAccount != null);
+            Assert.IsTrue(!string.IsNullOrEmpty(bankInfo.CorrespondentAccount));
         }
     }
 }
