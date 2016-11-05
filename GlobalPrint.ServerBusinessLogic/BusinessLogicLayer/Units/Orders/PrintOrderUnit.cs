@@ -26,6 +26,7 @@ using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.DI;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
+using System.Configuration;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 {
@@ -36,6 +37,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
         private Lazy<PaymentActionUnit> _paymentUnit { get; set; }
         private Lazy<PrintServicesUnit> _printServiceUnit { get; set; }
         private Lazy<PrinterUnit> _printerUnit { get; set; }
+        private Lazy<UserUnit> _userUnit { get; set; }
 
         [DebuggerStepThrough]
         public PrintOrderUnit(Lazy<IEmailUtility> emailUtility)
@@ -46,6 +48,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             this._paymentUnit = new Lazy<PaymentActionUnit>(() => new PaymentActionUnit());
             this._printServiceUnit = new Lazy<PrintServicesUnit>(() => new PrintServicesUnit());
             this._printerUnit = new Lazy<PrinterUnit>(() => new PrinterUnit());
+            this._userUnit = new Lazy<UserUnit>(() => new UserUnit(_emailUtility));
         }
 
         /// <summary>
@@ -296,7 +299,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             bool isExtensionAcceptable = this._fileUtility.Value.IsFormatAcceptable(printFile.Extension);
             validation.Require(isExtensionAcceptable, "Формат выбранного файла не поддерживается системой.");
 
-            PrinterServiceExtended service = this.GetPrintService(newOrder);
+            PrinterServiceExtended service = this.GetPrinterService(newOrder);
             validation.NotNull(service, "Выбранная услуга печати не поддерживается принтером.");
 
             PrinterFullInfoModel printer = this._printerUnit.Value.GetFullByID(newOrder.PrinterID);
@@ -304,6 +307,10 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
             validation.Require(printer.IsAvailableNow, "В данный момент принтер недоступен.");
 
+            int pagesCount = CalculatePagesCount(printFile);
+            decimal fullPrice = CALCULATE_FULL_PRICE(service.PrinterService.PricePerPage, pagesCount, newOrder.CopiesCount);
+            PrintOrderAvailabilities isAvailable = CheckPrintOrderAvailabilityForUser(newOrder.UserID, fullPrice);
+            validation.Require(isAvailable != PrintOrderAvailabilities.Unavailable, "Недостаточно средств на счету.");
             return validation;
         }
 
@@ -330,7 +337,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
         /// </summary>
         /// <param name="newOrder">New print order model.</param>
         /// <returns>Print service information. If doesn't found - returns null.</returns>
-        public PrinterServiceExtended GetPrintService(NewOrder newOrder)
+        public PrinterServiceExtended GetPrinterService(NewOrder newOrder)
         {
             Argument.NotNull(newOrder, "Модель заказа не может быть пустой.");
             Argument.Positive(newOrder.PrintSizeID, "Размер печати не может быть пустым.");
@@ -376,7 +383,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 PaymentTransactionID = 0 //will be defined while save
             };
 
-            PrinterServiceExtended service = this.GetPrintService(newOrder);
+            PrinterServiceExtended service = this.GetPrinterService(newOrder);
             Argument.Require(service != null, "Выбранная услуга печати не поддерживается принтером.");
 
             order.PrintServiceID = service.PrinterService.PrintServiceID;
@@ -477,6 +484,39 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 context.Save();
 
                 return order;
+            }
+        }
+
+        /// <summary>
+        /// Check if new order is available for user.
+        /// </summary>
+        /// <param name="userID">Current user.</param>
+        /// <param name="fullPrice">Price of the order.</param>
+        /// <returns></returns>
+        public PrintOrderAvailabilities CheckPrintOrderAvailabilityForUser(int userID, decimal fullPrice)
+        {
+            using (IDataContext context = this.Context())
+            {
+                IUserRepository userRepo = this.Repository<IUserRepository>(context);
+
+                decimal maxDebtPerAccount = decimal.Parse(ConfigurationManager.AppSettings["MaxDebtPerAccount"]);
+                maxDebtPerAccount = Math.Min(maxDebtPerAccount, -maxDebtPerAccount);
+                decimal maxDebtPerSystem = decimal.Parse(ConfigurationManager.AppSettings["MaxDebtPerSystem"]);
+                maxDebtPerSystem = Math.Min(maxDebtPerSystem, -maxDebtPerSystem);
+
+                User user = userRepo.GetByID(userID);
+                Argument.NotNull(user, "Пользователь не найден.");
+
+                decimal systemDebt = userRepo.GetAll().Where(e => e.AmountOfMoney < 0).Sum(e => e.AmountOfMoney);
+
+                if (user.AmountOfMoney - fullPrice >= 0) {
+                    return PrintOrderAvailabilities.Available;
+                }
+                if (user.AmountOfMoney - fullPrice >= maxDebtPerAccount && systemDebt - fullPrice >= maxDebtPerSystem)
+                {
+                    return PrintOrderAvailabilities.AvailableWithDebt;
+                }
+                return PrintOrderAvailabilities.Unavailable;
             }
         }
 

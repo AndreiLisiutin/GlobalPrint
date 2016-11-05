@@ -627,6 +627,7 @@
     <Content Include="Resources\Libraries\underscore.js\underscore.js" />
     <Content Include="Resources\Scripts\GlobalPrint.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Home\Index.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Order\Confirm.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Printer\Edit.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Order\New.js" />
     <Content Include="Resources\Scripts\GlobalPrint\PrintOrder\RecievedPrintOrder.js" />
@@ -637,6 +638,7 @@
     <Content Include="Resources\Scripts\GlobalPrint\UserProfile\SendMoney.js" />
     <Content Include="Resources\Scripts\GlobalPrint\UserProfile\UserProfile.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\CommonUtils.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Utils\Enums.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\Services.js" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\css\jquery.fileupload.css" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\jquery.fileupload-process.js" />
