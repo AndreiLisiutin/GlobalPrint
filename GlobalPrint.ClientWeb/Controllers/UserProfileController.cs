@@ -15,6 +15,7 @@ using GlobalPrint.Infrastructure.CommonUtils.Pagination;
 using System.Linq;
 using GlobalPrint.ClientWeb.Models.Lookup;
 using GlobalPrint.Infrastructure.BankUtility;
+using GlobalPrint.Infrastructure.BankUtility.BankInfo;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -22,14 +23,16 @@ namespace GlobalPrint.ClientWeb
     {
         private UserUnit _userUnit;
         private PaymentActionUnit _paymentActionUnit;
+        private IBankUtility _bankUtility;
         public UserProfileController()
-            : this(IoC.Instance.Resolve<UserUnit>(), new PaymentActionUnit())
+            : this(IoC.Instance.Resolve<UserUnit>(), new PaymentActionUnit(), IoC.Instance.Resolve<IBankUtility>())
         {
         }
-        public UserProfileController(UserUnit userUnit, PaymentActionUnit paymentActionUnit)
+        public UserProfileController(UserUnit userUnit, PaymentActionUnit paymentActionUnit, IBankUtility bankUtility)
         {
             this._userUnit = userUnit;
             this._paymentActionUnit = paymentActionUnit;
+            this._bankUtility = bankUtility;
         }
 
         /// <summary>
@@ -146,8 +149,14 @@ namespace GlobalPrint.ClientWeb
         [HttpGet, Authorize]
         public ActionResult GetBankInfo(string bic)
         {
-            var bankInfo = new BankUtility().GetBankInfo(bic);
-            return Json(bankInfo);
+            IBankInfo bankInfo = null;
+            try
+            {
+                bankInfo = _bankUtility.GetBankInfo(bic);
+            }
+            catch (Exception) { }
+
+            return Json(bankInfo, JsonRequestBehavior.AllowGet);
         }
 
         private ViewResult _USER_PROFILE_SEND_MONEY(SendModeyPackage package)

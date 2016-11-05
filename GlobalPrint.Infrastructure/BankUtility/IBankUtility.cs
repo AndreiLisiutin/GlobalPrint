@@ -13,6 +13,6 @@ namespace GlobalPrint.Infrastructure.BankUtility
         /// </summary>
         /// <param name="bicCode">BIC code of bank.</param>
         /// <returns>Returns object with bank info.</returns>
-        BankInfo GetBankInfo(string bicCode);
+        IBankInfo GetBankInfo(string bicCode);
     }
 }

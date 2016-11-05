@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GlobalPrint.Infrastructure.BankUtility
+namespace GlobalPrint.Infrastructure.BankUtility.BankInfo
 {
     /// <summary>
     /// Bank info from web service.
@@ -12,28 +12,28 @@ namespace GlobalPrint.Infrastructure.BankUtility
     /// <remarks>
     /// Taken from http://www.cbr.ru/scripts/CO_XSD/CreditInfoByIntCode.xsd
     /// </remarks>
-    public class BankInfo
+    public class BankInfo : IBankInfo
     {
-        /// <summary>
-        /// Регистрационный номер КО.
-        /// </summary>
-        public short? RegNumber { get; set; }
         /// <summary>
         /// БИК.
         /// </summary>
         public string Bic { get; set; }
         /// <summary>
+        /// Регистрационный номер КО.
+        /// </summary>
+        public short? RegNumber { get; set; }
+        /// <summary>
         /// Название организации.
         /// </summary>
-        public string OrgName { get; set; }
+        public string ShortName { get; set; }
         /// <summary>
         /// Полное название организации.
         /// </summary>
-        public string OrgFullName { get; set; }
+        public string FullName { get; set; }
         /// <summary>
         /// Список телефонов.
         /// </summary>
-        public string Phones { get; set; }
+        public string Phone { get; set; }
         /// <summary>
         /// Дата внесения в КГР.
         /// </summary>
@@ -74,5 +74,20 @@ namespace GlobalPrint.Infrastructure.BankUtility
         /// Дата вынесения заключения (признак внесения КО в Систему страхования вкладов).
         /// </summary>
         public DateTime? SSV_Date { get; set; }
+
+        /// <summary>
+        /// Корреспондентский счет - не реализован тут.
+        /// </summary>
+        public string CorrespondentAccount
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

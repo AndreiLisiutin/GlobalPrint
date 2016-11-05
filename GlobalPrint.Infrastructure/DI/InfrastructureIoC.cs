@@ -1,4 +1,6 @@
 ﻿using GlobalPrint.Infrastructure.BankUtility;
+using GlobalPrint.Infrastructure.BankUtility.BankInfo;
+using GlobalPrint.Infrastructure.BankUtility.BicInfo;
 using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.Infrastructure.DI;
 using GlobalPrint.Infrastructure.EmailUtility;
@@ -28,8 +30,8 @@ namespace GlobalPrint.ServerBusinessLogic.DI
             ioc.Kernel.Bind<Lazy<IEmailUtility>>().ToMethod(ctx => new Lazy<IEmailUtility>(() => ioc.Kernel.Get<IEmailUtility>()));
 
             // Bank
-            ioc.Kernel.Bind<IBankUtility>().To<BankUtility>().InSingletonScope();
-            ioc.Kernel.Bind<Lazy<IBankUtility>>().ToMethod(ctx => new Lazy<IBankUtility>(() => ioc.Kernel.Get<BankUtility>()));
+            ioc.Kernel.Bind<IBankUtility>().To<BicInfoUtility>().InSingletonScope();
+            ioc.Kernel.Bind<Lazy<IBankUtility>>().ToMethod(ctx => new Lazy<IBankUtility>(() => ioc.Kernel.Get<BicInfoUtility>()));
 
             // File utility
             ioc.Kernel.Bind<IFileUtility>().To<FileUtility>().InSingletonScope();

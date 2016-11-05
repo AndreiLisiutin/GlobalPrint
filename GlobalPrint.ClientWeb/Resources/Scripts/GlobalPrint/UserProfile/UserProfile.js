@@ -34,7 +34,11 @@
 
         var bankInfoCallback = function (json) {
             if (json) {
-                bankName.val(json.OrgName);
+                bankName.val(json.FullName);
+                bankCorrespondentAccount.val(json.CorrespondentAccount);
+            } else {
+                bankName.val(null);
+                bankCorrespondentAccount.val(null);
             }
         };
 

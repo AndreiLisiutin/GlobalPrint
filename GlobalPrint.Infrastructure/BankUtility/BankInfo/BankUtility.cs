@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GlobalPrint.Infrastructure.BankUtility
+namespace GlobalPrint.Infrastructure.BankUtility.BankInfo
 {
     public class BankUtility : IBankUtility
     {
@@ -26,7 +26,7 @@ namespace GlobalPrint.Infrastructure.BankUtility
         /// </summary>
         /// <param name="bicCode">BIC code of bank.</param>
         /// <returns>Returns object with bank info.</returns>
-        public BankInfo GetBankInfo(string bicCode)
+        public IBankInfo GetBankInfo(string bicCode)
         {
             double intCode = _service.BicToIntCode(bicCode);
             DataSet ds = _service.CreditInfoByIntCode(intCode);

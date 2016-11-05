@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GlobalPrint.Infrastructure.BankUtility
+namespace GlobalPrint.Infrastructure.BankUtility.BankInfo
 {
     /// <summary>
     /// Realizes Adapter pattern. For converting bank web service response to BankInfo model.
@@ -29,9 +29,9 @@ namespace GlobalPrint.Infrastructure.BankUtility
                     {
                         RegNumber = dr["RegNumber"] as short?,
                         Bic = dr["BIC"].ToString(),
-                        OrgName = dr["OrgName"].ToString(),
-                        OrgFullName = dr["OrgFullName"].ToString(),
-                        Phones = dr["phones"].ToString(),
+                        ShortName = dr["OrgName"].ToString(),
+                        FullName = dr["OrgFullName"].ToString(),
+                        Phone = dr["phones"].ToString(),
                         DateKGRRegistration = dr["DateKGRRegistration"] as DateTime?,
                         MainRegNumber = dr["MainRegNumber"].ToString(),
                         MainDateReg = dr["MainDateReg"] as DateTime?,
