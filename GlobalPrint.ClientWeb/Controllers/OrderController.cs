@@ -2,6 +2,7 @@
 using GlobalPrint.ClientWeb.Models.PushNotifications;
 using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.CommonUtils;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order;
 using GlobalPrint.ServerBusinessLogic.Models.Business;
@@ -22,14 +23,16 @@ namespace GlobalPrint.ClientWeb
     public class OrderController : BaseController
     {
         PrintOrderUnit _printOrderUnit;
+        IUserUnit _userUnit;
         Random _random;
         public OrderController()
-            : this (IoC.Instance.Resolve<PrintOrderUnit>(), new Random())
+            : this (IoC.Instance.Resolve<PrintOrderUnit>(), IoC.Instance.Resolve<IUserUnit>(), new Random())
         {
         }
-        public OrderController(PrintOrderUnit printerOrderUnit, Random random)
+        public OrderController(PrintOrderUnit printerOrderUnit, IUserUnit userUnit, Random random)
         {
             this._printOrderUnit = printerOrderUnit;
+            this._userUnit = userUnit;
             this._random = random;
         }
 
@@ -269,18 +272,22 @@ namespace GlobalPrint.ClientWeb
 
         private ViewResult _ORDER_CONFIRM(NewOrder newOrder)
         {
+            int userId = this.GetCurrentUserID();
             Argument.NotNull(newOrder, "Модель для нового заказа не может быть пустой.");
             Argument.Positive(newOrder.PrinterID, "Ключ принтера в модели для нового заказа не может быть пустым.");
             Argument.Require(this._uploadedFilesRepo.Contains(newOrder.FileToPrint), "Не найден файл для печати.");
 
             DocumentBusinessInfo document = this._uploadedFilesRepo.Get(newOrder.FileToPrint);
             int pagesCount = this._printOrderUnit.CalculatePagesCount(document);
-            PrinterServiceExtended printService = this._printOrderUnit.GetPrintService(newOrder);
-            decimal fullPrice = PrintOrderUnit.CALCULATE_FULL_PRICE(printService.PrinterService.PricePerPage, pagesCount, newOrder.CopiesCount);
+            PrinterServiceExtended printerService = this._printOrderUnit.GetPrinterService(newOrder);
+            decimal fullPrice = PrintOrderUnit.CALCULATE_FULL_PRICE(printerService.PrinterService.PricePerPage, pagesCount, newOrder.CopiesCount);
+            PrintOrderAvailabilities isAvailable = this._printOrderUnit.CheckPrintOrderAvailabilityForUser(userId, fullPrice);
 
             ViewBag.PagesCount = pagesCount;
-            ViewBag.PrinterService = printService;
+            ViewBag.PrinterService = printerService;
             ViewBag.FullPrice = fullPrice;
+            ViewBag.IsOrderAvailable = isAvailable;
+            
             return View("Confirm", newOrder);
         }
     }
