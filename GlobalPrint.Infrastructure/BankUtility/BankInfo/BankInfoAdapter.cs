@@ -27,7 +27,7 @@ namespace GlobalPrint.Infrastructure.BankUtility.BankInfo
                     DataRow dr = dt.Rows[0];
                     return new BankInfo()
                     {
-                        RegNumber = dr["RegNumber"] as short?,
+                        RegNumber = dr["RegNumber"] as string,
                         Bic = dr["BIC"].ToString(),
                         ShortName = dr["OrgName"].ToString(),
                         FullName = dr["OrgFullName"].ToString(),
@@ -38,9 +38,9 @@ namespace GlobalPrint.Infrastructure.BankUtility.BankInfo
                         UstavAdr = dr["UstavAdr"].ToString(),
                         FactAdr = dr["FactAdr"].ToString(),
                         Director = dr["Director"].ToString(),
-                        UstMoney = dr["UstMoney"] as decimal?,
+                        UstMoney = dr["UstMoney"] as string,
                         OrgStatus = dr["OrgStatus"].ToString(),
-                        RegCode = dr["RegCode"] as short?,
+                        RegCode = dr["RegCode"] as string,
                         SSV_Date = dr["SSV_Date"] as DateTime?
                     };
                 }

@@ -507,9 +507,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 User user = userRepo.GetByID(userID);
                 Argument.NotNull(user, "Пользователь не найден.");
 
-                decimal systemDebt = userRepo.GetAll().Where(e => e.AmountOfMoney < 0).Sum(e => e.AmountOfMoney);
+                var usersWithNegativeMoney = userRepo.GetAll().Where(e => e.AmountOfMoney < 0).ToList();
+                decimal systemDebt = usersWithNegativeMoney.Sum(e => e.AmountOfMoney);
 
-                if (user.AmountOfMoney - fullPrice >= 0) {
+                if (user.AmountOfMoney - fullPrice >= 0)
+                {
                     return PrintOrderAvailabilities.Available;
                 }
                 if (user.AmountOfMoney - fullPrice >= maxDebtPerAccount && systemDebt - fullPrice >= maxDebtPerSystem)

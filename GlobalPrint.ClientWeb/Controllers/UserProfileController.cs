@@ -16,6 +16,8 @@ using System.Linq;
 using GlobalPrint.ClientWeb.Models.Lookup;
 using GlobalPrint.Infrastructure.BankUtility;
 using GlobalPrint.Infrastructure.BankUtility.BankInfo;
+using GlobalPrint.Infrastructure.BankUtility.BicInfo;
+using GlobalPrint.Infrastructure.LogUtility;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -24,15 +26,19 @@ namespace GlobalPrint.ClientWeb
         private UserUnit _userUnit;
         private PaymentActionUnit _paymentActionUnit;
         private IBankUtility _bankUtility;
+        private Lazy<ILogger> _logUtility;
         public UserProfileController()
-            : this(IoC.Instance.Resolve<UserUnit>(), new PaymentActionUnit(), IoC.Instance.Resolve<IBankUtility>())
+            : this(IoC.Instance.Resolve<UserUnit>(), new PaymentActionUnit(), 
+                  IoC.Instance.Resolve<IBankUtility>(), IoC.Instance.Resolve<ILoggerFactory>())
         {
         }
-        public UserProfileController(UserUnit userUnit, PaymentActionUnit paymentActionUnit, IBankUtility bankUtility)
+        public UserProfileController(UserUnit userUnit, PaymentActionUnit paymentActionUnit, 
+            IBankUtility bankUtility, ILoggerFactory loggerFactory)
         {
             this._userUnit = userUnit;
             this._paymentActionUnit = paymentActionUnit;
             this._bankUtility = bankUtility;
+            this._logUtility = new Lazy<ILogger>(() => loggerFactory.GetLogger<UserProfileController>());
         }
 
         /// <summary>
@@ -154,7 +160,11 @@ namespace GlobalPrint.ClientWeb
             {
                 bankInfo = _bankUtility.GetBankInfo(bic);
             }
-            catch (Exception) { }
+            catch (Exception e)
+            {
+                this._logUtility.Value.Error(e, e.Message);
+                bankInfo = new BicInfo();
+            }
 
             return Json(bankInfo, JsonRequestBehavior.AllowGet);
         }

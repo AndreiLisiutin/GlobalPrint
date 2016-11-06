@@ -21,7 +21,7 @@ namespace GlobalPrint.Infrastructure.BankUtility.BankInfo
         /// <summary>
         /// Регистрационный номер КО.
         /// </summary>
-        public short? RegNumber { get; set; }
+        public string RegNumber { get; set; }
         /// <summary>
         /// Название организации.
         /// </summary>
@@ -61,7 +61,7 @@ namespace GlobalPrint.Infrastructure.BankUtility.BankInfo
         /// <summary>
         /// Уставный капитал, руб.
         /// </summary>
-        public decimal? UstMoney { get; set; }
+        public string UstMoney { get; set; }
         /// <summary>
         /// Статус кредитной орг.
         /// </summary>
@@ -69,7 +69,7 @@ namespace GlobalPrint.Infrastructure.BankUtility.BankInfo
         /// <summary>
         /// Вн. код региона.
         /// </summary>
-        public short? RegCode { get; set; }
+        public string RegCode { get; set; }
         /// <summary>
         /// Дата вынесения заключения (признак внесения КО в Систему страхования вкладов).
         /// </summary>

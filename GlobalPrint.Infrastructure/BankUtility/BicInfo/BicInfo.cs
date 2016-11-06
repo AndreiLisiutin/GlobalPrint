@@ -21,7 +21,7 @@ namespace GlobalPrint.Infrastructure.BankUtility.BicInfo
         /// <summary>
         /// Регистрационный номер.
         /// </summary>
-        public short? RegNumber { get; set; }
+        public string RegNumber { get; set; }
         /// <summary>
         /// Корреспондентский счет.
         /// </summary>

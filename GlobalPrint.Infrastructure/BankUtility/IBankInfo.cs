@@ -34,7 +34,7 @@ namespace GlobalPrint.Infrastructure.BankUtility
         /// <summary>
         /// Регистрационный номер.
         /// </summary>
-        short? RegNumber { get; set; }
+        string RegNumber { get; set; }
 
         /// <summary>
         /// Телефон.

@@ -34,7 +34,7 @@
 
         var bankInfoCallback = function (json) {
             if (json) {
-                bankName.val(json.FullName);
+                bankName.val(json.ShortName);
                 bankCorrespondentAccount.val(json.CorrespondentAccount);
             } else {
                 bankName.val(null);
