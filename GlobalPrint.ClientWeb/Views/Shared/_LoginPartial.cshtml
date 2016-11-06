@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNet.Identity
 @using GlobalPrint.ClientWeb.Helpers
 @using System.Globalization
+@using GlobalPrint.ServerBusinessLogic.Models.Domain.Users
 
 @if (Request.IsAuthenticated)
 {
@@ -9,7 +10,7 @@
         @Html.AntiForgeryToken()
 
         <ul id="main-nav-right" class="nav navbar-nav navbar-right">
-            @if (!ViewContext.HttpContext.User.IsInRole("Admin"))
+            @if (!ViewContext.HttpContext.User.IsInRole(UserRolesEnum.Admin))
             {
                 <li>
                     @Html.ActionLink("Администрирование", "MyPrinters", "Printer")

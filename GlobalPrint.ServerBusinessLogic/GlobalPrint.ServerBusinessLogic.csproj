@@ -116,6 +116,7 @@
     <Compile Include="Models\Business\Orders\PrinterScheduled.cs" />
     <Compile Include="DI\IoC.cs" />
     <Compile Include="DI\ServerBusinessLogicIoC.cs" />
+    <Compile Include="Models\Domain\Users\UserRolesEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_IBusinessLogicLayer\Units\Users\IRoleUnit.cs" />
     <Compile Include="_IBusinessLogicLayer\Units\Users\IUserRoleUnit.cs" />
