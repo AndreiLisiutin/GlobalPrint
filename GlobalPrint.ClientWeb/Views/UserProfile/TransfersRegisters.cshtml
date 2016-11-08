@@ -41,8 +41,10 @@
     </table>
 
     <div class="form-group">
-        @Ajax.ActionLink("Сформировать", "NewTransfersRegister", "UserProfile", new { },
-                                new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-default", @title = "Сформировать" })
+        @using (Html.BeginForm("NewTransfersRegister", "UserProfile", FormMethod.Post, new { @class = "form-inline" }))
+        {
+            <button type="submit" class="btn btn-default">Сформировать</button>
+        }
         @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
     </div>
 </div>
