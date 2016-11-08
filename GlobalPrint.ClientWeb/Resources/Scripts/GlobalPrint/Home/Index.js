@@ -74,7 +74,7 @@
     var _createMap = function (location) {
         var isUserAuthenticated = GlobalPrint.Utils.CommonUtils.isUserAuthenticated();
         var mapOptions = {
-            zoom: isUserAuthenticated ? 16 : 4,
+            zoom: 4,
             center: location,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
@@ -100,7 +100,7 @@
     };
 
     var _zoomMarker = function (marker) {
-        _map.setZoom(16);
+        _map.setZoom(15);
         _map.setCenter(marker.getPosition());
     };
 
@@ -249,7 +249,7 @@
 
             var averallServices = '';
             $.each(marker.printerInfo.PrinterServices, function (index, item) {
-                var service = item.PrintService.FullName + ':.....' + item.PrinterService.PricePerPage + ' руб.';
+                var service = item.PrintService.FullName + ': ' + item.PrinterService.PricePerPage + ' руб.';
                 averallServices += (averallServices ? '\n' : '') + service;
             });
             $("#printerInfoPrices").val(averallServices);

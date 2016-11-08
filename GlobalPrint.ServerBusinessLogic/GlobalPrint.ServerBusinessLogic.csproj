@@ -69,6 +69,7 @@
     <Compile Include="BusinessLogicLayer\Units\Orders\PrintOrderRegistersUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Printers\PrinterUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Printers\PrintServicesUnit.cs" />
+    <Compile Include="BusinessLogicLayer\Units\TransfersRegisters\TransfersRegisterUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Users\RoleUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Users\UserActionUnit.cs" />
     <Compile Include="BusinessLogicLayer\Units\Users\UserRoleUnit.cs" />
@@ -106,6 +107,10 @@
     <Compile Include="Models\Domain\Printers\PrintSize.cs" />
     <Compile Include="Models\Domain\Printers\PrintSizePrintType.cs" />
     <Compile Include="Models\Domain\Printers\PrintType.cs" />
+    <Compile Include="Models\Domain\TransfersRegisters\CashRequestStatus.cs" />
+    <Compile Include="Models\Domain\TransfersRegisters\CashRequest.cs" />
+    <Compile Include="Models\Domain\TransfersRegisters\CashRequestStatusEnum.cs" />
+    <Compile Include="Models\Domain\TransfersRegisters\TransfersRegister.cs" />
     <Compile Include="Models\Domain\Users\ILegalRequisites.cs" />
     <Compile Include="Models\Domain\Users\IUserAccount.cs" />
     <Compile Include="Models\Domain\Users\Role.cs" />
@@ -139,6 +144,9 @@
     <Compile Include="_IDataAccessLayer\Repository\Printers\IPrintSizeRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Printers\IPrintSizePrintTypeRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Printers\IPrintTypeRepository.cs" />
+    <Compile Include="_IDataAccessLayer\Repository\TransfersRegisters\ICashRequestStatusRepository.cs" />
+    <Compile Include="_IDataAccessLayer\Repository\TransfersRegisters\ICashRequestRepository.cs" />
+    <Compile Include="_IDataAccessLayer\Repository\TransfersRegisters\ITransfersRegisterRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Users\IUserActionLogRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Users\IRoleRepository.cs" />
     <Compile Include="_IDataAccessLayer\Repository\Users\IUserRepository.cs" />

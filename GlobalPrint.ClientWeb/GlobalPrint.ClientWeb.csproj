@@ -635,6 +635,7 @@
     <Content Include="Resources\Scripts\GlobalPrint\Shared\BaseLayout.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Shared\Navigation.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Shared\PushNotifications.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\UserProfile\RequestCash.js" />
     <Content Include="Resources\Scripts\GlobalPrint\UserProfile\SendMoney.js" />
     <Content Include="Resources\Scripts\GlobalPrint\UserProfile\UserProfile.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\CommonUtils.js" />
@@ -807,6 +808,8 @@
     <Content Include="Resources\Libraries\nprogress\package.json" />
     <Content Include="Resources\Libraries\nprogress\Readme.md" />
     <Content Include="Views\Shared\Errors\404.cshtml" />
+    <Content Include="Views\UserProfile\RequestCash.cshtml" />
+    <Content Include="Views\UserProfile\TransfersRegisters.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

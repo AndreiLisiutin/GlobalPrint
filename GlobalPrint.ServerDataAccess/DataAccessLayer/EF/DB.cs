@@ -1,6 +1,7 @@
 ﻿using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.TransfersRegisters;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using System.Data.Common;
 using System.Data.Entity;
@@ -53,5 +54,9 @@ namespace GlobalPrint.ServerDataAccess.EF
         public DbSet<PaymentTransactionStatus> PaymentTransactionStatuses { get; set; }
         public DbSet<PaymentActionStatus> PaymentActionStatuses { get; set; }
         public DbSet<PaymentActionType> PaymentActionTypes { get; set; }
+
+        public DbSet<CashRequest> CashRequests { get; set; }
+        public DbSet<CashRequestStatus> CashRequestStatuses { get; set; }
+        public DbSet<TransfersRegister> TransfersRegisters { get; set; }
     }
 }

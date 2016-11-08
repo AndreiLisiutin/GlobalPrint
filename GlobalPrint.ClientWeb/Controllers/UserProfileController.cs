@@ -18,6 +18,8 @@ using GlobalPrint.Infrastructure.BankUtility;
 using GlobalPrint.Infrastructure.BankUtility.BankInfo;
 using GlobalPrint.Infrastructure.BankUtility.BicInfo;
 using GlobalPrint.Infrastructure.LogUtility;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.TransfersRegisters;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.TransfersRegisters;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -25,20 +27,22 @@ namespace GlobalPrint.ClientWeb
     {
         private UserUnit _userUnit;
         private PaymentActionUnit _paymentActionUnit;
+        private TransfersRegisterUnit _transfersRegisterUnit;
         private IBankUtility _bankUtility;
         private Lazy<ILogger> _logUtility;
         public UserProfileController()
-            : this(IoC.Instance.Resolve<UserUnit>(), new PaymentActionUnit(), 
-                  IoC.Instance.Resolve<IBankUtility>(), IoC.Instance.Resolve<ILoggerFactory>())
+            : this(IoC.Instance.Resolve<UserUnit>(), new PaymentActionUnit(),
+                  IoC.Instance.Resolve<IBankUtility>(), IoC.Instance.Resolve<ILoggerFactory>(), new TransfersRegisterUnit())
         {
         }
-        public UserProfileController(UserUnit userUnit, PaymentActionUnit paymentActionUnit, 
-            IBankUtility bankUtility, ILoggerFactory loggerFactory)
+        public UserProfileController(UserUnit userUnit, PaymentActionUnit paymentActionUnit,
+            IBankUtility bankUtility, ILoggerFactory loggerFactory, TransfersRegisterUnit transfersRegisterUnit)
         {
             this._userUnit = userUnit;
             this._paymentActionUnit = paymentActionUnit;
             this._bankUtility = bankUtility;
             this._logUtility = new Lazy<ILogger>(() => loggerFactory.GetLogger<UserProfileController>());
+            this._transfersRegisterUnit = transfersRegisterUnit;
         }
 
         /// <summary>
@@ -169,12 +173,69 @@ namespace GlobalPrint.ClientWeb
             return Json(bankInfo, JsonRequestBehavior.AllowGet);
         }
 
+
+        [HttpGet, Authorize]
+        public ActionResult RequestCash()
+        {
+            CashRequest cashRequest = new CashRequest()
+            {
+                UserID = this.GetCurrentUserID(),
+                CreatedOn = DateTime.Now,
+                CashRequestStatusID = (int)CashRequestStatusEnum.InProgress
+            };
+            return _USER_PROFILE_REQUEST_CASH(cashRequest);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult ExecuteRequestCash(CashRequest request)
+        {
+            Argument.NotNull(request, "Модель для запроса вывода денег пустая.");
+            Argument.Require(request.UserID == this.GetCurrentUserID(), "Нельзя выводить деньги от лица других пользователей.");
+            request.CreatedOn = DateTime.Now;
+            request.CashRequestStatusID = (int)CashRequestStatusEnum.InProgress;
+            Validation validation = this._transfersRegisterUnit.ValidateCashRequest(request);
+            if (!validation.IsValid)
+            {
+                validation.Errors.ForEach(e => ModelState.AddModelError("", e));
+                return this._USER_PROFILE_REQUEST_CASH(request);
+            }
+            this._transfersRegisterUnit.RequestCash(request);
+            return RedirectToAction("UserProfile");
+        }
+
+        [HttpGet, Authorize]
+        public ActionResult TransfersRegisters()
+        {
+            int userID = this.GetCurrentUserID();
+            List<TransfersRegister> registers = this._transfersRegisterUnit.GetTransfersRegisters(userID);
+            return _USER_PROFILE_TRANSFER_REGISTERS(registers);
+        }
+
+        [HttpPost, Authorize]
+        public ActionResult NewTransfersRegister()
+        {
+            int userID = this.GetCurrentUserID();
+            TransfersRegister register = this._transfersRegisterUnit.CreateTransfersRegister(userID);
+            return RedirectToAction("TransfersRegisters");
+        }
+
         private ViewResult _USER_PROFILE_SEND_MONEY(SendModeyPackage package)
         {
             int userID = this.GetCurrentUserID();
             User user = this._userUnit.GetByID(userID);
             ViewBag.SenderUser = user;
             return this.View("SendMoney", package);
+        }
+        private ViewResult _USER_PROFILE_REQUEST_CASH(CashRequest request)
+        {
+            User user = this._userUnit.GetByID(request.UserID);
+            ViewBag.User = user;
+            return this.View("RequestCash", request);
+        }
+        private ViewResult _USER_PROFILE_TRANSFER_REGISTERS(List<TransfersRegister> registers)
+        {
+            return this.View("TransfersRegisters", registers);
         }
     }
 }
