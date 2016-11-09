@@ -8,7 +8,7 @@
 
 <div id="lookupWindow">
     <button type="button" class="close hidden-xs" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    @using (Html.BeginForm("fake", "fake", FormMethod.Get, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("fake", "fake", FormMethod.Get, new { @class = "form-horizontal", role = "form", id="searchForm" }))
     {
         <div class="form-inline gp-data-filter focus">
             <div class="input-group">
@@ -68,12 +68,14 @@
     </div>
     @if (Model.Values.PagesCount > 1)
     {
-        <div class="pagination" id="lookupPagination">
+        <div id="lookupPagination">
             @Html.Paging(Model.Values, page => Url.Action("Fake", "Fake", new { CurrentPage = page, ItemsPerPage = Model.Values.PagesCount, searchText = SearchText }))
         </div>
     }
-    <button type="button" class="btn btn-default" data-dismiss="modal" id="lookupSelect">Выбрать</button>
-    <button type="button" class="btn btn-default pull-right" data-dismiss="modal" id="lookupClose">Отмена</button>
+    <div class="btn-toolbar">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="lookupSelect">Выбрать</button>
+        <button type="button" class="btn btn-default pull-right" data-dismiss="modal" id="lookupClose">Отмена</button>
+    </div>
 </div>
 
 <script>
@@ -124,13 +126,13 @@
             });
         };
 
-        $("#searchTextSubmit").click(function (e) {
+        $("#searchForm").submit(function (e) {
             e.preventDefault();
             updateLookup(1, null);
         });
         $('#lookupPagination a').on('click', function (e) {
             e.preventDefault();
-            updateLookup(e.target.attr('data-page'), null);
+            updateLookup($(e.target).attr('data-page'), null);
         });
     });
 

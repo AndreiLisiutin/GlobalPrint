@@ -37,7 +37,7 @@
             <label class="col-sm-3 control-label text-left">Пересылаемая сумма</label>
             <div class="col-sm-9 input-wrapper">
                 <div class="input-group">
-                    @Html.TextBox("AmountOfMoney", Model.AmountOfMoney, new { @type = "number", @class = "form-control text-right" })
+                    @Html.TextBox("AmountOfMoney", Model.AmountOfMoney == 0 ? "" : Model.AmountOfMoney.ToString(), new { @type = "text", @class = "form-control text-right" })
                     <div class="input-group-addon">руб.</div>
                 </div>
             </div>

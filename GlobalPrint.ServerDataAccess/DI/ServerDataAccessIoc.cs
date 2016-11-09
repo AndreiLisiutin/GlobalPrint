@@ -62,6 +62,11 @@ namespace GlobalPrint.ServerDataAccess.DI
             ioc.Kernel.Bind<IPaymentActionStatusRepository>().To<PaymentActionStatusRepository>().InTransientScope();
             ioc.Kernel.Bind<IPaymentTransactionRepository>().To<PaymentTransactionRepository>().InTransientScope();
             ioc.Kernel.Bind<IPaymentTransactionStatusRepository>().To<PaymentTransactionStatusRepository>().InTransientScope();
+
+            ioc.Kernel.Bind<ICashRequestRepository>().To<CashRequestRepository>().InTransientScope();
+            ioc.Kernel.Bind<ICashRequestStatusRepository>().To<CashRequestStatusRepository>().InTransientScope();
+            ioc.Kernel.Bind<ITransfersRegisterRepository>().To<TransfersRegisterRepository>().InTransientScope();
+
         }
     }
 }

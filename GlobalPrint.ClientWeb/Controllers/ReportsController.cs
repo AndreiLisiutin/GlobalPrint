@@ -5,6 +5,7 @@ using GlobalPrint.Infrastructure.FileUtility.FileExporters;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Orders;
 using GlobalPrint.ServerBusinessLogic.Models.Business;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Orders;
+using GlobalPrint.ServerBusinessLogic.Models.Business.TransfersRegisters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +55,21 @@ namespace GlobalPrint.ClientWeb.Controllers
         {
             filter.OwnerUserID = this.GetCurrentUserID();
             DocumentBusinessInfo file = this._printOrderRegistersUnit.OrderRegisterExport(filter);
+            string mimeType = this._mimeTypeUtility.ConvertExtensionToMimeType(file.Extension);
+            return File(file.SerializedFile, mimeType, file.Name);
+        }
+
+        /// <summary>
+        /// Perform calculating the register of transfers by its identifier.
+        /// </summary>
+        /// <param name="filter">Filter for the register.</param>
+        /// <returns>Register file info.</returns>
+        [HttpGet]
+        [Authorize]
+        public ActionResult GetTransfersRegister(TransfersRegisterFilter filter)
+        {
+            filter.OwnerUserID = this.GetCurrentUserID();
+            DocumentBusinessInfo file = this._printOrderRegistersUnit.TransfersRegisterExport(filter);
             string mimeType = this._mimeTypeUtility.ConvertExtensionToMimeType(file.Extension);
             return File(file.SerializedFile, mimeType, file.Name);
         }

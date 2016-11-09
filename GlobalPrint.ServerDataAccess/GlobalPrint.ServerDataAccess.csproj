@@ -80,6 +80,9 @@
     <Compile Include="DataAccessLayer\Repository\Printers\PrintSizePrintTypeRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\Printers\PrintSizeRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\Printers\PrintTypeRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\TransfersRegisters\CashRequestStatusRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\TransfersRegisters\CashRequestRepository.cs" />
+    <Compile Include="DataAccessLayer\Repository\TransfersRegisters\TransfersRegisterRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\Users\RoleRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\Users\UserActionLogRepository.cs" />
     <Compile Include="DataAccessLayer\Repository\Users\UserActionTypeRepository.cs" />
