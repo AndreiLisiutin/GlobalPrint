@@ -218,3 +218,7 @@ th {
 .currency-input {
     min-width: 70px;
 }
+
+.inline-block {
+    display: inline-block;
+}

@@ -29,19 +29,19 @@
         <tbody>
             @foreach (TransfersRegister register in Model)
             {
-            <tr>
-                <td class="col-md-4">@Html.DisplayFor(c => register.ID)</td>
-                <td class="col-md-6">@Html.DisplayFor(c => register.CreatedOn)</td>
-                <td class="table-col-buttons">
-                    <a href="@Url.Action("DownloadTransfersRegister", "UserProfile", new { @TransfersRegisterID = register.ID })" title="Загрузить" class="btn btn-default glyphicon glyphicon-download-alt"></a>
-                </td>
-            </tr>
+                <tr>
+                    <td class="col-md-4">@Html.DisplayFor(c => register.ID)</td>
+                    <td class="col-md-6">@Html.DisplayFor(c => register.CreatedOn)</td>
+                    <td class="table-col-buttons">
+                        <a href="@Url.Action("GetTransfersRegister", "Reports", new { @TransfersRegisterID = register.ID })" title="Загрузить" class="btn btn-default glyphicon glyphicon-download-alt"></a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 
     <div class="form-group">
-        @using (Html.BeginForm("NewTransfersRegister", "UserProfile", FormMethod.Post, new { @class = "form-inline" }))
+        @using (Html.BeginForm("NewTransfersRegister", "UserProfile", FormMethod.Post, new { @class = "inline-block" }))
         {
             <button type="submit" class="btn btn-default">Сформировать</button>
         }

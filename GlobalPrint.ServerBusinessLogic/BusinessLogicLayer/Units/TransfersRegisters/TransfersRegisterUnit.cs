@@ -90,17 +90,25 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.TransfersRegi
                     {
                         User user = users.First(e => e.ID == cashRequest.UserID);
 
-                        if (cashRequest.AmountOfMoney <= user.AmountOfMoney)
+                        if (cashRequest.AmountOfMoney >= user.AmountOfMoney)
+                        {
+                            //money is not enough
+                            cashRequest.CashRequestStatusID = (int)CashRequestStatusEnum.RolledBack;
+                            cashRepo.Update(cashRequest);
+                        }
+                        else if (string.IsNullOrWhiteSpace(user.BankName) || string.IsNullOrWhiteSpace(user.BankBic)
+                            || string.IsNullOrWhiteSpace(user.BankCorrespondentAccount) || string.IsNullOrWhiteSpace(user.PaymentAccount))
+                        {
+                            //bank account data is not enough
+                            cashRequest.CashRequestStatusID = (int)CashRequestStatusEnum.RolledBack;
+                            cashRepo.Update(cashRequest);
+                        }
+                        else
                         {
                             user.AmountOfMoney -= cashRequest.AmountOfMoney;
                             userRepo.Update(user);
                             cashRequest.CashRequestStatusID = (int)CashRequestStatusEnum.Committed;
                             cashRequest.TransfersRegisterID = register.ID;
-                            cashRepo.Update(cashRequest);
-                        }
-                        else
-                        {
-                            cashRequest.CashRequestStatusID = (int)CashRequestStatusEnum.RolledBack;
                             cashRepo.Update(cashRequest);
                         }
                     }

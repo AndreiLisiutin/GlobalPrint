@@ -76,6 +76,7 @@
     <Compile Include="BusinessLogicLayer\Units\Users\UserUnit.cs" />
     <Compile Include="BusinessLogicLayer\Utilities\SmsUtility.cs" />
     <Compile Include="Models\Business\Orders\NewOrder.cs" />
+    <Compile Include="Models\Business\TransfersRegisters\TransfersRegisterFilter.cs" />
     <Compile Include="Models\Business\Orders\OrderRegisterFilter.cs" />
     <Compile Include="Models\Business\Orders\PrintOrderAvailabilities.cs" />
     <Compile Include="Models\Business\Payments\PaymentActionFullInfo.cs" />
