@@ -1,4 +1,5 @@
 ﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.SignalR;
 using System;
 using System.Collections.Generic;
@@ -20,11 +21,7 @@ namespace GlobalPrint.ClientWeb.Models.PushNotifications
         {
             if (request.User.Identity.IsAuthenticated)
             {
-                var currentUser = this._unit.GetByFilter(x => x.UserName == request.User.Identity.Name);
-                if (currentUser != null)
-                {
-                    return currentUser.ID.ToString();
-                }
+                return request.User.Identity.GetUserId();
             }
 
             return "0";

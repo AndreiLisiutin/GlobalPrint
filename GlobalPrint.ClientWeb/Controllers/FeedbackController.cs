@@ -1,6 +1,8 @@
 ﻿using GlobalPrint.ClientWeb.Models;
 using GlobalPrint.ClientWeb.Models.FeedbackViewModel;
+using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.EmailUtility;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +17,7 @@ namespace GlobalPrint.ClientWeb.Controllers
     {
         private Lazy<IEmailUtility> _emailUtility { get; set; }
 
-        public FeedbackController(Lazy<IEmailUtility> emailUtility) 
+        public FeedbackController(Lazy<IEmailUtility> emailUtility)
             : base()
         {
             _emailUtility = emailUtility;
@@ -33,18 +35,14 @@ namespace GlobalPrint.ClientWeb.Controllers
             {
                 FeedbackViewModel currentUserFeedback = new FeedbackViewModel();
 
-                string userName = this.GetCurrentUserName();
-                if (userName.Contains("@"))
-                {
-                    currentUserFeedback.Email = this.GetCurrentUserName();
-                }
-                else
-                {
-                    currentUserFeedback.UserName = this.GetCurrentUserName();
-                }
+                var userUnit = IoC.Instance.Resolve<IUserUnit>();
+                var user = userUnit.GetByID(this.GetCurrentUserID());
+                currentUserFeedback.Email = user.Email;
+                currentUserFeedback.UserName = user.UserName;
 
                 return View(currentUserFeedback);
             }
+
             return View();
         }
 

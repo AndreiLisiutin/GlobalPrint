@@ -162,7 +162,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 
                 if (originalUser != null)
                 {
-                    userRepo.Update(user);
+                    originalUser.Email = user.Email;
+                    originalUser.UserName = user.UserName;
+                    originalUser.PhoneNumber = user.PhoneNumber;
+
+                    userRepo.Update(originalUser);
                     context.Save();
                     return user;
                 }

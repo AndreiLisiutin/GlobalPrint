@@ -17,7 +17,7 @@
                 </li>
             }
             <li>
-                @Html.ActionLink("Мои Принтеры", "MyPrinters", "Printer")
+                @Html.ActionLink("Мои принтеры", "MyPrinters", "Printer")
             </li>            
             <li>
                 @Html.ActionLink("Мои заказы", "MyOrders", "Order")
@@ -26,7 +26,7 @@
                 @{Html.RenderAction("UserRecievedPrintOrder", "UserPrintInfo");}       
             </li>
             <li>
-                @Html.ActionLink(User.Identity.GetUserName(), "UserProfile", "UserProfile", new { }, new { @class = "font-bold" })
+                @{Html.RenderAction("UserName", "UserPrintInfo");}
             </li>
             <li>
                 @{Html.RenderAction("UserBalance", "UserPrintInfo");}

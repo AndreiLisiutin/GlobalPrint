@@ -807,6 +807,7 @@
     <Content Include="Resources\Libraries\nprogress\package.json" />
     <Content Include="Resources\Libraries\nprogress\Readme.md" />
     <Content Include="Views\Shared\Errors\404.cshtml" />
+    <Content Include="Views\UserPrintInfo\_UserName.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
