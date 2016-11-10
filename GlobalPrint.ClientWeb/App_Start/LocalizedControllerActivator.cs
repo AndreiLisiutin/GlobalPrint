@@ -16,7 +16,7 @@ namespace GlobalPrint.ClientWeb.App_Start
         public IController Create(RequestContext requestContext, Type controllerType)
         {
             // Get the {lang} parameter in the RouteData
-            string lang = requestContext.RouteData.Values["lang"] as string;
+            string lang = "ru"; // requestContext.RouteData.Values["lang"] as string;
 
             // Validate culture name, default if not valid
             lang = LocalizationHelper.GetImplementedCulture(lang);

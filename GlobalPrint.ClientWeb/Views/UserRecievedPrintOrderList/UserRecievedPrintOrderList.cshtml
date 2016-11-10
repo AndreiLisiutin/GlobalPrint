@@ -1,6 +1,8 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders
 @using GlobalPrint.ServerBusinessLogic.Models.Business.Orders
+@using System.Globalization
 @using GlobalPrint.ClientWeb
+
 @model List<PrintOrderInfo>
 @{
     ViewBag.Title = "Принятые Заказы";
@@ -46,7 +48,7 @@
                     <td class="col-md-1" align="center">@Html.DisplayFor(c => printOrder.PrintOrder.ID)</td>
                     <td class="col-md-3">@Html.DisplayFor(c => printOrder.Printer.Name)</td>
                     <td class="col-md-2">@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>
-                    <td class="col-md-2" align="center">@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, "{0:dd.MM.yyyy HH:mm:ss}")</td>
+                    <td class="col-md-2" align="center">@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, String.Format("{{0: {0} }}", CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern))</td>
                     <td class="col-md-2" align="right">@Html.DisplayFor(c => printOrder.PrintOrder.FullPrice, "{0:0.00}")</td>
                     <td class="col-md-1" align="center">@Html.DisplayFor(c => printOrder.Status.Status)</td>
                     @if (printOrder.PrintOrder.PrintOrderStatusID == (int)PrintOrderStatusEnum.Waiting)
