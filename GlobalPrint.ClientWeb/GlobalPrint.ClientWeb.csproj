@@ -228,8 +228,13 @@
     <Content Include="Resources\Images\add-printer-button.png" />
     <Content Include="Resources\Images\closest_printer.png" />
     <Content Include="Resources\Images\Errors\404-error-pony.png" />
-    <Content Include="Resources\Images\Errors\default-error-pony.png" />
     <Content Include="Resources\Images\en_32_round.png" />
+    <Content Include="Resources\Images\Errors\default-error-1-pony.png" />
+    <Content Include="Resources\Images\Errors\default-error-2-pony.png" />
+    <Content Include="Resources\Images\Errors\default-error-3-pony.png" />
+    <Content Include="Resources\Images\Errors\default-error-4-pony.jpg" />
+    <Content Include="Resources\Images\Errors\default-error-pony.png" />
+    <Content Include="Resources\Images\Errors\file-not-found-pony.png" />
     <Content Include="Resources\Images\geolocation.png" />
     <Content Include="Resources\Images\green_circle.ico" />
     <Content Include="Resources\Images\loading_pony.gif" />
@@ -810,6 +815,7 @@
     <Content Include="Views\Shared\Errors\404.cshtml" />
     <Content Include="Views\UserProfile\RequestCash.cshtml" />
     <Content Include="Views\UserProfile\TransfersRegisters.cshtml" />
+    <Content Include="Views\Shared\Errors\FileNotFound.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
