@@ -3,6 +3,7 @@ using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.Infrastructure.LogUtility;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -42,6 +43,13 @@ namespace GlobalPrint.ClientWeb.Filters
             string controllerName = (string)filterContext.RouteData.Values["controller"];
             string actionName = (string)filterContext.RouteData.Values["action"];
             HandleErrorInfo model = new HandleErrorInfo(filterContext.Exception, controllerName, actionName);
+            filterContext.ExceptionHandled = true;
+            filterContext.HttpContext.Response.Clear();
+            filterContext.HttpContext.Response.StatusCode = filterContext.Exception is HttpException
+                ? ((HttpException)filterContext.Exception).GetHttpCode()
+                : new HttpException(null, filterContext.Exception).GetHttpCode();
+
+            this.View = this.ErrorPageView(filterContext.Exception, filterContext.HttpContext.Response.StatusCode);
             filterContext.Result = new ViewResult
             {
                 ViewName = View,
@@ -49,13 +57,6 @@ namespace GlobalPrint.ClientWeb.Filters
                 ViewData = new ViewDataDictionary<HandleErrorInfo>(model),
                 TempData = filterContext.Controller.TempData
             };
-            filterContext.ExceptionHandled = true;
-            filterContext.HttpContext.Response.Clear();
-            filterContext.HttpContext.Response.StatusCode = filterContext.Exception is HttpException
-                ? ((HttpException)filterContext.Exception).GetHttpCode()
-                : new HttpException(null, filterContext.Exception).GetHttpCode();
-
-            this.View = this.ErrorPageView(filterContext.HttpContext.Response.StatusCode);
 
             // Certain versions of IIS will sometimes use their own error page when
             // they detect a server error. Setting this property indicates that we
@@ -68,8 +69,12 @@ namespace GlobalPrint.ClientWeb.Filters
         /// </summary>
         /// <param name="statusCode">Status code.</param>
         /// <returns>View page name.</returns>
-        public string ErrorPageView(int statusCode)
+        public string ErrorPageView(Exception exception, int statusCode)
         {
+            if (exception != null && exception is FileNotFoundException)
+            {
+                return $"Errors/FileNotFound";
+            }
             switch (statusCode)
             {
                 case 404:
