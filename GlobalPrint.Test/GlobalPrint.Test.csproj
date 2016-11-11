@@ -97,7 +97,6 @@
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
     <Compile Include="ClientWebControllers\BaseControllerTest.cs" />
-    <Compile Include="ClientWebControllers\OfferControllerTest.cs" />
     <Compile Include="InfrastructureUtilities\BankUtilityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerBusinessLogicUnits\UserUnitTest.cs" />

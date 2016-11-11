@@ -1,5 +1,4 @@
-﻿using GlobalPrint.ClientWeb.Models.OfferController;
-using GlobalPrint.Infrastructure.CommonUtils;
+﻿using GlobalPrint.Infrastructure.CommonUtils;
 using System;
 using System.Web.Mvc;
 
@@ -7,72 +6,24 @@ namespace GlobalPrint.ClientWeb.Controllers
 {
     public class OfferController : BaseController
     {
-        //private IUserOfferUnit _userOfferUnit { get; set; }
-        //private IOfferUnit _offerUnit { get; set; }
-
-        public OfferController(/*IUserOfferUnit userOfferUnit, IOfferUnit offerUnit*/)
-        {
-            //_userOfferUnit = userOfferUnit;
-            //_offerUnit = offerUnit;
-        }
-
         /// <summary>
         /// Show privacy policy on registration.
         /// </summary>
         /// <returns>Blank privacy policy.</returns>
-        // GET: /Offer/PrivacyPolicy
         [HttpGet]
         public ActionResult PrivacyPolicy()
         {
             return View("PrivacyPolicy");
         }
-
-        /// <summary>
-        /// Show blank user offer on registration.
-        /// </summary>
-        /// <returns>Blank actual user offer.</returns>
-        // GET: /Offer/ActualUserOffer
-        [HttpGet]
-        public ActionResult ActualUserOffer()
-        {
-            //Offer userOffer = _offerUnit.GetActualOfferByType(OfferTypeEnum.UserOffer);
-            //Argument.NotNull(userOffer, "Не найдена актуальная оферта пользователя.");
-            //Argument.NotNullOrWhiteSpace(userOffer.Text, "Текст оферты пользователя пуст.");
-
-            //OfferViewModel offerModel = new OfferViewModel()
-            //{
-            //    Title = userOffer.Name ?? "Договор оферты пользователя",
-            //    Paragraphs = userOffer.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None)
-            //};
-
-            return View("Offer");
-        }
-
+        
         /// <summary>
         /// Get user offer or show blank offer.
         /// </summary>
         /// <returns>Offer view.</returns>
-        // GET: /Offer/Offer
         [HttpGet]
-        [Authorize]
-        public ActionResult Offer(/*OfferTypeEnum offerTypeID*/)
+        public ActionResult Offer()
         {
-            //UserOfferExtended userOffer = _userOfferUnit.GetLatestUserOfferByUserID(this.GetCurrentUserID(), offerTypeID);
-
-            //string[] offerParagraphs = null;
-            //string offerTitle = null;
-            //if (userOffer != null && userOffer.Offer != null && !string.IsNullOrWhiteSpace(userOffer.UserOfferText))
-            //{
-            //    offerTitle = userOffer.UserOfferTitle;
-            //    offerParagraphs = userOffer.UserOfferText.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
-            //}
-            
-            //OfferViewModel offerModel = new OfferViewModel()
-            //{
-            //    Title = offerTitle,
-            //    Paragraphs = offerParagraphs
-            //};
-            return View();
+            return View("Offer");
         }
     }
 }

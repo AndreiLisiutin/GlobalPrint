@@ -33,7 +33,7 @@ namespace GlobalPrint.ClientWeb
             ModelBinders.Binders.Add(typeof(decimal?), new FloatModelBinder());
 
             // Set controller factory implementing multilanguage stuff
-            //ControllerBuilder.Current.SetControllerFactory(new DefaultControllerFactory(new LocalizedControllerActivator()));
+            ControllerBuilder.Current.SetControllerFactory(new DefaultControllerFactory(new LocalizedControllerActivator()));
 
             // run web service to check inactive users with - printer operators and send notifications to them
             new ActivityCheckerJobScheduler().Start();
