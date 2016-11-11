@@ -26,7 +26,7 @@ namespace GlobalPrint.ClientWeb
         IUserUnit _userUnit;
         Random _random;
         public OrderController()
-            : this (IoC.Instance.Resolve<PrintOrderUnit>(), IoC.Instance.Resolve<IUserUnit>(), new Random())
+            : this(IoC.Instance.Resolve<PrintOrderUnit>(), IoC.Instance.Resolve<IUserUnit>(), new Random())
         {
         }
         public OrderController(PrintOrderUnit printerOrderUnit, IUserUnit userUnit, Random random)
@@ -97,7 +97,7 @@ namespace GlobalPrint.ClientWeb
             NewOrder newOrder = this._printOrderUnit.FromExisting(printOrderID, userID);
             DocumentBusinessInfo document = this._printOrderUnit.GetPrintOrderDocument(printOrderID, userID, app_data);
             this._uploadedFilesRepo.Add(newOrder.FileToPrint, document);
-            return this._ORDER_NEW(newOrder);
+            return this._ORDER_NEW(newOrder, document);
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace GlobalPrint.ClientWeb
             if (!validation.IsValid)
             {
                 validation.Errors.ForEach(e => ModelState.AddModelError("", e));
-                return this._ORDER_NEW(newOrder);
+                return this._ORDER_NEW(newOrder, document);
             }
 
             return RedirectToAction("Confirm", newOrder);
@@ -209,7 +209,7 @@ namespace GlobalPrint.ClientWeb
 
             #region Notifications
 
-            #warning remove it from here
+#warning remove it from here
             // Push notification about new order
             User printerOperator = new PrinterUnit().GetPrinterOperator(createdOrder.PrinterID);
             string notificationMessage = string.Format(
@@ -260,13 +260,14 @@ namespace GlobalPrint.ClientWeb
 
 
 
-        private ViewResult _ORDER_NEW(NewOrder newOrder)
+        private ViewResult _ORDER_NEW(NewOrder newOrder, DocumentBusinessInfo document = null)
         {
             Argument.NotNull(newOrder, "Модель для нового заказа не может быть пустой.");
             Argument.Positive(newOrder.PrinterID, "Ключ принтера в модели для нового заказа не может быть пустым.");
 
             Printer printer = new PrinterUnit().GetByID(newOrder.PrinterID);
             ViewBag.Printer = printer;
+            ViewBag.Document = document;
             return View("New", newOrder);
         }
 
@@ -287,7 +288,7 @@ namespace GlobalPrint.ClientWeb
             ViewBag.PrinterService = printerService;
             ViewBag.FullPrice = fullPrice;
             ViewBag.IsOrderAvailable = isAvailable;
-            
+
             return View("Confirm", newOrder);
         }
     }

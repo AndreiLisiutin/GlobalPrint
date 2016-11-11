@@ -1,10 +1,12 @@
+ALTER TABLE public.printer DROP CONSTRAINT printer_name_key;
+
 -- Table: public.cash_request_status
 
 -- DROP TABLE public.cash_request_status;
 
 CREATE TABLE public.cash_request_status
 (
-  cash_request_status_id integer NOT NULL DEFAULT nextval('cash_request_status_cash_request_status_id_seq'::regclass),
+  cash_request_status_id SERIAL,
   name text NOT NULL,
   CONSTRAINT cash_request_status_pkey PRIMARY KEY (cash_request_status_id)
 )
@@ -21,7 +23,7 @@ ALTER TABLE public.cash_request_status
 
 CREATE TABLE public.transfers_register
 (
-  transfers_register_id integer NOT NULL DEFAULT nextval('transfers_register_transfers_register_id_seq'::regclass),
+  transfers_register_id SERIAL,
   created_on timestamp with time zone NOT NULL,
   user_id integer NOT NULL,
   CONSTRAINT transfers_register_pkey PRIMARY KEY (transfers_register_id),
@@ -42,7 +44,7 @@ ALTER TABLE public.transfers_register
 
 CREATE TABLE public.cash_request
 (
-  cash_request_id integer NOT NULL DEFAULT nextval('cash_request_cash_request_id_seq'::regclass),
+  cash_request_id SERIAL,
   user_id integer NOT NULL,
   amount_of_money numeric(10,2) NOT NULL,
   transfers_register_id integer,
