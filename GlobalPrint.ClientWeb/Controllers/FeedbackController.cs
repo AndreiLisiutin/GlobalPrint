@@ -25,8 +25,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// Get feedback form
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public ActionResult Feedback()
         {
             if (User.Identity.IsAuthenticated)
@@ -53,8 +52,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// </summary>
         /// <param name="model">Feedback message information</param>
         /// <returns>Redirects to Messsage view with feedback thanks</returns>
-        [HttpPost]
-        [AllowAnonymous]
+        [HttpPost, AllowAnonymous]
         public async Task<ActionResult> Feedback(FeedbackViewModel model)
         {
             if (!ModelState.IsValid)

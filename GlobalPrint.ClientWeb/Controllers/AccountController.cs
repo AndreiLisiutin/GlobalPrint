@@ -19,14 +19,14 @@ namespace GlobalPrint.ClientWeb
         private ApplicationUserManager _userManager;
         private ApplicationRoleManager _roleManager = null;
 
-        protected ApplicationRoleManager RoleManager
+        public ApplicationRoleManager RoleManager
         {
             get
             {
                 return _roleManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationRoleManager>();
             }
         }
-        private IAuthenticationManager AuthenticationManager
+        public IAuthenticationManager AuthenticationManager
         {
             get
             {
@@ -55,6 +55,7 @@ namespace GlobalPrint.ClientWeb
                 _userManager = value;
             }
         }
+
         private Lazy<ILogger> _logUtility { get; set; }
 
         public AccountController(ILoggerFactory loggerFactory)

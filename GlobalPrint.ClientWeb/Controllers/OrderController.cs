@@ -41,8 +41,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="printOrderID">Identifier of the order.</param>
         /// <returns></returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult Details(int printOrderID)
         {
             Argument.Positive(printOrderID, "Ключ заказа пустой.");
@@ -56,8 +55,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="rateModel">Info about order's rating.</param>
         /// <returns></returns>
-        [HttpPost]
-        [Authorize]
+        [HttpPost, Authorize]
         public ActionResult Rate(Order_RateViewModel rateModel)
         {
             Argument.NotNull(rateModel, "Модель оценки заказа пустая.");
@@ -73,8 +71,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="printOrderID">Mask for order filtering. Optional.</param>
         /// <returns>View with list of current user's orders.</returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult MyOrders(string printOrderID)
         {
             int userID = this.GetCurrentUserID();
@@ -87,8 +84,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="printOrderID">Identifier of an order.</param>
         /// <returns>New order creation view.</returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult FromExisting(int printOrderID)
         {
             Argument.Positive(printOrderID, "printOrderID не может быть меньше 0.");
@@ -105,8 +101,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="printerID">Identifier of the printer.</param>
         /// <returns>View with printer edition possibility.</returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult New(int printerID)
         {
             Argument.Require(printerID > 0, "printerID не может быть меньше 0.");
@@ -160,8 +155,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="newOrder">New order model.</param>
         /// <returns></returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult Confirm(NewOrder newOrder)
         {
             Argument.NotNull(newOrder, "Подготовленный для печати заказ не может быть пустым.");
@@ -179,8 +173,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="newOrder"></param>
         /// <returns></returns>
-        [HttpPost]
-        [Authorize]
+        [HttpPost, Authorize]
         public ActionResult Create(NewOrder newOrder)
         {
             Argument.NotNull(newOrder, "Подготовленный для печати заказ не может быть пустым.");
@@ -233,8 +226,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="printOrderID">New order identifier.</param>
         /// <returns>Page with congratulations.</returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult Complete(int printOrderID)
         {
             Argument.Positive(printOrderID, "Ключ заказа пустой.");
@@ -248,8 +240,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="printOrderID">Identifier of the order.</param>
         /// <returns>File stram with order file.</returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult DownloadOrder(int printOrderID)
         {
             string app_data = HttpContext.Server.MapPath("~/App_Data");

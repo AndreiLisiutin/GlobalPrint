@@ -11,7 +11,7 @@ namespace GlobalPrint.ClientWeb.Models.Lookup
     public enum LookupTypeEnum
     {
         /// <summary>
-        /// Uswer'.
+        /// User.
         /// </summary>
         User = 1
     }
