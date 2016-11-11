@@ -134,5 +134,16 @@ namespace GlobalPrint.Infrastructure.EmailUtility
                 //MailMessage message = (MailMessage)e.UserState;
             }
         }
+
+        /// <summary>
+        /// Send an email.
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="sender"></param>
+        /// <param name="throwException"></param>
+        public void Send(EmailMessage message, MailAddress sender = null, bool throwException = false)
+        {
+            this.Send(message.Destination, message.Subject, message.Body, sender, throwException);
+        }
     }
 }

@@ -10,6 +10,7 @@ using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.TransfersRegisters;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Payments;
+using GlobalPrint.ServerBusinessLogic.Models.Business.TransfersRegisters;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.TransfersRegisters;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
@@ -45,7 +46,7 @@ namespace GlobalPrint.ClientWeb
 
         public UserProfileController()
             : this(IoC.Instance.Resolve<IUserUnit>(), new PaymentActionUnit(),
-                  IoC.Instance.Resolve<IBankUtility>(), IoC.Instance.Resolve<ILoggerFactory>(), new TransfersRegisterUnit())
+                  IoC.Instance.Resolve<IBankUtility>(), IoC.Instance.Resolve<ILoggerFactory>(), IoC.Instance.Resolve<TransfersRegisterUnit>())
         {
         }
         public UserProfileController(IUserUnit userUnit, PaymentActionUnit paymentActionUnit,
@@ -199,7 +200,8 @@ namespace GlobalPrint.ClientWeb
             {
                 UserID = this.GetCurrentUserID(),
                 CreatedOn = DateTime.Now,
-                CashRequestStatusID = (int)CashRequestStatusEnum.InProgress
+                CashRequestStatusID = (int)CashRequestStatusEnum.InProgress,
+                CashRequestStatusComment = "В процессе обработки."
             };
             return _USER_PROFILE_REQUEST_CASH(cashRequest);
         }
@@ -211,6 +213,7 @@ namespace GlobalPrint.ClientWeb
             Argument.Require(request.UserID == this.GetCurrentUserID(), "Нельзя выводить деньги от лица других пользователей.");
             request.CreatedOn = DateTime.Now;
             request.CashRequestStatusID = (int)CashRequestStatusEnum.InProgress;
+            request.CashRequestStatusComment = "В процессе обработки.";
             Validation validation = this._transfersRegisterUnit.ValidateCashRequest(request);
             if (!validation.IsValid)
             {
@@ -237,6 +240,14 @@ namespace GlobalPrint.ClientWeb
             return RedirectToAction("TransfersRegisters");
         }
 
+        [HttpGet, Authorize]
+        public ActionResult CashRequests()
+        {
+            int userID = this.GetCurrentUserID();
+            List<CashRequestExtended> requests = this._transfersRegisterUnit.GetCashRequests(userID);
+            return _USER_PROFILE_CASH_REQUESTS(requests);
+        }
+
         private ViewResult _USER_PROFILE_SEND_MONEY(SendModeyPackage package)
         {
             int userID = this.GetCurrentUserID();
@@ -249,6 +260,10 @@ namespace GlobalPrint.ClientWeb
             User user = this._userUnit.GetByID(request.UserID);
             ViewBag.User = user;
             return this.View("RequestCash", request);
+        }
+        private ViewResult _USER_PROFILE_CASH_REQUESTS(List<CashRequestExtended> requests)
+        {
+            return this.View("CashRequests", requests);
         }
         private ViewResult _USER_PROFILE_TRANSFER_REGISTERS(List<TransfersRegister> registers)
         {

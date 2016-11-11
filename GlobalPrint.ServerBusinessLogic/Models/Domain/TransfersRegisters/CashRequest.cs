@@ -32,6 +32,9 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.TransfersRegisters
         [Column("cash_request_status_id")]
         public int CashRequestStatusID { get; set; }
 
+        [Column("cash_request_status_comment")]
+        public string CashRequestStatusComment { get; set; }
+
         #region IDomainModel
         [Key]
         [Column("cash_request_id")]

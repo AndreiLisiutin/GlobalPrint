@@ -815,6 +815,7 @@
     <Content Include="Views\UserProfile\RequestCash.cshtml" />
     <Content Include="Views\UserProfile\TransfersRegisters.cshtml" />
     <Content Include="Views\Shared\Errors\FileNotFound.cshtml" />
+    <Content Include="Views\UserProfile\CashRequests.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
