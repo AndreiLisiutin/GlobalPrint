@@ -130,6 +130,10 @@
             e.preventDefault();
             updateLookup(1, null);
         });
+        $("#searchTextSubmit").click(function (e) {
+            e.preventDefault();
+            updateLookup(1, null);
+        });
         $('#lookupPagination a').on('click', function (e) {
             e.preventDefault();
             updateLookup($(e.target).attr('data-page'), null);

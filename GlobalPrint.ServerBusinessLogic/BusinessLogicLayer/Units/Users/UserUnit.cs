@@ -69,8 +69,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 
                 if (filter != null)
                 {
+                    filter = filter.ToLower();
                     query = query
-                        .Where(e => e.Email.Contains(filter));
+                        .Where(e => e.Email.ToLower().Contains(filter));
                 }
 
                 query = query.OrderBy(e => e.Email);
