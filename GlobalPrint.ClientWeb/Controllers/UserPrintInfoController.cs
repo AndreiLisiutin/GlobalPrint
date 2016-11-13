@@ -59,7 +59,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// Get country picker
         /// </summary>
         /// <returns>Partial view with country picker</returns>
-        [ChildActionOnly]
+        [AllowAnonymous, ChildActionOnly]
         public ActionResult CountryPicker()
         {
             ViewBag.CurrentCulture = LocalizationHelper.GetCurrentCulture();

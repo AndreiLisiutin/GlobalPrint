@@ -258,7 +258,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             FileInfo physicalFile = new FileInfo(_physicalPathToFile);
             if (!physicalFile.Directory.Exists)
             {
-                throw new FileNotFoundException($"Файл заказа № {printOrderID} по пути {_physicalPathToFile} не найден.");
+                throw new FileNotFoundException($"Файл заказа № {printOrderID} по пути {_physicalPathToFile} не найден.", $"{order.PrintOrder.DocumentName}.{order.PrintOrder.DocumentExtension}");
             }
             byte[] fileArray = File.ReadAllBytes(_physicalPathToFile);
             DocumentBusinessInfo fileInfo = new DocumentBusinessInfo()

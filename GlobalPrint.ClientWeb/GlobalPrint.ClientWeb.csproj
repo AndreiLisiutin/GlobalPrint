@@ -228,8 +228,13 @@
     <Content Include="Resources\Images\add-printer-button.png" />
     <Content Include="Resources\Images\closest_printer.png" />
     <Content Include="Resources\Images\Errors\404-error-pony.png" />
-    <Content Include="Resources\Images\Errors\default-error-pony.png" />
     <Content Include="Resources\Images\en_32_round.png" />
+    <Content Include="Resources\Images\Errors\default-error-1-pony.png" />
+    <Content Include="Resources\Images\Errors\default-error-2-pony.png" />
+    <Content Include="Resources\Images\Errors\default-error-3-pony.png" />
+    <Content Include="Resources\Images\Errors\default-error-4-pony.jpg" />
+    <Content Include="Resources\Images\Errors\default-error-pony.png" />
+    <Content Include="Resources\Images\Errors\file-not-found-pony.png" />
     <Content Include="Resources\Images\geolocation.png" />
     <Content Include="Resources\Images\green_circle.ico" />
     <Content Include="Resources\Images\loading_pony.gif" />
@@ -708,7 +713,6 @@
     <Compile Include="Models\Lookup\LookupResultValue.cs" />
     <Compile Include="Models\Lookup\LookupTypeEnum.cs" />
     <Compile Include="Models\Lookup\LookupViewModel.cs" />
-    <Compile Include="Models\OfferController\OfferViewModel.cs" />
     <Compile Include="Models\OrderController\Order_RateViewModel.cs" />
     <Compile Include="Models\PrinterController\Printer_EditViewMoel.cs" />
     <Compile Include="Models\PrinterController\Printer_MyPrinters.cs" />
@@ -811,6 +815,8 @@
     <Content Include="Views\UserPrintInfo\_UserName.cshtml" />
     <Content Include="Views\UserProfile\RequestCash.cshtml" />
     <Content Include="Views\UserProfile\TransfersRegisters.cshtml" />
+    <Content Include="Views\Shared\Errors\FileNotFound.cshtml" />
+    <Content Include="Views\UserProfile\CashRequests.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -82,7 +82,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                 PaymentTransaction transaction = new PaymentTransaction()
                 {
                     ID = 0,
-                    Comment = $"Пополнение баланса на {amountOfMoney} у.е.",
+                    Comment = $"Пополнение баланса на {amountOfMoney} руб.",
                     FinishedOn = null,
                     StartedOn = DateTime.Now,
                     PaymentTransactionStatusID = (int)PaymentTransactionStatusEnum.InProgress
@@ -96,7 +96,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                     PaymentAction action = new PaymentAction()
                     {
                         ID = 0,
-                        Comment = $"Пополнение баланса на {amountOfMoney} у.е.",
+                        Comment = $"Пополнение баланса на {amountOfMoney} руб.",
                         ExternalIdentifier = externalIdentifier,
                         FinishedOn = null,
                         PaymentActionStatusID = (int)PaymentActionStatusEnum.InProgress,
@@ -407,7 +407,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                     PaymentTransaction transaction = new PaymentTransaction()
                     {
                         ID = 0,
-                        Comment = $"Пересылка денег со счета {sender.Email} на счет {receiver.Email} в размере {amountOfMoneyString} у.е.",
+                        Comment = $"Пересылка денег со счета {sender.Email} на счет {receiver.Email} в размере {amountOfMoneyString} руб.",
                         FinishedOn = DateTime.Now,
                         StartedOn = DateTime.Now,
                         PaymentTransactionStatusID = (int)PaymentTransactionStatusEnum.InProgress
@@ -417,7 +417,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                     PaymentAction action = new PaymentAction()
                     {
                         ID = 0,
-                        Comment = $"Отправка денег на счет {receiver.Email} в размере {amountOfMoneyString} у.е.",
+                        Comment = $"Отправка денег на счет {receiver.Email} в размере {amountOfMoneyString} руб.",
                         ExternalIdentifier = null,
                         FinishedOn = null,
                         PaymentActionStatusID = (int)PaymentActionStatusEnum.InProgress,
@@ -431,7 +431,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
                     PaymentAction action2 = new PaymentAction()
                     {
                         ID = 0,
-                        Comment = $"Получение денег со счета {sender.Email} в размере {amountOfMoneyString} у.е.",
+                        Comment = $"Получение денег со счета {sender.Email} в размере {amountOfMoneyString} руб.",
                         ExternalIdentifier = null,
                         FinishedOn = null,
                         PaymentActionStatusID = (int)PaymentActionStatusEnum.InProgress,

@@ -1,57 +1,70 @@
 ﻿using GlobalPrint.ClientWeb.Filters;
 using GlobalPrint.Configuration.DI;
-using GlobalPrint.Infrastructure.LogUtility.Robokassa;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment;
-using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
-using System.Web.Mvc;
-using System;
-using GlobalPrint.ServerBusinessLogic.Models.Business.Payments;
-using System.Collections.Generic;
-using GlobalPrint.Infrastructure.CommonUtils;
-using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
-using GlobalPrint.ClientWeb.Helpers;
-using GlobalPrint.Infrastructure.CommonUtils.Pagination;
-using System.Linq;
-using GlobalPrint.ClientWeb.Models.Lookup;
 using GlobalPrint.Infrastructure.BankUtility;
-using GlobalPrint.Infrastructure.BankUtility.BankInfo;
 using GlobalPrint.Infrastructure.BankUtility.BicInfo;
+using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.Infrastructure.LogUtility;
-using GlobalPrint.ServerBusinessLogic.Models.Domain.TransfersRegisters;
+using GlobalPrint.Infrastructure.LogUtility.Robokassa;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.TransfersRegisters;
+using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
+using GlobalPrint.ServerBusinessLogic.Models.Business.Payments;
+using GlobalPrint.ServerBusinessLogic.Models.Business.TransfersRegisters;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.TransfersRegisters;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb
 {
     public class UserProfileController : BaseController
     {
-        private UserUnit _userUnit;
+        /// <summary>
+        /// Unit with user business logic.
+        /// </summary>
+        private IUserUnit _userUnit;
+        /// <summary>
+        /// Unit with payment actions business logic.
+        /// </summary>
         private PaymentActionUnit _paymentActionUnit;
+        /// <summary>
+        /// Unit with money transfer registers business logic.
+        /// </summary>
         private TransfersRegisterUnit _transfersRegisterUnit;
+
+        /// <summary>
+        /// Utility to get data by bank BIC.
+        /// </summary>
         private IBankUtility _bankUtility;
+        /// <summary>
+        /// Errors log utility.
+        /// </summary>
         private Lazy<ILogger> _logUtility;
+
         public UserProfileController()
-            : this(IoC.Instance.Resolve<UserUnit>(), new PaymentActionUnit(),
-                  IoC.Instance.Resolve<IBankUtility>(), IoC.Instance.Resolve<ILoggerFactory>(), new TransfersRegisterUnit())
+            : this(IoC.Instance.Resolve<IUserUnit>(), new PaymentActionUnit(),
+                  IoC.Instance.Resolve<IBankUtility>(), IoC.Instance.Resolve<ILoggerFactory>(), IoC.Instance.Resolve<TransfersRegisterUnit>())
         {
         }
-        public UserProfileController(UserUnit userUnit, PaymentActionUnit paymentActionUnit,
+        public UserProfileController(IUserUnit userUnit, PaymentActionUnit paymentActionUnit,
             IBankUtility bankUtility, ILoggerFactory loggerFactory, TransfersRegisterUnit transfersRegisterUnit)
         {
             this._userUnit = userUnit;
             this._paymentActionUnit = paymentActionUnit;
+            this._transfersRegisterUnit = transfersRegisterUnit;
+
             this._bankUtility = bankUtility;
             this._logUtility = new Lazy<ILogger>(() => loggerFactory.GetLogger<UserProfileController>());
-            this._transfersRegisterUnit = transfersRegisterUnit;
         }
 
         /// <summary>
         /// Get user profile view.
         /// </summary>
         /// <returns>Profile info of current user.</returns>
-        // GET: UserProfile/UserProfile
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult UserProfile()
         {
             UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
@@ -64,9 +77,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="model">Profile info of current user.</param>
         /// <returns>Redirects to updated profile view.</returns>
-        [HttpPost]
-        [Authorize]
-        [MultipleButton(Name = "action", Argument = "Save")]
+        [HttpPost, Authorize, MultipleButton(Name = "action", Argument = "Save")]
         public ActionResult Save(User model)
         {
             if (!ModelState.IsValid)
@@ -86,10 +97,13 @@ namespace GlobalPrint.ClientWeb
                 return View("UserProfile", model);
             }
         }
-
-        [HttpPost]
-        [Authorize]
-        [MultipleButton(Name = "action", Argument = "FillUpBalance")]
+        
+        /// <summary>
+        /// Fill the balance of current user.
+        /// </summary>
+        /// <param name="upSumm">Money amount to fill balance.</param>
+        /// <returns>Redirects to Robokassa.</returns>
+        [HttpPost, Authorize, MultipleButton(Name = "action", Argument = "FillUpBalance")]
         public ActionResult FillUpBalance(string upSumm)
         {
             try
@@ -117,18 +131,24 @@ namespace GlobalPrint.ClientWeb
             }
         }
 
-
-        [HttpGet]
-        [Authorize]
+        /// <summary>
+        /// Send money to another user.
+        /// </summary>
+        /// <returns>Redirects to SendMoney view.</returns>
+        [HttpGet, Authorize]
         public ActionResult SendMoney()
         {
             SendModeyPackage moneyPackage = new SendModeyPackage();
             moneyPackage.SenderUserId = this.GetCurrentUserID();
             return this._USER_PROFILE_SEND_MONEY(moneyPackage);
         }
-
-        [HttpPost]
-        [Authorize]
+        
+        /// <summary>
+        /// Perform money transfer.
+        /// </summary>
+        /// <param name="package"></param>
+        /// <returns></returns>
+        [HttpPost, Authorize]
         public ActionResult ExecuteSendMoney(SendModeyPackage package)
         {
             Argument.NotNull(package, "Модель для пересылки денег от одного пользователя другому пустая.");
@@ -141,8 +161,7 @@ namespace GlobalPrint.ClientWeb
         /// Get list of user's payments.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult MyPayments()
         {
             PaymentActionUnit paymentUnit = new PaymentActionUnit();
@@ -181,19 +200,20 @@ namespace GlobalPrint.ClientWeb
             {
                 UserID = this.GetCurrentUserID(),
                 CreatedOn = DateTime.Now,
-                CashRequestStatusID = (int)CashRequestStatusEnum.InProgress
+                CashRequestStatusID = (int)CashRequestStatusEnum.InProgress,
+                CashRequestStatusComment = "В процессе обработки."
             };
             return _USER_PROFILE_REQUEST_CASH(cashRequest);
         }
-
-        [HttpPost]
-        [Authorize]
+        
+        [HttpPost, Authorize]
         public ActionResult ExecuteRequestCash(CashRequest request)
         {
             Argument.NotNull(request, "Модель для запроса вывода денег пустая.");
             Argument.Require(request.UserID == this.GetCurrentUserID(), "Нельзя выводить деньги от лица других пользователей.");
             request.CreatedOn = DateTime.Now;
             request.CashRequestStatusID = (int)CashRequestStatusEnum.InProgress;
+            request.CashRequestStatusComment = "В процессе обработки.";
             Validation validation = this._transfersRegisterUnit.ValidateCashRequest(request);
             if (!validation.IsValid)
             {
@@ -220,6 +240,14 @@ namespace GlobalPrint.ClientWeb
             return RedirectToAction("TransfersRegisters");
         }
 
+        [HttpGet, Authorize]
+        public ActionResult CashRequests()
+        {
+            int userID = this.GetCurrentUserID();
+            List<CashRequestExtended> requests = this._transfersRegisterUnit.GetCashRequests(userID);
+            return _USER_PROFILE_CASH_REQUESTS(requests);
+        }
+
         private ViewResult _USER_PROFILE_SEND_MONEY(SendModeyPackage package)
         {
             int userID = this.GetCurrentUserID();
@@ -232,6 +260,10 @@ namespace GlobalPrint.ClientWeb
             User user = this._userUnit.GetByID(request.UserID);
             ViewBag.User = user;
             return this.View("RequestCash", request);
+        }
+        private ViewResult _USER_PROFILE_CASH_REQUESTS(List<CashRequestExtended> requests)
+        {
+            return this.View("CashRequests", requests);
         }
         private ViewResult _USER_PROFILE_TRANSFER_REGISTERS(List<TransfersRegister> registers)
         {

@@ -44,7 +44,7 @@
         GlobalPrint.Utils.CommonUtils.geolocate(function (position) {
             _meMarker && _meMarker.setMap(null);
             var location = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            _map.setCenter(location);
+            _map.panTo(location);
             _map.setZoom(15);
             _meMarker = new google.maps.Marker({
                 position: location,
@@ -82,6 +82,10 @@
         google.maps.event.addListenerOnce(_map, 'idle', function () {
             loadPrinters();
         });
+        //google maps api bug-hack
+        google.maps.event.addListener(_map, 'idle', function () {
+            _map.panBy(0, 0);
+        });
         google.maps.event.addListener(_map, 'click', HomeIndex.closePrinterInfo);
         $("#googlemaps").on("heightChange", function () {
             //for resize map with browser resize
@@ -94,14 +98,14 @@
             _currentPrinterID = null;
             $("#homeInfoSidebar").addClass("hidden");
             _map.setZoom(_lastState.zoom);
-            _map.setCenter(_lastState.center);
+            _map.panTo(_lastState.center);
             _lastState = null;
         }
     };
 
     var _zoomMarker = function (marker) {
         _map.setZoom(15);
-        _map.setCenter(marker.getPosition());
+        _map.panTo(marker.getPosition());
     };
 
     function deleteAllMarkers() {

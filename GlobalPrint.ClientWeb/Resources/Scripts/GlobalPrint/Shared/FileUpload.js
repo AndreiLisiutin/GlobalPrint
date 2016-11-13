@@ -92,13 +92,14 @@
         //TODO: needs refactor
         var guidEmpty = '00000000-0000-0000-0000-000000000000';
         var fileIdHiddenField = $('#fileupload').parents('.input-group').find('#fileId');
+        var fileNameHiddenField = $('#fileupload').parents('.input-group').find('#fileName');
         if (fileIdHiddenField.val() && fileIdHiddenField.val() != guidEmpty) {
             var progressBar = $('#fileupload').parents('.input-group').find('#progress .progress-bar');
             var progressPercentText = $('#fileupload').parents('.input-group').find('#progressPercentText');
             var textfield = $('#fileupload').parents('.input-group').find(':text');
             progressBar.css('width', 100 + '%');
             progressPercentText.text(100 + '%');
-            textfield.val('Файл загружен.');
+            textfield.val(fileNameHiddenField.val());
         }
     };
 

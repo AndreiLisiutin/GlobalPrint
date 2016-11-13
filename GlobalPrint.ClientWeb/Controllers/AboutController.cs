@@ -8,9 +8,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// Get page about project
         /// </summary>
         /// <returns></returns>
-        // GET: About/About
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public ActionResult About()
         {
             return View();

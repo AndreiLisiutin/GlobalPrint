@@ -97,6 +97,7 @@
     <Compile Include="DI\BaseIoC.cs" />
     <Compile Include="DI\InfrastructureIoC.cs" />
     <Compile Include="DI\IoC.cs" />
+    <Compile Include="EmailUtility\EmailMessage.cs" />
     <Compile Include="EmailUtility\EmailUtility.cs" />
     <Compile Include="EmailUtility\IEmailUtility.cs" />
     <Compile Include="FileUtility\FileExporters\ExcelExporter.cs" />

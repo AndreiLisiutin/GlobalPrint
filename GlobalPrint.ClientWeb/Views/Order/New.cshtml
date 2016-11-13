@@ -1,10 +1,12 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.Models.Business.Orders
 @using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers
+@using GlobalPrint.ServerBusinessLogic.Models.Business
 @model NewOrder
 @{
     ViewBag.Title = "Заказ на печать";
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
     Printer Printer = (Printer)ViewBag.Printer;
+    DocumentBusinessInfo Document = (DocumentBusinessInfo)ViewBag.Document;
 }
 @section Scripts{
     <script src="~/Resources/Scripts/GlobalPrint/Order/New.js"></script>
@@ -51,6 +53,7 @@
                         </div>
                     </div>
                     @Html.HiddenFor(m => m.FileToPrint, new { @id = "fileId", @required = "required" })
+                    @Html.Hidden("_Document", Document?.Name, new { @id = "fileName" })
                 </div>
             </div>
         </div>

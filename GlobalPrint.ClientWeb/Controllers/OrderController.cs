@@ -26,7 +26,7 @@ namespace GlobalPrint.ClientWeb
         IUserUnit _userUnit;
         Random _random;
         public OrderController()
-            : this (IoC.Instance.Resolve<PrintOrderUnit>(), IoC.Instance.Resolve<IUserUnit>(), new Random())
+            : this(IoC.Instance.Resolve<PrintOrderUnit>(), IoC.Instance.Resolve<IUserUnit>(), new Random())
         {
         }
         public OrderController(PrintOrderUnit printerOrderUnit, IUserUnit userUnit, Random random)
@@ -41,8 +41,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="printOrderID">Identifier of the order.</param>
         /// <returns></returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult Details(int printOrderID)
         {
             Argument.Positive(printOrderID, "Ключ заказа пустой.");
@@ -56,8 +55,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="rateModel">Info about order's rating.</param>
         /// <returns></returns>
-        [HttpPost]
-        [Authorize]
+        [HttpPost, Authorize]
         public ActionResult Rate(Order_RateViewModel rateModel)
         {
             Argument.NotNull(rateModel, "Модель оценки заказа пустая.");
@@ -73,8 +71,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="printOrderID">Mask for order filtering. Optional.</param>
         /// <returns>View with list of current user's orders.</returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult MyOrders(string printOrderID)
         {
             int userID = this.GetCurrentUserID();
@@ -87,8 +84,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="printOrderID">Identifier of an order.</param>
         /// <returns>New order creation view.</returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult FromExisting(int printOrderID)
         {
             Argument.Positive(printOrderID, "printOrderID не может быть меньше 0.");
@@ -97,7 +93,7 @@ namespace GlobalPrint.ClientWeb
             NewOrder newOrder = this._printOrderUnit.FromExisting(printOrderID, userID);
             DocumentBusinessInfo document = this._printOrderUnit.GetPrintOrderDocument(printOrderID, userID, app_data);
             this._uploadedFilesRepo.Add(newOrder.FileToPrint, document);
-            return this._ORDER_NEW(newOrder);
+            return this._ORDER_NEW(newOrder, document);
         }
 
         /// <summary>
@@ -105,8 +101,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="printerID">Identifier of the printer.</param>
         /// <returns>View with printer edition possibility.</returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult New(int printerID)
         {
             Argument.Require(printerID > 0, "printerID не может быть меньше 0.");
@@ -149,7 +144,7 @@ namespace GlobalPrint.ClientWeb
             if (!validation.IsValid)
             {
                 validation.Errors.ForEach(e => ModelState.AddModelError("", e));
-                return this._ORDER_NEW(newOrder);
+                return this._ORDER_NEW(newOrder, document);
             }
 
             return RedirectToAction("Confirm", newOrder);
@@ -160,8 +155,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="newOrder">New order model.</param>
         /// <returns></returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult Confirm(NewOrder newOrder)
         {
             Argument.NotNull(newOrder, "Подготовленный для печати заказ не может быть пустым.");
@@ -179,8 +173,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="newOrder"></param>
         /// <returns></returns>
-        [HttpPost]
-        [Authorize]
+        [HttpPost, Authorize]
         public ActionResult Create(NewOrder newOrder)
         {
             Argument.NotNull(newOrder, "Подготовленный для печати заказ не может быть пустым.");
@@ -209,7 +202,7 @@ namespace GlobalPrint.ClientWeb
 
             #region Notifications
 
-            #warning remove it from here
+#warning remove it from here
             // Push notification about new order
             User printerOperator = new PrinterUnit().GetPrinterOperator(createdOrder.PrinterID);
             string notificationMessage = string.Format(
@@ -233,8 +226,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="printOrderID">New order identifier.</param>
         /// <returns>Page with congratulations.</returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult Complete(int printOrderID)
         {
             Argument.Positive(printOrderID, "Ключ заказа пустой.");
@@ -248,8 +240,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="printOrderID">Identifier of the order.</param>
         /// <returns>File stram with order file.</returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult DownloadOrder(int printOrderID)
         {
             string app_data = HttpContext.Server.MapPath("~/App_Data");
@@ -260,13 +251,14 @@ namespace GlobalPrint.ClientWeb
 
 
 
-        private ViewResult _ORDER_NEW(NewOrder newOrder)
+        private ViewResult _ORDER_NEW(NewOrder newOrder, DocumentBusinessInfo document = null)
         {
             Argument.NotNull(newOrder, "Модель для нового заказа не может быть пустой.");
             Argument.Positive(newOrder.PrinterID, "Ключ принтера в модели для нового заказа не может быть пустым.");
 
             Printer printer = new PrinterUnit().GetByID(newOrder.PrinterID);
             ViewBag.Printer = printer;
+            ViewBag.Document = document;
             return View("New", newOrder);
         }
 
@@ -287,7 +279,7 @@ namespace GlobalPrint.ClientWeb
             ViewBag.PrinterService = printerService;
             ViewBag.FullPrice = fullPrice;
             ViewBag.IsOrderAvailable = isAvailable;
-            
+
             return View("Confirm", newOrder);
         }
     }

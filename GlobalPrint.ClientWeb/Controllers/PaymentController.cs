@@ -15,9 +15,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// </summary>
         /// <param name="confirmationRequest">Data about payment operation from Robokassa.</param>
         /// <returns></returns>
-        [HttpPost]
-        [AllowAnonymous]
-        [AuthorizeByUrl(new string[] { "auth.robokassa.ru" })]
+        [HttpPost, AllowAnonymous, AuthorizeByUrl(new string[] { "auth.robokassa.ru" })]
 
         public ActionResult Result(RobokassaConfirmationRequest confirmationRequest)
         {
@@ -49,9 +47,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// </summary>
         /// <param name="confirmationRequest">Data about payment operation from Robokassa.</param>
         /// <returns></returns>
-        [HttpPost]
-        [AllowAnonymous]
-        [AuthorizeByUrl(new string[] { "auth.robokassa.ru" })]
+        [HttpPost, AllowAnonymous, AuthorizeByUrl(new string[] { "auth.robokassa.ru" })]
         public ActionResult Success(RobokassaConfirmationRequest confirmationRequest)
         {
             Argument.NotNull(confirmationRequest, "PaymentController.Success model is null.");
@@ -81,9 +77,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// </summary>
         /// <param name="confirmationRequest">Data about payment operation from Robokassa.</param>
         /// <returns></returns>
-        [HttpPost]
-        [AllowAnonymous]
-        [AuthorizeByUrl(new string[] { "auth.robokassa.ru" })]
+        [HttpPost, AllowAnonymous, AuthorizeByUrl(new string[] { "auth.robokassa.ru" })]
         public ActionResult Fail(RobokassaConfirmationRequest confirmationRequest)
         {
             Argument.NotNull(confirmationRequest, "PaymentController.Fail model is null.");

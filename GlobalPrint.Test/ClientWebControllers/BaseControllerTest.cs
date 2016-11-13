@@ -1,4 +1,5 @@
 ﻿using GlobalPrint.ClientWeb;
+using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using Microsoft.AspNet.Identity;
 using Moq;
 using System;
@@ -18,7 +19,7 @@ namespace GlobalPrint.Test.ClientWebControllers
         {
             var controllerContext = new Mock<ControllerContext>();
             var principal = new Mock<IPrincipal>();
-            principal.Setup(p => p.IsInRole("Administrator")).Returns(true);
+            principal.Setup(p => p.IsInRole(UserRolesEnum.Admin)).Returns(true);
             principal.SetupGet(x => x.Identity.Name).Returns(CurrentUserName);
             principal.Setup(p => p.Identity.GetUserId<int>()).Returns(CurrentUserID);
             controllerContext.SetupGet(x => x.HttpContext.User).Returns(principal.Object);

@@ -33,8 +33,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// Show page with filters for the register of orders.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult PrintOrderRegister()
         {
             OrderRegisterFilter filter = new OrderRegisterFilter()
@@ -49,8 +48,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// </summary>
         /// <param name="filter">Filter for the register.</param>
         /// <returns>Register file info.</returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult GetPrintOrderRegister(OrderRegisterFilter filter)
         {
             filter.OwnerUserID = this.GetCurrentUserID();
@@ -64,8 +62,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// </summary>
         /// <param name="filter">Filter for the register.</param>
         /// <returns>Register file info.</returns>
-        [HttpGet]
-        [Authorize]
+        [HttpGet, Authorize]
         public ActionResult GetTransfersRegister(TransfersRegisterFilter filter)
         {
             filter.OwnerUserID = this.GetCurrentUserID();
