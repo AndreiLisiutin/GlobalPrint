@@ -207,7 +207,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.TransfersRegi
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public List<TransfersRegister> GetTransfersRegisters(int userID)
+        public List<TransfersRegisterExtended> GetTransfersRegisters(int userID)
         {
             using (var context = this.Context())
             {
@@ -215,7 +215,17 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.TransfersRegi
                 var userRepo = this.Repository<IUserRepository>(context);
                 var registerRepo = this.Repository<ITransfersRegisterRepository>(context);
 
-                return registerRepo.Get(e => e.UserID == userID).ToList();
+                var list = (
+                    from register in registerRepo.Get(e => e.UserID == userID)
+                    join cash in cashRepo.GetAll() on register.ID equals cash.TransfersRegisterID
+                    group cash by register into registerGropp
+                    orderby registerGropp.Key.CreatedOn descending
+                    select new { Register = registerGropp.Key, Count = registerGropp.Count(), AmountOfMoneySumm = registerGropp.Sum(e => e.AmountOfMoney) }
+                    )
+                    .ToList()
+                    .Select(e => new TransfersRegisterExtended() { TransfersRegister = e.Register, AmountOfMoneySumm = e.AmountOfMoneySumm, RequestsCount = e.Count })
+                    .ToList();
+                return list;
             }
         }
 
