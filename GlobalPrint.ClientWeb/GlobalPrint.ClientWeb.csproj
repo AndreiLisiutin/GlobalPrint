@@ -812,6 +812,7 @@
     <Content Include="Resources\Libraries\nprogress\package.json" />
     <Content Include="Resources\Libraries\nprogress\Readme.md" />
     <Content Include="Views\Shared\Errors\404.cshtml" />
+    <Content Include="Views\UserPrintInfo\_UserName.cshtml" />
     <Content Include="Views\UserProfile\RequestCash.cshtml" />
     <Content Include="Views\UserProfile\TransfersRegisters.cshtml" />
     <Content Include="Views\Shared\Errors\FileNotFound.cshtml" />

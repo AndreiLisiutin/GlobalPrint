@@ -1,6 +1,7 @@
 ﻿using GlobalPrint.ClientWeb.Helpers;
 using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.Localization;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
@@ -12,6 +13,16 @@ namespace GlobalPrint.ClientWeb.Controllers
 {
     public class UserPrintInfoController : BaseController
     {
+        /// <summary>
+        /// User business logic unit.
+        /// </summary>
+        private readonly IUserUnit _userUnit;
+
+        public UserPrintInfoController(IUserUnit userUnit)
+        {
+            _userUnit = userUnit;
+        }
+
         /// <summary>
         /// Number of waiting orders, not processed by current user
         /// </summary>
@@ -54,6 +65,18 @@ namespace GlobalPrint.ClientWeb.Controllers
             ViewBag.CurrentCulture = LocalizationHelper.GetCurrentCulture();
             ViewBag.CultureList = LocalizationHelper.GetCultureList().ToList();
             return PartialView("_CountryPicker");
+        }
+
+        /// <summary>
+        /// Get user name.
+        /// </summary>
+        /// <returns>Partial view with user name</returns>
+        [ChildActionOnly]
+        public ActionResult UserName()
+        {
+            var user = _userUnit.GetByID(this.GetCurrentUserID());
+            ViewBag.UserName = user.UserName;
+            return PartialView("_UserName");
         }
 
         /// <summary>

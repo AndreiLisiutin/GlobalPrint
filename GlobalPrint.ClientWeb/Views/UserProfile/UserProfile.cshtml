@@ -188,7 +188,10 @@
                 @Html.ActionLink("Реестр заказов", "PrintOrderRegister", "Reports", new { }, new { @class = "btn btn-default" })
                 @Html.ActionLink("Перекинуть баланс", "SendMoney", "UserProfile", new { }, new { @class = "btn btn-default" })
                 @Html.ActionLink("Заявки на вывод денег", "CashRequests", "UserProfile", new { }, new { @class = "btn btn-default" })
-                @Html.ActionLink("Реестры перечислений", "TransfersRegisters", "UserProfile", new { }, new { @class = "btn btn-default" })
+                @if (ViewContext.HttpContext.User.IsInRole(UserRolesEnum.Admin))
+                {
+                    @Html.ActionLink("Реестры перечислений", "TransfersRegisters", "UserProfile", new { }, new { @class = "btn btn-default" })
+                }
             </div>
         </div>
     }

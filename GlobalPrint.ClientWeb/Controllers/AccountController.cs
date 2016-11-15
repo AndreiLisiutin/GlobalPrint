@@ -189,7 +189,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="model">Register view model.</param>
         /// <returns>Redirects to page with email confirmation message (DisplayEmail).</returns>
-        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken, HttpPost, AllowAnonymous]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             // If we got this far, something failed, redisplay form
@@ -261,7 +261,7 @@ namespace GlobalPrint.ClientWeb
         /// <param name="model">Login wiew model with user data</param>
         /// <param name="returnUrl">Fucking shit</param>
         /// <returns></returns>
-        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken, HttpPost, AllowAnonymous]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (ModelState.IsValid)
@@ -321,7 +321,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="model">Forgot password model</param>
         /// <returns></returns>
-        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken, HttpPost, AllowAnonymous]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -385,7 +385,7 @@ namespace GlobalPrint.ClientWeb
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken, HttpPost, AllowAnonymous]
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -466,7 +466,7 @@ namespace GlobalPrint.ClientWeb
         /// Log off from the application
         /// </summary>
         /// <returns>Redirect to the Index/Home</returns>
-        [HttpPost, ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken, HttpPost]
         public ActionResult LogOff()
         {
             this.AuthenticationManager.SignOut();

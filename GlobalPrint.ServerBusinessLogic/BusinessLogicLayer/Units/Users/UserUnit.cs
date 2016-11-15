@@ -69,8 +69,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 
                 if (filter != null)
                 {
+                    filter = filter.ToLower();
                     query = query
-                        .Where(e => e.Email.Contains(filter));
+                        .Where(e => e.Email.ToLower().Contains(filter));
                 }
 
                 query = query.OrderBy(e => e.Email);
@@ -162,7 +163,11 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 
                 if (originalUser != null)
                 {
-                    userRepo.Update(user);
+                    originalUser.Email = user.Email;
+                    originalUser.UserName = user.UserName;
+                    originalUser.PhoneNumber = user.PhoneNumber;
+
+                    userRepo.Update(originalUser);
                     context.Save();
                     return user;
                 }

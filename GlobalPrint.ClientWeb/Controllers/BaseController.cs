@@ -58,10 +58,6 @@ namespace GlobalPrint.ClientWeb
         {
             return User.Identity.GetUserId<int>();
         }
-        protected string GetCurrentUserName()
-        {
-            return User.Identity.GetUserName();
-        }
 
         /// <summary>
         /// Upload file into session. File is storing inside the session one hour then it is to be removed.

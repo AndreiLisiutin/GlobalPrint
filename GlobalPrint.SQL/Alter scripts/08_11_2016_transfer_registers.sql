@@ -50,6 +50,7 @@ CREATE TABLE public.cash_request
   transfers_register_id integer,
   created_on timestamp with time zone NOT NULL,
   cash_request_status_id integer NOT NULL,
+  cash_request_status_comment text,
   CONSTRAINT cash_request_pkey PRIMARY KEY (cash_request_id),
   CONSTRAINT cash_request_cash_request_status_id_fkey FOREIGN KEY (cash_request_status_id)
       REFERENCES public.cash_request_status (cash_request_status_id) MATCH SIMPLE
@@ -66,6 +67,7 @@ WITH (
 );
 ALTER TABLE public.cash_request
   OWNER TO postgres;
+
   
 INSERT INTO public.cash_request_status(cash_request_status_id, name) VALUES (1, 'В процессе');
 INSERT INTO public.cash_request_status(cash_request_status_id, name) VALUES (2, 'Завершено успешно');
