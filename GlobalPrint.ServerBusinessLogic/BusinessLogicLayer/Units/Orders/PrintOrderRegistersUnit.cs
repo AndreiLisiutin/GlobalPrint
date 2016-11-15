@@ -172,21 +172,21 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Orders
                     var properties = new List<ExportableProperty>()
                     {
                         new ExportableProperty(e.register.ID.ToString(), "Номер реестра перечислений", 10),
+                        new ExportableProperty(e.cashRequest.AmountOfMoney.ToString("#.00", CultureInfo.InvariantCulture), "Сумма к перечислению заказа", 20),
                         new ExportableProperty(e.user.UserName ?? "--", "Логин пользователя", 40),
                         new ExportableProperty(e.user.Email ?? "--", "Email пользователя", 40),
-                        new ExportableProperty(e.user.BankBic ?? "--", "БИК банка пользователя", 40),
-                        new ExportableProperty(e.user.BankCorrespondentAccount ?? "--", "Корреспондентский счет банка", 40),
+                        new ExportableProperty(e.user.BankBic ?? "--", "БИК банка пользователя", 40, ExportFormatting.Number),
+                        new ExportableProperty(e.user.BankCorrespondentAccount ?? "--", "Корреспондентский счет банка", 40, ExportFormatting.Number),
                         new ExportableProperty(e.user.BankName ?? "--", "Наименование банка", 40),
-                        new ExportableProperty(e.user.Inn ?? "--", "ИНН пользователя", 40),
-                        new ExportableProperty(e.user.Kpp ?? "--", "КПП пользователя", 40),
+                        new ExportableProperty(e.user.Inn ?? "--", "ИНН пользователя", 40, ExportFormatting.Number),
+                        new ExportableProperty(e.user.Kpp ?? "--", "КПП пользователя", 40, ExportFormatting.Number),
                         new ExportableProperty(e.user.LegalAddress ?? "--", "Юридический адрес организации пользователя", 40),
                         new ExportableProperty(e.user.LegalFullName ?? "--", "Полное наименование организации пользователя", 40),
                         new ExportableProperty(e.user.LegalShortName ?? "--", "Краткое наименование организации пользователя", 40),
-                        new ExportableProperty(e.user.Ogrn ?? "--", "ОГРН организации пользователя", 40),
-                        new ExportableProperty(e.user.PaymentAccount ?? "--", "Расчетный счет пользователя", 40),
+                        new ExportableProperty(e.user.Ogrn ?? "--", "ОГРН организации пользователя", 40, ExportFormatting.Number),
+                        new ExportableProperty(e.user.PaymentAccount ?? "--", "Расчетный счет пользователя", 40, ExportFormatting.Number),
                         new ExportableProperty(e.user.PostAddress ?? "--", "Почтовый адрес пользователя", 40),
                         new ExportableProperty(e.user.PhoneNumber ?? "--", "Номер телефона пользователя", 40),
-                        new ExportableProperty(e.cashRequest.AmountOfMoney.ToString("#.00", CultureInfo.InvariantCulture), "Сумма к перечислению заказа", 20),
                         new ExportableProperty(e.cashRequest.ID.ToString(), "Идентификатор запроса на вывод денег", 20)
                     };
                     ExportableEntity entity = new ExportableEntity(properties);

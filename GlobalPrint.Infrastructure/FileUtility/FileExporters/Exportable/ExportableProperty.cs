@@ -12,11 +12,12 @@ namespace GlobalPrint.Infrastructure.FileUtility.FileExporters.Exportable
     /// </summary>
     public class ExportableProperty
     {
-        public ExportableProperty(string value, string name, int? length = null)
+        public ExportableProperty(string value, string name, int? length = null, ExportFormatting? format = null)
         {
             this.Value = value;
             this.PropertyName = name;
             this.Length = length ?? value?.Length;
+            this.Format = format ?? ExportFormatting.Text;
         }
         /// <summary>
         /// Property value.
@@ -30,5 +31,17 @@ namespace GlobalPrint.Infrastructure.FileUtility.FileExporters.Exportable
         /// Property value length.
         /// </summary>
         public int? Length { get; set; }
+        /// <summary>
+        /// Property value length.
+        /// </summary>
+        public ExportFormatting? Format { get; set; }
+    }
+
+    public enum ExportFormatting
+    {
+        Text = 1,
+        Number = 2,
+        Money = 3,
+        Date = 4
     }
 }

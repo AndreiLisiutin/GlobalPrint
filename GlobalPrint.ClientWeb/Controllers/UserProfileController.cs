@@ -228,7 +228,7 @@ namespace GlobalPrint.ClientWeb
         public ActionResult TransfersRegisters()
         {
             int userID = this.GetCurrentUserID();
-            List<TransfersRegister> registers = this._transfersRegisterUnit.GetTransfersRegisters(userID);
+            List<TransfersRegisterExtended> registers = this._transfersRegisterUnit.GetTransfersRegisters(userID);
             return _USER_PROFILE_TRANSFER_REGISTERS(registers);
         }
 
@@ -265,7 +265,7 @@ namespace GlobalPrint.ClientWeb
         {
             return this.View("CashRequests", requests);
         }
-        private ViewResult _USER_PROFILE_TRANSFER_REGISTERS(List<TransfersRegister> registers)
+        private ViewResult _USER_PROFILE_TRANSFER_REGISTERS(List<TransfersRegisterExtended> registers)
         {
             return this.View("TransfersRegisters", registers);
         }

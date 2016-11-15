@@ -57,6 +57,21 @@ namespace GlobalPrint.Infrastructure.FileUtility.FileExporters
                     foreach (var property in entity.Properties)
                     {
                         workSheet.Cells[row, column] = property.Value;
+                        switch (property.Format)
+                        {
+                            case ExportFormatting.Date:
+                                workSheet.Cells[row, column].NumberFormat = "dd.MM.yyyy HH:mm:ss";
+                                break;
+                            //case ExportFormatting.Money:
+                            //    workSheet.Cells[row, column].NumberFormat = "0.00";
+                            //    break;
+                            case ExportFormatting.Number:
+                                workSheet.Cells[row, column].NumberFormat = "#";
+                                break;
+                            case ExportFormatting.Text:
+                                workSheet.Cells[row, column].NumberFormat = "@";
+                                break;
+                        }
                         column++;
                     }
                     row++;
