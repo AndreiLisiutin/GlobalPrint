@@ -16,9 +16,13 @@ namespace GlobalPrint.ClientWeb
         {
             this._printerUnit = printerUnit;
         }
-
-        // GET: Home
-        [HttpGet]
+        
+        /// <summary>
+        /// Entry point of the application.
+        /// </summary>
+        /// <returns></returns>
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+        //http://stackoverflow.com/questions/16941317/a-public-action-method-was-not-found-on-controller
         public ActionResult Index()
         {
             return View();
