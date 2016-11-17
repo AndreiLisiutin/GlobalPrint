@@ -163,11 +163,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
 
                 if (originalUser != null)
                 {
-                    originalUser.Email = user.Email;
-                    originalUser.UserName = user.UserName;
-                    originalUser.PhoneNumber = user.PhoneNumber;
-
-                    userRepo.Update(originalUser);
+                    userRepo.Update(user);
                     context.Save();
                     return user;
                 }
