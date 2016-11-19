@@ -2,12 +2,16 @@
 @using GlobalPrint.ClientWeb.Helpers;
 @using GlobalPrint.ServerBusinessLogic.Models.Business.TransfersRegisters;
 
-@model List<TransfersRegisterExtended>
+@model List<TransfersRegister>
 @{
     ViewBag.Title = "Реестры перечислений";
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
 
+
+@section Scripts {
+    <script src="~/Resources/Scripts/GlobalPrint/UserProfile/TransfersRegisters.js"></script>
+}
 
 <div class="container">
 
@@ -30,15 +34,15 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (TransfersRegisterExtended register in Model)
+            @foreach (TransfersRegister register in Model)
             {
                 <tr>
-                    <td class="col-md-1">@Html.DisplayFor(c => register.TransfersRegister.ID)</td>
-                    <td class="col-md-3">@Html.DisplayFor(c => register.TransfersRegister.CreatedOn)</td>
-                    <td class="col-md-3">@Html.DisplayFor(c => register.RequestsCount)</td>
-                    <td class="col-md-3">@Html.DisplayFor(c => register.AmountOfMoneySumm)</td>
+                    <td class="col-md-1">@Html.DisplayFor(c => register.ID)</td>
+                    <td class="col-md-3">@Html.DisplayFor(c => register.CreatedOn)</td>
+                    <td class="col-md-3">@Html.DisplayFor(c => register.CashRequestsTotalCount)</td>
+                    <td class="col-md-3">@Html.DisplayFor(c => register.CashRequestsTotalAmountOfMoney)</td>
                     <td class="table-col-buttons col-md-2">
-                        <a href="@Url.Action("GetTransfersRegister", "Reports", new { @TransfersRegisterID = register.TransfersRegister.ID })" title="Загрузить" class="btn btn-default glyphicon glyphicon-download-alt"></a>
+                        <a href="@Url.Action("GetTransfersRegister", "Reports", new { @TransfersRegisterID = register.ID })" title="Загрузить" class="btn btn-default glyphicon glyphicon-download-alt"></a>
                     </td>
                 </tr>
             }
@@ -46,9 +50,9 @@
     </table>
 
     <div class="form-group">
-        @using (Html.BeginForm("NewTransfersRegister", "UserProfile", FormMethod.Post, new { @class = "inline-block" }))
+        @using (Html.BeginForm("NewTransfersRegister", "UserProfile", FormMethod.Post, new { @class = "inline-block", id = "createNewRegister" }))
         {
-            <button type="submit" class="btn btn-default">Сформировать</button>
+            <button type="submit" class="btn btn-default" id="createNewRegister">Сформировать</button>
         }
         @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
     </div>

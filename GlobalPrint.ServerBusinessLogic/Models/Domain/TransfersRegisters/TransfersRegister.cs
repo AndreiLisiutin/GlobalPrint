@@ -23,6 +23,12 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.TransfersRegisters
         [Column("user_id")]
         public int UserID { get; set; }
 
+        [Column("cash_request_total_count")]
+        public int CashRequestsTotalCount { get; set; }
+
+        [Column("cash_request_total_amount_of_money")]
+        public decimal CashRequestsTotalAmountOfMoney { get; set; }
+
         #region IDomainModel
         [Key]
         [Column("transfers_register_id")]
