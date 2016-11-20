@@ -20,7 +20,12 @@ namespace GlobalPrint.ClientWeb.Models.PushNotifications
             _logUtility = new Lazy<ILogger>(() => loggerFactory.GetLogger<PushNotificationHub>());
         }
 
-        public void NotifyUserByID(string message, int userID)
+        /// <summary>
+        /// Notification about user activity.
+        /// </summary>
+        /// <param name="message">Message of notification.</param>
+        /// <param name="userID">Client user identifier.</param>
+        public void UserActivityNotification(string message, int userID)
         {
             try
             {
@@ -29,10 +34,15 @@ namespace GlobalPrint.ClientWeb.Models.PushNotifications
             }
             catch (Exception ex)
             {
-                _logUtility.Value.Error(ex, "Exception occurs in PushNotificationHub.NotifyUserByID: " + ex.Message);
+                _logUtility.Value.Error(ex, "Exception occurs in PushNotificationHub.UserActivityNotification: " + ex.Message);
             }
         }
 
+        /// <summary>
+        /// Notification about new incoming order.
+        /// </summary>
+        /// <param name="message">Message of notification.</param>
+        /// <param name="clientUserID">Client user identifier.</param>
         public void NewIncomingOrder(string message, int clientUserID)
         {
             try

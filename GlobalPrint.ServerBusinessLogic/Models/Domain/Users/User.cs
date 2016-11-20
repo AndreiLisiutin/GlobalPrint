@@ -36,6 +36,8 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         public bool EmailConfirmed { get; set; }
         [Column("last_activity_date")]
         public DateTime LastActivityDate { get; set; }
+        [Column("device_id")]
+        public string DeviceID { get; set; }
 
         #region ILegalRequisites
 

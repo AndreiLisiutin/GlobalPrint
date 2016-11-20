@@ -21,7 +21,14 @@ namespace GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users
         User DeleteUser(User user);
         List<PrinterOperatorModel> GetInactiveUsers(TimeSpan threshold, TimeSpan callInterval);
         User UpdateUserActivity(int userID, DateTime? lastActivityDate = null);
-       
+
+        /// <summary>
+        /// Update шdentifier of user device for notifications system.
+        /// </summary>
+        /// <param name="userID">User identifier.</param>
+        /// <param name="deviceID">Identifier of user device for notifications system.</param>
+        /// <returns>User instance.</returns>
+        User UpdateDeviceID(int userID, string deviceID);
     }
 
     public interface IUserProfileUnit : IUserUnit

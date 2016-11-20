@@ -192,6 +192,42 @@ namespace GlobalPrint.ClientWeb
             return Json(bankInfo, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Update шdentifier of user device for notifications system.
+        /// </summary>
+        /// <param name="deviceID">Identifier of user device for notifications system.</param>
+        /// <returns>Nothing in fact.</returns>
+        [HttpGet, Authorize]
+        public ActionResult UpdateDeviceID(string deviceID)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                Argument.NotNullOrWhiteSpace(deviceID, "При изменении идентификатора устройства произошла ошибка. Идентификатор устройства не может быть пустым.");
+                var user = this._userUnit.UpdateDeviceID(this.GetCurrentUserID(), deviceID);
+                return Json(user, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        /// <summary>
+        /// Get device identifier of current user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet, Authorize]
+        public ActionResult GetDeviceID()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userID = this.GetCurrentUserID();
+                var user = this._userUnit.GetByID(this.GetCurrentUserID());
+                return Json(new { deviceID = user.DeviceID }, JsonRequestBehavior.AllowGet);
+            } else
+            {
+                return Json(new { deviceID = "" }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
         [HttpGet, Authorize]
         public ActionResult RequestCash()

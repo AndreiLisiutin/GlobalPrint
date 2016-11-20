@@ -2,6 +2,7 @@
 using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.EmailUtility;
 using GlobalPrint.Infrastructure.LogUtility;
+using GlobalPrint.Infrastructure.Notifications;
 using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Printers;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
@@ -80,8 +81,22 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
 
                 _emailUtility.Send(destination, _emailSubject, messageBody);
 
+                // Simple push notification
                 PushNotificationHub pushNotificationHub = IoC.Instance.Resolve<PushNotificationHub>();
-                pushNotificationHub.NotifyUserByID(messageBody, item.PrinterOperator.ID);
+                pushNotificationHub.UserActivityNotification(messageBody, item.PrinterOperator.ID);
+
+                // Browser push notification
+                if (!string.IsNullOrWhiteSpace(item.PrinterOperator.DeviceID))
+                {
+                    NotificationMessage message = new NotificationMessage()
+                    {
+                        Body = messageBody,
+                        Destination = item.PrinterOperator.DeviceID,
+                        Title = _emailSubject
+                    };
+                    FirebaseCloudNotifications firebaseNotification = new FirebaseCloudNotifications();
+                    firebaseNotification.SendNotification(message);
+                }
             }
             catch (Exception e)
             {

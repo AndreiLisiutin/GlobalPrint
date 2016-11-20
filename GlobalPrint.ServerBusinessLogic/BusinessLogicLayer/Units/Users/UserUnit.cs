@@ -275,5 +275,35 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 return totalList;
             }
         }
+
+        /// <summary>
+        /// Update шdentifier of user device for notifications system.
+        /// </summary>
+        /// <param name="userID">User identifier.</param>
+        /// <param name="deviceID">Identifier of user device for notifications system.</param>
+        /// <returns>User instance.</returns>
+        public User UpdateDeviceID(int userID, string deviceID)
+        {
+            Argument.NotNullOrWhiteSpace(deviceID, "При изменении идентификатора устройства произошла ошибка. Идентификатор устройства не может быть пустым.");
+
+            using (IDataContext context = this.Context())
+            {
+                IUserRepository userRepo = this.Repository<IUserRepository>(context);
+                User originalUser = userRepo.GetByID(userID);
+
+                if (originalUser != null)
+                {
+                    originalUser.DeviceID = deviceID;
+                    userRepo.Update(originalUser);
+                    context.Save();
+
+                    return originalUser;
+                }
+                else
+                {
+                    throw new Exception("Не найден пользователь [ID=" + userID + "]");
+                }
+            }
+        }
     }
 }

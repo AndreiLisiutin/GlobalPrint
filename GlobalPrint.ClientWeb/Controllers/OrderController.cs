@@ -2,6 +2,7 @@
 using GlobalPrint.ClientWeb.Models.PushNotifications;
 using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.CommonUtils;
+using GlobalPrint.Infrastructure.Notifications;
 using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order;
@@ -25,6 +26,8 @@ namespace GlobalPrint.ClientWeb
         PrintOrderUnit _printOrderUnit;
         IUserUnit _userUnit;
         Random _random;
+        private object _emailSubject;
+
         public OrderController()
             : this(IoC.Instance.Resolve<PrintOrderUnit>(), IoC.Instance.Resolve<IUserUnit>(), new Random())
         {
@@ -203,7 +206,8 @@ namespace GlobalPrint.ClientWeb
             #region Notifications
 
 #warning remove it from here
-            // Push notification about new order
+
+            // Simple push notification about new order
             User printerOperator = new PrinterUnit().GetPrinterOperator(createdOrder.PrinterID);
             string notificationMessage = string.Format(
                 "{0}: поступил заказ № {1}." + Environment.NewLine +
@@ -214,6 +218,20 @@ namespace GlobalPrint.ClientWeb
                 createdOrder.FullPrice
             );
             IoC.Instance.Resolve<PushNotificationHub>().NewIncomingOrder(notificationMessage, printerOperator.ID);
+
+            // Browser push notification
+            if (!string.IsNullOrWhiteSpace(printerOperator.DeviceID))
+            {
+                NotificationMessage message = new NotificationMessage()
+                {
+                    Body = notificationMessage,
+                    Destination = printerOperator.DeviceID,
+                    Title = "Global Print - Новый заказ на печать"
+                    //Action = Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList", new { target = "_blank" })
+                };
+                FirebaseCloudNotifications firebaseNotification = new FirebaseCloudNotifications();
+                firebaseNotification.SendNotification(message);
+            }
 
             #endregion Notifications
 
