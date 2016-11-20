@@ -260,11 +260,22 @@ namespace GlobalPrint.ClientWeb
             return RedirectToAction("UserProfile");
         }
 
+        /// <summary>
+        /// Predict how many cash requests will be in next transfers register.
+        /// </summary>
+        /// <returns>JSON data with TransfersRegister object.</returns>
+        [HttpGet, Authorize]
+        public ActionResult GetNextTransferRegisterPrediction()
+        {
+            TransfersRegister transfersRegister = this._transfersRegisterUnit.GetNextTransferRegisterPrediction();
+            return Json(transfersRegister, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet, Authorize]
         public ActionResult TransfersRegisters()
         {
             int userID = this.GetCurrentUserID();
-            List<TransfersRegisterExtended> registers = this._transfersRegisterUnit.GetTransfersRegisters(userID);
+            List<TransfersRegister> registers = this._transfersRegisterUnit.GetTransfersRegisters(userID);
             return _USER_PROFILE_TRANSFER_REGISTERS(registers);
         }
 
@@ -301,7 +312,7 @@ namespace GlobalPrint.ClientWeb
         {
             return this.View("CashRequests", requests);
         }
-        private ViewResult _USER_PROFILE_TRANSFER_REGISTERS(List<TransfersRegisterExtended> registers)
+        private ViewResult _USER_PROFILE_TRANSFER_REGISTERS(List<TransfersRegister> registers)
         {
             return this.View("TransfersRegisters", registers);
         }

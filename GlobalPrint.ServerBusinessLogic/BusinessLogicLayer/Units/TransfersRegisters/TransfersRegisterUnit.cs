@@ -103,7 +103,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.TransfersRegi
                 TransfersRegister register = new TransfersRegister()
                 {
                     CreatedOn = DateTime.Now,
-                    UserID = userID
+                    UserID = userID,
+                    CashRequestsTotalAmountOfMoney = 0,
+                    CashRequestsTotalCount = 0
                 };
 
                 context.BeginTransaction();
@@ -153,10 +155,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.TransfersRegi
                                 $"в реестр перечислений № {register.ID} от {register.CreatedOn.ToString("dd.MM.yyyy")}. " +
                                 $"Заявленная сумма {cashRequest.AmountOfMoney.ToString("#.00")} рублей будет перечислена на указанные в учетной записи реквизиты.";
                             cashRepo.Update(cashRequest);
+
+                            register.CashRequestsTotalCount++;
+                            register.CashRequestsTotalAmountOfMoney += cashRequest.AmountOfMoney;
                         }
 
                         messagesToSend.Add(this._CreateMTransfersRegisterMessage(cashRequest, user));
                     }
+                    registerRepo.Update(register);
                     context.Save();
                     context.CommitTransaction();
                 }
@@ -171,6 +177,36 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.TransfersRegi
                     this._emailUtility.Value.Send(message);
                 }
                 return register;
+            }
+        }
+
+        /// <summary>
+        /// Predict how many cash requests will be in next transfers register.
+        /// </summary>
+        /// <returns></returns>
+        public TransfersRegister GetNextTransferRegisterPrediction()
+        {
+            using (var context = this.Context())
+            {
+                var cashRepo = this.Repository<ICashRequestRepository>(context);
+                var userRepo = this.Repository<IUserRepository>(context);
+
+                List<CashRequest> requests = (
+                    from cash in cashRepo.GetAll()
+                    join user in userRepo.GetAll() on cash.UserID equals user.ID
+                    where cash.TransfersRegisterID == null && cash.CashRequestStatusID == (int)CashRequestStatusEnum.InProgress 
+                    //&& user.AmountOfMoney >= cash.AmountOfMoney 
+                    //&& !string.IsNullOrWhiteSpace(user.BankName) && !string.IsNullOrWhiteSpace(user.BankBic)
+                    //&& !string.IsNullOrWhiteSpace(user.BankCorrespondentAccount) && !string.IsNullOrWhiteSpace(user.PaymentAccount)
+                    select cash
+                )
+                    .ToList();
+
+                return new TransfersRegister()
+                {
+                    CashRequestsTotalCount = requests.Count,
+                    CashRequestsTotalAmountOfMoney = requests.Sum(e => e.AmountOfMoney)
+                };
             }
         }
 
@@ -207,7 +243,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.TransfersRegi
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
-        public List<TransfersRegisterExtended> GetTransfersRegisters(int userID)
+        public List<TransfersRegister> GetTransfersRegisters(int userID)
         {
             using (var context = this.Context())
             {
@@ -215,17 +251,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.TransfersRegi
                 var userRepo = this.Repository<IUserRepository>(context);
                 var registerRepo = this.Repository<ITransfersRegisterRepository>(context);
 
-                var list = (
-                    from register in registerRepo.Get(e => e.UserID == userID)
-                    join cash in cashRepo.GetAll() on register.ID equals cash.TransfersRegisterID
-                    group cash by register into registerGropp
-                    orderby registerGropp.Key.CreatedOn descending
-                    select new { Register = registerGropp.Key, Count = registerGropp.Count(), AmountOfMoneySumm = registerGropp.Sum(e => e.AmountOfMoney) }
-                    )
-                    .ToList()
-                    .Select(e => new TransfersRegisterExtended() { TransfersRegister = e.Register, AmountOfMoneySumm = e.AmountOfMoneySumm, RequestsCount = e.Count })
-                    .ToList();
-                return list;
+                return registerRepo.Get(e => e.UserID == userID).ToList();
             }
         }
 
