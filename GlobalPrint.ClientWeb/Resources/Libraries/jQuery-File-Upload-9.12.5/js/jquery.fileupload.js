@@ -453,10 +453,11 @@
             }
             if (!multipart || options.blob || !this._isInstanceOf('File', file)) {
                 options.headers['Content-Disposition'] = 'attachment; filename="' +
-                    encodeURI(file.name) + '"';
+                    encodeURIComponent(file.name) + '"';
             }
             if (!multipart) {
-                options.contentType = file.type || 'application/octet-stream';
+            	options.contentType = file.type || 'application/octet-stream';
+            	options.contentType += '; charset=utf-8';
                 options.data = options.blob || file;
             } else if ($.support.xhrFormDataFileUpload) {
                 if (options.postMessage) {

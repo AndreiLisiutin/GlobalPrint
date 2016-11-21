@@ -30,7 +30,6 @@
             maxFileSize: 1024 * 1024 * 10, // = 10Mb
             autoUpload: true,
             maxNumberOfFiles: 1,
-            formAcceptCharset: 'utf-8',
             dataType: 'json',
             messages: {
                 maxNumberOfFiles: 'Превышено максимально допустимое количество файлов для загрузки',
