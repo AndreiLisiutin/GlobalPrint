@@ -161,7 +161,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Orders
                     from register in registerRepo.GetAll()
                     join cashRequest in cashRepo.GetAll() on register.ID equals cashRequest.TransfersRegisterID
                     join user in userRepo.GetAll() on cashRequest.UserID equals user.ID
-                    where register.ID == transfersRegisterID && register.UserID == userID
+                    where register.ID == transfersRegisterID// && register.UserID == userID
                     orderby cashRequest.CreatedOn descending
                     select new { register = register, cashRequest = cashRequest, user = user }
                  )

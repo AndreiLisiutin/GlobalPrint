@@ -13,4 +13,24 @@
     $('#recievedPrintOrderIdFilter').on('propertychange change keyup paste input', function () {
         dprocess();
     });
+
+    $(".rejectOrder").submit(function (event) {
+        event.preventDefault();
+        GlobalPrint.Utils.CommonUtils.showModalQuestion({
+            question: 'Отменить выбранный заказ?',
+            answers: [
+                {
+                    text: 'Да',
+                    handler: function () {
+                        event.target.submit();
+                    }
+                },
+                {
+                    text: 'Нет',
+                    handler: function () {
+                    }
+                }
+            ]
+        });
+    });
 });

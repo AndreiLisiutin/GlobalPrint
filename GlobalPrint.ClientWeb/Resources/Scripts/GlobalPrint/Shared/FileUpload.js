@@ -25,7 +25,7 @@
     FileUpload.initFileUpload = function () {
         $('#fileupload').fileupload({
             url: '/Order/UploadFile',
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png|pdf|doc|docx|tif|tiff)$/i,
+            acceptFileTypes: /(\.|\/)(jpe?g|png|pdf|doc|docx|tif|tiff)$/i,
             paramName: 'gpUserFile',
             maxFileSize: 1024 * 1024 * 10, // = 10Mb
             autoUpload: true,

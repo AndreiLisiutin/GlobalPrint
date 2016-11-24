@@ -307,10 +307,13 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
             validation.Require(printer.IsAvailableNow, "В данный момент принтер недоступен.");
 
-            int pagesCount = CalculatePagesCount(printFile);
-            decimal fullPrice = CALCULATE_FULL_PRICE(service.PrinterService.PricePerPage, pagesCount, newOrder.CopiesCount);
-            PrintOrderAvailabilities isAvailable = CheckPrintOrderAvailabilityForUser(newOrder.UserID, fullPrice);
-            validation.Require(isAvailable != PrintOrderAvailabilities.Unavailable, "Недостаточно средств на счету.");
+            if (validation.IsValid)
+            {
+                int pagesCount = CalculatePagesCount(printFile);
+                decimal fullPrice = CALCULATE_FULL_PRICE(service.PrinterService.PricePerPage, pagesCount, newOrder.CopiesCount);
+                PrintOrderAvailabilities isAvailable = CheckPrintOrderAvailabilityForUser(newOrder.UserID, fullPrice);
+                validation.Require(isAvailable != PrintOrderAvailabilities.Unavailable, "Недостаточно средств на счету.");
+            }
             return validation;
         }
 

@@ -8,6 +8,9 @@
     ViewBag.Title = "Принтеры";
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
+@section Scripts {
+    <script src="~/Resources/Scripts/GlobalPrint/Printer/MyPrinters.js"></script>
+}
 
 <div class="container">
 
@@ -38,7 +41,10 @@
                         <td class="table-col-buttons">
                             <a href="@Url.Action("Clone", "Printer", new { @PrinterID = printer.ID })" title="Клонировать принтер" class="btn btn-default glyphicon glyphicon-plus"></a>
                             <a href="@Url.Action("Edit", "Printer", new { @PrinterID = printer.ID })" title="Изменить параметры принтера" class="btn btn-default glyphicon glyphicon-pencil"></a>
-                            @Ajax.ActionLink(" ", "Delete", new { PrinterID = printer.ID }, new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-default glyphicon glyphicon-trash", @title = "Удалить принтер" })
+                            @using (Html.BeginForm("Delete", "Printer", new { PrinterID = printer.ID }, FormMethod.Post, new { @class = "inline-block deletePrinter" }))
+                            {
+                                <button type="submit" value="Удалить принтер" class="btn btn-default glyphicon glyphicon-trash"></button>
+                            }
                         </td>
                     </tr>
                 }
