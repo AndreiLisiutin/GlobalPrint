@@ -42,7 +42,8 @@ $(document).ready(function () {
                 });
             } else {
                 GlobalPrint.Utils.CommonUtils.showModalQuestion({
-                    question: 'Сформировать реестр перечислений по ' + data.CashRequestsTotalCount + ' заявкам на вывод денег на предположительную общую сумму ' + parseFloat(data.CashRequestsTotalAmountOfMoney).toFixed(2) + ' руб.?',
+                    question: 'Сформировать реестр перечислений по ' + data.CashRequestsTotalCount + ' заявкам на вывод ' + parseFloat(data.CashRequestsTotalAmountOfMoney).toFixed(2) + 
+                        ' рублей? Запрошенная сумма по каждому пользователю будет включена в реестр только при наличии этой суммы на его текущем счету системы.',
                     answers: [
                         {
                             text: 'Да',

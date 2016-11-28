@@ -635,6 +635,7 @@
     <Content Include="Resources\Scripts\GlobalPrint.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Home\Index.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Order\Confirm.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Printer\MyPrinters.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Printer\Edit.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Order\New.js" />
     <Content Include="Resources\Scripts\GlobalPrint\PrintOrder\RecievedPrintOrder.js" />

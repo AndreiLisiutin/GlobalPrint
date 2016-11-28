@@ -57,8 +57,10 @@
                             @Ajax.ActionLink(" ", "AcceptOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID },
                                 new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-default glyphicon glyphicon-ok", @title = "Подтверждение от клиента для получения оплаты" })
 
-                            @Ajax.ActionLink(" ", "RejectOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID },
-                                new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-default glyphicon glyphicon-remove", @title = "Отклонить" })
+                            @using (Html.BeginForm("RejectOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID }, FormMethod.Post, new { @class = "inline-block rejectOrder" }))
+                            {
+                                <button type="submit" value="Отклонить" class="btn btn-default glyphicon glyphicon-remove"></button>
+                            }
                         </td>
                     }
                     else if (printOrder.PrintOrder.PrintOrderStatusID == (int)PrintOrderStatusEnum.Accepted)

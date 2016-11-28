@@ -20,6 +20,7 @@ namespace GlobalPrint.Infrastructure.FileUtility
             ["docx"] = new DocFileReader(),
             ["jpeg"] = new JpegFileReader(),
             ["jpg"] = new JpegFileReader(),
+            ["png"] = new JpegFileReader(),
             ["tif"] = new TiffFileReader(),
             ["tiff"] = new TiffFileReader()
         };

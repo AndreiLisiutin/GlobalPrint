@@ -38,9 +38,9 @@
             {
                 <tr>
                     <td class="col-md-1">@Html.DisplayFor(c => register.ID)</td>
-                    <td class="col-md-3">@Html.DisplayFor(c => register.CreatedOn)</td>
-                    <td class="col-md-3">@Html.DisplayFor(c => register.CashRequestsTotalCount)</td>
-                    <td class="col-md-3">@Html.DisplayFor(c => register.CashRequestsTotalAmountOfMoney)</td>
+                    <td class="col-md-3" align="center">@Html.DisplayFor(c => register.CreatedOn)</td>
+                    <td class="col-md-3" align="right">@Html.DisplayFor(c => register.CashRequestsTotalCount)</td>
+                    <td class="col-md-3" align="right">@Html.DisplayFor(c => register.CashRequestsTotalAmountOfMoney)</td>
                     <td class="table-col-buttons col-md-2">
                         <a href="@Url.Action("GetTransfersRegister", "Reports", new { @TransfersRegisterID = register.ID })" title="Загрузить" class="btn btn-default glyphicon glyphicon-download-alt"></a>
                     </td>
