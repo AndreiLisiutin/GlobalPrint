@@ -5,6 +5,7 @@ using GlobalPrint.Infrastructure.BankUtility.BicInfo;
 using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.Infrastructure.LogUtility;
 using GlobalPrint.Infrastructure.LogUtility.Robokassa;
+using GlobalPrint.Infrastructure.Notifications;
 using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.TransfersRegisters;
@@ -97,7 +98,7 @@ namespace GlobalPrint.ClientWeb
                 return View("UserProfile", model);
             }
         }
-        
+
         /// <summary>
         /// Fill the balance of current user.
         /// </summary>
@@ -142,7 +143,7 @@ namespace GlobalPrint.ClientWeb
             moneyPackage.SenderUserId = this.GetCurrentUserID();
             return this._USER_PROFILE_SEND_MONEY(moneyPackage);
         }
-        
+
         /// <summary>
         /// Perform money transfer.
         /// </summary>
@@ -223,9 +224,48 @@ namespace GlobalPrint.ClientWeb
                 var userID = this.GetCurrentUserID();
                 var user = this._userUnit.GetByID(this.GetCurrentUserID());
                 return Json(new { deviceID = user.DeviceID }, JsonRequestBehavior.AllowGet);
-            } else
+            }
+            else
             {
                 return Json(new { deviceID = "" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
+        /// Get current user ID.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet, Authorize]
+        public ActionResult GetUserID()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userID = this.GetCurrentUserID();
+                return Json(new { userID = userID }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { userID = "" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        /// <summary>
+        /// Add current user device into devices group.
+        /// </summary>
+        /// <param name="deviceID">Current device identifier.</param>
+        /// <returns></returns>
+        [HttpGet, Authorize]
+        public ActionResult AddDeviceToGroup(string deviceID)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userID = this.GetCurrentUserID();
+                new FirebaseCloudNotifications().AddDeviceToGroup(deviceID, userID.ToString());
+                return Json(new { groupID = userID.ToString() }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { groupID = "" }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -241,7 +281,7 @@ namespace GlobalPrint.ClientWeb
             };
             return _USER_PROFILE_REQUEST_CASH(cashRequest);
         }
-        
+
         [HttpPost, Authorize]
         public ActionResult ExecuteRequestCash(CashRequest request)
         {

@@ -24,9 +24,8 @@ namespace GlobalPrint.Infrastructure.Notifications
         }
 
         /// <summary>
-        /// Message destination - device identifier.
+        /// Message destination - device/group identifier.
         /// </summary>
-        /// <see cref="User.DeviceID"/>
         public string Destination { get; set; }
 
         /// <summary>
@@ -47,11 +46,17 @@ namespace GlobalPrint.Infrastructure.Notifications
         /// <summary>
         /// Sound for notification. Does not work for web.
         /// </summary>
+        [Obsolete("Not allowed in web")]
         public string Sound { get; set; }
 
         /// <summary>
         /// Action to perform on notification click.
         /// </summary>
         public string Action { get; set; }
+
+        /// <summary>
+        /// Recieved user identifier.
+        /// </summary>
+        public int DestinationUserID { get; set; }
     }
 }

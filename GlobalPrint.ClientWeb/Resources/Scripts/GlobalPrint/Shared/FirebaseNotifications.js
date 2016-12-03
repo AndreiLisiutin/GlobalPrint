@@ -13,53 +13,29 @@
     // Retrieve Firebase Messaging object.
     const messaging = firebase.messaging();
 
-    var setTokenSentToServer = function (sent) {
-        if (sent) {
-            window.localStorage.setItem('sentToServer', 1);
-        } else {
-            window.localStorage.setItem('sentToServer', 0);
-        }
-    };
-
     var sendTokenToServer = function (currentToken) {
-        if (!isTokenSentToServer()) {
-            // Send the current token to server.
-            $.ajax({
-                type: 'GET',
-                contentType: 'application/json',
-                dataType: 'json',
-                data: { deviceID: currentToken + '' },
-                url: '/UserProfile/UpdateDeviceID'
-            }).done(function (json) {
-                setTokenSentToServer(true);
-                console.log('Token updated on server...');
+        // Send the current token to server.
+        $.ajax({
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: { deviceID: currentToken + '' },
+            url: '/UserProfile/AddDeviceToGroup'
+        }).done(function (json) {
+            console.log('Token updated on server...');
 
-            }).fail(function () {
-                setTokenSentToServer(false);
-                console.log('Error: ajax call failed.');
-            });
-
-        } else {
-            console.log('Token already sent to server so won\'t send it again ' +
-                'unless it changes');
-        }
-    };
-
-    var isTokenSentToServer = function () {
-        if (window.localStorage.getItem('sentToServer') == 1) {
-            return true;
-        }
-        return false;
+        }).fail(function () {
+            console.log('Error: ajax call failed.');
+        });
     };
 
     var refreshToken = function () {
         messaging.getToken()
-            .then(function (refreshedToken) {
+            .then(function (token) {
+                console.log('Token received: ' + token);
                 console.log('Token refreshing...');
-                // Indicate that the new Instance ID token has not yet been sent to the app server.
-                setTokenSentToServer(false);
                 // Send Instance ID token to app server.
-                sendTokenToServer(refreshedToken);
+                sendTokenToServer(token);
             })
             .catch(function (err) {
                 console.log('Unable to retrieve refreshed token ', err);
@@ -75,36 +51,7 @@
         .then(function () {
             console.log('Notification permission granted.');
             // Retrieve an Instance ID token for use with FCM.
-            messaging.getToken()
-                .then(function (token) {
-                    console.log('Token received: ' + token);
-
-                    // Get current token from server.
-                    $.ajax({
-                        type: 'GET',
-                        contentType: 'application/json',
-                        dataType: 'json',
-                        url: '/UserProfile/GetDeviceID'
-                    }).done(function (json) {
-                        if (!json) {
-                            console.log('Error: ajax call response is empty.');
-                            return;
-                        }
-
-                        var deviceID = json.deviceID;
-                        if (!deviceID || deviceID != token) {
-                            refreshToken();
-                        }
-
-                    }).fail(function () {
-                        setTokenSentToServer(false);
-                        console.log('Error: ajax call failed.');
-                    });
-
-                })
-                .catch(function (err) {
-                    console.log('Unable to retrieve token ', err);
-                });
+            refreshToken();
 
         })
         .catch(function (err) {

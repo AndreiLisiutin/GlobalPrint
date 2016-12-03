@@ -39,14 +39,16 @@
         }).on('fileuploadadd', function (e, data) {
             var $this = $(this);
             var file = data.files[0];
+            var originalFile = data.originalFiles[0];
             var fileName = file.name + ' (' + formatBytes(file.size) + ')';
+            var originalFileName = originalFile.name + ' (' + formatBytes(originalFile.size) + ')';
             var textfield = $('#fileupload').parents('.input-group').find(':text');
             var errorLabel = $('#fileupload').parents('.input-group').find('#errorText');
             var progressBar = $('#fileupload').parents('.input-group').find('#progress .progress-bar');
 
             progressBar.show();
             errorLabel.hide();
-            textfield.val(fileName);
+            textfield.val(fileName + ' ' + originalFileName);
 
             // File validation
             if (data.autoUpload || (data.autoUpload !== false && $(this).fileupload('option', 'autoUpload'))) {

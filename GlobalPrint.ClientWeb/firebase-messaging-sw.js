@@ -21,18 +21,43 @@ const messaging = firebase.messaging();
 // implement this optional method.
 // [START background_handler]
 messaging.setBackgroundMessageHandler(function (payload) {
-    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+    console.log('Received background message ', payload);
 
-    if (payload.notification) {
-        var notificationTitle = 'Background Message Title';
-        var notificationOptions = {
-            body: payload.notification.body,
-            icon: payload.notification.icon
-        };
-        return self.registration.showNotification(payload.notification.title,
-            notificationOptions);
+    if (!payload || !payload.destinationUserID || !payload.notification) {
+        return;
     }
-    
+
+    // Get current user ID from server.
+    $.ajax({
+        type: 'GET',
+        contentType: 'application/json',
+        dataType: 'json',
+        url: '/UserProfile/GetUserID'
+    }).done(function (json) {
+        if (!json) {
+            console.log('Error: ajax call response is empty.');
+            return;
+        }
+
+        var userID = json.userID;
+        if (!userID) {
+            return;
+        }
+
+        // if current logged in user is reciever of message, show notification
+        if (userID == payload.destinationUserID) {
+            console.log('Correct background message, show it');
+            var notificationOptions = {
+                body: payload.notification.body,
+                icon: payload.notification.icon
+            };
+            return self.registration.showNotification(payload.notification.title,
+                notificationOptions);
+        }
+
+    }).fail(function () {
+        console.log('Error: ajax call failed.');
+    });
 
 });
 // [END background_handler]

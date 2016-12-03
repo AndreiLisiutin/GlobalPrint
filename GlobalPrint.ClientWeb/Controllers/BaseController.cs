@@ -1,12 +1,15 @@
 ﻿using GlobalPrint.ClientWeb.Models;
 using GlobalPrint.ClientWeb.Models.FilesRepository;
+using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.CommonUtils;
+using GlobalPrint.Infrastructure.LogUtility;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 using GlobalPrint.ServerBusinessLogic.Models.Business;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Timers;
 using System.Web;
 using System.Web.Configuration;
@@ -63,8 +66,7 @@ namespace GlobalPrint.ClientWeb
         /// Upload file into session. File is storing inside the session one hour then it is to be removed.
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
-        [Authorize]
+        [HttpPost, Authorize]
         public virtual ActionResult UploadFile()
         {
             int userID = this.GetCurrentUserID();
@@ -73,6 +75,35 @@ namespace GlobalPrint.ClientWeb
             string message = "Ошибка загрузки файла.";
             Guid? fileId = null;
 
+            #region Для тестирования, удалить потом
+
+            ILoggerFactory factory = IoC.Instance.Resolve<ILoggerFactory>();
+            ILogger logger = factory.GetCurrentClassLogger();
+            
+            string log = "File: " + Environment.NewLine;
+            log += "ContentLength: " + file.ContentLength + Environment.NewLine;
+            log += "ContentType: " + file.ContentType + Environment.NewLine;
+            log += "FileName: " + file.FileName + Environment.NewLine;
+
+            byte[] bytes = Encoding.Default.GetBytes(file.FileName);
+            string newFileName = Encoding.UTF8.GetString(bytes);
+            log += "DefaultNewFileName: " + newFileName + Environment.NewLine;
+
+            bytes = Encoding.ASCII.GetBytes(file.FileName);
+            newFileName = Encoding.UTF8.GetString(bytes);
+            log += "ASCIINewFileName: " + newFileName + Environment.NewLine;
+
+            bytes = Encoding.Unicode.GetBytes(file.FileName);
+            newFileName = Encoding.UTF8.GetString(bytes);
+            log += "UnicodeNewFileName: " + newFileName + Environment.NewLine;
+
+            newFileName = HttpUtility.UrlEncode(file.FileName, Encoding.UTF8);
+            log += "UrlEncodeNewFileName: " + newFileName + Environment.NewLine;
+
+            logger.Info(log);
+            
+            #endregion
+
             if (file != null && file.ContentLength != 0)
             {
                 fileId = this._uploadedFilesRepo.Add(file, userID);
@@ -80,7 +111,7 @@ namespace GlobalPrint.ClientWeb
                 message = "Файл успешно загружен.";
             }
 
-            return Json(new { isUploaded = isUploaded, message = message, fileId = fileId }, "text/html");
+            return Json(new { isUploaded = isUploaded, message = message, fileId = fileId }, "text/html;charset=utf-8");
         }
     }
 }

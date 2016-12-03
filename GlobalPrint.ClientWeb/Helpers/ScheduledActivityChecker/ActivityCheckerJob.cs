@@ -15,7 +15,9 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Configuration;
+using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
 {
@@ -24,6 +26,7 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
         private readonly TimeSpan _threshold;
         private readonly TimeSpan _callInterval;
         private readonly string _emailSubject = "Активность в GlobalPrint";
+        private readonly string _globalPrintSiteUrl;
 
         private IUserUnit _userUnit;
         private IEmailUtility _emailUtility;
@@ -38,6 +41,7 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
 
             _threshold = TimeSpan.FromMinutes(double.Parse(WebConfigurationManager.AppSettings["ActivityCheckerThreshold"]));
             _callInterval = TimeSpan.FromMinutes(double.Parse(WebConfigurationManager.AppSettings["ActivityCheckerCallInterval"]));
+            _globalPrintSiteUrl = WebConfigurationManager.AppSettings["GlobalPrintSiteUrl"].ToString();
         }
 
         public void Execute(IJobExecutionContext context)
@@ -92,7 +96,9 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
                     {
                         Body = messageBody,
                         Destination = item.PrinterOperator.DeviceID,
-                        Title = _emailSubject
+                        Title = _emailSubject,
+                        Action = _globalPrintSiteUrl,
+                        DestinationUserID = item.PrinterOperator.ID
                     };
                     FirebaseCloudNotifications firebaseNotification = new FirebaseCloudNotifications();
                     firebaseNotification.SendNotification(message);

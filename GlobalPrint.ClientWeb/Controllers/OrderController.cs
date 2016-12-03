@@ -205,7 +205,7 @@ namespace GlobalPrint.ClientWeb
 
             #region Notifications
 
-#warning remove it from here
+            #warning remove it from here
 
             // Simple push notification about new order
             User printerOperator = new PrinterUnit().GetPrinterOperator(createdOrder.PrinterID);
@@ -226,8 +226,9 @@ namespace GlobalPrint.ClientWeb
                 {
                     Body = notificationMessage,
                     Destination = printerOperator.DeviceID,
-                    Title = "Global Print - Новый заказ на печать"
-                    //Action = Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList", new { target = "_blank" })
+                    Title = "Global Print - Новый заказ на печать",
+                    Action = Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList", null, Request.Url.Scheme),
+                    DestinationUserID = printerOperator.ID
                 };
                 FirebaseCloudNotifications firebaseNotification = new FirebaseCloudNotifications();
                 firebaseNotification.SendNotification(message);
