@@ -71,7 +71,7 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
         {
             try
             {
-                MailAddress destination = new MailAddress(item.PrinterOperator.Email, item.PrinterOperator.UserName);
+                MailAddress printerOperatorMail = new MailAddress(item.PrinterOperator.Email, item.PrinterOperator.UserName);
                 string messageBody = string.Format(
                      "Вы являетесь оператором принтера \"{0}\" по адресу {1}." +
                      " В {2} ваш принтер стал неактивным на карте и клиенты больше не могут отправлять вам заказы." +
@@ -83,7 +83,7 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
                      _threshold.TotalMinutes
                  );
 
-                _emailUtility.Send(destination, _emailSubject, messageBody);
+                _emailUtility.Send(printerOperatorMail, _emailSubject, messageBody);
 
                 // Simple push notification
                 PushNotificationHub pushNotificationHub = IoC.Instance.Resolve<PushNotificationHub>();

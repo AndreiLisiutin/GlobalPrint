@@ -25,7 +25,11 @@ namespace GlobalPrint.Test
         /// User ID for identity config.
         /// </summary>
         protected int CurrentUserID = Int32.Parse(ConfigurationManager.AppSettings["TestUserID"]);
-        
+
+        /// <summary>
+        /// Returns moq object for email component.
+        /// </summary>
+        /// <returns>Moq object for email component</returns>
         protected Mock<IEmailUtility> GetEmailMoq()
         {
             Mock<IEmailUtility> emailUtilityMoq = new Mock<IEmailUtility>();
@@ -35,7 +39,13 @@ namespace GlobalPrint.Test
 
             emailUtilityMoq
                 .SetupGet(e => e.SupportEmail)
-                .Returns(new MailAddress(WebConfigurationManager.AppSettings["SupportEmail"].ToString(), WebConfigurationManager.AppSettings["SupportEmailDisplayName"].ToString()));
+                .Returns(new MailAddress(WebConfigurationManager.AppSettings["SupportEmail"].ToString(), 
+                    WebConfigurationManager.AppSettings["SupportEmailDisplayName"].ToString()));
+
+            emailUtilityMoq
+               .SetupGet(e => e.DevelopersEmail)
+               .Returns(new MailAddress(WebConfigurationManager.AppSettings["DevelopersEmail"].ToString(), 
+                    WebConfigurationManager.AppSettings["DevelopersEmailDisplayName"].ToString()));
 
             emailUtilityMoq
                 .Setup(e => e.SendAsync(It.IsAny<MailAddress>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MailAddress>(), It.IsAny<bool>()))

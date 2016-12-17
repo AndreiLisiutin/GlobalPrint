@@ -22,12 +22,29 @@ namespace GlobalPrint.Infrastructure.EmailUtility
             this._logUtility = new Lazy<ILogger>(() => loggerFactory.GetLogger<EmailUtility>());
         }
 
-        private readonly MailAddress _supportEmail = new MailAddress(WebConfigurationManager.AppSettings["SupportEmail"].ToString(), WebConfigurationManager.AppSettings["SupportEmailDisplayName"].ToString());
+        /// <summary>
+        /// Support email address to send feedback emails to.
+        /// </summary>
+        private readonly MailAddress _supportEmail = new MailAddress(WebConfigurationManager.AppSettings["SupportEmail"].ToString(), 
+            WebConfigurationManager.AppSettings["SupportEmailDisplayName"].ToString());
         public MailAddress SupportEmail
         {
             get
             {
                 return this._supportEmail;
+            }
+        }
+
+        /// <summary>
+        /// Developers email address to send bugs info.
+        /// </summary>
+        private readonly MailAddress _developersEmail = new MailAddress(WebConfigurationManager.AppSettings["DevelopersEmail"].ToString(),
+            WebConfigurationManager.AppSettings["DevelopersEmailDisplayName"].ToString());
+        public MailAddress DevelopersEmail
+        {
+            get
+            {
+                return this._developersEmail;
             }
         }
 

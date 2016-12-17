@@ -77,31 +77,29 @@ namespace GlobalPrint.ClientWeb
 
             #region Для тестирования, удалить потом
 
-            ILoggerFactory factory = IoC.Instance.Resolve<ILoggerFactory>();
-            ILogger logger = factory.GetCurrentClassLogger();
+            //ILoggerFactory factory = IoC.Instance.Resolve<ILoggerFactory>();
+            //ILogger logger = factory.GetCurrentClassLogger();
             
-            string log = "File: " + Environment.NewLine;
-            log += "ContentLength: " + file.ContentLength + Environment.NewLine;
-            log += "ContentType: " + file.ContentType + Environment.NewLine;
-            log += "FileName: " + file.FileName + Environment.NewLine;
+            //string log = "File: " + Environment.NewLine;
+            //log += "ContentLength: " + file.ContentLength + Environment.NewLine;
+            //log += "ContentType: " + file.ContentType + Environment.NewLine;
+            //log += "FileName: " + file.FileName + Environment.NewLine;
 
-            byte[] bytes = Encoding.Default.GetBytes(file.FileName);
-            string newFileName = Encoding.UTF8.GetString(bytes);
-            log += "DefaultNewFileName: " + newFileName + Environment.NewLine;
+            //byte[] bytes = Encoding.Default.GetBytes(file.FileName);
+            //string newFileName = Encoding.UTF8.GetString(bytes);
+            //log += "DefaultNewFileName: " + newFileName + Environment.NewLine;
 
-            bytes = Encoding.ASCII.GetBytes(file.FileName);
-            newFileName = Encoding.UTF8.GetString(bytes);
-            log += "ASCIINewFileName: " + newFileName + Environment.NewLine;
+            //bytes = Encoding.ASCII.GetBytes(file.FileName);
+            //newFileName = Encoding.UTF8.GetString(bytes);
+            //log += "ASCIINewFileName: " + newFileName + Environment.NewLine;
 
-            bytes = Encoding.Unicode.GetBytes(file.FileName);
-            newFileName = Encoding.UTF8.GetString(bytes);
-            log += "UnicodeNewFileName: " + newFileName + Environment.NewLine;
+            //bytes = Encoding.Unicode.GetBytes(file.FileName);
+            //newFileName = Encoding.UTF8.GetString(bytes);
+            //log += "UnicodeNewFileName: " + newFileName + Environment.NewLine;
 
-            newFileName = HttpUtility.UrlEncode(file.FileName, Encoding.UTF8);
-            log += "UrlEncodeNewFileName: " + newFileName + Environment.NewLine;
-
-            logger.Info(log);
-            
+            //newFileName = HttpUtility.UrlEncode(file.FileName, Encoding.UTF8);
+            //log += "UrlEncodeNewFileName: " + newFileName + Environment.NewLine;
+                        
             #endregion
 
             if (file != null && file.ContentLength != 0)
