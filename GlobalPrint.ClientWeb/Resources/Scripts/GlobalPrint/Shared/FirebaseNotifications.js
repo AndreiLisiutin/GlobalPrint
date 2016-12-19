@@ -1,5 +1,5 @@
-﻿GlobalPrint.namespace('GlobalPrint.Shared.PushNotifications');
-(function (PushNotifications) {
+﻿GlobalPrint.namespace('GlobalPrint.Shared.FirebaseNotifications');
+(function (FirebaseNotifications) {
 
     // Initialize Firebase
     var config = {
@@ -64,6 +64,42 @@
     //   `messaging.setBackgroundMessageHandler` handler.
     messaging.onMessage(function (payload) {
         console.log("Message received. ", payload);
+        if (!payload || !payload.notification || !payload.data || !payload.data.destinationUserID) {
+            return;
+        }
+
+        // Get current user ID from server.
+        $.ajax({
+            type: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+            url: '/UserProfile/GetUserID'
+        }).done(function (json) {
+            if (!json) {
+                console.log('Error: ajax call response is empty.');
+                return;
+            }
+
+            var userID = json.userID;
+            if (!userID) {
+                return;
+            }
+
+            // if current logged in user is reciever of message, show notification
+            if (userID == payload.data.destinationUserID) {
+                var notificationOptions = {
+                    body: payload.notification.body,
+                    icon: payload.notification.icon
+                };
+                GlobalPrint.Shared.PushNotifications.playSound();
+                return messaging.b.showNotification(payload.notification.title,
+                    notificationOptions);
+            }
+
+        }).fail(function () {
+            console.log('Error: ajax call failed.');
+        });
+
     });
 
-}(GlobalPrint.Shared.PushNotifications));
+}(GlobalPrint.Shared.FirebaseNotifications));

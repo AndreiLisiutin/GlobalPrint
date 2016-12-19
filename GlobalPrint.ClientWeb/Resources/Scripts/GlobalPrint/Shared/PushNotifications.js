@@ -1,5 +1,7 @@
 ﻿GlobalPrint.namespace('GlobalPrint.Shared.PushNotifications');
 (function (PushNotifications) {
+
+    // audio file name to play
     var audioFile = "../Resources/Sounds/notification";
 
     // Update incoming prders count
@@ -7,9 +9,11 @@
         $("#incomingOrdersCountBadge").text(count > 0 ? count : null);
     };
 
-    PushNotifications.notify = function (message, url) {       
+    PushNotifications.notify = function (message, url) {
+        // we are using FCM
+        return;
         PushNotifications.displayMessage(message, url);
-        PushNotifications.playSound(audioFile);
+        PushNotifications.playSound();
     };
 
     PushNotifications.displayMessage = function (message, url) {
@@ -34,8 +38,8 @@
         });
     };
 
-    PushNotifications.playSound = function (filename) {
-        $("#sound")[0].innerHTML = '<audio autoplay="autoplay"><source src="' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + filename + '.mp3" /></audio>';
+    PushNotifications.playSound = function () {
+        $("#sound")[0].innerHTML = '<audio autoplay="autoplay"><source src="' + audioFile + '.mp3" type="audio/mpeg" /><source src="' + audioFile + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + audioFile + '.mp3" /></audio>';
     };
 
 }(GlobalPrint.Shared.PushNotifications));

@@ -48,7 +48,9 @@ namespace GlobalPrint.Infrastructure.Notifications
                         icon = message.Icon,
                         click_action = message.Action
                     },
-                    destinationUserID = message.DestinationUserID,
+                    data = new {
+                        destinationUserID = message.DestinationUserID
+                    },
                     priority = "high"
                 };
                 var serializer = new JavaScriptSerializer();

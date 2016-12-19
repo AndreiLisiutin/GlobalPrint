@@ -23,7 +23,7 @@ const messaging = firebase.messaging();
 messaging.setBackgroundMessageHandler(function (payload) {
     console.log('Received background message ', payload);
 
-    if (!payload || !payload.destinationUserID || !payload.notification) {
+    if (!payload || !payload.notification || !payload.data || !payload.data.destinationUserID) {
         return;
     }
 
@@ -45,8 +45,7 @@ messaging.setBackgroundMessageHandler(function (payload) {
         }
 
         // if current logged in user is reciever of message, show notification
-        if (userID == payload.destinationUserID) {
-            console.log('Correct background message, show it');
+        if (userID == payload.data.destinationUserID) {
             var notificationOptions = {
                 body: payload.notification.body,
                 icon: payload.notification.icon
