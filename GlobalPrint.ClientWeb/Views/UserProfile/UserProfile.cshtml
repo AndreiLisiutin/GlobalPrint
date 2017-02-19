@@ -64,7 +64,8 @@
             <label class="col-sm-1 control-label text-left">Оферта</label>
             <div class="col-sm-11">
                 <div class="input-group">
-                    @Html.TextBox("UserOfferTitle", "Договор оферты пользователя", new { @class = "form-control", @readonly = "true", @placeholder = "Договор оферты пользователя" })
+                    @Html.TextBox("UserOfferTitle", $"Договор оферты пользователя № {Model.ID} от {Model.CreatedOn.ToString("dd.MM.yyyy")}", 
+                        new { @class = "form-control", @readonly = "true", @placeholder = "Договор оферты пользователя" })
                     <span class="input-group-btn">
                         <a href="@Url.Action("Offer", "Offer")" target="_blank" title="Открыть договор оферты" class="btn btn-default">
                             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
