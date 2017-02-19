@@ -2,17 +2,19 @@
 
 namespace GlobalPrint.ClientWeb.Controllers
 {
+    /// <summary>
+    /// Контроллер страницы "О проекте".
+    /// </summary>
     public class AboutController : BaseController
     {
         /// <summary>
-        /// Get page about project
+        /// Получить страницу "О проекте".
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Страница "О проекте".</returns>
         [HttpGet, AllowAnonymous]
         public ActionResult About()
         {
             return View();
-        }
-        
+        }        
     }
 }

@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace GlobalPrint.ClientWeb.Filters
 {
@@ -33,6 +34,18 @@ namespace GlobalPrint.ClientWeb.Filters
                 return;
             }
             this._logUtility.Error(filterContext.Exception, filterContext.Exception.Message);
+
+            // If it's anti-forgery exception, go to login page
+            var exception = filterContext.Exception as HttpAntiForgeryException;
+            if (exception != null)
+            {
+                var routeValues = new RouteValueDictionary();
+                routeValues["controller"] = "Account";
+                routeValues["action"] = "Login";
+                filterContext.Result = new RedirectToRouteResult(routeValues);
+                filterContext.ExceptionHandled = true;
+                return;
+            }
 
             if (filterContext.HttpContext.Request.IsAjaxRequest())
             {

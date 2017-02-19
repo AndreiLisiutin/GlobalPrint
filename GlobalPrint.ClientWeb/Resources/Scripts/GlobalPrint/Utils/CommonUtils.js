@@ -302,7 +302,9 @@
         var processSwitchers = function (array, size) {
             if (array && array.length > 0) {
                 array.forEach(function (html) {
-                    var switchery = new Switchery(html, { size: size || 'default' });
+                    var switchery = new Switchery(html, {
+                        size: size || 'default'
+                    });
 
                     var observer = new MutationObserver(function (mutations) {
                         for (var i = 0, mutation; mutation = mutations[i]; i++) {

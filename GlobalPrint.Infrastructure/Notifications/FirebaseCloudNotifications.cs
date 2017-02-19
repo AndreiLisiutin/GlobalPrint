@@ -49,7 +49,8 @@ namespace GlobalPrint.Infrastructure.Notifications
                         click_action = message.Action
                     },
                     data = new {
-                        destinationUserID = message.DestinationUserID
+                        destinationUserID = message.DestinationUserID,
+                        url = message.Action
                     },
                     priority = "high"
                 };

@@ -678,7 +678,6 @@
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\Utils\LookupControlller.cs" />
     <Compile Include="Filters\BaseErrorHandleAttribute.cs" />
-    <Compile Include="Controllers\_TestController.cs" />
     <Compile Include="Controllers\AboutController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\OfferController.cs" />
@@ -750,10 +749,9 @@
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Properties\PublishProfiles\Package.pubxml" />
     <Content Include="Views\Order\Confirm.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <None Include="Properties\PublishProfiles\GlobalPrint.pubxml" />
+    <None Include="Properties\PublishProfiles\Dev Release.pubxml" />
     <Content Include="Views\Order\Complete.cshtml" />
     <Content Include="Views\UserProfile\UserProfile.cshtml" />
     <Content Include="Views\Printer\MyPrinters.cshtml" />

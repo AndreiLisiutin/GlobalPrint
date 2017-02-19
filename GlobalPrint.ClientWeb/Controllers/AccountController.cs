@@ -1,6 +1,5 @@
 ﻿using GlobalPrint.ClientWeb.App_Start;
 using GlobalPrint.Infrastructure.LogUtility;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Utilities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -8,8 +7,7 @@ using System;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using GlobalPrint.ClientWeb.Helpers;
-using System.Globalization;
+using System.Web.UI;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -249,7 +247,7 @@ namespace GlobalPrint.ClientWeb
         /// <summary>
         /// Login page
         /// </summary>
-        [HttpGet, AllowAnonymous]
+        [HttpGet, AllowAnonymous, OutputCache(NoStore = true, Location = OutputCacheLocation.None)]
         public ActionResult Login()
         {
             return View();

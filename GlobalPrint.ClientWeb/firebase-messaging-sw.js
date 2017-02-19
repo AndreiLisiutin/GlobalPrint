@@ -48,7 +48,8 @@ messaging.setBackgroundMessageHandler(function (payload) {
         if (userID == payload.data.destinationUserID) {
             var notificationOptions = {
                 body: payload.notification.body,
-                icon: payload.notification.icon
+                icon: payload.notification.icon,
+                requireInteraction: true
             };
             return self.registration.showNotification(payload.notification.title,
                 notificationOptions);

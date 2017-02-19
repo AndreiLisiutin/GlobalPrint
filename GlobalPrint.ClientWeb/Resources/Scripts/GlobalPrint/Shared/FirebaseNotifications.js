@@ -89,7 +89,11 @@
             if (userID == payload.data.destinationUserID) {
                 var notificationOptions = {
                     body: payload.notification.body,
-                    icon: payload.notification.icon
+                    icon: payload.notification.icon,
+                    requireInteraction: true,
+                    data: {
+                        url: payload.data.url
+                    }
                 };
                 GlobalPrint.Shared.PushNotifications.playSound();
                 return messaging.b.showNotification(payload.notification.title,

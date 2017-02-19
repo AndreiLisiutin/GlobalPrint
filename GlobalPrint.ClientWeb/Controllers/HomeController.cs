@@ -32,14 +32,14 @@ namespace GlobalPrint.ClientWeb
         public ActionResult GetPrinters(PrinterSearchFilter filter)
         {
             filter = filter ?? new PrinterSearchFilter();
-            IEnumerable<PrinterFullInfoModel> printers = this._printerUnit.GetFullByFilter(filter);
+            IEnumerable<PrinterFullInfoModel> printers = _printerUnit.GetFullByFilter(filter);
             return Json(printers);
         }
 
         [HttpGet]
         public ActionResult GetClosestPrinter(float latitude, float longtitude)
         {
-            PrinterFullInfoModel printer = this._printerUnit.GetClosest(latitude, longtitude);
+            PrinterFullInfoModel printer = _printerUnit.GetClosest(latitude, longtitude);
             if (printer == null)
             {
                 return Json("");
