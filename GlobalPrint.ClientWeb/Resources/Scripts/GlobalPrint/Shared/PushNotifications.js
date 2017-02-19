@@ -1,19 +1,31 @@
 ﻿GlobalPrint.namespace('GlobalPrint.Shared.PushNotifications');
-(function (PushNotifications) {
+(function (PushNotifications, CommonUtils) {
 
     // audio file name to play
     var audioFile = "../Resources/Sounds/notification";
+    var alarmAudioFile = "../Resources/Sounds/alarm";
 
     // Update incoming prders count
     PushNotifications.updateIncomingOrdersCount = function (count) {
         $("#incomingOrdersCountBadge").text(count > 0 ? count : null);
     };
 
+    /**
+     * Воспроизвести бесконечный звонок будильника при наличии хотя бы 1 необработанного входящего заказа.
+     * @param {!number} ordersCount Количество входящих заказов.
+     */
+    PushNotifications.setIncomingOrdersAlarm = function (ordersCount) {
+        var elementId = "recievedOrdersSound";
+        if (ordersCount > 0) {
+            CommonUtils.playSound(elementId, alarmAudioFile, true);
+        }
+    };
+
     PushNotifications.notify = function (message, url) {
         // we are using FCM
         return;
         PushNotifications.displayMessage(message, url);
-        PushNotifications.playSound();
+        CommonUtils.playSound("sound", audioFile);
     };
 
     PushNotifications.displayMessage = function (message, url) {
@@ -38,8 +50,4 @@
         });
     };
 
-    PushNotifications.playSound = function () {
-        $("#sound")[0].innerHTML = '<audio autoplay="autoplay"><source src="' + audioFile + '.mp3" type="audio/mpeg" /><source src="' + audioFile + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="' + audioFile + '.mp3" /></audio>';
-    };
-
-}(GlobalPrint.Shared.PushNotifications));
+}(GlobalPrint.Shared.PushNotifications, GlobalPrint.Utils.CommonUtils));

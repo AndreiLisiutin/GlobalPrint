@@ -1,1 +1,21 @@
-﻿<a href="@Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList")">Входящие заказы <span id="incomingOrdersCountBadge" class="badge badge-notify badge-notify-incoming-orders">@ViewData["UserRecievedPrintOrdersCount"]</span></a>
+﻿<a href="@Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList")">
+    Входящие заказы&nbsp;
+    <span id="incomingOrdersCountBadge" class="badge badge-notify badge-notify-incoming-orders">@ViewData["UserRecievedPrintOrdersCount"]</span>
+</a>
+<div id="recievedOrdersSound"></div>
+
+<script type="text/javascript">
+    (function () {
+        var audioFile = "../Resources/Sounds/alarm";
+        var ordersCount = @ViewData["UserRecievedPrintOrdersCount"];
+        var recievedOrdersElement = document.getElementById("recievedOrdersSound");
+        if (ordersCount > 0 && recievedOrdersElement) {
+            recievedOrdersElement.innerHTML =
+               '<audio autoplay loop>' +
+                   '<source src="' + audioFile + '.mp3" type="audio/mpeg" />' +
+                   '<source src="' + audioFile + '.ogg" type="audio/ogg" />' +
+                   '<embed hidden="true" autostart="true" loop="false" src="' + audioFile + '.mp3" />' +
+               '</audio>';
+        }
+    })();
+</script>

@@ -238,7 +238,7 @@
             '        <div class="modal-content">                                                                                                                        ' +
             '            <div class="modal-body">                                                                                                                       ' +
             '                <div class="modal-body-content row">                                                                                                       ' +
-            '                   <button type="button" class="close hidden-xs" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>  ' + 
+            '                   <button type="button" class="close hidden-xs" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>  ' +
             '                </div>                                                                                                                                     ' +
             '            </div>                                                                                                                                         ' +
             '        </div>                                                                                                                                             ' +
@@ -357,7 +357,9 @@
         }
     };
 
-    // Add clear "x" button to input
+    /**
+     * Добавить кнопку "Х" (очистить) к контролам с классом js-clearable.
+     */
     CommonUtils.initializeClearableInputs = function () {
         var clearableInputs = Array.prototype.slice.call(document.querySelectorAll('.js-clearable'));
         clearableInputs.forEach(function (item) {
@@ -367,5 +369,20 @@
             });
         });
     }
+
+    /**
+     * Запустить воспроизведение музыкальной дорожки.
+     * @param {!string} elementId Идентификатор элемента разметки (div'а), который будет содержать в себе звуковой файл.
+     * @param {!string} audioFile Путь к звуковому файлу.
+     * @param {?boolean} isLoop Нужно ли повторять звук в цикле.
+     */
+    CommonUtils.playSound = function (elementId, audioFile, isLoop) {
+        $("#" + elementId)[0].innerHTML =
+            '<audio autoplay ' + (isLoop ? 'loop' : '') + '>' +
+                '<source src="' + audioFile + '.mp3" type="audio/mpeg" />' +
+                '<source src="' + audioFile + '.ogg" type="audio/ogg" />' +
+                '<embed hidden="true" autostart="true" loop="false" src="' + audioFile + '.mp3" />' +
+            '</audio>';
+    };
 
 })(GlobalPrint.Utils.CommonUtils);

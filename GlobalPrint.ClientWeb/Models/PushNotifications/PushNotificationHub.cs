@@ -1,11 +1,7 @@
-﻿using GlobalPrint.Configuration.DI;
-using GlobalPrint.Infrastructure.LogUtility;
+﻿using GlobalPrint.Infrastructure.LogUtility;
 using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
 using Microsoft.AspNet.SignalR;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace GlobalPrint.ClientWeb.Models.PushNotifications
 {
@@ -55,8 +51,8 @@ namespace GlobalPrint.ClientWeb.Models.PushNotifications
 
                 // notify by message
                 userToNotify.displayMessage(message, "/UserRecievedPrintOrderList/UserRecievedPrintOrderList");
-                // update orders count badge
                 userToNotify.updateIncomingOrdersCount(printOrdersCount);
+                userToNotify.setIncomingOrdersAlarm(printOrdersCount);
             }
             catch (Exception ex)
             {

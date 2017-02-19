@@ -4,6 +4,7 @@
 
     notificationhub.client.displayMessage = GlobalPrint.Shared.PushNotifications.notify;
     notificationhub.client.updateIncomingOrdersCount = GlobalPrint.Shared.PushNotifications.updateIncomingOrdersCount;
+    notificationhub.client.setIncomingOrdersAlarm = GlobalPrint.Shared.PushNotifications.setIncomingOrdersAlarm;
     $.connection.hub.start();
 
     //Initialization of fileupload
