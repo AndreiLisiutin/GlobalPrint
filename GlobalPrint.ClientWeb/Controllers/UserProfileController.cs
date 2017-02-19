@@ -53,12 +53,12 @@ namespace GlobalPrint.ClientWeb
         public UserProfileController(IUserUnit userUnit, PaymentActionUnit paymentActionUnit,
             IBankUtility bankUtility, ILoggerFactory loggerFactory, TransfersRegisterUnit transfersRegisterUnit)
         {
-            this._userUnit = userUnit;
-            this._paymentActionUnit = paymentActionUnit;
-            this._transfersRegisterUnit = transfersRegisterUnit;
+            _userUnit = userUnit;
+            _paymentActionUnit = paymentActionUnit;
+            _transfersRegisterUnit = transfersRegisterUnit;
 
-            this._bankUtility = bankUtility;
-            this._logUtility = new Lazy<ILogger>(() => loggerFactory.GetLogger<UserProfileController>());
+            _bankUtility = bankUtility;
+            _logUtility = new Lazy<ILogger>(() => loggerFactory.GetLogger<UserProfileController>());
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace GlobalPrint.ClientWeb
             }
             catch (Exception e)
             {
-                this._logUtility.Value.Error(e, e.Message);
+                _logUtility.Value.Error(e, e.Message);
                 bankInfo = new BicInfo();
             }
 
@@ -204,7 +204,7 @@ namespace GlobalPrint.ClientWeb
             if (User.Identity.IsAuthenticated)
             {
                 Argument.NotNullOrWhiteSpace(deviceID, "При изменении идентификатора устройства произошла ошибка. Идентификатор устройства не может быть пустым.");
-                var user = this._userUnit.UpdateDeviceID(this.GetCurrentUserID(), deviceID);
+                var user = _userUnit.UpdateDeviceID(this.GetCurrentUserID(), deviceID);
                 return Json(user, JsonRequestBehavior.AllowGet);
             }
             else
@@ -221,8 +221,8 @@ namespace GlobalPrint.ClientWeb
         {
             if (User.Identity.IsAuthenticated)
             {
-                var userID = this.GetCurrentUserID();
-                var user = this._userUnit.GetByID(this.GetCurrentUserID());
+                var userID = GetCurrentUserID();
+                var user = _userUnit.GetByID(GetCurrentUserID());
                 return Json(new { deviceID = user.DeviceID }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -259,7 +259,7 @@ namespace GlobalPrint.ClientWeb
         {
             if (User.Identity.IsAuthenticated)
             {
-                var userID = this.GetCurrentUserID();
+                var userID = GetCurrentUserID();
                 new FirebaseCloudNotifications().AddDeviceToGroup(deviceID, userID.ToString());
                 return Json(new { groupID = userID.ToString() }, JsonRequestBehavior.AllowGet);
             }
@@ -274,7 +274,7 @@ namespace GlobalPrint.ClientWeb
         {
             CashRequest cashRequest = new CashRequest()
             {
-                UserID = this.GetCurrentUserID(),
+                UserID = GetCurrentUserID(),
                 CreatedOn = DateTime.Now,
                 CashRequestStatusID = (int)CashRequestStatusEnum.InProgress,
                 CashRequestStatusComment = "В процессе обработки."
@@ -286,17 +286,17 @@ namespace GlobalPrint.ClientWeb
         public ActionResult ExecuteRequestCash(CashRequest request)
         {
             Argument.NotNull(request, "Модель для запроса вывода денег пустая.");
-            Argument.Require(request.UserID == this.GetCurrentUserID(), "Нельзя выводить деньги от лица других пользователей.");
+            Argument.Require(request.UserID == GetCurrentUserID(), "Нельзя выводить деньги от лица других пользователей.");
             request.CreatedOn = DateTime.Now;
             request.CashRequestStatusID = (int)CashRequestStatusEnum.InProgress;
             request.CashRequestStatusComment = "В процессе обработки.";
-            Validation validation = this._transfersRegisterUnit.ValidateCashRequest(request);
+            Validation validation = _transfersRegisterUnit.ValidateCashRequest(request);
             if (!validation.IsValid)
             {
                 validation.Errors.ForEach(e => ModelState.AddModelError("", e));
-                return this._USER_PROFILE_REQUEST_CASH(request);
+                return _USER_PROFILE_REQUEST_CASH(request);
             }
-            this._transfersRegisterUnit.RequestCash(request);
+            _transfersRegisterUnit.RequestCash(request);
             return RedirectToAction("UserProfile");
         }
 
@@ -307,54 +307,54 @@ namespace GlobalPrint.ClientWeb
         [HttpGet, Authorize]
         public ActionResult GetNextTransferRegisterPrediction()
         {
-            TransfersRegister transfersRegister = this._transfersRegisterUnit.GetNextTransferRegisterPrediction();
+            TransfersRegister transfersRegister = _transfersRegisterUnit.GetNextTransferRegisterPrediction();
             return Json(transfersRegister, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet, Authorize]
         public ActionResult TransfersRegisters()
         {
-            int userID = this.GetCurrentUserID();
-            List<TransfersRegister> registers = this._transfersRegisterUnit.GetTransfersRegisters(userID);
+            int userID = GetCurrentUserID();
+            List<TransfersRegister> registers = _transfersRegisterUnit.GetTransfersRegisters(userID);
             return _USER_PROFILE_TRANSFER_REGISTERS(registers);
         }
 
         [HttpPost, Authorize]
         public ActionResult NewTransfersRegister()
         {
-            int userID = this.GetCurrentUserID();
-            TransfersRegister register = this._transfersRegisterUnit.CreateTransfersRegister(userID);
+            int userID = GetCurrentUserID();
+            TransfersRegister register = _transfersRegisterUnit.CreateTransfersRegister(userID);
             return RedirectToAction("TransfersRegisters");
         }
 
         [HttpGet, Authorize]
         public ActionResult CashRequests()
         {
-            int userID = this.GetCurrentUserID();
-            List<CashRequestExtended> requests = this._transfersRegisterUnit.GetCashRequests(userID);
+            int userID = GetCurrentUserID();
+            List<CashRequestExtended> requests = _transfersRegisterUnit.GetCashRequests(userID);
             return _USER_PROFILE_CASH_REQUESTS(requests);
         }
 
         private ViewResult _USER_PROFILE_SEND_MONEY(SendModeyPackage package)
         {
-            int userID = this.GetCurrentUserID();
-            User user = this._userUnit.GetByID(userID);
+            int userID = GetCurrentUserID();
+            User user = _userUnit.GetByID(userID);
             ViewBag.SenderUser = user;
-            return this.View("SendMoney", package);
+            return View("SendMoney", package);
         }
         private ViewResult _USER_PROFILE_REQUEST_CASH(CashRequest request)
         {
-            User user = this._userUnit.GetByID(request.UserID);
+            User user = _userUnit.GetByID(request.UserID);
             ViewBag.User = user;
-            return this.View("RequestCash", request);
+            return View("RequestCash", request);
         }
         private ViewResult _USER_PROFILE_CASH_REQUESTS(List<CashRequestExtended> requests)
         {
-            return this.View("CashRequests", requests);
+            return View("CashRequests", requests);
         }
         private ViewResult _USER_PROFILE_TRANSFER_REGISTERS(List<TransfersRegister> registers)
         {
-            return this.View("TransfersRegisters", registers);
+            return View("TransfersRegisters", registers);
         }
     }
 }
