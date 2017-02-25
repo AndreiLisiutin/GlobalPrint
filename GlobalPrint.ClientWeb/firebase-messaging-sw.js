@@ -13,16 +13,16 @@ firebase.initializeApp({
 // Retrieve an instance of Firebase Messaging so that it can handle background messages.
 const messaging = firebase.messaging();
 
-var showNotification = function (payload) {	
+var showNotification = function (payload) {
 	var notificationOptions = {
-		body: payload.notification.body,
-		icon: payload.notification.icon,
+		body: payload.data.body,
+		icon: payload.data.icon,
 		requireInteraction: true,
 		data: {
 			url: payload.data.url
 		}
 	};
-	return self.registration.showNotification(payload.notification.title,
+	return self.registration.showNotification(payload.data.title,
 		notificationOptions);
 }
 
@@ -30,12 +30,12 @@ var showNotification = function (payload) {
 // background (Web app is closed or not in browser focus) then you should
 // implement this optional method.
 messaging.setBackgroundMessageHandler(function (payload) {
-	console.log('Received background message ', payload);
-		
+	console.log('Получено push сообщение, когда вкладка с сайтом была неактивна: ', payload);
 	self.registration.active.postMessage(payload);
 });
 
 self.addEventListener('message', function (event) {
+    console.log("Получено push сообщение, когда вкладка с сайтом была активна: ", payload);
 	event.waitUntil(showNotification(event.data));
 });
 
@@ -43,30 +43,30 @@ self.addEventListener('notificationclick', function (event) {
 	event.notification.close();
 
 	if (event.notification.data && event.notification.data.url ||
-		event.notification.data && event.notification.data.click_url ||
-		event.notification.click_url ||
+		event.notification.data && event.notification.data.click_action ||
+		event.notification.click_action ||
 		event.notification.url) {
 
-		var url = event.notification.url || event.notification.click_url;
+	    var url = event.notification.url || event.notification.click_action;
 		if (!url && event.notification.data) {
-			url = event.notification.data.url || event.notification.data.click_url;
+		    url = event.notification.data.url || event.notification.data.click_action;
 		}
 
 		if (url) {
-			// This looks to see if the current is already open and
-			// focuses if it is
-			event.waitUntil(clients.matchAll({
-				type: "window"
-			}).then(function (clientList) {
-				for (var i = 0; i < clientList.length; i++) {
-					var client = clientList[i];
-					if (client.url == url && 'focus' in client)
-						return client.focus();
-				}
-				if (clients.openWindow) {
-					return clients.openWindow(url);
-				}
-			}));
+			// This looks to see if the current is already open and focuses if it is
+		    event.waitUntil(
+                clients.matchAll({ type: "window" })
+                    .then(function (clientList) {
+                        for (var i = 0; i < clientList.length; i++) {
+                            var client = clientList[i];
+                            if (client.url == url && 'focus' in client)
+                                return client.focus();
+                        }
+                        if (clients.openWindow) {
+                            return clients.openWindow(url);
+                        }
+                    })
+            );
 		}		
 	}
 });

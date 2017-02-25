@@ -26,7 +26,6 @@ namespace GlobalPrint.ClientWeb
         PrintOrderUnit _printOrderUnit;
         IUserUnit _userUnit;
         Random _random;
-        private object _emailSubject;
 
         public OrderController()
             : this(IoC.Instance.Resolve<PrintOrderUnit>(), IoC.Instance.Resolve<IUserUnit>(), new Random())
@@ -34,9 +33,9 @@ namespace GlobalPrint.ClientWeb
         }
         public OrderController(PrintOrderUnit printerOrderUnit, IUserUnit userUnit, Random random)
         {
-            this._printOrderUnit = printerOrderUnit;
-            this._userUnit = userUnit;
-            this._random = random;
+            _printOrderUnit = printerOrderUnit;
+            _userUnit = userUnit;
+            _random = random;
         }
 
         /// <summary>
@@ -49,7 +48,7 @@ namespace GlobalPrint.ClientWeb
         {
             Argument.Positive(printOrderID, "Ключ заказа пустой.");
 
-            PrintOrderInfo orderInfo = this._printOrderUnit.GetPrintOrderInfoByID(printOrderID);
+            PrintOrderInfo orderInfo = _printOrderUnit.GetPrintOrderInfoByID(printOrderID);
             return View("Details", orderInfo);
         }
 
@@ -64,8 +63,8 @@ namespace GlobalPrint.ClientWeb
             Argument.NotNull(rateModel, "Модель оценки заказа пустая.");
             Argument.Positive(rateModel.PrintOrderID, "Ключ заказа в модели оценки заказа пустой.");
 
-            int userID = this.GetCurrentUserID();
-            this._printOrderUnit.Rate(rateModel.PrintOrderID, rateModel.Rating, rateModel.Comment, userID);
+            int userID = GetCurrentUserID();
+            _printOrderUnit.Rate(rateModel.PrintOrderID, rateModel.Rating, rateModel.Comment, userID);
             return RedirectToAction("MyOrders", "Order");
         }
 
@@ -77,8 +76,8 @@ namespace GlobalPrint.ClientWeb
         [HttpGet, Authorize]
         public ActionResult MyOrders(string printOrderID)
         {
-            int userID = this.GetCurrentUserID();
-            var printOrderList = this._printOrderUnit.GetUserPrintOrderList(userID, printOrderID);
+            int userID = GetCurrentUserID();
+            var printOrderList = _printOrderUnit.GetUserPrintOrderList(userID, printOrderID);
             return View("MyOrders", printOrderList);
         }
 
@@ -91,12 +90,12 @@ namespace GlobalPrint.ClientWeb
         public ActionResult FromExisting(int printOrderID)
         {
             Argument.Positive(printOrderID, "printOrderID не может быть меньше 0.");
-            int userID = this.GetCurrentUserID();
+            int userID = GetCurrentUserID();
             string app_data = HttpContext.Server.MapPath("~/App_Data");
-            NewOrder newOrder = this._printOrderUnit.FromExisting(printOrderID, userID);
-            DocumentBusinessInfo document = this._printOrderUnit.GetPrintOrderDocument(printOrderID, userID, app_data);
-            this._uploadedFilesRepo.Add(newOrder.FileToPrint, document);
-            return this._ORDER_NEW(newOrder, document);
+            NewOrder newOrder = _printOrderUnit.FromExisting(printOrderID, userID);
+            DocumentBusinessInfo document = _printOrderUnit.GetPrintOrderDocument(printOrderID, userID, app_data);
+            _uploadedFilesRepo.Add(newOrder.FileToPrint, document);
+            return _ORDER_NEW(newOrder, document);
         }
 
         /// <summary>
@@ -109,18 +108,18 @@ namespace GlobalPrint.ClientWeb
         {
             Argument.Require(printerID > 0, "printerID не может быть меньше 0.");
 
-            int userId = this.GetCurrentUserID();
+            int userId = GetCurrentUserID();
             //creating an empty order
             NewOrder newOrder = new NewOrder()
             {
                 PrinterID = printerID,
-                SecretCode = new string(this._random.Next(1, 9).ToString()[0], 2)
-                    + new string(this._random.Next(1, 9).ToString()[0], 2),
+                SecretCode = new string(_random.Next(1, 9).ToString()[0], 2)
+                    + new string(_random.Next(1, 9).ToString()[0], 2),
                 CopiesCount = 1,
                 UserID = userId
             };
 
-            return this._ORDER_NEW(newOrder);
+            return _ORDER_NEW(newOrder);
         }
 
         /// <summary>
@@ -134,20 +133,20 @@ namespace GlobalPrint.ClientWeb
             Argument.NotNull(newOrder, "Модель нового заказа не может быть пустой.");
             if (!ModelState.IsValid)
             {
-                return this._ORDER_NEW(newOrder);
+                return _ORDER_NEW(newOrder);
             }
-            if (!this._uploadedFilesRepo.Contains(newOrder.FileToPrint))
+            if (!_uploadedFilesRepo.Contains(newOrder.FileToPrint))
             {
                 //файл не найден
                 ModelState.AddModelError("", "Файл для печати не найден.");
-                return this._ORDER_NEW(newOrder);
+                return _ORDER_NEW(newOrder);
             }
-            DocumentBusinessInfo document = this._uploadedFilesRepo.Get(newOrder.FileToPrint);
-            Validation validation = this._printOrderUnit.Validate(newOrder, document);
+            DocumentBusinessInfo document = _uploadedFilesRepo.Get(newOrder.FileToPrint);
+            Validation validation = _printOrderUnit.Validate(newOrder, document);
             if (!validation.IsValid)
             {
                 validation.Errors.ForEach(e => ModelState.AddModelError("", e));
-                return this._ORDER_NEW(newOrder, document);
+                return _ORDER_NEW(newOrder, document);
             }
 
             return RedirectToAction("Confirm", newOrder);
@@ -162,13 +161,13 @@ namespace GlobalPrint.ClientWeb
         public ActionResult Confirm(NewOrder newOrder)
         {
             Argument.NotNull(newOrder, "Подготовленный для печати заказ не может быть пустым.");
-            if (!this._uploadedFilesRepo.Contains(newOrder.FileToPrint))
+            if (!_uploadedFilesRepo.Contains(newOrder.FileToPrint))
             {
                 //файл не найден
                 ModelState.AddModelError("", "Файл для печати не найден.");
                 return RedirectToAction("New", newOrder);
             }
-            return this._ORDER_CONFIRM(newOrder);
+            return _ORDER_CONFIRM(newOrder);
         }
 
         /// <summary>
@@ -180,7 +179,7 @@ namespace GlobalPrint.ClientWeb
         public ActionResult Create(NewOrder newOrder)
         {
             Argument.NotNull(newOrder, "Подготовленный для печати заказ не может быть пустым.");
-            if (!this._uploadedFilesRepo.Contains(newOrder.FileToPrint))
+            if (!_uploadedFilesRepo.Contains(newOrder.FileToPrint))
             {
                 //файл не найден
                 ModelState.AddModelError("", "Файл для печати не найден.");
@@ -188,20 +187,20 @@ namespace GlobalPrint.ClientWeb
             }
             if (!ModelState.IsValid)
             {
-                return this._ORDER_CONFIRM(newOrder);
+                return _ORDER_CONFIRM(newOrder);
             }
 
-            DocumentBusinessInfo document = this._uploadedFilesRepo.Get(newOrder.FileToPrint);
-            Validation validation = this._printOrderUnit.Validate(newOrder, document);
+            DocumentBusinessInfo document = _uploadedFilesRepo.Get(newOrder.FileToPrint);
+            Validation validation = _printOrderUnit.Validate(newOrder, document);
             if (!validation.IsValid)
             {
                 validation.Errors.ForEach(e => ModelState.AddModelError("", e));
-                return this._ORDER_CONFIRM(newOrder);
+                return _ORDER_CONFIRM(newOrder);
             }
 
             string app_data = HttpContext.Server.MapPath("~/App_Data");
-            int userID = this.GetCurrentUserID();
-            PrintOrder createdOrder = this._printOrderUnit.Create(newOrder, userID, app_data, document);
+            int userID = GetCurrentUserID();
+            PrintOrder createdOrder = _printOrderUnit.Create(newOrder, userID, app_data, document);
 
             #region Notifications
 
@@ -220,19 +219,14 @@ namespace GlobalPrint.ClientWeb
             IoC.Instance.Resolve<PushNotificationHub>().NewIncomingOrder(notificationMessage, printerOperator.ID);
 
             // Browser push notification
-            if (!string.IsNullOrWhiteSpace(printerOperator.DeviceID))
+            NotificationMessage message = new NotificationMessage()
             {
-                NotificationMessage message = new NotificationMessage()
-                {
-                    Body = notificationMessage,
-                    Destination = printerOperator.DeviceID,
-                    Title = "Global Print - Новый заказ на печать",
-                    Action = Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList", null, Request.Url.Scheme),
-                    DestinationUserID = printerOperator.ID
-                };
-                FirebaseCloudNotifications firebaseNotification = new FirebaseCloudNotifications();
-                firebaseNotification.SendNotification(message);
-            }
+                Body = notificationMessage,
+                Title = "Global Print - Новый заказ на печать",
+                Action = Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList", null, Request.Url.Scheme),
+                DestinationUserID = printerOperator.ID
+            };
+            new FirebaseCloudNotifications().SendNotification(message);
 
             #endregion Notifications
 

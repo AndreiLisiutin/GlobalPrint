@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GlobalPrint.Infrastructure.Notifications
 {
@@ -19,14 +15,9 @@ namespace GlobalPrint.Infrastructure.Notifications
 
         public NotificationMessage()
         {
-            this.Icon = _defaultIcon;
-            this.Sound = _defaultSound;
+            Icon = _defaultIcon;
+            Sound = _defaultSound;
         }
-
-        /// <summary>
-        /// Message destination - device/group identifier.
-        /// </summary>
-        public string Destination { get; set; }
 
         /// <summary>
         /// Message title.

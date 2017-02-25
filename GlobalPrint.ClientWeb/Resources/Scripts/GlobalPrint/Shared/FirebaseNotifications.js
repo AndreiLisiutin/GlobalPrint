@@ -12,6 +12,10 @@
 	firebase.initializeApp(config);
 	const messaging = firebase.messaging();
 
+	/**
+	 * Обновить токен браузера для текущего пользователя.
+	 * @param {string} currentToken Токен браузера.
+	 */
 	var sendTokenToServer = function (currentToken) {
 		$.ajax({
 			type: 'GET',
@@ -20,43 +24,48 @@
 			data: { deviceID: currentToken + '' },
 			url: '/UserProfile/AddDeviceToGroup'
 		}).done(function (json) {
-			console.log('Token updated on server...');
+			console.log('Токен браузера обновлен.');
 
 		}).fail(function () {
 			console.log('Error: ajax call failed.');
 		});
 	};
 
+	/**
+	 * Получить и при необходимости обновить токен браузера для пользователя.
+	 */
 	var refreshToken = function () {
 		messaging.getToken()
             .then(function (token) {
-            	console.log('Token received: ' + token);
+            	console.log('Получен токен браузера: ' + token);
             	sendTokenToServer(token);
             })
             .catch(function (err) {
-            	console.log('Unable to retrieve refreshed token ', err);
+            	console.log('Ошибка обновления токена браузера для пользователя: ', err);
             });
 	};
 	
+	/**
+	 * Запросить разрешение на уведомления.
+	 */
 	var requestPermission = function () {
 		messaging.requestPermission()
 			.then(function () {
-				console.log('Notification permission granted.');
+				console.log('Получено разрешение на уведомления.');
 				refreshToken();
 			})
 			.catch(function (err) {
-				console.log('Unable to get permission to notify.', err);
+				console.log('Разрешение на уведомление не получено.', err);
 			});
 	}
 
 	if ('serviceWorker' in navigator) {
-		navigator.serviceWorker.register('./firebase-messaging-sw.js')
+		navigator.serviceWorker.register('/firebase-messaging-sw.js')
 		  .then(requestPermission);
 	} else {
-		console.error('Service workers aren\'t supported in this browser.');
+		console.error('Сервис воркеры не поддерживаются браузером.');
 	}
 
-	// fired if Instance ID token is updated.
 	messaging.onTokenRefresh(function () {
 		refreshToken();
 	});
@@ -65,11 +74,6 @@
 	// - a message is received while the app has focus
 	// - the user clicks on an app notification created by a sevice worker "messaging.setBackgroundMessageHandler" handler.
 	messaging.onMessage(function (payload) {
-		console.log("Message received. ", payload);
-		if (!payload || !payload.notification || !payload.data || !payload.data.destinationUserID) {
-			return;
-		}
-
 		navigator.serviceWorker.ready
 			.then(function (serviceWorkerRegistration) {
 				serviceWorkerRegistration.active.postMessage(payload);

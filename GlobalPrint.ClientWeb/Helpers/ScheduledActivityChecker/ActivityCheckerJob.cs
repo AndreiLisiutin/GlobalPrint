@@ -95,7 +95,6 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
                     NotificationMessage message = new NotificationMessage()
                     {
                         Body = messageBody,
-                        Destination = item.PrinterOperator.DeviceID,
                         Title = _emailSubject,
                         Action = _globalPrintSiteUrl,
                         DestinationUserID = item.PrinterOperator.ID

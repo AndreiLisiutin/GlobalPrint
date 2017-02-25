@@ -1,18 +1,16 @@
-﻿using Microsoft.CSharp.RuntimeBinder;
+﻿using GlobalPrint.Infrastructure.LogUtility;
+using Microsoft.CSharp.RuntimeBinder;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web.Configuration;
 using System.Web.Script.Serialization;
 
 namespace GlobalPrint.Infrastructure.Notifications
 {
     /// <summary>
-    /// Class for sending messages via firebase cloud.
+    /// Класс для отправки push уведомлений через Firebase Cloud Messaging.
     /// </summary>
     public class FirebaseCloudNotifications
     {
@@ -21,122 +19,95 @@ namespace GlobalPrint.Infrastructure.Notifications
         private readonly string _addDeviceToGroupService = @"https://iid.googleapis.com/iid/v1/{0}/rel/topics/{1}";
         private readonly string _serverApiKey = WebConfigurationManager.AppSettings["FirebaseCloudMessagingToken"].ToString();
         private readonly string _senderId = WebConfigurationManager.AppSettings["FirebaseSenderID"].ToString();
-
+        
         /// <summary>
-        /// Send notification via firebase cloud.
+        /// Отправить push уведомление.
         /// </summary>
-        /// <param name="deviceId">Devise identifier of recieved user.</param>
-        /// <param name="message">Message to send.</param>
-        /// <returns>Wrapper with notification result info.</returns>
-        public void SendNotification(NotificationMessage message)
+        /// <param name="message">Сообщение для отправки.</param>
+        /// <returns>Ответ на запрос.</returns>
+        public string SendNotification(NotificationMessage message)
         {
-            try
+            var webRequest = WebRequest.Create(_sendNotificationService);
+            webRequest.Method = "post";
+            webRequest.ContentType = "application/json";
+            webRequest.Headers.Add($"Authorization: key={_serverApiKey}");
+            webRequest.Headers.Add($"Sender: id={_senderId}");
+
+            // Все данные нужно оставить в поле data, не заполнять notification, иначе не сработает backgroundHandler в js
+            var data = new
             {
-                WebRequest webRequest = WebRequest.Create(_sendNotificationService);
-                webRequest.Method = "post";
-                webRequest.ContentType = "application/json";
-                webRequest.Headers.Add(string.Format("Authorization: key={0}", _serverApiKey));
-                webRequest.Headers.Add(string.Format("Sender: id={0}", _senderId));
-
-                var data = new
+                to = $"/topics/{message.DestinationUserID}",
+                data = new
                 {
-                    to = "/topics/" + message.DestinationUserID,
-                    notification = new
-                    {
-                        body = message.Body,
-                        title = message.Title,
-                        icon = message.Icon,
-                        click_action = message.Action
-                    },
-                    data = new {
-                        destinationUserID = message.DestinationUserID,
-                        url = message.Action
-                    },
-                    priority = "high"
-                };
-                var serializer = new JavaScriptSerializer();
-                var json = serializer.Serialize(data);
-                Byte[] byteArray = Encoding.UTF8.GetBytes(json);
-                webRequest.ContentLength = byteArray.Length;
+                    body = message.Body,
+                    title = message.Title,
+                    icon = message.Icon,
+                    url = message.Action,
+                    destinationUserID = message.DestinationUserID
+                },
+                priority = "high"
+            };
+            var json = new JavaScriptSerializer().Serialize(data);
+            var byteArray = Encoding.UTF8.GetBytes(json);
+            webRequest.ContentLength = byteArray.Length;
 
-                using (var dataStream = webRequest.GetRequestStream())
-                {
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-
-                    using (WebResponse webResponse = webRequest.GetResponse())
-                    {
-                        using (var dataStreamResponse = webResponse.GetResponseStream())
-                        {
-                            using (var reader = new StreamReader(dataStreamResponse))
-                            {
-                                String responseFromServer = reader.ReadToEnd();
-                                //result.Response = responseFromServer;
-                                //result.IsSuccessful = true;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
+            using (var dataStream = webRequest.GetRequestStream())
             {
-                var IsSuccessful = false;
-                //var Response = null;
-                //var Error = ex;
-            }
-        }
-
-        /// <summary>
-        /// Add device to user devices group.
-        /// </summary>
-        /// <param name="deviceID">Device/browser identifier.</param>
-        /// <param name="groupID">Devices group identifier</param>
-        /// <returns>Wrapper with response info.</returns>
-        public void AddDeviceToGroup(string deviceID, string groupID)
-        {
-            try
-            {
-                bool isDeviceAleradyInGroup = CheckDeviceIdInGroup(deviceID, groupID);
-                if (isDeviceAleradyInGroup)
-                {
-                    return;
-                }
-
-                string serviceUrl = string.Format(
-                    _addDeviceToGroupService, deviceID, groupID
-                );
-                WebRequest webRequest = WebRequest.Create(serviceUrl);
-                webRequest.Method = "post";
-                webRequest.ContentType = "application/json";
-                webRequest.ContentLength = 0;
-                webRequest.Headers.Add(string.Format("Authorization: key={0}", _serverApiKey));
-
-                using (WebResponse webResponse = webRequest.GetResponse())
+                dataStream.Write(byteArray, 0, byteArray.Length);
+                using (var webResponse = webRequest.GetResponse())
                 {
                     using (var dataStreamResponse = webResponse.GetResponseStream())
                     {
                         using (var reader = new StreamReader(dataStreamResponse))
                         {
-                            String responseFromServer = reader.ReadToEnd();
-                            //result.Response = responseFromServer;
-                            //result.IsSuccessful = true;
+                            return reader.ReadToEnd();
                         }
                     }
                 }
             }
-            catch (Exception ex)
+        }
+
+        /// <summary>
+        /// Добавить токен браузера к группе пользователя.
+        /// </summary>
+        /// <param name="deviceID">Токен браузера.</param>
+        /// <param name="groupID">Группа пользователя.</param>
+        /// <returns>Ответ на запрос.</returns>
+        public string AddDeviceToGroup(string deviceID, string groupID)
+        {
+            bool isDeviceAleradyInGroup = CheckDeviceIdInGroup(deviceID, groupID);
+            if (isDeviceAleradyInGroup)
             {
-                var IsSuccessful = false;
-                //result.Response = null;
-                //result.Error = ex;
+                return null;
+            }
+
+            string serviceUrl = string.Format(
+                _addDeviceToGroupService, deviceID, groupID
+            );
+            WebRequest webRequest = WebRequest.Create(serviceUrl);
+            webRequest.Method = "post";
+            webRequest.ContentType = "application/json";
+            webRequest.ContentLength = 0;
+            webRequest.Headers.Add($"Authorization: key={_serverApiKey}");
+
+            using (var webResponse = webRequest.GetResponse())
+            {
+                using (var dataStreamResponse = webResponse.GetResponseStream())
+                {
+                    using (var reader = new StreamReader(dataStreamResponse))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
             }
         }
 
         /// <summary>
-        /// Check dynamic object has property with special name.
+        /// Проверить существование свойства/поля у динамического объекта.
         /// </summary>
-        /// <param name="obj">Dynamic object.</param>
-        /// <param name="property">Property name.</param>
-        /// <returns>Whether dynamic object has property.</returns>
+        /// <param name="obj">Динамический объект.</param>
+        /// <param name="property">Имя свойства.</param>
+        /// <returns>Имеет ли объект данное свойство.</returns>
         private bool CheckDynamicHasProperty(dynamic obj, string property)
         {
             try
@@ -151,22 +122,23 @@ namespace GlobalPrint.Infrastructure.Notifications
         }
 
         /// <summary>
-        /// Check, if current device is in group.
+        /// Проверить, есть ли токен браузера в группе пользователя.
         /// </summary>
-        /// <param name="deviceID">Device/browser identifier.</param>
-        /// <param name="groupID">Devices group identifier</param>
-        /// <returns>Whether device is in group or not.</returns>
+        /// <param name="deviceID">Токен браузера.</param>
+        /// <param name="groupID">Группа пользователя.</param>
+        /// <returns>Есть ли токен браузера в группе пользователя.</returns>
         public bool CheckDeviceIdInGroup(string deviceID, string groupID)
         {
             string serviceUrl = string.Format(
-                _getDeviceInfoService, deviceID
+                _getDeviceInfoService,
+                deviceID
             );
             WebRequest webRequest = WebRequest.Create(serviceUrl);
             webRequest.Method = "get";
             webRequest.ContentType = "application/json";
-            webRequest.Headers.Add(string.Format("Authorization: key={0}", _serverApiKey));
+            webRequest.Headers.Add($"Authorization: key={_serverApiKey}");
 
-            using (WebResponse webResponse = webRequest.GetResponse())
+            using (var webResponse = webRequest.GetResponse())
             {
                 using (var dataStreamResponse = webResponse.GetResponseStream())
                 {
@@ -193,6 +165,6 @@ namespace GlobalPrint.Infrastructure.Notifications
 
             return false;
         }
-        
+
     }
 }
