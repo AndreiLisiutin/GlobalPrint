@@ -25,6 +25,10 @@
         @Html.ValidationMessageFor(m => m.Message, "", new { @class = "text-danger" })
         @Html.ValidationMessage("", new { @class = "text-danger" });
 
-        <button class="btn btn-default btn-primary btn-block" type="submit">Отправить</button>
+        <div class="">
+            <button class="btn btn-default btn-primary" type="submit">Отправить</button>
+            @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
+            @Html.ActionLink("Назад", "About", "About", new { }, new { @class = "btn btn-default" })
+        </div>
     }
 </div>
