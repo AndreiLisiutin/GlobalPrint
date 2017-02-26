@@ -260,7 +260,7 @@ namespace GlobalPrint.ClientWeb
             if (User.Identity.IsAuthenticated)
             {
                 var userID = GetCurrentUserID();
-                new FirebaseCloudNotifications().AddDeviceToGroup(deviceID, userID.ToString());
+                new FirebaseNotificator().AddDeviceToGroup(deviceID, userID.ToString());
                 return Json(new { groupID = userID.ToString() }, JsonRequestBehavior.AllowGet);
             }
             else

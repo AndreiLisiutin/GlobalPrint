@@ -35,7 +35,7 @@ messaging.setBackgroundMessageHandler(function (payload) {
 });
 
 self.addEventListener('message', function (event) {
-    console.log("Получено push сообщение, когда вкладка с сайтом была активна: ", payload);
+    console.log("Получено push сообщение, когда вкладка с сайтом была активна: ", event.data);
 	event.waitUntil(showNotification(event.data));
 });
 

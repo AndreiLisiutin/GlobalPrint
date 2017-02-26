@@ -1,6 +1,4 @@
-﻿using GlobalPrint.Infrastructure.LogUtility;
-using Microsoft.CSharp.RuntimeBinder;
-using System;
+﻿using Microsoft.CSharp.RuntimeBinder;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -12,7 +10,7 @@ namespace GlobalPrint.Infrastructure.Notifications
     /// <summary>
     /// Класс для отправки push уведомлений через Firebase Cloud Messaging.
     /// </summary>
-    public class FirebaseCloudNotifications
+    public class FirebaseNotificator
     {
         private readonly string _sendNotificationService = @"https://fcm.googleapis.com/fcm/send";
         private readonly string _getDeviceInfoService = @"https://iid.googleapis.com/iid/info/{0}?details=true";

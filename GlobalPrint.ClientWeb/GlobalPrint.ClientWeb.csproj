@@ -658,6 +658,8 @@
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\jquery.fileupload.js" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\jquery.iframe-transport.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Shared\FileUpload.js" />
+    <Content Include="Resources\Sounds\alarm.mp3" />
+    <Content Include="Resources\Sounds\funny_alarm.mp3" />
     <Content Include="Resources\Sounds\notification.mp3" />
     <Content Include="Resources\Stylesheets\shared\display-form.css" />
     <Content Include="Resources\Stylesheets\shared\edit-form.css" />

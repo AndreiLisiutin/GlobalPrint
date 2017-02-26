@@ -226,7 +226,7 @@ namespace GlobalPrint.ClientWeb
                 Action = Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList", null, Request.Url.Scheme),
                 DestinationUserID = printerOperator.ID
             };
-            new FirebaseCloudNotifications().SendNotification(message);
+            new FirebaseNotificator().SendNotification(message);
 
             #endregion Notifications
 

@@ -99,7 +99,7 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
                         Action = _globalPrintSiteUrl,
                         DestinationUserID = item.PrinterOperator.ID
                     };
-                    FirebaseCloudNotifications firebaseNotification = new FirebaseCloudNotifications();
+                    FirebaseNotificator firebaseNotification = new FirebaseNotificator();
                     firebaseNotification.SendNotification(message);
                 }
             }
