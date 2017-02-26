@@ -480,7 +480,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
                 PrintOrder order = orderRepo.GetByID(printOrderID);
                 Argument.Require(order.UserID == userID, "Редактировать можно только свои заказы.");
 
-                order.Comment = comment;
+                order.ClientRecall = comment;
                 order.Rating = rating;
                 orderRepo.Update(order);
 

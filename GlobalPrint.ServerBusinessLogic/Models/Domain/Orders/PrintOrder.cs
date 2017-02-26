@@ -71,6 +71,11 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Orders
         [Column("comment")]
         public string Comment { get; set; }
 
+        /// <summary> Recall of the client.
+        /// </summary>
+        [Column("client_recall")]
+        public string ClientRecall { get; set; }
+
         /// <summary> Rating of the order.
         /// </summary>
         [Column("rating")]
