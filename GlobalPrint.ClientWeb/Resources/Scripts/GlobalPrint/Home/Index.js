@@ -33,6 +33,12 @@
     var _currentPrinterID = null;
     var _lastState = null;
 
+
+    var _zoomMarker = function (position) {
+        _map.setZoom(15);
+        _map.panTo(position);
+    };
+
     HomeIndex.init = function () {
         loadMap();
     };
@@ -91,6 +97,9 @@
             //for resize map with browser resize
             google.maps.event.trigger(_map, "resize");
         });
+        if (isUserAuthenticated) {
+            _zoomMarker(location);
+        }
     };
 
     HomeIndex.closePrinterInfo = function () {
@@ -101,11 +110,6 @@
             _map.panTo(_lastState.center);
             _lastState = null;
         }
-    };
-
-    var _zoomMarker = function (marker) {
-        _map.setZoom(15);
-        _map.panTo(marker.getPosition());
     };
 
     function deleteAllMarkers() {
@@ -160,7 +164,7 @@
                     }
                     deleteMarkerByPrinterID(json.Printer.ID);
                     var marker = _addMarker(json, true);
-                    _zoomMarker(marker);
+                    _zoomMarker(marker.getPosition());
                 }).fail(function () {
                     console.log('Error: ajax call failed.');
                 });
@@ -266,10 +270,10 @@
 
                 $("#homeInfoSidebar").removeClass("hidden");
                 setTimeout(function () {
-                    _zoomMarker(marker);
+                    _zoomMarker(marker.getPosition());
                 }, 600);
             } else {
-                _zoomMarker(marker);
+                _zoomMarker(marker.getPosition());
             }
             _currentPrinterID = marker.printerInfo.Printer.ID;
         });
