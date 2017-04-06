@@ -4,27 +4,49 @@
 @{
     Layout = "~/Views/Shared/_BaseLayout.cshtml";
 }
-<nav class="navbar main-navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="@Url.Action("Index", "Home")"><img src="~/Resources/Documents/Logo/logo_09_2016.png" class="main-page-logo"></a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            @Html.Partial("_LoginPartial")
+<div class="load"></div>
+<div class="topMargin"></div>
+
+<div class="top">
+    <div class="topLine">
+        <div class="container">
+            <div class="col-md-6 hidden-xs hidden-sm">
+                @Html.ActionLink("Условия использования", "Offer", "Offer")
+                @Html.ActionLink("Политика конфедициальности", "PrivacyPolicy", "Offer")
+            </div>
+            <div class="col-md-6">
+                <div class="languageSelect">
+                    <div class="langContainer">
+                        <img src="~/Content/img/languages/ru-ru.png" alt="" /> <span>Русский</span> <img src="~/Content/img/langDrop.png" alt=""/>
+
+                        <div class="selectBox">
+                            <div class="sItem selected">
+                                <img src="~/Content/img/languages/ru-ru.png" alt="" /> <span>Русский</span>
+                            </div>
+                            <div class="sItem">
+                                <img src="~/Content/img/languages/en-us.png" alt="" /> <span>Английский</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</nav>
+
+    @Html.Partial("_LoginPartial")
+
+</div>
+
 @RenderBody()
-<div id="footer"></div>
+
+<div class="btLine">
+    <div class="visible-xs visible-sm hidden-md hidden-lg" align="center">
+        @Html.ActionLink("Условия использования", "Offer", "Offer")
+        @Html.ActionLink("Политика конфедициальности", "PrivacyPolicy", "Offer")
+    </div>
+</div>
 
 @section Scripts {
-    <script src="~/Resources/Scripts/GlobalPrint/Shared/Navigation.js"></script>
     @if (IsSectionDefined("Scripts"))
     {
         @RenderSection("Scripts")
@@ -32,7 +54,6 @@
 }
 
 @section Stylesheets {
-    <link href="~/Resources/Stylesheets/base.css" rel="stylesheet" />
     @if (IsSectionDefined("Stylesheets"))
     {
         @RenderSection("Stylesheets")

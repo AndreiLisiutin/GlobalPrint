@@ -1,0 +1,82 @@
+@media screen and (max-width:1000px) {
+	html, body {overflow-x:hidden !important;}
+	
+	.topMargin {height:0;}
+	
+	.top {position:static;}
+	.bInsCont, .insertContainer, .content {width:100%;}
+	.partners img {width:100%;}
+	.slider .slide {width:100%;}
+	
+	.messages {width:100%; display:block;}
+	
+	.topLine {text-align:center;}
+	.topLine a {display:block; margin:0;}
+	.langContainer {width:100%; text-align:center !important}
+	.selectBox {width:100%;}
+	.outerDrop {width:100%; left:0; margin:0;}
+	
+	.dropDesc {padding:0px 15px;}
+	
+	.menu {height:auto !important;}
+	.menuLine {width:100%; height:auto; line-height:32px; min-height:0;}
+	.topMail  {width:100%; max-width:100%; text-align:center !important;}
+	
+	.map {position:relative; min-height:500px; top:0;}
+	.topProfile {text-align:center !important; margin-bottom:10px;}
+	.defTop {width:220px; margin-bottom:10px; margin-left:0;}
+	
+	.topLogo {text-align:center;}
+	
+	.aboutLink {margin-left:0;padding:0px 0px 20px; display:inline-block;}
+	
+	.planetTop {text-align:center; padding-bottom:20px;}
+	.planetTop img {width:90%;}
+	
+	.ab-content {padding: 70px 20px 0px;}
+	
+	.ab-title {text-align:center; font-size:18px; line-height: 32px;}
+	.ab-text {text-align:center;}
+	
+	.abBtn {padding: 6px 20px;}
+	
+	.sl-Title {text-align:center; font-size:18px; padding-top:20px;}
+	.sl-Text {text-align:center;}
+	
+	.landTopBox {padding:15px;}
+	
+	.infoBox {width: calc(100% - 30px); z-index:500;}
+	
+	.partTitle {font-size: 14px; line-height: 30px; margin-bottom:20px;}
+	
+	.r-desc {font-size:12px;}
+	
+	.forBox {margin-bottom: 15px;}
+	.ftLogo {width:100%;}
+	.ftNum {text-align:center;}
+	
+	.lkBox {height:auto !important; padding:20px 0px;}
+	
+	.topNavigate {padding: 10px 10px; text-align:center;}
+	.nowIn {padding:20px 0px 10px; text-align:center !important;}
+	.lk {padding:0 !important}
+	.lkBoxTitle {padding-top:15px;}
+	.order-code {margin:5px 0px; width:100% !important;}
+	
+	.dLabel {height: 30px;top: 5px; right:0;}
+	
+	.outRow {margin:0px 15px;}
+	
+}
+
+@media screen and (max-width:600px) {
+	.goReg, .loginForm {width:100%;}
+	.loginTitle {width:26px;}
+	.loginForm {padding: 25px 20px 40px;}
+	.goReg {margin-top:15px;}
+	.defaultButton {margin-bottom:10px; width:100%;}
+	.outerTable {border:none; overflow-x:scroll;}
+	.defaultTable {min-width:700px;}
+	.lkInsetOverflow:after {content:''; display:block; width:64px; height:32px; background:url("../img/scroll.png") center no-repeat; margin:5px auto 0;}
+	.minusMargin {margin:0px -30px; width:calc(100% + 60px);}
+}

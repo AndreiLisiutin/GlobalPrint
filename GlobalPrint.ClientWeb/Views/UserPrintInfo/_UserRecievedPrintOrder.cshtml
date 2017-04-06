@@ -1,7 +1,35 @@
-﻿<a href="@Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList")">
-    Входящие заказы&nbsp;
-    <span id="incomingOrdersCountBadge" class="badge badge-notify badge-notify-incoming-orders">@ViewData["UserRecievedPrintOrdersCount"]</span>
-</a>
+﻿<div class="menuLine">
+    <a href="#" class="messages">
+        <img src="~/Content/img/alarm.png" alt="" />
+        <span>@ViewData["UserRecievedPrintOrdersCount"]</span>
+
+        <div class="outerDrop">
+            <div class="dropBox">
+                <div class="dropItem">
+                    <div class="row">
+                        <div class="col-md-2 col-xs-1 dropIco">
+                            <i class="fa fa-envelope"></i>
+                        </div>
+                        <div class="col-md-10 col-xs-9 dropDesc">
+                            У вас новое сообщение!
+                        </div>
+                    </div>
+                </div>
+                <div class="dropItem">
+                    <div class="row">
+                        <div class="col-md-2 col-xs-1 dropIco">
+                            <i class="fa fa-info"></i>
+                        </div>
+                        <div class="col-md-10 col-xs-9 dropDesc">
+                            Новое уведомление
+                            @*<button href="@Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList")">Новое уведомление</button>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
 <div id="recievedOrdersSound"></div>
 
 @if (ViewData.ContainsKey("UserRecievedPrintOrdersCount") && ViewData["UserRecievedPrintOrdersCount"] != null)

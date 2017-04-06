@@ -7,20 +7,32 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
     <title>@ViewBag.Title</title>
 
     <link rel="manifest" href="~/Resources/Scripts/manifest.json">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">*@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
     <link rel="stylesheet" href="~/Resources/Libraries/nprogress/nprogress.css" />
     <link rel="stylesheet" href="~/Resources/Libraries/clockpicker/dist/bootstrap-clockpicker.min.css" />
-    <link rel="stylesheet" href="~/Resources/Stylesheets/base.css">
+    @*<link rel="stylesheet" href="~/Resources/Stylesheets/base.css">*@
     <link rel="stylesheet" href="~/Resources/Libraries/jQuery-File-Upload-9.12.5/css/jquery.fileupload.css">
     <link rel="stylesheet" href="~/Resources/Libraries/bootstrap-rating/bootstrap-rating.css" />
     <link rel="stylesheet" href="~/Resources/Libraries/switchery/switchery.css" />
+
+    <!--Новая верстка-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,600i,700" rel="stylesheet">
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/css/bootstrap-theme.css" rel="stylesheet" />
+    <link href="~/Content/css/main.css" rel="stylesheet" />
+    <link href="~/Content/css/media.css" rel="stylesheet" />
+    <link href="~/Content/css/owl.carousel.css" rel="stylesheet" />
+    <link href="~/Content/css/owl.theme.default.css" rel="stylesheet" />
+    <link href="~/Content/css/animate.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="~/Content/img/favicon.ico" type="image/ico" />
+
     @if (IsSectionDefined("Stylesheets"))
     {
         @RenderSection("Stylesheets")
@@ -33,9 +45,7 @@
     <![endif]-->
 </head>
 <body data-is-authenticated="@User.Identity.IsAuthenticated" data-user-id="@User.Identity.GetUserId()">
-    <div class="content">
-        @RenderBody()
-    </div>
+    @RenderBody()
     <div id="sound"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
@@ -59,12 +69,19 @@
     <script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.iframe-transport.js"></script>
     <script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.fileupload-process.js"></script>
     <script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.fileupload-validate.js"></script>
-    
+
     <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-messaging.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-auth.js"></script>
-    
+
+    <!--Новая верстка-->
+    <script src="https://use.fontawesome.com/36b364e3c1.js"></script>
+    <script src="~/Content/js/owl.carousel.min.js"></script>
+    <script src="~/Content/js/wow.js"></script>
+    <script src="~/Content/js/main.js"></script>
+    <script src="~/Content/js/info.js"></script>
+
     <script src="~/Resources/Scripts/GlobalPrint.js"></script>
     <script src="~/Resources/Scripts/GlobalPrint/Utils/CommonUtils.js"></script>
     <script src="~/Resources/Scripts/GlobalPrint/Utils/Enums.js"></script>
@@ -76,6 +93,13 @@
     }
     <script src="~/Resources/Scripts/GlobalPrint/Shared/FileUpload.js"></script>
     <script src="~/Resources/Scripts/GlobalPrint/Shared/BaseLayout.js"></script>
+
+    <script>
+        $(function () {
+            new WOW().init();
+        })
+    </script>
+
     @if (IsSectionDefined("Scripts"))
     {
         @RenderSection("Scripts")

@@ -1,1 +1,3 @@
-﻿@Html.ActionLink(ViewData["UserName"].ToString(), "UserProfile", "UserProfile", new { }, new { @class = "font-bold" })
+﻿<span class="topMail">
+    <img src="~/Content/img/mail.png" alt="" /> @Html.ActionLink(ViewData["UserName"].ToString(), "UserProfile", "UserProfile")
+</span>

@@ -5,47 +5,54 @@
 
 @if (Request.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
     {
         @Html.AntiForgeryToken()
 
-        <ul id="main-nav-right" class="nav navbar-nav navbar-right">
-            <li>
-                @Html.ActionLink("Мои принтеры", "MyPrinters", "Printer")
-            </li>            
-            <li>
-                @Html.ActionLink("Мои заказы", "MyOrders", "Order")
-            </li>
-            <li>
-                @{Html.RenderAction("UserRecievedPrintOrder", "UserPrintInfo");}       
-            </li>
-            <li>
-                @{Html.RenderAction("UserName", "UserPrintInfo");}
-            </li>
-            <li>
-                @{Html.RenderAction("UserBalance", "UserPrintInfo");}
-            </li>
-            <li>
-                <a href="javascript:document.getElementById('logoutForm').submit()" class="font-bold">Выйти</a>
-            </li>
-            <li>
-                @Html.ActionLink("О проекте", "About", "About")
-            </li>
-        </ul>
+        <div class="menu">
+            <div class="container">
+                <div class="col-md-4" align="center">
+                    <a href="/">
+                        <img src="~/Content/img/logo.png" alt="" class="headLogo" />
+                    </a>
+                    <div class="menuLine">
+                        @Html.ActionLink("О проекте", "About", "About", null, new { @class = "aboutLink" })
+                    </div>
+                </div>
+                <div class="col-md-2" align="center">
+                    @{Html.RenderAction("UserRecievedPrintOrder", "UserPrintInfo");}
+                </div>
+                <div class="col-md-6">
+                    <div class="menuLine profLine">
+                        <div class="topProfile">
+                            @{Html.RenderAction("UserName", "UserPrintInfo");}
+                            @{Html.RenderAction("UserBalance", "UserPrintInfo");}
+                            <a href="javascript:document.getElementById('logoutForm').submit()" class="whBtn">Выйти</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Зарегистрироваться", "Register", "Account", null, new { @class = "font-bold", id = "registerLink" })
-        </li>
-        <li>
-            @Html.ActionLink("Войти", "Login", "Account", null, new { @class = "font-bold", id = "loginLink" })
-        </li>
-        <li>
-            @Html.ActionLink("О проекте", "About", "About")
-        </li>
-        @*@{Html.RenderAction("CountryPicker", "UserPrintInfo");}*@
-    </ul>
+    <div class="menu">
+	    <div class="container">
+		    <div class="col-md-6 topLogo">
+			    <a href="/">
+                    <img src="~/Content/img/logo.png" alt="" class="headLogo"/>
+			    </a>
+		    </div>
+		    <div class="col-md-6">
+			    <div class="menuLine profLine">
+				    <div class="topProfile">
+                        @Html.ActionLink("Зарегистрироваться", "Register", "Account", null, new { @class = "whBtn defTop", id = "registerLink" })
+                        @Html.ActionLink("Войти", "Login", "Account", null, new { @class = "whBtn defTop", id = "loginLink" })
+                        @Html.ActionLink("О проекте", "About", "About", null, new { @class = "whBtn defTop" })
+				    </div>
+			    </div>
+		    </div>
+	    </div>
+    </div>
 }

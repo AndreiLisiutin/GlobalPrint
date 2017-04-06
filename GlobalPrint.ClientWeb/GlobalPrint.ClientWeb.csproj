@@ -218,6 +218,57 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\css\animate.css" />
+    <Content Include="Content\css\bootstrap-theme.css" />
+    <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\main.css" />
+    <Content Include="Content\css\media.css" />
+    <Content Include="Content\css\owl.carousel.css" />
+    <Content Include="Content\css\owl.theme.default.css" />
+    <Content Include="Content\img\alarm.png" />
+    <Content Include="Content\img\check.png" />
+    <Content Include="Content\img\favicon.ico" />
+    <Content Include="Content\img\ftLogo.png" />
+    <Content Include="Content\img\idea-ico.png" />
+    <Content Include="Content\img\landIcons\kmic1.png" />
+    <Content Include="Content\img\landIcons\kmic2.png" />
+    <Content Include="Content\img\landIcons\kmic3.png" />
+    <Content Include="Content\img\landIcons\kmic4.png" />
+    <Content Include="Content\img\landIcons\kmic5.png" />
+    <Content Include="Content\img\landIcons\kmic6.png" />
+    <Content Include="Content\img\landMap.png" />
+    <Content Include="Content\img\landSlBg.png" />
+    <Content Include="Content\img\langDrop.png" />
+    <Content Include="Content\img\languages\en-us.png" />
+    <Content Include="Content\img\languages\ru-ru.png" />
+    <Content Include="Content\img\lkLogo.png" />
+    <Content Include="Content\img\load.gif" />
+    <Content Include="Content\img\login_google.png" />
+    <Content Include="Content\img\login_vk.png" />
+    <Content Include="Content\img\logo.png" />
+    <Content Include="Content\img\mail.png" />
+    <Content Include="Content\img\manager.png" />
+    <Content Include="Content\img\marker.png" />
+    <Content Include="Content\img\maximka.png" />
+    <Content Include="Content\img\networking.png" />
+    <Content Include="Content\img\p-check.png" />
+    <Content Include="Content\img\partners.png" />
+    <Content Include="Content\img\planet.png" />
+    <Content Include="Content\img\print.png" />
+    <Content Include="Content\img\scroll.png" />
+    <Content Include="Content\img\search-engine.png" />
+    <Content Include="Content\img\search.png" />
+    <Content Include="Content\img\sl-bg.png" />
+    <Content Include="Content\img\testMap.png" />
+    <Content Include="Content\img\whatsapp.png" />
+    <Content Include="Content\js\bootstrap.min.js" />
+    <Content Include="Content\js\info.js" />
+    <Content Include="Content\js\jquery.js" />
+    <Content Include="Content\js\main.js" />
+    <Content Include="Content\js\npm.js" />
+    <Content Include="Content\js\owl.carousel.min.js" />
+    <Content Include="Content\js\ss.js" />
+    <Content Include="Content\js\wow.js" />
     <Content Include="Global.asax" />
     <Content Include="Resources\Documents\Logo\logo_09_2016.png" />
     <Content Include="Resources\Documents\Logo\main_logo.png" />
@@ -832,6 +883,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GlobalPrint.Configuration\GlobalPrint.Configuration.csproj">
