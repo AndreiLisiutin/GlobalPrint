@@ -15,9 +15,9 @@ namespace GlobalPrint.ClientWeb
         public ApplicationUser(string userName, string email)
             : base(new User())
         {
-            this.UserName = userName;
-            this.User.Email = email;
-        }
+            UserName = userName;
+            User.Email = email;
+		}
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser, int> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
