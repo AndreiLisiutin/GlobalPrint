@@ -4,7 +4,7 @@
 @model SendModeyPackage
 @{
     ViewBag.Title = "Отправка денег";
-    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
     User SenderUser = (User)ViewBag.SenderUser;
 }
 
@@ -12,41 +12,47 @@
     <script src="~/Resources/Scripts/GlobalPrint/UserProfile/SendMoney.js"></script>
 }
 
+<div class="col-md-8">
+	<div class="lkBox">
 
-<div class="container">
-    <h2>Отправка денег</h2>
-    @using (Html.BeginForm("ExecuteSendMoney", "UserProfile", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "sendModeyForm" }))
-    {
+		<div class="lkBoxCont">
+			<div class="defaultTitle">
+				Денежные переводы
+			</div>
+			@using (Html.BeginForm("ExecuteSendMoney", "UserProfile", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "sendModeyForm" }))
+			{
+				@Html.Hidden("UserAmountOfMoney", SenderUser.AmountOfMoney, new { @id = "userAmountOfMoney" })
+				@Html.Hidden("SenderUserId", Model.SenderUserId, new { @id = "senderUserId" })
 
-        if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-danger container margin-top-20">
-                <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                @Html.ValidationSummary(false, "Ошибки: ")
-            </div>
-        }
-        @Html.Hidden("UserAmountOfMoney", SenderUser.AmountOfMoney, new { @id = "userAmountOfMoney" })
-        @Html.Hidden("SenderUserId", Model.SenderUserId, new { @id = "senderUserId" })
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Пользователь</label>
-            <div class="col-sm-9 input-wrapper">
-                @Html.Lookup(LookupTypeEnum.User, "ReceiverUserId", Model.ReceiverUserId)
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Пересылаемая сумма</label>
-            <div class="col-sm-9 input-wrapper">
-                <div class="input-group">
-                    @Html.TextBox("AmountOfMoney", Model.AmountOfMoney == 0 ? "" : Model.AmountOfMoney.ToString(), new { @type = "text", @class = "form-control text-right" })
-                    <div class="input-group-addon">руб.</div>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-10">
-                <input type="submit" value="Преслать" class="btn btn-default" />
-                @Html.ActionLink("Назад", "UserProfile", "UserProfile", new { @class = "btn btn-default" })
-            </div>
-        </div>
-    }
+				<div class="row regisRow">
+					<div class="col-md-3">
+						<div class="tableName">Пользователь:</div>
+					</div>
+					<div class="col-md-9 input-wrapper">
+						@Html.Lookup(LookupTypeEnum.User, "ReceiverUserId", Model.ReceiverUserId)
+					</div>
+				</div>
+
+				<div class="row regisRow">
+					<div class="col-md-3">
+						<div class="tableName">Сумма перевода:</div>
+					</div>
+					<div class="col-md-9 input-wrapper">
+
+						<label class="labelBox">
+							@Html.TextBox("AmountOfMoney", Model.AmountOfMoney == 0 ? "" : Model.AmountOfMoney.ToString(), new { @type = "text", @class = "input-def order-code form-control", @style = "width:100%" })
+							<div class="dLabel">руб.</div>
+						</label>
+
+					</div>
+				</div>
+
+				<div class="buttonsBox">
+					<a href="#"><button type="submit" class="defaultButton coloredBtn">Отправить</button></a>
+					<a href=@Url.Action("UserProfile", "UserProfile") class="defaultButton coloredBtn white-text">Отмена</a>
+				</div>
+			}
+		</div>
+
+	</div>
 </div>

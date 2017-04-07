@@ -1,48 +1,73 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.Models.Business.Orders
 @model OrderRegisterFilter
 @{
-    ViewBag.Title = "Реестр заказов";
-    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+	ViewBag.Title = "Реестр заказов";
+	Layout = "~/Views/Shared/_ProfileLayout.cshtml";
 }
 
-<div class="container">
-    @using (Html.BeginForm("GetPrintOrderRegister", "Reports", FormMethod.Get, new { @class = "form-horizontal" }))
-    {
-        if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-danger container margin-top-20">
-                <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                @Html.ValidationSummary(false, "Ошибки: ")
-            </div>
-        }
-        <h2>Реестр заказов</h2>
-        @Html.HiddenFor(e => e.OwnerUserID, new { @id = "OwnerUserID" })
-        <div class="form-group">
-            <label class="col-lg-2 control-label text-left">Дата реестра с</label>
-            <div class="col-md-5 nopadding">
-                <div class="col-lg-12">
-                    @Html.TextBoxFor(e => e.DateFrom, new { @type = "date", @class = "form-control" })
-                </div>
-            </div>
-            <div class="col-md-5 nopadding">
-                <label class="col-lg-3 control-label text-left">по</label>
-                <div class="col-lg-9">
-                    @Html.TextBoxFor(e => e.DateTo, new { @type = "date", @class = "form-control" })
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label text-left">Тип</label>
-            <div class="col-sm-10">
-                @Html.DropDownListFor(m => m.FileExporter, (IEnumerable<SelectListItem>)ViewBag.ExportTypesList, new { @id = "FileExporter", @class = "form-control", @required = "required" })
-            </div>
-        </div>
+<div class="col-md-8">
+	<div class="row">
+		<div class="col-md-6">
+			<a href=@Url.Action("FillUpBalance", "UserProfile")>
+				<button class="lkTopBBtn">
+					Пополнить счет
+				</button>
+			</a>
+		</div>
+		<div class="col-md-6">
+			<a href=@Url.Action("RequestCash", "UserProfile")>
+				<button class="lkTopBBtn">
+					Вывести средства
+				</button>
+			</a>
+		</div>
+	</div>
+</div>
 
-        <div class="form-group">
-            <div class="col-sm-10">
-                <input type="submit" id="printButton" value="Выполнить" class="btn btn-default" />
-                @Html.ActionLink("Назад", "UserProfile", "UserProfile", new { }, new { @class = "btn btn-default" })
-            </div>
-        </div>
-    }
+<div class="col-md-8">
+	<div class="lkBox">
+
+		<div class="lkBoxCont">
+			<div class="defaultTitle">
+				Реестр заказов
+			</div>
+
+			@using (Html.BeginForm("GetPrintOrderRegister", "Reports", FormMethod.Get, new { @class = "form-horizontal" }))
+			{
+				@Html.HiddenFor(e => e.OwnerUserID, new { @id = "OwnerUserID" })
+
+				<div class="col-md-11">
+					<div class="row regisRow">
+						<div class="col-md-3">
+							Дата реестра с
+						</div>
+						<div class="col-md-4">
+							@Html.TextBoxFor(e => e.DateFrom, new { @type = "date", @class = "input-def regisInp", @placeholder = "дд.мм.гг" })
+						</div>
+
+						<div class="col-md-1">
+							по
+						</div>
+						<div class="col-md-4">
+							@Html.TextBoxFor(e => e.DateTo, new { @type = "date", @class = "input-def regisInp", @placeholder = "дд.мм.гг" })
+						</div>
+					</div>
+					<div class="row regisRow">
+						<div class="col-md-3">
+							Тип
+						</div>
+						<div class="col-md-4">
+							@Html.DropDownListFor(m => m.FileExporter, (IEnumerable<SelectListItem>)ViewBag.ExportTypesList, new { @id = "FileExporter", @class = "input-def regisInp", @required = "required" })
+						</div>
+					</div>
+				</div>
+
+				<div class="buttonsBox">
+					<a href="#"><button type="submit" class="defaultButton coloredBtn">Выполнить</button></a>
+					<a href=@Url.Action("UserProfile", "UserProfile") class="defaultButton coloredBtn white-text">Назад</a>
+				</div>
+			}
+		</div>
+
+	</div>
 </div>

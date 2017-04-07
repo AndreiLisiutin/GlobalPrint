@@ -6,54 +6,55 @@
 @model Printer_MyPrinters
 @{
     ViewBag.Title = "Принтеры";
-    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
 }
 @section Scripts {
     <script src="~/Resources/Scripts/GlobalPrint/Printer/MyPrinters.js"></script>
 }
 
-<div class="container">
 
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger container margin-top-20">
-            <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            @Html.ValidationSummary(false, "Ошибки: ")
-        </div>
-    }
+<div class="col-md-8">
+	<div class="lkBox">
 
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th class="col-md-4">Название</th>
-                <th class="col-md-6">Расположение</th>
-                <th class="col-md-2">Действия</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model != null && Model.PrinterList != null)
-            {
-                foreach (Printer printer in Model.PrinterList)
-                {
-                    <tr>
-                        <td class="col-md-4">@Html.DisplayFor(c => printer.Name)</td>
-                        <td class="col-md-6">@Html.DisplayFor(c => printer.Location)</td>
-                        <td class="table-col-buttons">
-                            <a href="@Url.Action("Clone", "Printer", new { @PrinterID = printer.ID })" title="Клонировать принтер" class="btn btn-default glyphicon glyphicon-plus"></a>
-                            <a href="@Url.Action("Edit", "Printer", new { @PrinterID = printer.ID })" title="Изменить параметры принтера" class="btn btn-default glyphicon glyphicon-pencil"></a>
-                            @using (Html.BeginForm("Delete", "Printer", new { PrinterID = printer.ID }, FormMethod.Post, new { @class = "inline-block deletePrinter" }))
-                            {
-                                <button type="submit" value="Удалить принтер" class="btn btn-default glyphicon glyphicon-trash"></button>
-                            }
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
+		<div class="lkBoxCont">
+			<div class="defaultTitle">
+				Принтеры
+			</div>
 
-    <div class="form-group">
-        @Html.ActionLink("Добавить", "Create", "Printer", new { }, new { @class = "btn btn-default" })
-        @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
-    </div>
+			<div class="tableName">Мои принтеры</div>
+
+			<div class="lkInsetOverflow minusMargin">
+				<div class="outerTable">
+					<table class="defaultTable" width="100%">
+						<tr class="tableHead">
+							<td>Название</td>
+							<td>Расположение</td>
+							<td>Действия</td>
+						</tr>
+						@foreach (Printer printer in Model?.PrinterList ?? new List<Printer>())
+						{
+							<tr>
+								<td>@Html.DisplayFor(c => printer.Name)</td>
+								<td>@Html.DisplayFor(c => printer.Location)</td>
+								<td>
+									<a href="@Url.Action("Clone", "Printer", new { @PrinterID = printer.ID })" title="Клонировать принтер" class="btn btn-default glyphicon glyphicon-plus"></a>
+									<a href="@Url.Action("Edit", "Printer", new { @PrinterID = printer.ID })" title="Изменить параметры принтера" class="btn btn-default glyphicon glyphicon-pencil"></a>
+									@using (Html.BeginForm("Delete", "Printer", new { PrinterID = printer.ID }, FormMethod.Post, new { @class = "inline-block deletePrinter" }))
+									{
+										<button type="submit" value="Удалить принтер" class="btn btn-default glyphicon glyphicon-trash"></button>
+									}
+								</td>
+							</tr>
+						}
+					</table>
+				</div>
+			</div>
+
+			<div class="buttonsBox">
+				<a href=@Url.Action("Create", "Printer") class="defaultButton coloredBtn white-text">Добавить</a>
+				<a href="/" class="defaultButton coloredBtn white-text">На главную</a>
+			</div>
+		</div>
+
+	</div>
 </div>

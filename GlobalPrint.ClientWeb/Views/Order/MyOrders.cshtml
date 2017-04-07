@@ -4,69 +4,86 @@
 
 @model List<PrintOrderInfo>
 @{
-    ViewBag.Title = "Мои Заказы";
-    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+	ViewBag.Title = "Мои Заказы";
+	Layout = "~/Views/Shared/_ProfileLayout.cshtml";
 }
 
 @section Scripts {
-    <script src="~/Resources/Scripts/GlobalPrint/PrintOrder/PrintOrder.js"></script>
+	<script src="~/Resources/Scripts/GlobalPrint/PrintOrder/PrintOrder.js"></script>
 }
 
-<div class="container">
-    @using (Html.BeginForm("MyOrders", "Order", FormMethod.Get, new { @class = "form-horizontal", role = "form", id = "userPrintOrderListForm" }))
-    {
-
-        if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-danger container margin-top-20">
-                <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                @Html.ValidationSummary(false, "Ошибки: ")
-            </div>
-        }
-
-        <div class="form-inline gp-data-filter focus">
-            <label class="control-label">Код заказа</label>
-            @Html.TextBox("printOrderID", "", htmlAttributes: new { @class = "form-control", @id = "printOrderIdFilter" })
-            @*<input type="submit" value="Фильтр" class="btn btn-default" />*@
-        </div>
-
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th class="col-md-1">Код заказа</th>
-                    <th class="col-md-3">Принтер</th>
-                    <th class="col-md-2">Документ</th>
-                    <th class="col-md-2">Дата заказа</th>
-                    <th class="col-md-2">Цена заказа</th>
-                    <th class="col-md-1">Код</th>
-                    <th class="col-md-2">Статус</th>
-                    <th class="col-md-1"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (PrintOrderInfo printOrder in Model)
-                {
-                    <tr>
-                        <td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.ID)</td>
-                        <td>@Html.DisplayFor(c => printOrder.Printer.Name)</td>
-                        <td>@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>
-                        <td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, String.Format("{{0: {0} }}", CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern))</td>
-                        <td align="right">@Html.DisplayFor(c => printOrder.PrintOrder.FullPrice, "{0:0.00}")</td>
-                        <td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.SecretCode)</td>
-                        <td align="center">@Html.DisplayFor(c => printOrder.Status.Status)</td>
-                        <td align="center">
-                            <div class="table-col-buttons">
-                                <a href="@Url.Action("FromExisting", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title="Копировать заказ" class="btn btn-default glyphicon glyphicon-plus"></a>
-                                <a href="@Url.Action("Details", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title="Детали заказа на печать" class="btn btn-default glyphicon glyphicon-pencil"></a>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <div class="form-group">
-            @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
-        </div>
-    }
+<div class="col-md-8">
+	<div class="row">
+		<div class="col-md-6">
+			<a href=@Url.Action("FillUpBalance", "UserProfile")>
+				<button class="lkTopBBtn">
+					Пополнить счет
+				</button>
+			</a>
+		</div>
+		<div class="col-md-6">
+			<a href=@Url.Action("RequestCash", "UserProfile")>
+				<button class="lkTopBBtn">
+					Вывести средства
+				</button>
+			</a>
+		</div>
+	</div>
 </div>
 
+<div class="col-md-8">
+	<div class="lkBox">
+
+		<div class="lkBoxCont">
+			<div class="defaultTitle">
+				Мои заказы
+			</div>
+			@using (Html.BeginForm("MyOrders", "Order", FormMethod.Get, new { @class = "form-horizontal", role = "form", id = "userPrintOrderListForm" }))
+			{
+				<div class="gp-data-filter focus tableName">
+					Код заказа:
+					@Html.TextBox("printOrderID", "", htmlAttributes: new { @class = "input-def order-code", @id = "printOrderIdFilter" })
+				</div>
+			}
+			<div class="lkInsetOverflow minusMargin">
+				<div class="outerTable">
+					<table class="defaultTable" width="100%">
+						<tr class="tableHead">
+							<td>Код заказа</td>
+							<td>Принтер</td>
+							<td>Документ</td>
+							<td>Дата</td>
+							<td>Цена</td>
+							<td>Код</td>
+							<td>Статус</td>
+							<td></td>
+						</tr>
+						@foreach (PrintOrderInfo printOrder in Model)
+						{
+							<tr>
+								<td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.ID)</td>
+								<td>@Html.DisplayFor(c => printOrder.Printer.Name)</td>
+								<td>@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>
+								<td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, String.Format("{{0: {0} }}", CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern))</td>
+								<td align="right">@Html.DisplayFor(c => printOrder.PrintOrder.FullPrice, "{0:0.00}")</td>
+								<td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.SecretCode)</td>
+								<td align="center">@Html.DisplayFor(c => printOrder.Status.Status)</td>
+								<td align="center">
+									<div class="table-col-buttons">
+										<a href="@Url.Action("FromExisting", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title="Копировать заказ" class="btn btn-default glyphicon glyphicon-plus"></a>
+										<a href="@Url.Action("Details", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title="Детали заказа на печать" class="btn btn-default glyphicon glyphicon-pencil"></a>
+									</div>
+								</td>
+							</tr>
+						}
+					</table>
+				</div>
+			</div>
+
+			<div class="buttonsBox">
+				<a href="/" class="defaultButton coloredBtn white-text">На главную</a>
+			</div>
+		</div>
+
+	</div>
+</div>

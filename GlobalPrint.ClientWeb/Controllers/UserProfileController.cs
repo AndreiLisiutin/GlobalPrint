@@ -74,6 +74,18 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
+        /// Редактирование профиля пользователя.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet, Authorize]
+        public ActionResult UserProfileEdit()
+        {
+            UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
+            var user = userUnit.GetByID(this.GetCurrentUserID());
+            return View(user);
+        }
+
+        /// <summary>
         /// Save user profile info.
         /// </summary>
         /// <param name="model">Profile info of current user.</param>
@@ -102,10 +114,10 @@ namespace GlobalPrint.ClientWeb
         /// <summary>
         /// Fill the balance of current user.
         /// </summary>
-        /// <param name="upSumm">Money amount to fill balance.</param>
+        /// <param name="amountOfMoney">Money amount to fill balance.</param>
         /// <returns>Redirects to Robokassa.</returns>
-        [HttpPost, Authorize, MultipleButton(Name = "action", Argument = "FillUpBalance")]
-        public ActionResult FillUpBalance(string upSumm)
+        [HttpPost, Authorize]
+        public ActionResult ExecuteFillUpBalance(string amountOfMoney)
         {
             try
             {
@@ -114,7 +126,7 @@ namespace GlobalPrint.ClientWeb
                 decimal decimalUpSumm;
                 try
                 {
-                    decimalUpSumm = Convert.ToDecimal(upSumm);
+                    decimalUpSumm = Convert.ToDecimal(amountOfMoney);
                 }
                 catch (Exception ex)
                 {
@@ -130,6 +142,16 @@ namespace GlobalPrint.ClientWeb
                 ModelState.AddModelError("", ex.Message);
                 return View("UserProfile");
             }
+        }
+
+		/// <summary>
+		/// Пополнить баланс.
+		/// </summary>
+		/// <returns></returns>
+        [HttpGet, Authorize]
+        public ActionResult FillUpBalance()
+        {
+			return View();
         }
 
         /// <summary>
@@ -297,7 +319,7 @@ namespace GlobalPrint.ClientWeb
                 return _USER_PROFILE_REQUEST_CASH(request);
             }
             _transfersRegisterUnit.RequestCash(request);
-            return RedirectToAction("UserProfile");
+            return RedirectToAction("CashRequests");
         }
 
         /// <summary>

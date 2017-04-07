@@ -5,85 +5,109 @@
 
 @model List<PrintOrderInfo>
 @{
-    ViewBag.Title = "Принятые Заказы";
-    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+	ViewBag.Title = "Принятые Заказы";
+	Layout = "~/Views/Shared/_ProfileLayout.cshtml";
 }
 
 @section Scripts {
-    <script src="~/Resources/Scripts/GlobalPrint/PrintOrder/RecievedPrintOrder.js"></script>
+	<script src="~/Resources/Scripts/GlobalPrint/PrintOrder/RecievedPrintOrder.js"></script>
 }
-<div class="container">
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger container margin-top-20">
-            <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            @Html.ValidationSummary(false, "Ошибки: ")
-        </div>
-    }
 
-    @using (Html.BeginForm("UserRecievedPrintOrderList", "UserRecievedPrintOrderList", FormMethod.Get, new { @class = "form-horizontal", @id = "userRecievedPrintOrderListForm" }))
-    {
-        <div class="form-inline gp-data-filter focus">
-            <label class="control-label">Код заказа</label>
-            @Html.TextBox("printOrderID", "", htmlAttributes: new { @class = "form-control", @id = "recievedPrintOrderIdFilter" })
-        </div>
-    }
+<div class="col-md-8">
+	<div class="row">
+		<div class="col-md-6">
+			<a href=@Url.Action("FillUpBalance", "UserProfile")>
+				<button class="lkTopBBtn">
+					Пополнить счет
+				</button>
+			</a>
+		</div>
+		<div class="col-md-6">
+			<a href=@Url.Action("RequestCash", "UserProfile")>
+				<button class="lkTopBBtn">
+					Вывести средства
+				</button>
+			</a>
+		</div>
+	</div>
+</div>
 
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th class="col-md-1">Код заказа</th>
-                <th class="col-md-2">Принтер</th>
-                <th class="col-md-2">Документ</th>
-                <th class="col-md-1">Дата заказа</th>
-                <th class="col-md-2">Комментарий</th>
-                <th class="col-md-1">Цена заказа</th>
-                <th class="col-md-1">Статус</th>
-                <th></th> @*for buttons*@
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (PrintOrderInfo printOrder in Model)
-            {
-                <tr>
-                    <td class="col-md-1" align="center">@Html.DisplayFor(c => printOrder.PrintOrder.ID)</td>
-                    <td class="col-md-2">@Html.DisplayFor(c => printOrder.Printer.Name)</td>
-                    <td class="col-md-2">@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>
-                    <td class="col-md-1" align="center">@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, String.Format("{{0: {0} }}", CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern))</td>
-                    <td class="col-md-2" align="left">@Html.DisplayFor(c => printOrder.PrintOrder.Comment)</td>
-                    <td class="col-md-1" align="right">@Html.DisplayFor(c => printOrder.PrintOrder.FullPrice, "{0:0.00}")</td>
-                    <td class="col-md-1" align="center">@Html.DisplayFor(c => printOrder.Status.Status)</td>
-                    @if (printOrder.PrintOrder.PrintOrderStatusID == (int)PrintOrderStatusEnum.Waiting)
-                    {
-                        <td class="table-col-buttons" align="right">
-                            @Ajax.ActionLink(" ", "AcceptOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID },
-                                new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-default glyphicon glyphicon-ok", @title = "Подтверждение от клиента для получения оплаты" })
+<div class="col-md-8">
+	<div class="lkBox">
 
-                            @using (Html.BeginForm("RejectOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID }, FormMethod.Post, new { @class = "inline-block rejectOrder" }))
-                            {
-                                <button type="submit" value="Отклонить" class="btn btn-default glyphicon glyphicon-remove"></button>
-                            }
-                        </td>
-                    }
-                    else if (printOrder.PrintOrder.PrintOrderStatusID == (int)PrintOrderStatusEnum.Accepted)
-                    {
-                        <td class="table-col-buttons" align="right">
-                            <a href="@Url.Action("DownloadOrder", "Order", new { printOrderID = printOrder.PrintOrder.ID })" 
-                               title="Скачать" class="btn btn-default glyphicon glyphicon-download-alt"></a>
+		<div class="lkBoxCont">
+			<div class="defaultTitle">
+				Входящие заказы
+			</div>
 
-                            <a href="@Url.Action("ConfirmPrintOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID })"
-                               title="Распечатать" class="btn btn-default glyphicon glyphicon glyphicon-usd"></a>
-                        </td>
-                    }
-                    else
-                    {
-                        <td class="col-md-3"></td>
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
-    <div class="form-group">
-        @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
-    </div>
+			@using (Html.BeginForm("UserRecievedPrintOrderList", "UserRecievedPrintOrderList", FormMethod.Get, new { @class = "form-horizontal", @id = "userRecievedPrintOrderListForm" }))
+			{
+				<div class="tableName">
+					Код заказа:
+					@Html.TextBox("printOrderID", "", htmlAttributes: new { @class = "input-def order-code", @id = "recievedPrintOrderIdFilter" })
+				</div>
+			}
+
+			<div class="lkInsetOverflow minusMargin">
+				<div class="outerTable">
+					<table class="defaultTable" width="100%" cellspacing="0">
+						<tr class="tableHead">
+							<td>Код заказа</td>
+							<td>Принтер</td>
+							<td>Документ</td>
+							<td>Дата</td>
+							<td>Комментарий</td>
+							<td>Цена</td>
+							<td>Статус</td>
+							<td></td>
+						</tr>
+
+						@foreach (PrintOrderInfo printOrder in Model)
+						{
+							<tr>
+								<td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.ID)</td>
+								<td>@Html.DisplayFor(c => printOrder.Printer.Name)</td>
+								<td>@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>
+								<td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, String.Format("{{0: {0} }}", CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern))</td>
+								<td align="left">@Html.DisplayFor(c => printOrder.PrintOrder.Comment)</td>
+								<td align="right">@Html.DisplayFor(c => printOrder.PrintOrder.FullPrice, "{0:0.00}")</td>
+								<td align="center">@Html.DisplayFor(c => printOrder.Status.Status)</td>
+								@if (printOrder.PrintOrder.PrintOrderStatusID == (int)PrintOrderStatusEnum.Waiting)
+								{
+									<td class="table-col-buttons" align="right">
+										@Ajax.ActionLink(" ", "AcceptOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID },
+								new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-default glyphicon glyphicon-ok", @title = "Подтверждение от клиента для получения оплаты" })
+
+										@using (Html.BeginForm("RejectOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID }, FormMethod.Post, new { @class = "inline-block rejectOrder" }))
+										{
+											<button type="submit" value="Отклонить" class="btn btn-default glyphicon glyphicon-remove"></button>
+										}
+									</td>
+								}
+								else if (printOrder.PrintOrder.PrintOrderStatusID == (int)PrintOrderStatusEnum.Accepted)
+								{
+									<td class="table-col-buttons" align="right">
+										<a href="@Url.Action("DownloadOrder", "Order", new { printOrderID = printOrder.PrintOrder.ID })"
+										   title="Скачать" class="btn btn-default glyphicon glyphicon-download-alt"></a>
+
+										<a href="@Url.Action("ConfirmPrintOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID })"
+										   title="Распечатать" class="btn btn-default glyphicon glyphicon glyphicon-usd"></a>
+									</td>
+								}
+								else
+								{
+									<td class="col-md-3"></td>
+								}
+							</tr>
+						}
+					</table>
+				</div>
+			</div>
+
+			<div class="buttonsBox">
+				<a href="/" class="defaultButton coloredBtn white-text">На главную</a>
+			</div>
+		</div>
+
+	</div>
 </div>

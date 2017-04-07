@@ -1,0 +1,79 @@
+﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Users
+@using GlobalPrint.ClientWeb.Helpers;
+
+@{
+	Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+}
+
+<div class="container lk">
+
+	<div class="topNavigate">
+		<div class="row">
+			<div class="col-md-6">
+				Моя информация
+			</div>
+			<div class="col-md-6">
+				<div class="nowIn">
+					Главная <i class="fa fa-angle-right"></i> <span class="rzd">Личный кабинет</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-4">
+		<div class="lkBox lkMenuBox">
+			<div class="menuLogo">
+				<img src="~/Content/img/lkLogo.png" alt="" />
+			</div>
+
+			<ul class="lkMenu">
+				<a href=@Url.Action("UserProfile", "UserProfile")>
+					<li class="@Html.IsSelected(actions: "UserProfile", controllers: "UserProfile", cssClass: "active")">Моя информация</li>
+				</a>
+				<a href=@Url.Action("MyOrders", "Order")>
+					<li class="@Html.IsSelected(actions: "MyOrders", controllers: "Order", cssClass: "active")">Мои заказы</li>
+				</a>
+				<a href=@Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList")>
+					<li class="@Html.IsSelected(actions: "UserRecievedPrintOrderList", controllers: "UserRecievedPrintOrderList", cssClass: "active")">Входящие заказы</li>
+				</a>
+				<a href=@Url.Action("MyPrinters", "Printer")>
+					<li class="@Html.IsSelected(actions: "MyPrinters", controllers: "Printer", cssClass: "active")">Мои принтеры</li>
+				</a>
+				<a href=@Url.Action("SendMoney", "UserProfile")>
+					<li class="@Html.IsSelected(actions: "SendMoney", controllers: "UserProfile", cssClass: "active")">Управление счётом</li>
+				</a>
+				<a href=@Url.Action("MyPayments", "UserProfile")>
+					<li class="@Html.IsSelected(actions: "MyPayments", controllers: "UserProfile", cssClass: "active")">История платежей</li>
+				</a>
+				<a href=@Url.Action("PrintOrderRegister", "Reports")>
+					<li class="@Html.IsSelected(actions: "PrintOrderRegister", controllers: "Reports", cssClass: "active")">Реестр заказов</li>
+				</a>
+				@if (ViewContext.HttpContext.User.IsInRole(UserRolesEnum.Admin))
+				{
+					<a href=@Url.Action("TransfersRegisters", "UserProfile")>
+						<li class="@Html.IsSelected(actions: "TransfersRegisters", controllers: "UserProfile", cssClass: "active") admin-button">Реестр перечислений</li>
+					</a>
+					<a href=@Url.Action("CashRequests", "UserProfile")>
+						<li class="@Html.IsSelected(actions: "CashRequests", controllers: "UserProfile", cssClass: "active") admin-button">Запросы на вывод денег</li>
+					</a>
+				}
+			</ul>
+		</div>
+	</div>
+
+	@RenderBody()
+</div>
+
+@section Scripts {
+	@if (IsSectionDefined("Scripts"))
+	{
+		@RenderSection("Scripts")
+	}
+}
+
+@section Stylesheets {
+	@if (IsSectionDefined("Stylesheets"))
+	{
+		@RenderSection("Stylesheets")
+	}
+}

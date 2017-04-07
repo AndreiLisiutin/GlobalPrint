@@ -1,25 +1,41 @@
-﻿<div class="modal fade" id="FillUpBalanceModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Пополнение баланса</h4>
-            </div>
-            @using (Html.BeginForm("UserProfile", "UserProfile", new { @class = "form-horizontal", role = "form" }))
-            {
-                <div class="modal-body" id="modal-body">
-                    <div class="form-group row">
-                        <label class="col-sm-3 control-label text-left">Сумма</label>
-                        <div class="col-sm-9">
-                            <input class="form-control currency bottom-component" id="summ" name="upSumm" type="number" value="300" min="1" step="any" max="10000">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" value="FillUpBalance" name="action:FillUpBalance">Пополнить</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-                </div>
-            }
-        </div>
-    </div>
+﻿@{
+	ViewBag.Title = "Пополнение баланса";
+	Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+}
+
+@section Scripts {
+	<script src="~/Resources/Scripts/GlobalPrint/UserProfile/FillUpBalance.js"></script>
+}
+
+<div class="col-md-8">
+	<div class="lkBox">
+
+		<div class="lkBoxCont">
+			<div class="defaultTitle">
+				Пополнение баланса
+			</div>
+			@using (Html.BeginForm("ExecuteFillUpBalance", "UserProfile", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "fillUpBalanceForm" }))
+			{
+				<div class="row regisRow">
+					<div class="col-md-3">
+						<div class="tableName">Сумма:</div>
+					</div>
+					<div class="col-md-9 input-wrapper">
+
+						<label class="labelBox">
+							<input class="input-def order-code form-control" id="AmountOfMoney" name="AmountOfMoney" type="number" value="300" min="1" step="any" max="10000" style="width:100%">
+							<div class="dLabel">руб.</div>
+						</label>
+
+					</div>
+				</div>
+
+				<div class="buttonsBox">
+					<a href="#"><button type="submit" class="defaultButton coloredBtn">Пополнить</button></a>
+					<a href=@Url.Action("UserProfile", "UserProfile") class="defaultButton coloredBtn white-text">Отмена</a>
+				</div>
+			}
+		</div>
+
+	</div>
 </div>

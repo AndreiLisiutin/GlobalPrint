@@ -6,20 +6,54 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace GlobalPrint.ClientWeb.Helpers
 {
 
     public static class HtmlHelpers
     {
-        /// <summary>
-        /// Create paging element for grid.
-        /// </summary>
-        /// <param name="html"></param>
-        /// <param name="pagedCollection">Collection with information about pagination state.</param>
-        /// <param name="url">Action HREF builder from page number. Try it by Url.Action(...).</param>
-        /// <returns></returns>
-        public static MvcHtmlString Paging(this HtmlHelper html, IPagedCollection pagedCollection, Func<int, string> url)
+		/// <summary>
+		/// Получить класс для ссылки пункта меню в зависимости от текущего маршрута.
+		/// </summary>
+		/// <param name="html"></param>
+		/// <param name="controllers"></param>
+		/// <param name="actions"></param>
+		/// <param name="cssClass"></param>
+		/// <returns></returns>
+		public static string IsSelected(this HtmlHelper html, string controllers = "", string actions = "", string cssClass = "active")
+		{
+			ViewContext viewContext = html.ViewContext;
+			bool isChildAction = viewContext.Controller.ControllerContext.IsChildAction;
+
+			if (isChildAction)
+				viewContext = html.ViewContext.ParentActionViewContext;
+
+			RouteValueDictionary routeValues = viewContext.RouteData.Values;
+			string currentAction = routeValues["action"].ToString();
+			string currentController = routeValues["controller"].ToString();
+
+			if (String.IsNullOrEmpty(actions))
+				actions = currentAction;
+
+			if (String.IsNullOrEmpty(controllers))
+				controllers = currentController;
+
+			string[] acceptedActions = actions.Trim().Split(',').Distinct().ToArray();
+			string[] acceptedControllers = controllers.Trim().Split(',').Distinct().ToArray();
+
+			return acceptedActions.Contains(currentAction) && acceptedControllers.Contains(currentController) ?
+				cssClass : String.Empty;
+		}
+
+		/// <summary>
+		/// Create paging element for grid.
+		/// </summary>
+		/// <param name="html"></param>
+		/// <param name="pagedCollection">Collection with information about pagination state.</param>
+		/// <param name="url">Action HREF builder from page number. Try it by Url.Action(...).</param>
+		/// <returns></returns>
+		public static MvcHtmlString Paging(this HtmlHelper html, IPagedCollection pagedCollection, Func<int, string> url)
         {
             if (pagedCollection.PagesCount == 1)
             {
@@ -82,19 +116,16 @@ namespace GlobalPrint.ClientWeb.Helpers
         /// <returns></returns>
         public static MvcHtmlString Lookup(this HtmlHelper html, LookupTypeEnum lookupType, string name = "lookupValueId", long? value = null, object htmlAttributes = null)
         {
-            //< div class="input-group lookup-input-group" data-lookup-type="{lookupType}">
-            //    <input type = "text" class="hidden form-control lookup-value-id" name="lookupValueId" id="lookupValueId">
-            //    <input type = "text" class="form-control lookup-value-name" disabled="" name="lookupValueName" id="lookupValueName">
-            //    <div class="input-group-btn">
-            //        <button class="btn btn-default lookup-show-button" id="lookupButton" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-            //    </div>
-            //</div>
+			//< label class="labelBox">
+			//	<input type = "text" class="input-def order-code" style="width:100%">
+			//	<div class="dLabel"><img src = "~/Content/img/search.png" /></ div >
+			//</ label >
 
-            var inputGroup = new TagBuilder("div");
-            inputGroup.AddCssClass("input-group");
-            inputGroup.AddCssClass("lookup-input-group");
-            inputGroup.MergeAttribute("data-lookup-type", ((int)lookupType).ToString());
-            if (htmlAttributes != null)
+			var inputGroup = new TagBuilder("label");
+            inputGroup.AddCssClass("labelBox");
+			inputGroup.AddCssClass("lookup-input-group");
+			inputGroup.MergeAttribute("data-lookup-type", ((int)lookupType).ToString());
+			if (htmlAttributes != null)
             {
                 foreach (var property in htmlAttributes.GetType().GetProperties())
                 {
@@ -116,31 +147,28 @@ namespace GlobalPrint.ClientWeb.Helpers
             inputGroup.InnerHtml += lookupValueId.ToString();
 
             var lookupValueName = new TagBuilder("input");
-            lookupValueName.AddCssClass("form-control");
-            lookupValueName.AddCssClass("lookup-value-name");
             lookupValueName.MergeAttribute("type", "text");
             lookupValueName.MergeAttribute("name", "lookupValueName");
             lookupValueName.MergeAttribute("id", "lookupValueName");
-            lookupValueName.MergeAttribute("disabled", "disabled");
+			lookupValueName.MergeAttribute("disabled", "disabled");
+            lookupValueName.MergeAttribute("style", "width:100%");
+			lookupValueName.AddCssClass("lookup-value-name");
+            lookupValueName.AddCssClass("form-control");
+            lookupValueName.AddCssClass("input-def");
+            lookupValueName.AddCssClass("order-code");
             inputGroup.InnerHtml += lookupValueName.ToString();
 
             var inputGroupBtn = new TagBuilder("div");
             inputGroupBtn.AddCssClass("input-group-btn");
+            inputGroupBtn.AddCssClass("dLabel");
+			inputGroupBtn.MergeAttribute("id", "lookupButton");
+			inputGroupBtn.AddCssClass("lookup-show-button");
 
-            var lookupButton = new TagBuilder("button");
-            lookupButton.AddCssClass("btn");
-            lookupButton.AddCssClass("btn-default");
-            lookupButton.AddCssClass("lookup-show-button");
-            lookupButton.MergeAttribute("id", "lookupButton");
-            lookupButton.MergeAttribute("type", "button");
+            var lookupButton = new TagBuilder("img");
+            lookupButton.MergeAttribute("src", new Uri(new Uri(HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority)), "Content/img/search.png").AbsoluteUri);
+			inputGroupBtn.InnerHtml += lookupButton.ToString();
 
-            var lookupButtonCaption = new TagBuilder("i");
-            lookupButtonCaption.AddCssClass("glyphicon");
-            lookupButtonCaption.AddCssClass("glyphicon-search");
-            lookupButton.InnerHtml += lookupButtonCaption.ToString();
-            inputGroupBtn.InnerHtml += lookupButton.ToString();
-
-            inputGroup.InnerHtml += inputGroupBtn.ToString();
+			inputGroup.InnerHtml += inputGroupBtn.ToString();
             return new MvcHtmlString(inputGroup.ToString());
         }
     }

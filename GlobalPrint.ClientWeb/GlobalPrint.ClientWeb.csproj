@@ -25,7 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>2.2</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -225,6 +225,7 @@
     <Content Include="Content\css\media.css" />
     <Content Include="Content\css\owl.carousel.css" />
     <Content Include="Content\css\owl.theme.default.css" />
+    <Content Include="Content\css\_development.css" />
     <Content Include="Content\img\alarm.png" />
     <Content Include="Content\img\check.png" />
     <Content Include="Content\img\favicon.ico" />
@@ -697,6 +698,7 @@
     <Content Include="Resources\Scripts\GlobalPrint\Shared\PushNotifications.js" />
     <Content Include="firebase-messaging-sw.js" />
     <Content Include="Resources\Scripts\GlobalPrint\UserProfile\RequestCash.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\UserProfile\FillUpBalance.js" />
     <Content Include="Resources\Scripts\GlobalPrint\UserProfile\SendMoney.js" />
     <Content Include="Resources\Scripts\GlobalPrint\UserProfile\TransfersRegisters.js" />
     <Content Include="Resources\Scripts\GlobalPrint\UserProfile\UserProfile.js" />
@@ -874,6 +876,8 @@
     <Content Include="Views\UserProfile\TransfersRegisters.cshtml" />
     <Content Include="Views\Shared\Errors\FileNotFound.cshtml" />
     <Content Include="Views\UserProfile\CashRequests.cshtml" />
+    <Content Include="Views\Shared\_ProfileLayout.cshtml" />
+    <Content Include="Views\UserProfile\UserProfileEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -883,7 +887,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GlobalPrint.Configuration\GlobalPrint.Configuration.csproj">

@@ -1,0 +1,28 @@
+﻿.white-text {
+	text-decoration: none !important;
+	color: white !important;
+	display: inline-block;
+	text-align: center;
+}
+
+.top {
+	z-index: 100;
+}
+
+.modal-dialog {
+	z-index: 200;
+}
+
+.admin-button {
+	background: #a9143d !important;
+}
+.admin-button:hover {
+	background: #c11746 !important;
+}
+
+@media screen and (max-width:600px) {
+	.white-text {
+		margin-bottom: 10px;
+		width: 100%;
+	}
+}

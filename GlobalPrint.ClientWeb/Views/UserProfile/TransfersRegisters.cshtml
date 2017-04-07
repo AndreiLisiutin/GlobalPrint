@@ -5,7 +5,7 @@
 @model List<TransfersRegister>
 @{
     ViewBag.Title = "Реестры перечислений";
-    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
 }
 
 
@@ -13,47 +13,50 @@
     <script src="~/Resources/Scripts/GlobalPrint/UserProfile/TransfersRegisters.js"></script>
 }
 
-<div class="container">
 
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger container margin-top-20">
-            <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            @Html.ValidationSummary(false, "Ошибки: ")
-        </div>
-    }
+<div class="col-md-8">
+	<div class="lkBox">
 
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th class="col-md-1">Номер</th>
-                <th class="col-md-3">Дата формирования</th>
-                <th class="col-md-3">Количество запросов</th>
-                <th class="col-md-3">Общая сумма</th>
-                <th class="col-md-2">Действия</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (TransfersRegister register in Model)
-            {
-                <tr>
-                    <td class="col-md-1">@Html.DisplayFor(c => register.ID)</td>
-                    <td class="col-md-3" align="center">@Html.DisplayFor(c => register.CreatedOn)</td>
-                    <td class="col-md-3" align="right">@Html.DisplayFor(c => register.CashRequestsTotalCount)</td>
-                    <td class="col-md-3" align="right">@Html.DisplayFor(c => register.CashRequestsTotalAmountOfMoney)</td>
-                    <td class="table-col-buttons col-md-2">
-                        <a href="@Url.Action("GetTransfersRegister", "Reports", new { @TransfersRegisterID = register.ID })" title="Загрузить" class="btn btn-default glyphicon glyphicon-download-alt"></a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+		<div class="lkBoxCont">
+			<div class="defaultTitle">
+				Реестры перечислений
+			</div>
 
-    <div class="form-group">
-        @using (Html.BeginForm("NewTransfersRegister", "UserProfile", FormMethod.Post, new { @class = "inline-block", id = "createNewRegister" }))
-        {
-            <button type="submit" class="btn btn-default" id="createNewRegister">Сформировать</button>
-        }
-        @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
-    </div>
+			<div class="tableName">Реестры перечислений</div>
+
+			<div class="lkInsetOverflow minusMargin">
+				<div class="outerTable">
+					<table class="defaultTable" width="100%">
+						<tr class="tableHead">
+							<td>Номер</td>
+							<td>Дата формирования</td>
+							<td>Количество запросов</td>
+							<td>Общая сумма</td>
+							<td></td>
+						</tr>
+						@foreach (TransfersRegister register in Model)
+						{
+							<tr>
+								<td>@Html.DisplayFor(c => register.ID)</td>
+								<td align="center">@Html.DisplayFor(c => register.CreatedOn)</td>
+								<td align="right">@Html.DisplayFor(c => register.CashRequestsTotalCount)</td>
+								<td align="right">@Html.DisplayFor(c => register.CashRequestsTotalAmountOfMoney)</td>
+								<td class="table-col-buttons">
+									<a href="@Url.Action("GetTransfersRegister", "Reports", new { @TransfersRegisterID = register.ID })" title="Загрузить" class="btn btn-default glyphicon glyphicon-download-alt"></a>
+								</td>
+							</tr>
+						}
+					</table>
+				</div>
+			</div>
+
+			<div class="buttonsBox">
+				<a href="/" class="defaultButton coloredBtn white-text">На главную</a>
+				@using (Html.BeginForm("NewTransfersRegister", "UserProfile", FormMethod.Post, new { @class = "white-text", id = "createNewRegister" }))
+				{
+					<button type="submit" class="defaultButton coloredBtn" id="createNewRegister">Сформировать</button>
+				}
+			</div>
+		</div>
+	</div>
 </div>
