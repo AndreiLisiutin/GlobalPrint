@@ -5,7 +5,8 @@
 	text-align: center;
 }
 
-.top {
+.top,
+.infoBox {
 	z-index: 100;
 }
 
@@ -16,13 +17,18 @@
 .admin-button {
 	background: #a9143d !important;
 }
-.admin-button:hover {
-	background: #c11746 !important;
-}
+
+	.admin-button:hover {
+		background: #c11746 !important;
+	}
 
 @media screen and (max-width:600px) {
 	.white-text {
 		margin-bottom: 10px;
 		width: 100%;
 	}
+}
+
+.relative {
+	position: relative;
 }
