@@ -196,7 +196,7 @@ namespace GlobalPrint.ClientWeb
                 return View("Register", model);
             }
             
-            var user = new ApplicationUser(model.Email, model.Email);
+            var user = new ApplicationUser(model.UserName ?? model.Email, model.Email);
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {

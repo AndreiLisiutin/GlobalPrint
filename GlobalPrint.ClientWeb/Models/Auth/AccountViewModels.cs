@@ -22,21 +22,42 @@ namespace GlobalPrint.ClientWeb
         public bool RememberMe { get; set; }
     }
 
+	/// <summary>
+	/// Модель регистрации пользователя.
+	/// </summary>
     public class RegisterViewModel
     {
+		/// <summary>
+		/// Email в качестве логина.
+		/// </summary>
         [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
         public string Email { get; set; }
 
+		/// <summary>
+		/// Пароль.
+		/// </summary>
         [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
         [StringLength(100, ErrorMessage = "Минимальная длина пароля - {2} символов.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
+		/// <summary>
+		/// Подтверждение пароля.
+		/// </summary>
         [Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Пароль и его подтверждение не совпадают.")]
         public string ConfirmPassword { get; set; }
+
+		/// <summary>
+		/// Имя пользователя.
+		/// </summary>
+		[Required(ErrorMessage = "Данное поле обязательно для заполнения.")]
+		public string UserName { get; set; }
         
+		/// <summary>
+		/// Согласен ли с условиями использования.
+		/// </summary>
         [Required(ErrorMessage = "Вы должны подтвердить свое согласие с условиями оферты.")]
         [Range(typeof(bool), "true", "true", ErrorMessage = "Вы должны подтвердить свое согласие с условиями оферты.")]
         public bool IsAgreeWithOffer { get; set; }
