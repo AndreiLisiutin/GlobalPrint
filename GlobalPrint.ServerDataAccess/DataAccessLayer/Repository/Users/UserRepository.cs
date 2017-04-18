@@ -4,6 +4,9 @@ using GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext;
 
 namespace GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Users
 {
+    /// <summary>
+    /// Репозиторий пользователей.
+    /// </summary>
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
         public UserRepository(DbConnectionContext context) : base(context)

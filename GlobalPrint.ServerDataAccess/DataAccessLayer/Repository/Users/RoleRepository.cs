@@ -4,6 +4,9 @@ using GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext;
 
 namespace GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Users
 {
+    /// <summary>
+    /// Репозиторий ролей пользователя.
+    /// </summary>
     public class RoleRepository : BaseRepository<Role>, IRoleRepository
     {
         public RoleRepository(DbConnectionContext context) : base(context)

@@ -4,6 +4,9 @@ using GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext;
 
 namespace GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Orders
 {
+    /// <summary>
+    /// Репозиторий заказа на печать.
+    /// </summary>
     public class PrintOrderRepository : BaseRepository<PrintOrder>, IPrintOrderRepository
     {
         public PrintOrderRepository(DbConnectionContext context) : base(context)
