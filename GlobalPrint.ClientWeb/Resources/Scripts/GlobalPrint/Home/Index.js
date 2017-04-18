@@ -235,17 +235,26 @@
 
 		google.maps.event.addListener(marker, 'click', function () {
 			$("#printerInfoPrinterID").val(printerInfo.Printer.ID);
-			$("#printerInfoIsAvailable").prop('checked', printerInfo.IsAvailableNow);
-			if (!printerInfo.IsOperatorAlive) {
-				$("#printerInfoIsAvailable").addClass('operator-sleeping');
-			} else {
-				$("#printerInfoIsAvailable").removeClass('operator-sleeping');
-			}
-			if (!printerInfo.IsAvailableNow || !printerInfo.IsOperatorAlive) {
+			if (printerInfo.IsAvailableNow && printerInfo.IsOperatorAlive) {
+				$("#printerStatus").html('Сейчас доступен');
+				$(".infoStatusBox").addClass('available');
+				$(".infoStatusBox").removeClass('disabled');
+				$(".infoStatusBox").removeClass('n-available');
+				$("#printerInfoPrint").removeClass('hidden');
+			} else if (printerInfo.Printer.IsDisabled) {
+				$("#printerStatus").html('Неактивный принтер');
+				$(".infoStatusBox").addClass('disabled');
+				$(".infoStatusBox").removeClass('available');
+				$(".infoStatusBox").removeClass('n-available');
 				$("#printerInfoPrint").addClass('hidden');
 			} else {
-				$("#printerInfoPrint").removeClass('hidden');
+				$("#printerStatus").html('Недоступен');
+				$(".infoStatusBox").addClass('n-available');
+				$(".infoStatusBox").removeClass('available');
+				$(".infoStatusBox").removeClass('disabled');
+				$("#printerInfoPrint").addClass('hidden');
 			}
+
 			function toFixedInt2(n) {
 				return n > 9 ? "" + n : "0" + n;
 			}
@@ -336,13 +345,4 @@ $(document).ready(function () {
 	});
 
 	GlobalPrint.Home.Index.setMapFullScreen();
-
-	$(document).click(function (event) {
-		//закрыть информацию о принтере, если ткнули на карту
-		var mark = $(".printer-marker");
-		var opened = $("#homeInfoSidebar").hasClass("active");
-		if (opened === true && !$(event.target).hasClass("infoBox") && !mark.is(event.target)) {
-			Home.Index.closePrinterInfo();
-		}
-	});
 });
