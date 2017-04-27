@@ -4,36 +4,36 @@ using GlobalPrint.Infrastructure.FileUtility.FileExporters;
 using GlobalPrint.Infrastructure.FileUtility.FileExporters.Exportable;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Orders;
-using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Payment;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Printers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
-using GlobalPrint.ServerBusinessLogic.DI;
 using GlobalPrint.ServerBusinessLogic.Models.Business;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Orders;
-using GlobalPrint.ServerBusinessLogic.Models.Business.Payments;
 using GlobalPrint.ServerBusinessLogic.Models.Business.TransfersRegisters;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders;
-using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Orders
 {
+    /// <summary>
+    /// Модуль бизнес логики для реестров перечислений.
+    /// </summary>
     public class PrintOrderRegistersUnit : BaseUnit
     {
-        private IFileUtility _fileUtility;
+        /// <summary>
+        /// Утилита для работы с файлами.
+        /// </summary>
+        private readonly IFileUtility _fileUtility;
 
         [DebuggerStepThrough]
-        public PrintOrderRegistersUnit()
+        public PrintOrderRegistersUnit(IFileUtility fileUtility)
         {
-            this._fileUtility = IoC.Instance.Resolve<IFileUtility>();
+            _fileUtility = fileUtility;
         }
+
         
         /// <summary>
         /// Perform calculating the register of orders for the certain period and for certain user as printer's owner.
@@ -60,12 +60,39 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Orders
             };
             return documentInfo;
         }
-
-        /// <summary> Get orders by certain criteria for export.
+        /// <summary>
+        /// Perform calculating the register of transfers and export it.
         /// </summary>
-        /// <param name="ownerUserID"></param>
-        /// <param name="dateFrom"></param>
-        /// <param name="dateTo"></param>
+        /// <param name="filter">Filter for the register.</param>
+        /// <returns>Register file info.</returns>
+        public DocumentBusinessInfo TransfersRegisterExport(TransfersRegisterFilter filter)
+        {
+            Argument.NotNull(filter, "Фильтр для реестра перечислений пустой.");
+            Argument.Positive(filter.OwnerUserID, "Не задан пользователь в фильтре для реестра перечислений.");
+            Argument.Positive(filter.TransfersRegisterID, "Не задан ключ реестра в фильтре для реестра перечислений.");
+            Argument.Positive((int)filter.FileExporter, "Не задан формат выгрузки в фильтре для реестра перечислений.");
+
+            IFileExporter exporter = this._fileUtility.GetFileExporter(filter.FileExporter);
+            List<ExportableEntity> exportable = this._PrepareTransfersRegister(filter.TransfersRegisterID, filter.OwnerUserID);
+            byte[] serializedReport = exporter.ExportToMemory(exportable);
+            string extension = exporter.GetFileExtension();
+            return new DocumentBusinessInfo()
+            {
+                SerializedFile = serializedReport,
+                Extension = extension,
+                Name = $"Реестр перечислений № {filter.TransfersRegisterID}.{extension}",
+                LoadedOn = DateTime.Now,
+                UserID = filter.OwnerUserID
+            };
+        }
+
+
+        /// <summary> 
+        /// Get orders by certain criteria for export.
+        /// </summary>
+        /// <param name="ownerUserID">Идентификатор владельца принтера.</param>
+        /// <param name="dateFrom">Фильтр по дате создания заказа на печать - начало периода.</param>
+        /// <param name="dateTo">Фильтр по дате создания заказа на печать - окончание периода.</param>
         /// <returns></returns>
         private List<ExportableEntity> _PrepareFinanceRegister(int ownerUserID, DateTime? dateFrom, DateTime? dateTo)
         {
@@ -90,7 +117,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Orders
                  )
                  .ToList();
 
-                List<ExportableEntity> entities = payments.Select(e =>
+                return payments.Select(e =>
                 {
                     var properties = new List<ExportableProperty>()
                     {
@@ -105,37 +132,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Orders
                     return entity;
                 })
                 .ToList();
-
-
-                return entities;
             }
-        }
-
-        /// <summary>
-        /// Perform calculating the register of transfers and export it.
-        /// </summary>
-        /// <param name="filter">Filter for the register.</param>
-        /// <returns>Register file info.</returns>
-        public DocumentBusinessInfo TransfersRegisterExport(TransfersRegisterFilter filter)
-        {
-            Argument.NotNull(filter, "Фильтр для реестра перечислений пустой.");
-            Argument.Positive(filter.OwnerUserID, "Не задан пользователь в фильтре для реестра перечислений.");
-            Argument.Positive(filter.TransfersRegisterID, "Не задан ключ реестра в фильтре для реестра перечислений.");
-            Argument.Positive((int)filter.FileExporter, "Не задан формат выгрузки в фильтре для реестра перечислений.");
-
-            IFileExporter exporter = this._fileUtility.GetFileExporter(filter.FileExporter);
-            List<ExportableEntity> exportable = this._PrepareTransfersRegister(filter.TransfersRegisterID, filter.OwnerUserID);
-            byte[] serializedReport = exporter.ExportToMemory(exportable);
-            string extension = exporter.GetFileExtension();
-            DocumentBusinessInfo documentInfo = new DocumentBusinessInfo()
-            {
-                SerializedFile = serializedReport,
-                Extension = extension,
-                Name = $"Реестр перечислений № {filter.TransfersRegisterID}.{extension}",
-                LoadedOn = DateTime.Now,
-                UserID = filter.OwnerUserID
-            };
-            return documentInfo;
         }
 
         /// <summary>
@@ -154,9 +151,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Orders
                 IUserRepository userRepo = this.Repository<IUserRepository>(context);
                 ITransfersRegisterRepository registerRepo = this.Repository<ITransfersRegisterRepository>(context);
                 ICashRequestRepository cashRepo = this.Repository<ICashRequestRepository>(context);
-
-
-
+                
                 var cashRequests = (
                     from register in registerRepo.GetAll()
                     join cashRequest in cashRepo.GetAll() on register.ID equals cashRequest.TransfersRegisterID
@@ -167,7 +162,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Orders
                  )
                  .ToList();
 
-                List<ExportableEntity> entities = cashRequests.Select(e =>
+                return cashRequests.Select(e =>
                 {
                     var properties = new List<ExportableProperty>()
                     {
@@ -193,9 +188,6 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Orders
                     return entity;
                 })
                 .ToList();
-
-
-                return entities;
             }
         }
     }

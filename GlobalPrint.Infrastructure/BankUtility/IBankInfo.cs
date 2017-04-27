@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GlobalPrint.Infrastructure.BankUtility
+﻿namespace GlobalPrint.Infrastructure.BankUtility
 {
     /// <summary>
-    /// Bank info from web service.
+    /// Данные о банке, полученные по БИК банка.
     /// </summary>
     public interface IBankInfo
     {

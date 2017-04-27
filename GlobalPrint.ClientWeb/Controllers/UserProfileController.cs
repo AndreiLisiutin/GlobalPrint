@@ -21,27 +21,33 @@ using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb
 {
+    /// <summary>
+    /// Контроллер профиля пользователя.
+    /// </summary>
     public class UserProfileController : BaseController
     {
         /// <summary>
-        /// Unit with user business logic.
+        /// Модуль бизнес логики для пользователя.
         /// </summary>
         private IUserUnit _userUnit;
+
         /// <summary>
-        /// Unit with payment actions business logic.
+        /// Модуль бизнес логики для денежных операций пользователя.
         /// </summary>
         private PaymentActionUnit _paymentActionUnit;
+
         /// <summary>
-        /// Unit with money transfer registers business logic.
+        /// Модуль бизнес логики для реестров перечислений.
         /// </summary>
         private TransfersRegisterUnit _transfersRegisterUnit;
 
         /// <summary>
-        /// Utility to get data by bank BIC.
+        /// Утилита для получения информации о банке по БИК.
         /// </summary>
         private IBankUtility _bankUtility;
+
         /// <summary>
-        /// Errors log utility.
+        /// Утилита логирования ошибок.
         /// </summary>
         private Lazy<ILogger> _logUtility;
 
@@ -62,34 +68,34 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
-        /// Get user profile view.
+        /// Получить страницу с профилем текущего пользователя.
         /// </summary>
-        /// <returns>Profile info of current user.</returns>
+        /// <returns>Страница с профилем текущего пользователя.</returns>
         [HttpGet, Authorize]
         public ActionResult UserProfile()
         {
-            UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
-            var user = userUnit.GetByID(this.GetCurrentUserID());
+            var userID = GetCurrentUserID();
+            var user = _userUnit.GetByID(userID);
             return View(user);
         }
 
         /// <summary>
-        /// Редактирование профиля пользователя.
+        /// Редактировать профиль текущего пользователя.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Страница редактирования профиля пользователя.</returns>
         [HttpGet, Authorize]
         public ActionResult UserProfileEdit()
         {
-            UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
-            var user = userUnit.GetByID(this.GetCurrentUserID());
+            var userID = GetCurrentUserID();
+            var user = _userUnit.GetByID(userID);
             return View(user);
         }
 
         /// <summary>
-        /// Save user profile info.
+        /// Сохранить профиль пользователя.
         /// </summary>
-        /// <param name="model">Profile info of current user.</param>
-        /// <returns>Redirects to updated profile view.</returns>
+        /// <param name="model">Профиль пользователя.</param>
+        /// <returns>Страница просмотра профиля пользователя.</returns>
         [HttpPost, Authorize, MultipleButton(Name = "action", Argument = "Save")]
         public ActionResult Save(User model)
         {
@@ -97,11 +103,10 @@ namespace GlobalPrint.ClientWeb
             {
                 return View("UserProfile", model);
             }
-            UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
 
             try
             {
-                userUnit.UpdateUserProfile(model);
+                _userUnit.UpdateUserProfile(model);
                 return RedirectToAction("UserProfile");
             }
             catch (Exception ex)
@@ -112,17 +117,16 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
-        /// Fill the balance of current user.
+        /// Пополнить баланс текущего пользователя.
         /// </summary>
-        /// <param name="amountOfMoney">Money amount to fill balance.</param>
-        /// <returns>Redirects to Robokassa.</returns>
+        /// <param name="amountOfMoney">Сумма пополнения баланса.</param>
+        /// <returns>Страница пополнения баланса Робокассы.</returns>
         [HttpPost, Authorize]
         public ActionResult ExecuteFillUpBalance(string amountOfMoney)
         {
             try
             {
-                UserUnit userUnit = IoC.Instance.Resolve<UserUnit>();
-                int userID = this.GetCurrentUserID();
+                int userID = GetCurrentUserID();
                 decimal decimalUpSumm;
                 try
                 {
@@ -144,10 +148,10 @@ namespace GlobalPrint.ClientWeb
             }
         }
 
-		/// <summary>
-		/// Пополнить баланс.
-		/// </summary>
-		/// <returns></returns>
+        /// <summary>
+        /// Открыть страницу запроса суммы для пополнения баланса.
+        /// </summary>
+        /// <returns>Страница запроса суммы для пополнения баланса.</returns>
         [HttpGet, Authorize]
         public ActionResult FillUpBalance()
         {
@@ -162,8 +166,8 @@ namespace GlobalPrint.ClientWeb
         public ActionResult SendMoney()
         {
             SendModeyPackage moneyPackage = new SendModeyPackage();
-            moneyPackage.SenderUserId = this.GetCurrentUserID();
-            return this._USER_PROFILE_SEND_MONEY(moneyPackage);
+            moneyPackage.SenderUserId = GetCurrentUserID();
+            return _USER_PROFILE_SEND_MONEY(moneyPackage);
         }
 
         /// <summary>
@@ -175,29 +179,28 @@ namespace GlobalPrint.ClientWeb
         public ActionResult ExecuteSendMoney(SendModeyPackage package)
         {
             Argument.NotNull(package, "Модель для пересылки денег от одного пользователя другому пустая.");
-            Argument.Require(package.SenderUserId == this.GetCurrentUserID(), "Нельзя посылать деньги от лица других пользователей.");
-            PaymentTransaction transaction = this._paymentActionUnit.InitializeAndCommitSendMoney(package);
+            Argument.Require(package.SenderUserId == GetCurrentUserID(), "Нельзя посылать деньги от лица других пользователей.");
+            PaymentTransaction transaction = _paymentActionUnit.InitializeAndCommitSendMoney(package);
             return RedirectToAction("UserProfile");
         }
 
         /// <summary>
-        /// Get list of user's payments.
+        /// Получить список денежных операций текущего пользователя.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Страница со списком денежных операций текущего пользователя.</returns>
         [HttpGet, Authorize]
         public ActionResult MyPayments()
         {
-            PaymentActionUnit paymentUnit = new PaymentActionUnit();
-            int userID = this.GetCurrentUserID();
-            List<PaymentActionFullInfo> actions = paymentUnit.GetByUserID(userID);
-            return View(actions);
+            var userID = GetCurrentUserID();
+            var paymentActions = _paymentActionUnit.GetByUserID(userID);
+            return View(paymentActions);
         }
 
         /// <summary>
-        /// Get bank info by bic code.
+        /// Получить информацию о банке по его БИК.
         /// </summary>
-        /// <param name="bic">Bic code of bank.</param>
-        /// <returns>Bank info in JSON.</returns>
+        /// <param name="bic">БИК банка.</param>
+        /// <returns>Информация о банке в формате JSON.</returns>
         [HttpGet, Authorize]
         public ActionResult GetBankInfo(string bic)
         {
@@ -223,10 +226,11 @@ namespace GlobalPrint.ClientWeb
         [HttpGet, Authorize]
         public ActionResult UpdateDeviceID(string deviceID)
         {
+            var userID = GetCurrentUserID();
             if (User.Identity.IsAuthenticated)
             {
                 Argument.NotNullOrWhiteSpace(deviceID, "При изменении идентификатора устройства произошла ошибка. Идентификатор устройства не может быть пустым.");
-                var user = _userUnit.UpdateDeviceID(this.GetCurrentUserID(), deviceID);
+                var user = _userUnit.UpdateDeviceID(userID, deviceID);
                 return Json(user, JsonRequestBehavior.AllowGet);
             }
             else
@@ -234,6 +238,7 @@ namespace GlobalPrint.ClientWeb
                 return Json(new { }, JsonRequestBehavior.AllowGet);
             }
         }
+
         /// <summary>
         /// Get device identifier of current user.
         /// </summary>
@@ -254,16 +259,15 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
-        /// Get current user ID.
+        /// Получить идентификатор текущего пользователя.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Идентификатор текущего пользователя, если он авторизован.</returns>
         [HttpGet, Authorize]
         public ActionResult GetUserID()
         {
             if (User.Identity.IsAuthenticated)
             {
-                var userID = this.GetCurrentUserID();
-                return Json(new { userID = userID }, JsonRequestBehavior.AllowGet);
+                return Json(new { userID = GetCurrentUserID() }, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -272,10 +276,10 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
-        /// Add current user device into devices group.
+        /// Добавить идентификатор устройства (браузера) текущего пользователя в его группу устройств.
         /// </summary>
-        /// <param name="deviceID">Current device identifier.</param>
-        /// <returns></returns>
+        /// <param name="deviceID">Идентификатор устройства (браузера) текущего пользователя.</param>
+        /// <returns>Код группы устройств пользователя (совпадает с ID пользователя).</returns>
         [HttpGet, Authorize]
         public ActionResult AddDeviceToGroup(string deviceID)
         {

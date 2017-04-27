@@ -13,7 +13,6 @@ namespace GlobalPrint.ClientWeb.Models.FilesRepository
     /// </summary>
     public interface IUploadFilesRepository
     {
-
         /// <summary>
         /// Add new document.
         /// </summary>

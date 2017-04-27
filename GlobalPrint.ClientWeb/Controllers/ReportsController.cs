@@ -15,24 +15,38 @@ using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb.Controllers
 {
+    /// <summary>
+    /// Контроллер реестров.
+    /// </summary>
     public class ReportsController : BaseController
     {
-        PrintOrderRegistersUnit _printOrderRegistersUnit;
-
-        private IFileUtility _fileUtility;
-        private IMimeTypeUtility _mimeTypeUtility;
-
-        public ReportsController()
-        {
-            this._printOrderRegistersUnit = new PrintOrderRegistersUnit();
-            this._fileUtility = IoC.Instance.Resolve<IFileUtility>();
-            this._mimeTypeUtility = IoC.Instance.Resolve<IMimeTypeUtility>();
-        }
+        /// <summary>
+        /// Модуль бизнес логики для реестров перечислений.
+        /// </summary>
+        private readonly PrintOrderRegistersUnit _printOrderRegistersUnit;
 
         /// <summary>
-        /// Show page with filters for the register of orders.
+        /// Утилита для работы с файламию.
         /// </summary>
-        /// <returns></returns>
+        private readonly IFileUtility _fileUtility;
+
+        /// <summary>
+        /// Утилита для работы с mime типами файлов.
+        /// </summary>
+        private readonly IMimeTypeUtility _mimeTypeUtility;
+
+        public ReportsController(IMimeTypeUtility mimeTypeUtility, IFileUtility fileUtility)
+        {
+            _printOrderRegistersUnit = IoC.Instance.Resolve<PrintOrderRegistersUnit>();
+            _fileUtility = fileUtility;
+            _mimeTypeUtility = mimeTypeUtility;
+        }
+
+
+        /// <summary>
+        /// Показать страницу с фильтрами для реестра заказов.
+        /// </summary>
+        /// <returns>Страница с фильтрами для реестра заказов.</returns>
         [HttpGet, Authorize]
         public ActionResult PrintOrderRegister()
         {
@@ -51,9 +65,11 @@ namespace GlobalPrint.ClientWeb.Controllers
         [HttpGet, Authorize]
         public ActionResult GetPrintOrderRegister(OrderRegisterFilter filter)
         {
-            filter.OwnerUserID = this.GetCurrentUserID();
-            DocumentBusinessInfo file = this._printOrderRegistersUnit.OrderRegisterExport(filter);
-            string mimeType = this._mimeTypeUtility.ConvertExtensionToMimeType(file.Extension);
+            filter = filter ?? new OrderRegisterFilter();
+            filter.OwnerUserID = GetCurrentUserID();
+
+            DocumentBusinessInfo file = _printOrderRegistersUnit.OrderRegisterExport(filter);
+            string mimeType = _mimeTypeUtility.ConvertExtensionToMimeType(file.Extension);
             return File(file.SerializedFile, mimeType, file.Name);
         }
 
@@ -65,11 +81,14 @@ namespace GlobalPrint.ClientWeb.Controllers
         [HttpGet, Authorize]
         public ActionResult GetTransfersRegister(TransfersRegisterFilter filter)
         {
-            filter.OwnerUserID = this.GetCurrentUserID();
-            DocumentBusinessInfo file = this._printOrderRegistersUnit.TransfersRegisterExport(filter);
-            string mimeType = this._mimeTypeUtility.ConvertExtensionToMimeType(file.Extension);
+            filter = filter ?? new TransfersRegisterFilter();
+            filter.OwnerUserID = GetCurrentUserID();
+
+            DocumentBusinessInfo file = _printOrderRegistersUnit.TransfersRegisterExport(filter);
+            string mimeType = _mimeTypeUtility.ConvertExtensionToMimeType(file.Extension);
             return File(file.SerializedFile, mimeType, file.Name);
         }
+
 
         /// <summary>
         /// Create view PrintOrderRegister.
@@ -78,12 +97,12 @@ namespace GlobalPrint.ClientWeb.Controllers
         /// <returns></returns>
         private ViewResult _PRINT_ORDER_REGISTER(OrderRegisterFilter filter)
         {
-            Dictionary<FileExporterEnum, string> exportTypes = this._fileUtility.GetFileExporterTypes();
+            Dictionary<FileExporterEnum, string> exportTypes = _fileUtility.GetFileExporterTypes();
             ViewBag.ExportTypesList = exportTypes
                 .Select(e => new SelectListItem() { Text = e.Value, Value = ((int)e.Key).ToString() })
                 .ToList();
             
-            return this.View("PrintOrderRegister", filter);
+            return View("PrintOrderRegister", filter);
         }
     }
 }

@@ -13,13 +13,13 @@ namespace GlobalPrint.ClientWeb
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        private ILogger _logUtility { get; set; }
+        private ILogger _logger { get; set; }
 
         public MvcApplication()
             : base()
         {
             ILoggerFactory loggerFactory = IoC.Instance.Resolve<ILoggerFactory>();
-            _logUtility = loggerFactory.GetLogger<MvcApplication>();
+            _logger = loggerFactory.GetLogger<MvcApplication>();
         }
 
         protected void Application_Start()
@@ -38,13 +38,18 @@ namespace GlobalPrint.ClientWeb
             // run web service to check inactive users with - printer operators and send notifications to them
             new ActivityCheckerJobScheduler().Start();
 
-            _logUtility.Info("Application Start");
+            _logger.Info("Application Start");
         }
 
+        /// <summary>
+        /// При возникновении любого необработанного исключения писать сообщение в лог.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void Application_Error(object sender, EventArgs e)
         {
             Exception exception = Server.GetLastError();
-            _logUtility.Error(exception, exception.Message);
+            _logger.Error(exception, exception.Message);
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using System.Net;
 
 namespace GlobalPrint.Infrastructure.BankUtility.BicInfo
 {
@@ -17,10 +11,8 @@ namespace GlobalPrint.Infrastructure.BankUtility.BicInfo
             using (WebClient wc = new WebClient())
             {
                 wc.Encoding = System.Text.Encoding.UTF8;
-                string fullServiceString = string.Format("{0}&bik={1}", _webService, bicCode);
-                string jsonString = wc.DownloadString(fullServiceString);
-                BicInfo result = new BicInfoAdapter().GetBankInfo(jsonString);
-                return result;
+                string jsonString = wc.DownloadString($"{_webService}&bik={bicCode}");
+                return new BicInfoAdapter().GetBankInfo(jsonString);
             }
         }
     }

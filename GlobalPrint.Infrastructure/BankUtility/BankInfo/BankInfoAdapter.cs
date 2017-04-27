@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GlobalPrint.Infrastructure.BankUtility.BankInfo
 {
     /// <summary>
-    /// Realizes Adapter pattern. For converting bank web service response to BankInfo model.
+    /// Адаптер для конвертирования ответа сервиса ЦБР в класс данных о банке.
     /// </summary>
     internal class BankInfoAdapter
     {
         /// <summary>
-        /// Adapter. Converts dataset from web service to BankInfo object.
+        /// Адаптер. Конвертирует полученный из веб сервиса DataSet в класс.
         /// </summary>
-        /// <param name="ds">Dataset from web service with data about bank.</param>
-        /// <returns>Returns BankInfo object.</returns>
+        /// <param name="ds">Полученный из веб сервиса DataSet с данными о банке.</param>
+        /// <returns>Экземпляр класса BankInfo.</returns>
         public BankInfo GetBankInfo(DataSet ds)
         {
             if (ds != null && ds.Tables.Count > 0 && ds.Tables["CO"] != null)

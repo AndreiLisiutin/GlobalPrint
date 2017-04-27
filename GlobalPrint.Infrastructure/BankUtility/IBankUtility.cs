@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GlobalPrint.Infrastructure.BankUtility
+﻿namespace GlobalPrint.Infrastructure.BankUtility
 {
+    /// <summary>
+    /// Интерфейс утилиты, достающей информацию о банке по его БИК.
+    /// </summary>
     public interface IBankUtility
     {
         /// <summary>
-        /// Get bank info from BIC of bank.
+        /// Получить информацию о банке по его БИК.
         /// </summary>
-        /// <param name="bicCode">BIC code of bank.</param>
-        /// <returns>Returns object with bank info.</returns>
+        /// <param name="bicCode">БИК банка.</param>
+        /// <returns>Информация о банке.</returns>
         IBankInfo GetBankInfo(string bicCode);
     }
 }

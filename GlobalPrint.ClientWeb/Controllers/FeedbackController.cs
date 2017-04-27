@@ -20,7 +20,7 @@ namespace GlobalPrint.ClientWeb.Controllers
         private Lazy<IEmailUtility> _emailUtility { get; set; }
 
         /// <summary>
-        /// Бизнес логика пользователей.
+        /// Модуль бизнес логики пользователей.
         /// </summary>
         private IUserUnit _userUnit { get; set; }
 
@@ -32,9 +32,9 @@ namespace GlobalPrint.ClientWeb.Controllers
         }
 
         /// <summary>
-        /// Получить форму обратной связи.
+        /// Получить страницу обратной связи.
         /// </summary>
-        /// <returns>Форма обратной связи.</returns>
+        /// <returns>Страница обратной связи.</returns>
         [HttpGet, AllowAnonymous]
         public ActionResult Feedback()
         {
@@ -53,10 +53,10 @@ namespace GlobalPrint.ClientWeb.Controllers
         }
 
         /// <summary>
-        /// Отправить сообщение обратной связи .
+        /// Отправить сообщение обратной связи.
         /// </summary>
         /// <param name="model">Обратная связь пользователя.</param>
-        /// <returns>Редирект на страницу с сообщением об успешности операции.</returns>
+        /// <returns>Страница с сообщением об успешности операции.</returns>
         [HttpPost, AllowAnonymous]
         public async Task<ActionResult> Feedback(FeedbackViewModel model)
         {

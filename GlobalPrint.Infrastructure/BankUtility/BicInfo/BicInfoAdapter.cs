@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GlobalPrint.Infrastructure.BankUtility.BicInfo
 {
@@ -56,13 +52,17 @@ namespace GlobalPrint.Infrastructure.BankUtility.BicInfo
             result.DateAdd = GetDateTime(obj.dateadd);
             result.DateChange = GetDateTime(obj.datechange);
             result.DocumentsPeriod = obj.srok;
-            result.FullName = obj.name == null || string.IsNullOrWhiteSpace(obj.name.ToString()) ? null : obj.name.ToString().Replace("&quot;", "\"");
+            result.FullName = obj.name == null || string.IsNullOrWhiteSpace(obj.name.ToString()) 
+                ? null 
+                : obj.name.ToString().Replace("&quot;", "\"");
             result.Index = obj.index;
             result.Okato = obj.okato;
             result.Okpo = obj.okpo;
             result.Phone = obj.phone;
             result.RegNumber = obj.regnum;
-            result.ShortName = obj.namemini == null || string.IsNullOrWhiteSpace(obj.namemini.ToString()) ? null : obj.namemini.ToString().Replace("&quot;", "\"");
+            result.ShortName = obj.namemini == null || string.IsNullOrWhiteSpace(obj.namemini.ToString()) 
+                ? null 
+                : obj.namemini.ToString().Replace("&quot;", "\"");
 
             return result;
         }

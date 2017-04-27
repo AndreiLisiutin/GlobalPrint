@@ -11,171 +11,33 @@ using System.Web.UI;
 
 namespace GlobalPrint.ClientWeb
 {
+    /// <summary>
+    /// Контроллер аккаунта пользователя.
+    /// </summary>
     public class AccountController : BaseController
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
-        private ApplicationRoleManager _roleManager = null;
+        public ApplicationRoleManager RoleManager => HttpContext.GetOwinContext().GetUserManager<ApplicationRoleManager>();
+        public IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
+        public ApplicationSignInManager SignInManager => HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+        public ApplicationUserManager UserManager => HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
 
-        public ApplicationRoleManager RoleManager
-        {
-            get
-            {
-                return _roleManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationRoleManager>();
-            }
-        }
-        public IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set
-            {
-                _signInManager = value;
-            }
-        }
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
-
-        private Lazy<ILogger> _logUtility { get; set; }
+        /// <summary>
+        /// Утилита для логирования.
+        /// </summary>
+        private Lazy<ILogger> _logger { get; set; }
 
         public AccountController(ILoggerFactory loggerFactory)
         {
-            this._logUtility = new Lazy<ILogger>(() => loggerFactory.GetLogger<AccountController>());
+            this._logger = new Lazy<ILogger>(() => loggerFactory.GetLogger<AccountController>());
         }
 
-        #region Old (Phone, ...)
 
-        /*
-        [HttpPost]
-        [AllowAnonymous]
-        [Obsolete]
-        public async Task<ActionResult> LoginFromPhone(LoginViewModel model)
-        {
-            var smsUtility = new SmsUtility(this.GetSmsParams());
-            //model.Phone = SmsUtility.ExtractValidPhone(model.Phone);
-            //if (string.IsNullOrEmpty(model.Phone))
-            //{
-            //    return View("Login", model);
-            //}
-
-            var password = smsUtility.GetneratePassword(6);
-            //smsUtility.Send(model.Phone, "Ваш пароль: " + password);
-            this.Session["SmsLoginValidationPassword"] = password;
-
-            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Phone, FromRegistration = false });
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [Obsolete]
-        public ActionResult RegisterFromPhone(RegisterViewModel model)
-        {
-            var smsUtility = new SmsUtility(this.GetSmsParams());
-            //var phoneNumber = SmsUtility.ExtractValidPhone(model.Phone);
-            //if (phoneNumber == null)
-            //{
-            //    return View("Register", model);
-            //}
-
-            var password = smsUtility.GetneratePassword(6);
-            //smsUtility.Send(model.Phone, "Ваш пароль: " + password);
-            this.Session["SmsValidationPassword"] = password;
-
-            return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = phoneNumber, FromRegistration = true });
-        }
-
-        [Obsolete]
-        public ActionResult VerifyPhoneNumber(string phoneNumber, bool FromRegistration)
-        {
-            ViewBag.FromRegistration = FromRegistration;
-            return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        [Obsolete]
-        public async Task<ActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model, bool fromRegistration)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            string password = fromRegistration ? this.Session["SmsValidationPassword"] as string : this.Session["SmsLoginValidationPassword"] as string;
-            // Костыль пока
-            model.Code = password;
-            if (model.Code != password)
-            {
-                ModelState.AddModelError("", "Введен некорректный пароль");
-                return View(model);
-            }
-            else
-            {
-                if (fromRegistration)
-                {
-                    this.Session["SmsValidationPassword"] = null;
-                    RegisterViewModel userModel = new RegisterViewModel()
-                    {
-                        //Name = model.PhoneNumber,
-                        Email = model.PhoneNumber,
-                        Password = model.Code,
-                        ConfirmPassword = model.Code,
-                        //Phone = model.PhoneNumber
-                    };
-                    return await this.Register(userModel);
-                }
-                else
-                {
-                    this.Session["SmsLoginValidationPassword"] = null;
-
-                    var currentUser = await UserManager.FindByNameAsync(model.PhoneNumber);
-                    if (currentUser != null)
-                    {
-                        await SignInManager.SignInAsync(currentUser, isPersistent: false, rememberBrowser: false);
-
-                        string printerID = Session["Account_PrinterID"] as string;
-                        if (printerID != null)
-                        {
-                            Session["Account_PrinterID"] = null;
-                            return RedirectToAction("New", "Order", new { PrinterID = printerID });
-                        }
-
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
-            }
-
-            ModelState.AddModelError("", "Не найден пользователь");
-            return View(fromRegistration ? "Register" : "Login");
-        }
-        **/
-
-        #endregion
-
-        #region Register
+        #region Регистрация и логинка
 
         /// <summary>
-        /// Get register page
+        /// Получить страницу регистрции.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Страница регистрации.</returns>
         [HttpGet, AllowAnonymous]
         public ActionResult Register()
         {
@@ -183,10 +45,10 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
-        /// User register action.
+        /// Зарегистрировать пользователя.
         /// </summary>
-        /// <param name="model">Register view model.</param>
-        /// <returns>Redirects to page with email confirmation message (DisplayEmail).</returns>
+        /// <param name="model">Регистрационные данные пользователя.</param>
+        /// <returns>Страница подтверждения регистрации через email.</returns>
         [ValidateAntiForgeryToken, HttpPost, AllowAnonymous]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
@@ -203,7 +65,6 @@ namespace GlobalPrint.ClientWeb
                 // генерируем токен для подтверждения регистрации
                 var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
 
-                // создаем ссылку для подтверждения
                 string callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code },
                     protocol: Request.Url.Scheme);
 
@@ -234,19 +95,16 @@ namespace GlobalPrint.ClientWeb
             else
             {
                 // Add errors to ModelState, replasing "Name XXX is alerady taken." by russian error
-                this.AddErrors(result);
+                AddErrors(result);
             }
 
             return View("Register", model);
         }
-
-        #endregion
-
-        #region Login
-
+        
         /// <summary>
-        /// Login page
+        /// Получить страницу логина.
         /// </summary>
+        /// <returns>Страница логина.</returns>
         [HttpGet, AllowAnonymous, OutputCache(NoStore = true, Location = OutputCacheLocation.None)]
         public ActionResult Login()
         {
@@ -254,11 +112,11 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
-        /// Login action
+        /// Залогинить пользователя.
         /// </summary>
-        /// <param name="model">Login wiew model with user data</param>
-        /// <param name="returnUrl">Fucking shit</param>
-        /// <returns></returns>
+        /// <param name="model">Информация пользователя для логина на сайт.</param>
+        /// <param name="returnUrl">Url для перехода после логина.</param>
+        /// <returns>Переходит по returnUrl.</returns>
         [ValidateAntiForgeryToken, HttpPost, AllowAnonymous]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
@@ -302,12 +160,12 @@ namespace GlobalPrint.ClientWeb
 
         #endregion
 
-        #region Forgot Password
+        #region Восстановление пароля
 
         /// <summary>
-        /// Get ForgotPassword view
+        /// Получить страницу сброса пароля.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Страница сброса пароля.</returns>
         [HttpGet, AllowAnonymous]
         public ActionResult ForgotPassword()
         {
@@ -315,10 +173,10 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
-        /// Process forgot password action
+        /// Сброс пароля.
         /// </summary>
-        /// <param name="model">Forgot password model</param>
-        /// <returns></returns>
+        /// <param name="model">Информация о сбрасываемом пароле.</param>
+        /// <returns>Страница подтверждения сброса пароля.</returns>
         [ValidateAntiForgeryToken, HttpPost, AllowAnonymous]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
@@ -356,9 +214,9 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
-        /// Get ForgotPasswordConfirmation view
+        /// Получить страницу подтверждения сброса пароля.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Страница подтверждения сброса пароля.</returns>
         [HttpGet, AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
         {
@@ -366,10 +224,11 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
-        /// Get ResetPassword view
+        /// Получить страницу восстановления пароля.
         /// </summary>
-        /// <param name="code"></param>
-        /// <returns></returns>
+        /// <param name="code">Токен для восстановления пароля.</param>
+        /// <param name="email">Email пользователя.</param>
+        /// <returns>Страница восстановления пароля.</returns>
         [HttpGet, AllowAnonymous]
         public ActionResult ResetPassword(string code, string email)
         {
@@ -379,10 +238,10 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
-        /// Perform reset password action
+        /// Восстановить пароль пользователя.
         /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
+        /// <param name="model">Данные для восстановления пароля.</param>
+        /// <returns>Страница подтверждения восстановления пароля.</returns>
         [ValidateAntiForgeryToken, HttpPost, AllowAnonymous]
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
@@ -414,9 +273,9 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
-        /// Get ResetPasswordConfirmation view
+        /// Получить страницу подтверждения восстановления пароля.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Страница подтверждения восстановления пароля.</returns>
         [HttpGet, AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
         {
@@ -426,11 +285,11 @@ namespace GlobalPrint.ClientWeb
         #endregion
 
         /// <summary>
-        /// Confirm email
+        /// Подтвердить email.
         /// </summary>
-        /// <param name="userId">Registred user ID</param>
-        /// <param name="code">Confirmation code</param>
-        /// <returns></returns>
+        /// <param name="userId">Идентификатор пользователя.</param>
+        /// <param name="code">Токен для подтверждения email.</param>
+        /// <returns>Главная страница сайта.</returns>
         [HttpGet, AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(int userId, string code)
         {
@@ -449,10 +308,11 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
-        /// Login and print. Causes when unregistred user wants to print smth
+        /// Войти на сайт и потом распечатать файл.
+        /// Вызывается при попытке незалогиненного пользователя создать заказ на печать.
         /// </summary>
-        /// <param name="printerID">Printer ID to remember</param>
-        /// <returns></returns>
+        /// <param name="printerID">Идентификатор принтера, в котором пользователь хочет распечатать документ.</param>
+        /// <returns>Страница логина.</returns>
         [HttpGet, AllowAnonymous]
         public ActionResult LoginAndPrint(int printerID)
         {
@@ -461,9 +321,9 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
-        /// Log off from the application
+        /// Выйти из приложения.
         /// </summary>
-        /// <returns>Redirect to the Index/Home</returns>
+        /// <returns>Главная страница сайта.</returns>
         [ValidateAntiForgeryToken, HttpPost]
         public ActionResult LogOff()
         {
@@ -471,6 +331,11 @@ namespace GlobalPrint.ClientWeb
             return RedirectToAction("Index", "Home");
         }
 
+        /// <summary>
+        /// Перейти на указанную страницу.
+        /// </summary>
+        /// <param name="returnUrl">Url страницы для редиректа.</param>
+        /// <returns>Страница, на которую хотели перейти. Если не указана, редирект на главную страницу сайта.</returns>
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
@@ -488,33 +353,9 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
-        /// Dispose managed resources
+        /// Добавить ошибку в ModelState, заменив "Name XXX is alerady taken." на русскую ошибку.
         /// </summary>
-        /// <param name="disposing"></param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_userManager != null)
-                {
-                    _userManager.Dispose();
-                    _userManager = null;
-                }
-
-                if (_signInManager != null)
-                {
-                    _signInManager.Dispose();
-                    _signInManager = null;
-                }
-            }
-
-            base.Dispose(disposing);
-        }
-
-        /// <summary>
-        /// Add errors to ModelState, replasing "Name XXX is alerady taken." by russian error
-        /// </summary>
-        /// <param name="result">Result of registration process</param>
+        /// <param name="result">Результат регистрации/логина.</param>
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
@@ -529,5 +370,6 @@ namespace GlobalPrint.ClientWeb
                 }
             }
         }
+        
     }
 }
