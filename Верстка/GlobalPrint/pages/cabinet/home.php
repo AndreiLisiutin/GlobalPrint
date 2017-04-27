@@ -14,7 +14,9 @@
 				</div>
 				
 				<div class="pStatus"><img src="./img/p-check.png" alt=""> Профиль заполнен</div>
-				<div class="pEdit">Редактировать профиль</div>
+				<a href="?page=cabinet&md=edit" class="pEdit">
+					Редактировать профиль
+				</a>
 			</div>
 		</div>
 	</div>

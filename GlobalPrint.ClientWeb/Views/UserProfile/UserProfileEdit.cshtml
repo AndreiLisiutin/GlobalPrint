@@ -1,184 +1,281 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Users
-@using GlobalPrint.ClientWeb.Helpers;
 
 @model User
 @{
-    ViewBag.Title = "Профиль пользователя";
-    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+	ViewBag.Title = "Профиль пользователя";
+	Layout = "~/Views/Shared/_ProfileLayout.cshtml";
 }
 
 @section Scripts {
-    <script src="~/Resources/Scripts/GlobalPrint/UserProfile/UserProfile.js"></script>
+	<script src="~/Resources/Scripts/GlobalPrint/UserProfile/UserProfile.js"></script>
 }
 
-<div class="container">
-    @using (Html.BeginForm("Save", "UserProfile", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-    {
-        if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-danger container margin-top-20">
-                <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                @Html.ValidationSummary(false, "Ошибки: ")
-            </div>
-        }
-        <h2 class="form-signin-heading">Профиль пользователя</h2>
+<div class="col-md-8">
+	<div class="lkBox">
+		<div class="lkBoxCont">
+			<div class="defaultTitle">Редактирование профиля</div>
 
-        // Имя
-        <div class="form-group">
-            <label class="col-sm-1 control-label text-left">Имя</label>
-            <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control js-clearable", @placeholder = "Имя пользователя", @required = "true", @autofocus = true })
-            </div>
-        </div>
+			@using (Html.BeginForm("Save", "UserProfile", FormMethod.Post, new { @class = "smForm", role = "form" }))
+			{
+				<div class="row regisRow">
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<div class="avatar">
+								<div onclick="$('.getAvatar').click();" class="editAvatar">
+									<i class="fa fa-camera"></i>
+								</div>
+								<input type="file" style="display:none;" class="getAvatar">
+								<img src="~/Content/img/maximka.png" alt="" />
+							</div>
+						</div>
+					</div>
 
-        // Email
-        <div class="form-group">
-            <label class="col-sm-1 control-label text-left">Email</label>
-            <div class="col-sm-11">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @readonly = "true", @type = "email", @placeholder = "Email", @required = "true" })
-            </div>
-        </div>
+					<div class="edit">Основное</div>
 
-        // Баланс
-        @Html.HiddenFor(m => m.AmountOfMoney)
-        <div class="form-group">
-            <label class="col-sm-1 control-label text-left">Баланс</label>
-            <div class="col-sm-11">
-                <div class="input-group">
-                    @Html.TextBox("AmountOfMoneyFormatted", Model.AmountOfMoney.ToString("0.00"), new { @class = "form-control", @readonly = "true", @placeholder = "Баланс" })
-                    <span class="input-group-btn">
-                        <!-- Кнопка, вызывающее модальное окно -->
-                        <a href=@Url.Action("FillUpBalance", "UserProfile") title="Пополнить счет" class="btn btn-default">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                        </a>
-                    </span>
-                </div>
-            </div>
-        </div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="tableName">Имя:</div>
+							<label class="labelBox mgBottom">
+								@Html.TextBoxFor(m => m.UserName, new { @class = "input-def", @autofocus = true, @style = "width:100%" })
+							</label>
+						</div>
+						<div class="col-md-6">
+							<div class="tableName">E-Mail:</div>
+							<label class="labelBox mgBottom">
+								@Html.TextBoxFor(m => m.Email, new { @class = "input-def", @readonly = "true", @type = "email", @style = "width:100%" })
+							</label>
+						</div>
+					</div>
 
-        // Оферта
-        <div class="form-group">
-            <label class="col-sm-1 control-label text-left">Оферта</label>
-            <div class="col-sm-11">
-                <div class="input-group">
-                    @Html.TextBox("UserOfferTitle", $"Договор оферты пользователя № {Model.ID} от {Model.CreatedOn.ToString("dd.MM.yyyy")}", 
-                        new { @class = "form-control", @readonly = "true", @placeholder = "Договор оферты пользователя" })
-                    <span class="input-group-btn">
-                        <a href="@Url.Action("Offer", "Offer")" target="_blank" title="Открыть договор оферты" class="btn btn-default">
-                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                        </a>
-                    </span>
-                </div>
-            </div>
-        </div>
+					<div class="tableName">Оферта:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBox("UserOfferTitle", $"Договор оферты пользователя № {Model.ID} от {Model.CreatedOn.ToString("dd.MM.yyyy")}",
+							new { @class = "input-def", @readonly = "true", @style = "width:100%" })
+					</label>
 
-        @Html.HiddenFor(m => m.ID)
-        @*@Html.HiddenFor(m => m.PhoneNumber)*@
+					<div class="edit">Реквизиты</div>
 
-        //--------------------------------------------List of time---------------------------------------------
-        <br />
-        <div class="input-wrapper">
-            <h2>Реквизиты</h2>
-        </div>
+					<div class="tableName">Полное наименование:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.LegalFullName, new { @class = "input-def", @style = "width:100%" })
+					</label>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label text-left">Полное наименование</label>
-            <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.LegalFullName, new { @class = "form-control js-clearable", @placeholder = "Полное наименование" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label text-left">Краткое наименование</label>
-            <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.LegalShortName, new { @class = "form-control js-clearable", @placeholder = "Краткое наименование" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label text-left">Юридический адрес</label>
-            <div class="col-sm-10 input-wrapper">
-                <div class="input-group">
-                    @Html.TextBoxFor(m => m.LegalAddress, new { @class = "form-control js-clearable", @id = "legalAddress", @placeholder = "Юридический адрес", @title = "Автозаполнение юридического адреса" })
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" id="legalGeolocation">
-                            <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-                        </button>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label text-left">Почтовый адрес</label>
-            <div class="col-sm-10 input-wrapper">
-                <div class="input-group">
-                    @Html.TextBoxFor(m => m.PostAddress, new { @class = "form-control js-clearable", @id = "postAddress", @placeholder = "Почтовый адрес", @title = "Автозаполнение почтового адреса" })
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" id="postGeolocation">
-                            <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-                        </button>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label text-left">Телефон</label>
-            <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control js-clearable", @placeholder = "Телефон" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label text-left">ИНН</label>
-            <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.Inn, new { @class = "form-control js-clearable", @placeholder = "ИНН" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label text-left">КПП</label>
-            <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.Kpp, new { @class = "form-control js-clearable", @placeholder = "КПП" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label text-left">ОГРН</label>
-            <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.Ogrn, new { @class = "form-control js-clearable", @placeholder = "ОГРН" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label text-left">Расчетный счет</label>
-            <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.PaymentAccount, new { @class = "form-control js-clearable", @placeholder = "Расчетный счет" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label text-left">БИК банка</label>
-            <div class="col-sm-10">
-                <div class="input-group">
-                    @Html.TextBoxFor(m => m.BankBic, new { @class = "form-control js-clearable", @placeholder = "БИК банка", @id = "bankBic" })
-                    <span class="input-group-btn">
-                        <button title="Автозаполнение данных банка" class="btn btn-default" id="autoFillBankData">
-                            <span class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"></span>
-                        </button>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label text-left">Наименование банка</label>
-            <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.BankName, new { @class = "form-control js-clearable", @readonly = "true", @placeholder = "Наименование банка", @id = "bankName" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label text-left">Корр. счет банка</label>
-            <div class="col-sm-10">
-                @Html.TextBoxFor(m => m.BankCorrespondentAccount, new { @class = "form-control js-clearable", @readonly = "true", @placeholder = "Корреспондентский счет банка", @id = "bankCorrespondentAccount" })
-            </div>
-        </div>
+					<div class="tableName">Краткое наименование:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.LegalShortName, new { @class = "input-def", @style = "width:100%" })
+					</label>
 
-        <div class="form-group">
-            <div class="col-xs-10">
-                <button class="btn btn-default" type="submit" value="Save" name="action:Save">Сохранить</button>
-            </div>
-        </div>
-    }
+					<div class="tableName">Юридический адрес:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.LegalAddress, new { @class = "input-def", @style = "width:100%" })
+					</label>
+
+					<div class="tableName">Почтовый адрес:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.PostAddress, new { @class = "input-def", @style = "width:100%" })
+					</label>
+
+					<div class="tableName">Телефон:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "input-def", @style = "width:100%" })
+					</label>
+
+					<div class="tableName">ИНН:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.Inn, new { @class = "input-def", @style = "width:100%" })
+					</label>
+
+					<div class="tableName">КПП:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.Kpp, new { @class = "input-def", @style = "width:100%" })
+					</label>
+
+					<div class="tableName">ОГРН:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.Ogrn, new { @class = "input-def", @style = "width:100%" })
+					</label>
+
+					<div class="tableName">Расчетный счет:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.PaymentAccount, new { @class = "input-def", @style = "width:100%" })
+					</label>
+
+					<div class="tableName">БИК Банка:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.BankBic, new { @class = "input-def", @style = "width:100%" })
+					</label>
+
+					<div class="tableName">Наименование банка:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.BankName, new { @class = "input-def", @style = "width:100%" })
+					</label>
+
+					<div class="tableName">Корр. счет банка:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.BankCorrespondentAccount, new { @class = "input-def", @style = "width:100%" })
+					</label>
+				</div>
+
+				<div class="buttonsBox" align="center">
+					<button class="defaultButton coloredBtn" type="submit" value="Save" name="action:Save">Сохранить</button>
+					<a href=@Url.Action("UserProfile", "UserProfile") class="defaultButton coloredBtn white-text">Отмена</a>
+				</div>
+
+				
+				@*<h2 class="form-signin-heading">Профиль пользователя</h2>
+
+					<div class="form-group">
+						<label class="col-sm-1 control-label text-left">Имя</label>
+						<div class="col-sm-11">
+							@Html.TextBoxFor(m => m.UserName, new { @class = "form-control js-clearable", @placeholder = "Имя пользователя", @required = "true", @autofocus = true })
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-1 control-label text-left">Email</label>
+						<div class="col-sm-11">
+							@Html.TextBoxFor(m => m.Email, new { @class = "form-control", @readonly = "true", @type = "email", @placeholder = "Email", @required = "true" })
+						</div>
+					</div>
+
+					@Html.HiddenFor(m => m.AmountOfMoney)
+					<div class="form-group">
+						<label class="col-sm-1 control-label text-left">Баланс</label>
+						<div class="col-sm-11">
+							<div class="input-group">
+								@Html.TextBox("AmountOfMoneyFormatted", Model.AmountOfMoney.ToString("0.00"), new { @class = "form-control", @readonly = "true", @placeholder = "Баланс" })
+								<span class="input-group-btn">
+									<a href=@Url.Action("FillUpBalance", "UserProfile") title="Пополнить счет" class="btn btn-default">
+										<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+									</a>
+								</span>
+							</div>
+						</div>
+					</div>
+				
+					<div class="form-group">
+						<label class="col-sm-1 control-label text-left">Оферта</label>
+						<div class="col-sm-11">
+							<div class="input-group">
+								@Html.TextBox("UserOfferTitle", $"Договор оферты пользователя № {Model.ID} от {Model.CreatedOn.ToString("dd.MM.yyyy")}",
+							new { @class = "form-control", @readonly = "true", @placeholder = "Договор оферты пользователя" })
+								<span class="input-group-btn">
+									<a href="@Url.Action("Offer", "Offer")" target="_blank" title="Открыть договор оферты" class="btn btn-default">
+										<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+									</a>
+								</span>
+							</div>
+						</div>
+					</div>
+
+					@Html.HiddenFor(m => m.ID)
+				@Html.HiddenFor(m => m.PhoneNumber)
+					
+					<br />
+					<div class="input-wrapper">
+						<h2>Реквизиты</h2>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-left">Полное наименование</label>
+						<div class="col-sm-10">
+							@Html.TextBoxFor(m => m.LegalFullName, new { @class = "form-control js-clearable", @placeholder = "Полное наименование" })
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-left">Краткое наименование</label>
+						<div class="col-sm-10">
+							@Html.TextBoxFor(m => m.LegalShortName, new { @class = "form-control js-clearable", @placeholder = "Краткое наименование" })
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-left">Юридический адрес</label>
+						<div class="col-sm-10 input-wrapper">
+							<div class="input-group">
+								@Html.TextBoxFor(m => m.LegalAddress, new { @class = "form-control js-clearable", @id = "legalAddress", @placeholder = "Юридический адрес", @title = "Автозаполнение юридического адреса" })
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="button" id="legalGeolocation">
+										<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+									</button>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-left">Почтовый адрес</label>
+						<div class="col-sm-10 input-wrapper">
+							<div class="input-group">
+								@Html.TextBoxFor(m => m.PostAddress, new { @class = "form-control js-clearable", @id = "postAddress", @placeholder = "Почтовый адрес", @title = "Автозаполнение почтового адреса" })
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="button" id="postGeolocation">
+										<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
+									</button>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-left">Телефон</label>
+						<div class="col-sm-10">
+							@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control js-clearable", @placeholder = "Телефон" })
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-left">ИНН</label>
+						<div class="col-sm-10">
+							@Html.TextBoxFor(m => m.Inn, new { @class = "form-control js-clearable", @placeholder = "ИНН" })
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-left">КПП</label>
+						<div class="col-sm-10">
+							@Html.TextBoxFor(m => m.Kpp, new { @class = "form-control js-clearable", @placeholder = "КПП" })
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-left">ОГРН</label>
+						<div class="col-sm-10">
+							@Html.TextBoxFor(m => m.Ogrn, new { @class = "form-control js-clearable", @placeholder = "ОГРН" })
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-left">Расчетный счет</label>
+						<div class="col-sm-10">
+							@Html.TextBoxFor(m => m.PaymentAccount, new { @class = "form-control js-clearable", @placeholder = "Расчетный счет" })
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-left">БИК банка</label>
+						<div class="col-sm-10">
+							<div class="input-group">
+								@Html.TextBoxFor(m => m.BankBic, new { @class = "form-control js-clearable", @placeholder = "БИК банка", @id = "bankBic" })
+								<span class="input-group-btn">
+									<button title="Автозаполнение данных банка" class="btn btn-default" id="autoFillBankData">
+										<span class="glyphicon glyphicon-sort-by-attributes" aria-hidden="true"></span>
+									</button>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-left">Наименование банка</label>
+						<div class="col-sm-10">
+							@Html.TextBoxFor(m => m.BankName, new { @class = "form-control js-clearable", @readonly = "true", @placeholder = "Наименование банка", @id = "bankName" })
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label text-left">Корр. счет банка</label>
+						<div class="col-sm-10">
+							@Html.TextBoxFor(m => m.BankCorrespondentAccount, new { @class = "form-control js-clearable", @readonly = "true", @placeholder = "Корреспондентский счет банка", @id = "bankCorrespondentAccount" })
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-xs-10">
+							<button class="btn btn-default" type="submit" value="Save" name="action:Save">Сохранить</button>
+						</div>
+					</div>*@
+			}
+		</div>
+	</div>
 </div>
