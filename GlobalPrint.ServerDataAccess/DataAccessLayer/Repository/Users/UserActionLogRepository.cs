@@ -1,13 +1,11 @@
-﻿
-using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
+﻿using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext;
-using GlobalPrint.ServerDataAccess.DataAccessLayer.Repository;
 
 namespace GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Users
 {
     /// <summary>
-    /// Интерфейс репозитория логов для пользовательских действий
+    /// Репозиторий логов пользовательских действий.
     /// </summary>
     public class UserActionLogRepository : BaseRepository<UserActionLog>, IUserActionLogRepository
     {

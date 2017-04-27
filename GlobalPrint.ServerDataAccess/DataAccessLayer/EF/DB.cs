@@ -16,7 +16,6 @@ namespace GlobalPrint.ServerDataAccess.EF
         {
             Database.SetInitializer<DB>(new NullDatabaseInitializer<DB>());
         }
-
         [DebuggerStepThrough]
         public DB() : base("GlobalPrint")
         {
@@ -30,6 +29,7 @@ namespace GlobalPrint.ServerDataAccess.EF
         // Models/Domain/Orders
         public DbSet<PrintOrder> PrintOrders { get; set; }
         public DbSet<PrintOrderStatus> PrintOrderStatuses { get; set; }
+
         // Models/Domain/Printers
         public DbSet<Printer> Printers { get; set; }
         public DbSet<PrinterSchedule> PrintSchedules { get; set; }
@@ -38,16 +38,14 @@ namespace GlobalPrint.ServerDataAccess.EF
         public DbSet<PrintSize> PrintSizes { get; set; }
         public DbSet<PrintType> PrintTypes { get; set; }
         public DbSet<PrintSizePrintType> PrintSizePrintTypes { get; set; }
+
         // Models/Domain/Users
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserActionLog> UserActionLogs { get; set; }
         public DbSet<UserActionType> UserActionTypes { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
-        // Models/Domain/Offers
-        //public DbSet<Offer> Offers { get; set; }
-        //public DbSet<UserOffer> UserOffers { get; set; }
-        //public DbSet<OfferType> OfferTypes { get; set; }
+
         // Models/Domain/Payment
         public DbSet<PaymentAction> PaymentActions { get; set; }
         public DbSet<PaymentTransaction> PaymentTransactions { get; set; }

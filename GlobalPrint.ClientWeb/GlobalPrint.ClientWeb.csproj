@@ -806,7 +806,6 @@
     </None>
     <Content Include="Views\Order\Confirm.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <None Include="Properties\PublishProfiles\Dev Release.pubxml" />
     <Content Include="Views\Order\Complete.cshtml" />
     <Content Include="Views\UserProfile\UserProfile.cshtml" />
     <Content Include="Views\Printer\MyPrinters.cshtml" />
@@ -878,6 +877,9 @@
     <Content Include="Views\UserProfile\CashRequests.cshtml" />
     <Content Include="Views\Shared\_ProfileLayout.cshtml" />
     <Content Include="Views\UserProfile\UserProfileEdit.cshtml" />
+    <None Include="Properties\PublishProfiles\Layout Deploy Package.pubxml" />
+    <None Include="Properties\PublishProfiles\Layout.pubxml" />
+    <None Include="Properties\PublishProfiles\Release.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

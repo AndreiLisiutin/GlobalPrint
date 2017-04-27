@@ -3,7 +3,7 @@ using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.TransfersRegisters;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext;
 
-namespace GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Printers
+namespace GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.TransfersRegisters
 {
     public class TransfersRegisterRepository : BaseRepository<TransfersRegister>, ITransfersRegisterRepository
     {

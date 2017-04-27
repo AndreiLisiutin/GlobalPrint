@@ -8,34 +8,40 @@ using GlobalPrint.ServerDataAccess.DataAccessLayer.DataContext;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Orders;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Payment;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Printers;
+using GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.TransfersRegisters;
 using GlobalPrint.ServerDataAccess.DataAccessLayer.Repository.Users;
-using Ninject;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GlobalPrint.ServerDataAccess.DI
 {
+    /// <summary>
+    /// Класс для регистрации зависимостей проекта.
+    /// </summary>
     public static class ServerDataAccessIoC
     {
+        /// <summary>
+        /// Инициализировать локальный контейнер зависимостей.
+        /// </summary>
+        /// <param name="ioc">Базовый контейнер зависимостей.</param>
         public static void InitializeIoC(BaseIoC ioc)
         {
             IoC.Instance.Initialize(ioc);
             ServerDataAccessIoC.RegisterDependencies(ioc);
         }
 
+        /// <summary>
+        /// Регистрация зависимостей проекта.
+        /// </summary>
+        /// <param name="ioc">Контейнер зависимостей.</param>
         private static void RegisterDependencies(BaseIoC ioc)
         {
-            //DataContext
+            // DataContext
             ioc.Kernel.Bind<IDataContextFactory>().To<DbConnectionContextFactory>().InTransientScope();
             
-            //Repository/Orders
+            // Repository/Orders
             ioc.Kernel.Bind<IPrintOrderRepository>().To<PrintOrderRepository>().InTransientScope();
             ioc.Kernel.Bind<IPrintOrderStatusRepository>().To<PrintOrderStatusRepository>().InTransientScope();
 
-            //Repository/Printers
+            // Repository/Printers
             ioc.Kernel.Bind<IPrinterRepository>().To<PrinterRepository>().InTransientScope();
             ioc.Kernel.Bind<IPrinterScheduleRepository>().To<PrinterScheduleRepository>().InTransientScope();
             ioc.Kernel.Bind<IPrinterServiceRepository>().To<PrinterServiceRepository>().InTransientScope();
@@ -44,18 +50,13 @@ namespace GlobalPrint.ServerDataAccess.DI
             ioc.Kernel.Bind<IPrintSizeRepository>().To<PrintSizeRepository>().InTransientScope();
             ioc.Kernel.Bind<IPrintTypeRepository>().To<PrintTypeRepository>().InTransientScope();
 
-            //Repository/Users
+            // Repository/Users
             ioc.Kernel.Bind<IRoleRepository>().To<RoleRepository>().InTransientScope();
             ioc.Kernel.Bind<IUserActionLogRepository>().To<UserActionLogRepository>().InTransientScope();
             ioc.Kernel.Bind<IUserActionTypeRepository>().To<UserActionTypeRepository>().InTransientScope();
             ioc.Kernel.Bind<IUserRepository>().To<UserRepository>().InTransientScope();
             ioc.Kernel.Bind<IUserRoleRepository>().To<UserRoleRepository>().InTransientScope();
-
-            // Repository/Offers
-            //ioc.Kernel.Bind<IOfferRepository>().To<OfferRepository>().InTransientScope();
-            //ioc.Kernel.Bind<IUserOfferRepository>().To<UserOfferRepository>().InTransientScope();
-            //ioc.Kernel.Bind<IOfferTypeRepository>().To<OfferTypeRepository>().InTransientScope();
-
+            
             // Repository/Payment
             ioc.Kernel.Bind<IPaymentActionRepository>().To<PaymentActionRepository>().InTransientScope();
             ioc.Kernel.Bind<IPaymentActionTypeRepository>().To<PaymentActionTypeRepository>().InTransientScope();
@@ -63,10 +64,10 @@ namespace GlobalPrint.ServerDataAccess.DI
             ioc.Kernel.Bind<IPaymentTransactionRepository>().To<PaymentTransactionRepository>().InTransientScope();
             ioc.Kernel.Bind<IPaymentTransactionStatusRepository>().To<PaymentTransactionStatusRepository>().InTransientScope();
 
+            // Repository/TransfersRegisters
             ioc.Kernel.Bind<ICashRequestRepository>().To<CashRequestRepository>().InTransientScope();
             ioc.Kernel.Bind<ICashRequestStatusRepository>().To<CashRequestStatusRepository>().InTransientScope();
             ioc.Kernel.Bind<ITransfersRegisterRepository>().To<TransfersRegisterRepository>().InTransientScope();
-
         }
     }
 }

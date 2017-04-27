@@ -25,15 +25,10 @@ namespace GlobalPrint.ServerBusinessLogic.DI
 
         private static void RegisterDependencies(BaseIoC ioc)
         {
-            // Units/Offer
-            //ioc.Kernel.Bind<IUserOfferUnit>().To<UserOfferUnit>().InTransientScope();
-            //ioc.Kernel.Bind<IOfferUnit>().To<OfferUnit>().InTransientScope();
-
             // Units/User
             ioc.Kernel.Bind<IUserUnit>().To<UserUnit>().InTransientScope();
             ioc.Kernel.Bind<IRoleUnit>().To<RoleUnit>().InTransientScope();
             ioc.Kernel.Bind<IUserRoleUnit>().To<UserRoleUnit>().InTransientScope();
-
         }
     }
 }
