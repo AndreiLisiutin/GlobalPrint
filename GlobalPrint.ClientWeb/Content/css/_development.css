@@ -1,43 +1,78 @@
 ﻿.white-text {
-	text-decoration: none !important;
-	color: white !important;
-	display: inline-block;
-	text-align: center;
+    text-decoration: none !important;
+    color: white !important;
+    display: inline-block;
+    text-align: center;
 }
 
 .inline-block {
-	display: inline-block;
+    display: inline-block;
 }
 
 .top,
 .infoBox {
-	z-index: 100;
+    z-index: 100;
 }
 
 .modal-dialog {
-	z-index: 200;
+    z-index: 200;
 }
 
 .admin-button {
-	background: #a9143d !important;
+    background: #a9143d !important;
 }
 
-	.admin-button:hover {
-		background: #c11746 !important;
-	}
+    .admin-button:hover {
+        background: #c11746 !important;
+    }
 
 @media screen and (max-width:600px) {
-	.white-text {
-		margin-bottom: 10px;
-		width: 100%;
-	}
+    .white-text {
+        margin-bottom: 10px;
+        width: 100%;
+    }
 
-	/*Кнопки в информации о принтере на главной форме*/
-	.printer-info-btn {
-		max-width: 200px;
-	}
+    /*Кнопки в информации о принтере на главной форме*/
+    .printer-info-btn {
+        max-width: 200px;
+    }
 }
 
 .relative {
-	position: relative;
+    position: relative;
+}
+
+.login-remember-me {
+    margin-top: 13px;
+    color: #667584;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.confirmation-form {
+    width: 580px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,.3);
+    margin: auto;
+    padding: 25px 30px 40px;
+}
+
+.confirmation-header {
+    font-size: 30px;
+    padding-bottom: 20px;
+    color: #667584;
+}
+
+.confirmation-text {
+    font-size: 16px;
+    color: #667584;
+}
+
+    .confirmation-text a {
+        color: #ec416f;
+    }
+
+
+.feedback-message {
+    height: 250px;
 }

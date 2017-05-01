@@ -1,11 +1,4 @@
 ﻿using GlobalPrint.Infrastructure.DI;
-using Ninject;
-using Ninject.Parameters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GlobalPrint.ServerBusinessLogic.DI
 {

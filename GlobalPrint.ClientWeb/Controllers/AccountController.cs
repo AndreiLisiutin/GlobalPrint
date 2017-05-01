@@ -1,5 +1,7 @@
 ﻿using GlobalPrint.ClientWeb.App_Start;
+using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.Infrastructure.LogUtility;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -24,11 +26,17 @@ namespace GlobalPrint.ClientWeb
         /// <summary>
         /// Утилита для логирования.
         /// </summary>
-        private Lazy<ILogger> _logger { get; set; }
+        private readonly Lazy<ILogger> _logger;
 
-        public AccountController(ILoggerFactory loggerFactory)
+        /// <summary>
+        /// Модуль бизнес логики пользователей.
+        /// </summary>
+        private readonly IUserUnit _userUnit;
+
+        public AccountController(ILoggerFactory loggerFactory, IUserUnit userUnit)
         {
-            this._logger = new Lazy<ILogger>(() => loggerFactory.GetLogger<AccountController>());
+            _logger = new Lazy<ILogger>(() => loggerFactory.GetLogger<AccountController>());
+            _userUnit = userUnit;
         }
 
 
@@ -57,7 +65,10 @@ namespace GlobalPrint.ClientWeb
             {
                 return View("Register", model);
             }
-            
+
+            var registeredUser = _userUnit.GetByFilter(e => e.Email == model.Email);
+            Argument.Require(registeredUser == null, "Пользователь с таким email уже зарегистрирован в системе.");
+
             var user = new ApplicationUser(model.UserName ?? model.Email, model.Email);
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
@@ -77,7 +88,7 @@ namespace GlobalPrint.ClientWeb
                 #region Old version of registration process, without email confirmation
                 if (false)
                 {
-                    var currentUser = await this.UserManager.FindByNameAsync(model.Email);
+                    var currentUser = await UserManager.FindByNameAsync(model.Email);
                     await SignInManager.SignInAsync(currentUser, isPersistent: false, rememberBrowser: false);
 
                     // In case of Print->Register
@@ -100,7 +111,7 @@ namespace GlobalPrint.ClientWeb
 
             return View("Register", model);
         }
-        
+
         /// <summary>
         /// Получить страницу логина.
         /// </summary>
@@ -201,7 +212,7 @@ namespace GlobalPrint.ClientWeb
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code, email = model.Email }, 
+                    var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code, email = model.Email },
                         protocol: Request.Url.Scheme);
 
                     await UserManager.SendEmailAsync(user.Id, "Сброс пароля", "Для сброса пароля, перейдите по <a href=\"" + callbackUrl + "\">ссылке</a>");
@@ -327,7 +338,7 @@ namespace GlobalPrint.ClientWeb
         [ValidateAntiForgeryToken, HttpPost]
         public ActionResult LogOff()
         {
-            this.AuthenticationManager.SignOut();
+            AuthenticationManager.SignOut();
             return RedirectToAction("Index", "Home");
         }
 
@@ -370,6 +381,6 @@ namespace GlobalPrint.ClientWeb
                 }
             }
         }
-        
+
     }
 }

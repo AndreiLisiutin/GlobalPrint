@@ -778,7 +778,6 @@
     <Compile Include="Models\PrinterController\Printer_MyPrinters.cs" />
     <Compile Include="Models\PushNotifications\PushNotificationHub.cs" />
     <Compile Include="Models\PushNotifications\UserIdProvider.cs" />
-    <Compile Include="Models\SimpleMessage.cs" />
     <Compile Include="Models\Auth\AccountViewModels.cs" />
     <Compile Include="Models\Auth\IdentityModels.cs" />
     <Compile Include="Models\Auth\IdentityUser.cs" />
@@ -812,10 +811,8 @@
     <Content Include="Views\Order\MyOrders.cshtml" />
     <Content Include="Views\UserRecievedPrintOrderList\UserRecievedPrintOrderList.cshtml" />
     <Content Include="Views\UserProfile\FillUpBalance.cshtml" />
-    <Content Include="Views\Account\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\UserRecievedPrintOrderList\ConfirmPrintOrder.cshtml" />
     <Content Include="Views\Printer\Edit.cshtml" />
-    <Content Include="Views\Account\__RegisterViaPhone.cshtml" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
@@ -833,7 +830,7 @@
     <Content Include="Resources\Libraries\clockpicker\package.json" />
     <Content Include="Resources\Libraries\clockpicker\README.md" />
     <Content Include="Views\About\About.cshtml" />
-    <Content Include="Views\Shared\SimpleMessage.cshtml" />
+    <Content Include="Views\Feedback\FeedbackCompleted.cshtml" />
     <Content Include="Views\Feedback\Feedback.cshtml" />
     <Content Include="Views\UserPrintInfo\_UserRecievedPrintOrder.cshtml" />
     <Content Include="Views\Offer\Offer.cshtml" />

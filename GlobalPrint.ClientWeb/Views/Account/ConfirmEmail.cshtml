@@ -2,18 +2,18 @@
 @using GlobalPrint.ClientWeb.Helpers
 
 @{
-    Layout = "~/Views/Shared/_BaseLayout.cshtml";
-    ViewBag.Title = "Подтверждение email";
+    ViewBag.Title = "Регистрация";
+    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
 
-@section Stylesheets {
-    <link href="~/Resources/Stylesheets/shared/display-form.css" rel="stylesheet" />
-}
+<div class="container verticalWrap">
+    <div class="confirmation-form">
 
-<div class="display-form-content">
-    <h2>@ViewBag.Title.</h2>
-    <p>
-        Спасибо за подтверждение вашего email. Пожалуйста, перейдите по
-        @Html.ActionLink("ссылке", "Login", "Account", null, new { id = "loginLink" })
-    </p>
+        <div class="confirmation-header">Подтверждение email</div>
+        <div class="confirmation-text">
+            Спасибо за подтверждение вашего email. Пожалуйста, перейдите по
+            @Html.ActionLink("ссылке", "Login", "Account", null, new { id = "loginLink" }), чтобы войти на сайт.
+        </div>
+
+    </div>
 </div>

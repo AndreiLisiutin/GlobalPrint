@@ -402,6 +402,8 @@ body {
 	background:transparent;
 	cursor:pointer;
 	transition:.2s;
+    text-decoration: none !important;
+    display: inline-block;
 }
 
 .abBtn:hover {

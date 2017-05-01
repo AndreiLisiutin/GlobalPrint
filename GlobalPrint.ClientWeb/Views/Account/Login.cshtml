@@ -5,51 +5,53 @@
 @model LoginViewModel
 @{
     ViewBag.Title = LoginViewResource.LoginFormTabTitle;
-    Layout = "~/Views/Shared/_BaseLayout.cshtml";
-}
-@section Stylesheets {
-    <link rel="stylesheet" href="~/Resources/Stylesheets/shared/edit-form.css">
+    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
 
-<div class="container edit-form">
-    <h2 class="edit-form-heading">@LoginViewResource.LoginFormHeader</h2>
+<div class="container verticalWrap">
+    <div class="loginForm">
+        <div class="loginTitle">
+            Войдите с помощью E-mail
+        </div>
+        <div class="or">
+            @LoginViewResource.ForgotPasswordString @Html.ActionLink(LoginViewResource.ForgotPasswordLabel,
+                                               "ForgotPassword", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, new { })
+        </div>
 
-    <div>
         @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
         {
             @Html.AntiForgeryToken()
 
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @type = "email",
-                                @placeholder = @Html.DisplayNameFor(m => m.Email), @required = "true", @autofocus = true })
-            @Html.TextBoxFor(m => m.Password, new { @class = "form-control", @type = "password",
-                                @placeholder = @Html.DisplayNameFor(m => m.Password), @required = "true" })
-
-            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-            @Html.ValidationMessage("", new { @class = "text-danger" });
-            
-            <div class="checkbox">
-                <label>
-                    @Html.CheckBoxFor(m => m.RememberMe) @LoginViewResource.RememberMeLabel
-                </label>
+            <div class="loginFormLabel">
+                <p>E-Mail</p>
+                @Html.TextBoxFor(m => m.Email, new { @class = "loginFormInput", @type = "email", @required = "true", @autofocus = true })
             </div>
 
-            <button class="btn btn-default btn-primary btn-block" type="submit">@LoginViewResource.LoginButtonLabel</button>
+            <div class="loginFormLabel">
+                <p>Пароль</p>
+                @Html.TextBoxFor(m => m.Password, new { @class = "loginFormInput", @type = "password", @required = "true" })
+            </div>
+
+            <div class="row" style="margin-top:15px;">
+                <div class="col-md-1 col-xs-2" style="text-align:center">
+                    @Html.CheckBoxFor(m => m.RememberMe, new { @class = "setClick" })
+                    <div class="loginCheckBox" onclick="$(this).toggleClass('checked'); $('.setClick').click();">
+                        <div class="checked"></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-10">
+                    <div class="row">
+                        <div class="login-remember-me">
+                            @LoginViewResource.RememberMeLabel
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5" align="right">
+                    <button class="goReg" type="submit">@LoginViewResource.LoginButtonLabel</button>
+                </div>
+            </div>
         }
-    </div>
 
-    <div class="edit-form-link">
-        @LoginViewResource.RegisterLinkString @Html.ActionLink(LoginViewResource.RegisterLinkLabel, 
-                                             "Register", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, new { })
     </div>
-
-    <div class="edit-form-link">
-        @LoginViewResource.ForgotPasswordString @Html.ActionLink(LoginViewResource.ForgotPasswordLabel, 
-                                               "ForgotPassword", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, new { })
-    </div>
-
-    <div class="edit-form-link">
-        @Html.ActionLink(Resource.GlobalPrintWebSiteLink, "Index", "Home")
-    </div>
-
 </div>

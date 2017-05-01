@@ -18,9 +18,7 @@
                             метров по всему миру!
 
                             <div>
-                                <a href="?page=register">
-                                    <button class="abBtn">Попробовать бесплатно</button>
-                                </a>
+                                @Html.ActionLink("Попробовать бесплатно", "Index", "Home", new { }, new { @class = "abBtn" })
                             </div>
                         </div>
                     </div>
@@ -255,7 +253,7 @@
         <div class="col-md-5" align="center">
             <ul class="ftMenu">
                 <li>
-                    @Html.ActionLink("О проекте", "About", "About")
+                    @Html.ActionLink("Обратная связь", "Feedback", "Feedback")
                 </li>
             </ul>
         </div>

@@ -83,14 +83,8 @@ namespace GlobalPrint.ClientWeb.Controllers
                 $"{model.Message} {n}{n}" +
                 "Спасибо Вам за отзыв о нашем сервисе. Нам очень важно ваше мнение, ведь Вы помогаете нам стать еще лучше!";
             await _emailUtility.Value.SendAsync(userMail, "Global Print - сообщение обратной связи", userMessageBody);
-
-            SimpleMessage simpleMessage = new SimpleMessage()
-            {
-                Title = "Обратная связь",
-                Message = "Ваше сообщение успешно отправлено." +
-                    "Спасибо Вам за отзыв о нашем сервисе. Нам очень важно ваше мнение, ведь Вы помогаете нам стать еще лучше!"
-            };
-            return View("SimpleMessage", simpleMessage);
+            
+            return View("FeedbackCompleted");
         }
     }
 }
