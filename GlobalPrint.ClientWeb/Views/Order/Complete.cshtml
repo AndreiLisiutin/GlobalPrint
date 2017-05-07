@@ -1,47 +1,49 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders
 @using GlobalPrint.ClientWeb.Helpers
 @using System.Globalization
-
 @model PrintOrder
 @{
-    ViewBag.Title = "Ваш заказ отправлен в печать";
-    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+    ViewBag.Title = "Заказ отправлен";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
 }
 
-<div class="container">
+<div class="col-md-8">
+    <div class="lkBox">
+        <div class="lkBoxCont">
+            <div class="defaultTitle">Ваш заказ отправлен в печать</div>
 
-    @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { @class = "form-horizontal" }))
-    {
-        <h2>Ваш заказ отправлен в печать</h2>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Номер заказа</label>
-            <div class="col-sm-9">
-                @Html.TextBoxFor(e => e.ID, new { @class = "form-control", @readonly = "readonly" })
-            </div>
+            @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { role = "form" }))
+            {
+                <div class="row regisRow">
+
+                    <div class="tableName">Номер заказа:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.TextBoxFor(m => m.ID, new { @class = "input-def", @style = "width:100%", @readonly = "readonly" })
+                    </label>
+
+                    <div class="tableName">Дата и время заказа:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.TextBoxFor(m => m.OrderedOn, String.Format("{{0: {0} }}", CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern),
+                            new { @class = "input-def", @style = "width:100%", @readonly = "readonly" })
+                    </label>
+
+                    <div class="tableName">Количество страниц:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.TextBoxFor(m => m.PagesCount, new { @class = "input-def", @style = "width:100%", @readonly = "readonly" })
+                    </label>
+
+                    <div class="tableName">Стоимость:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.TextBoxFor(m => m.PriceInCurrency, new { @class = "input-def", @style = "width:100%", @readonly = "readonly" })
+                    </label>
+
+                    <div class="buttonsBox" align="center">
+                        <a href=@Url.Action("MyOrders", "Order") class="defaultButton coloredBtn white-text">Мои заказы</a>
+                        <a href=@Url.Action("Index", "Home") class="defaultButton coloredBtn white-text">На главную</a>
+                    </div>
+                </div>
+            }
+
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Дата и время заказа</label>
-            <div class="col-sm-9">
-                @Html.TextBoxFor(e => e.OrderedOn, String.Format("{{0: {0} }}", CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern), new { @class = "form-control", @readonly = "readonly" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Количество страниц</label>
-            <div class="col-sm-9">
-                @Html.TextBoxFor(e => e.PagesCount, new { @class = "form-control", @readonly = "readonly" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Стоимость</label>
-            <div class="col-sm-9">
-                @Html.TextBoxFor(e => e.PriceInCurrency, new { @class = "form-control", @readonly = "readonly" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-10">
-                @Html.ActionLink("Мои заказы", "MyOrders", "Order", new { }, new { @class = "btn btn-default" })
-                @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
-            </div>
-        </div>
-    }
+    </div>
 </div>
