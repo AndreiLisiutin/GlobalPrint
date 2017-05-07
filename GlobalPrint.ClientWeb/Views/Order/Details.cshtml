@@ -1,67 +1,60 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.Models.Business.Orders
 @model PrintOrderInfo
 @{
-    ViewBag.Title = "Детали заказа № " + Model.PrintOrder.ID;
-    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+    ViewBag.Title = "Детали заказа";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
 }
 
-<div class="container">
+<div class="col-md-8">
+    <div class="lkBox">
+        <div class="lkBoxCont">
+            <div class="defaultTitle">Детали заказа № @Model.PrintOrder.ID</div>
 
-    @using (Html.BeginForm("Rate", "Order", FormMethod.Post, new { @class = "form-horizontal" }))
-    {
-        if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-danger container margin-top-20">
-                <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                @Html.ValidationSummary(false, "Ошибки: ")
-            </div>
-        }
-        <h2>Информация о заказе печати печати № @Model.PrintOrder.ID</h2>
-        <div class="hidden">
-            @Html.Hidden("PrintOrderID", Model.PrintOrder.ID)
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Принтер</label>
-            <div class="col-sm-9">
-                @Html.TextBox("Name", Model.Printer.Name, new { @class = "form-control", @readonly = "readonly" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Название документа</label>
-            <div class="col-sm-9">
-                @Html.TextBox("DocumentName", Model.PrintOrder.DocumentName, new { @class = "form-control", @readonly = "readonly" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Стоимость заказа</label>
-            <div class="col-sm-9">
-                @Html.TextBox("PriceInCurrency", Model.PrintOrder.PriceInCurrency, new { @class = "form-control", @readonly = "readonly" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-10">
-                @Html.ActionLink("На главную", "Index", "Home", new { }, new { @class = "btn btn-default" })
-            </div>
-        </div>
+            @using (Html.BeginForm("Rate", "Order", FormMethod.Post, new { role = "form" }))
+            {
+                <div class="row regisRow">
 
-        <hr />
-        <h2>Оценить заказ</h2>
-        <div class="form-group">
-            <div class="col-sm-9">
-                @Html.Hidden("Rating", Model.PrintOrder.Rating, new { @class = "rating", @data_filled = "fa fa-star fa-3x", @data_empty = "fa fa-star-o fa-3x", @data_stop = "5" })
-            </div>
+                    <div class="edit">Информация о заказе печати печати</div>
+
+                    <div class="hidden">
+                        @Html.Hidden("PrintOrderID", Model.PrintOrder.ID)
+                    </div>
+
+                    <div class="tableName">Принтер:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.TextBox("Name", Model.Printer.Name, new { @class = "input-def", @style = "width:100%", @readonly = "readonly" })
+                    </label>
+
+                    <div class="tableName">Название документа:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.TextBox("DocumentName", Model.PrintOrder.DocumentName, new { @class = "input-def", @style = "width:100%", @readonly = "readonly" })
+                    </label>
+
+                    <div class="tableName">Стоимость заказа:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.TextBox("PriceInCurrency", Model.PrintOrder.PriceInCurrency, new { @class = "input-def", @style = "width:100%", @readonly = "readonly" })
+                        <span class="dLabel">руб.</span>
+                    </label>
+
+                    <div class="edit">Оценить заказ</div>
+
+                    <label class="labelBox mgBottom">
+                        @Html.Hidden("Rating", Model.PrintOrder.Rating, new { @class = "input-def rating", @style = "width:100%", @data_filled = "fa fa-star fa-3x", @data_empty = "fa fa-star-o fa-3x", @data_stop = "5" })
+                    </label>
+
+                    <div class="tableName">Отзыв о заказе:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.TextBox("Comment", Model.PrintOrder.ClientRecall, new { @class = "input-def", @style = "width:100%", @rows = 5 })
+                    </label>
+                    
+                </div>
+
+                <div class="buttonsBox" align="center">
+                    <button class="defaultButton coloredBtn" type="submit" value="Save" name="action:Save">Оценить</button>
+                    <a href=@Url.Action("MyOrders", "Order") class="defaultButton coloredBtn white-text">Назад</a>
+                </div>
+            }
+
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Отзыв о заказе</label>
-            <div class="col-sm-9">
-                @Html.TextArea("Comment", Model.PrintOrder.ClientRecall, new { @class = "form-control", @rows = 5 })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-10">
-                <input type="submit" value="Оценить" class="btn btn-default" />
-                @Html.ActionLink("Назад", "MyOrders", "Order", new { }, new { @class = "btn btn-default" })
-            </div>
-        </div>
-    }
+    </div>
 </div>
