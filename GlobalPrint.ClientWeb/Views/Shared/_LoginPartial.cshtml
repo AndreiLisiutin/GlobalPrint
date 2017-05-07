@@ -16,7 +16,7 @@
                         <img src="~/Content/img/logo.png" alt="" class="headLogo" />
                     </a>
                     <div class="menuLine">
-                        @Html.ActionLink("О проекте", "About", "About", null, new { @class = "aboutLink" })
+                       @Html.ActionLink("О проекте", "About", "About", null, new { @class = "aboutLink" })
                     </div>
                 </div>
                 <div class="col-md-2" align="center">
@@ -47,9 +47,15 @@ else
 		    <div class="col-md-6">
 			    <div class="menuLine profLine">
 				    <div class="topProfile">
-                        @Html.ActionLink("Зарегистрироваться", "Register", "Account", null, new { @class = "whBtn defTop", id = "registerLink" })
-                        @Html.ActionLink("Войти", "Login", "Account", null, new { @class = "whBtn defTop", id = "loginLink" })
-                        @Html.ActionLink("О проекте", "About", "About", null, new { @class = "whBtn defTop" })
+                        <a href=@Url.Action("Register", "Account") id = "registerLink">
+                            <button class="whBtn defTop">Зарегистрироваться</button>
+                        </a>
+                        <a href=@Url.Action("Login", "Account") id = "loginLink">
+                            <button class="whBtn defTop">Войти</button>
+                        </a>
+                        <a href=@Url.Action("About", "About")>
+                            <button class="whBtn defTop">О проекте</button>
+                        </a>
 				    </div>
 			    </div>
 		    </div>

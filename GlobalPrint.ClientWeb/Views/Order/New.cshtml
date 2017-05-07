@@ -4,106 +4,100 @@
 @model NewOrder
 @{
     ViewBag.Title = "Заказ на печать";
-    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+
     Printer Printer = (Printer)ViewBag.Printer;
     DocumentBusinessInfo Document = (DocumentBusinessInfo)ViewBag.Document;
 }
 @section Scripts{
     <script src="~/Resources/Scripts/GlobalPrint/Order/New.js"></script>
 }
-<div class="container">
-    @using (Html.BeginForm("New", "Order", FormMethod.Post, new { @class = "form-horizontal", @id = "newOrderForm" }))
-    {
-        if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-danger container margin-top-20">
-                <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                @Html.ValidationSummary(false, "Ошибки: ")
-            </div>
-        }
-        <h2>Информация для печати</h2>
-        @Html.HiddenFor(m => m.PrinterID, new { @id = "PrinterID" })
-        @Html.HiddenFor(m => m.UserID, new { @id = "UserID" })
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Название принтера</label>
-            <div class="col-sm-9 input-wrapper">
-                @Html.TextBoxFor(e => Printer.Name, new { @class = "form-control", @readonly = "readonly" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Расположение принтера</label>
-            <div class="col-sm-9 input-wrapper">
-                @Html.TextBoxFor(e => Printer.Location, new { @class = "form-control", @readonly = "readonly" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Файл для печати</label>
-            <div class="col-sm-9 input-wrapper">
-                <div class="input-group">
-                    <label class="input-group-btn">
-                        <span class="btn btn-default">
-                            <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
-                            <input type="file" id="fileupload" style="display: none;">
+
+<div class="col-md-8">
+    <div class="lkBox">
+        <div class="lkBoxCont">
+            <div class="defaultTitle">Заказ на печать</div>
+
+            @using (Html.BeginForm("New", "Order", FormMethod.Post, new { @id = "newOrderForm" }))
+            {
+                <div class="row regisRow">
+
+                    @Html.HiddenFor(m => m.PrinterID, new { @id = "PrinterID" })
+                    @Html.HiddenFor(m => m.UserID, new { @id = "UserID" })
+
+                    <div class="tableName">Название принтера:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.TextBoxFor(m => Printer.Name, new { @class = "input-def", @style = "width:100%", @readonly = "readonly" })
+                    </label>
+
+                    <div class="tableName">Расположение принтера:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.TextBoxFor(m => Printer.Location, new { @class = "input-def", @style = "width:100%", @readonly = "readonly" })
+                    </label>
+
+                    <div class="tableName">Файл для печати:</div>
+                    <label class="labelBox mgBottom">
+                        <span class="input-group">
+                            <label class="input-group-btn">
+                                <span class="btn btn-default">
+                                    <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+                                    <input type="file" id="fileupload" style="display: none;">
+                                </span>
+                            </label>
+                            <input type="text" class="form-control" readonly>
+                            <span id="progress" class="input-group-addon progress progressbar-wrapper">
+                                <span id="errorText" class="text-danger"></span>
+                                <span class="progress-bar progress-bar-info progressbar-bar">
+                                    <span id="progressPercentText" class="progressbarpercent progressbar-text"></span>
+                                </span>
+                            </span>
+                            @Html.HiddenFor(m => m.FileToPrint, new { @id = "fileId", @required = "required" })
+                            @Html.Hidden("_Document", Document?.Name, new { @id = "fileName" })
                         </span>
                     </label>
-                    <input type="text" class="form-control" readonly>
-                    <div id="progress" class="input-group-addon progress progressbar-wrapper">
-                        <span id="errorText" class="text-danger"></span>
-                        <div class="progress-bar progress-bar-info progressbar-bar">
-                            <span id="progressPercentText" class="progressbarpercent progressbar-text"></span>
-                        </div>
-                    </div>
-                    @Html.HiddenFor(m => m.FileToPrint, new { @id = "fileId", @required = "required" })
-                    @Html.Hidden("_Document", Document?.Name, new { @id = "fileName" })
+
+                    <div class="tableName">Секретный код:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.TextBoxFor(m => m.SecretCode, new { @class = "input-def", @style = "width:100%", @required = "required" })
+                    </label>
+
+                    <div class="tableName">Тип:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.DropDownListFor(m => m.PrintTypeID, new List<SelectListItem>(), new { @id = "printType", @class = "input-def", @style = "width:100%", @required = "required" })
+                    </label>
+
+                    <div class="tableName">Формат:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.DropDownListFor(m => m.PrintSizeID, new List<SelectListItem>(), new { @id = "printSize", @class = "input-def", @style = "width:100%", @required = "required" })
+                    </label>
+
+                    <div class="tableName">Цветная печать:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.CheckBoxFor(m => m.IsColored, new { @id = "IsColored", @class = "js-switch-small" })
+                    </label>
+
+                    <div class="tableName">Двусторонняя печать:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.CheckBoxFor(m => m.IsTwoSided, new { @id = "IsTwoSided", @class = "js-switch-small" })
+                    </label>
+
+                    <div class="tableName">Количество копий:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.TextBoxFor(m => m.CopiesCount, new { @type = "number", @class = "input-def", @style = "width:100%", @required = "required" })
+                    </label>
+
+                    <div class="tableName">Комментарий:</div>
+                    <label class="labelBox mgBottom">
+                        @Html.TextBoxFor(m => m.Comment, new { @class = "input-def", @style = "width:100%" })
+                    </label>
+
                 </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Секретный код</label>
-            <div class="col-sm-9 input-wrapper">
-                @Html.TextBoxFor(m => m.SecretCode, new { @class = "form-control", @required = "required" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Тип</label>
-            <div class="col-sm-9 input-wrapper">
-                @Html.DropDownListFor(m => m.PrintTypeID, new List<SelectListItem>(), new { @id = "printType", @class = "form-control", @required = "required" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Формат</label>
-            <div class="col-sm-9 input-wrapper">
-                @Html.DropDownListFor(m => m.PrintSizeID, new List<SelectListItem>(), new { @id = "printSize", @class = "form-control", @required = "required" })
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label text-left">Цветная печать</label>
-            <div class="col-sm-9 input-wrapper">
-                    @Html.CheckBoxFor(m => m.IsColored, new { @id = "IsColored", @class="js-switch-small" })
-            </div>
-        </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label text-left">Двусторонняя печать</label>
-                <div class="col-sm-9 input-wrapper">
-                    @Html.CheckBoxFor(m => m.IsTwoSided, new { @id = "IsTwoSided", @class="js-switch-small" })
+
+                <div class="buttonsBox" align="center">
+                    <button class="defaultButton coloredBtn" type="submit" id="printButton">Печать</button>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label text-left">Количество копий</label>
-                <div class="col-sm-9 input-wrapper">
-                    @Html.TextBoxFor(m => m.CopiesCount, new { @type = "number", @class = "form-control", @required = "required" })
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label text-left">Комментарий</label>
-                <div class="col-sm-9 input-wrapper">
-                    @Html.TextBoxFor(m => m.Comment, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-2">
-                    <input type="submit" id="printButton" value="Печать" class="btn btn-default" />
-                </div>
-            </div>
-    }
+            }
+
+        </div>
+    </div>
 </div>

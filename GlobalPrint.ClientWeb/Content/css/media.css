@@ -71,7 +71,6 @@
 
 @media screen and (max-width:600px) {
 	.goReg, .loginForm {width:100%;}
-	.loginTitle {width:26px;}
 	.loginForm {padding: 25px 20px 40px;}
 	.goReg {margin-top:15px;}
 	.defaultButton {margin-bottom:10px; width:100%;}
