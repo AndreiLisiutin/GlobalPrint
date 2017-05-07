@@ -31,14 +31,14 @@
                     </label>
 
                     <div class="tableName">Стоимость заказа:</div>
-                    <label class="labelBox mgBottom">
+                    <label class="labelBox mgBottom input-group">
                         @Html.TextBox("PriceInCurrency", Model.PrintOrder.PriceInCurrency, new { @class = "input-def", @style = "width:100%", @readonly = "readonly" })
                         <span class="dLabel">руб.</span>
                     </label>
 
                     <div class="edit">Оценить заказ</div>
 
-                    <label class="labelBox mgBottom">
+                    <label class="labelBox mgBottom star-rating-field">
                         @Html.Hidden("Rating", Model.PrintOrder.Rating, new { @class = "input-def rating", @style = "width:100%", @data_filled = "fa fa-star fa-3x", @data_empty = "fa fa-star-o fa-3x", @data_stop = "5" })
                     </label>
 

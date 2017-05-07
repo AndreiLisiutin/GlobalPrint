@@ -116,3 +116,50 @@
 .offer-table td {
     text-align: left;
 }
+
+/*Переопределение для форм, чтоб не сжимались в 400 пикселей*/
+.smForm {
+    width: 100% !important;
+}
+/*Переопределение кнопки в лукапе, очень криво сверстано*/
+.dLabel {
+    cursor: pointer;
+    right: 0px !important;
+    height: 100% !important;
+    top: 0px !important;
+    display: table-cell !important;
+    position: inherit !important;
+    border-radius: 0px 5px 5px 0px !important;
+}
+
+.fullwidth {
+    width: 100%;
+}
+
+.has-error input {
+    border-color: #a94442;
+}
+
+.clockpicker,
+.currency-input-group {
+    min-width: 130px;
+}
+
+.min-width-0 {
+    min-width: 0px !important;
+}
+
+.outerTable {
+    overflow-x: auto !important;
+}
+
+.input-group .input-def {
+    border-radius: 5px 0px 0px 5px;
+}
+
+.js-clearable + .add-clear-x { 
+    top: -2px !important;
+}
+.star-rating-field {
+    color: #ff205c !important;
+}

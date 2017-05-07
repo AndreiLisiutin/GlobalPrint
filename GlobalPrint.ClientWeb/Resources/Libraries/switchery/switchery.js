@@ -1593,7 +1593,7 @@ module.exports = Switchery;
  */
 
 var defaults = {
-    color             : '#64bd63'
+    color: '#e81d54'
   , secondaryColor    : '#dfdfdf'
   , jackColor         : '#fff'
   , jackSecondaryColor: null

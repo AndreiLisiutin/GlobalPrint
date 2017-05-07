@@ -6,7 +6,7 @@
 @model PrinterEditionModel
 @{
     ViewBag.Title = "Редактирование принтера";
-    Layout = "~/Views/Shared/_NavigationLayout.cshtml";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
 
     List<PrintServiceExtended> AllServices = (List<PrintServiceExtended>)ViewBag.AllServices;
     WeekUtility WeekUtility = (WeekUtility)ViewBag.WeekUtility;
@@ -16,207 +16,192 @@
     <script src="~/Resources/Scripts/GlobalPrint/Printer/Edit.js"></script>
 }
 
-<div class="container">
-    <h2>Редактирование принтера "@( Model?.Printer?.Name ?? "Новый" )"</h2>
+<div class="col-md-8">
+    <div class="lkBox">
+        <div class="lkBoxCont">
+            <div class="defaultTitle">Редактирование принтера "@( Model?.Printer?.Name ?? "Новый" )"</div>
 
-    @using (Html.BeginForm("Save", "Printer", FormMethod.Post, new { @class = "form-horizontal", @role = "form", @id = "printerEditForm" }))
-    {
+            @using (Html.BeginForm("Save", "Printer", FormMethod.Post, new { @class = "form-horizontal", @role = "form", @id = "printerEditForm" }))
+            {
 
-        if (!ViewData.ModelState.IsValid)
-        {
-            <div class="alert alert-danger container margin-top-20">
-                <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                @Html.ValidationSummary(false, "Ошибки: ")
-            </div>
-        }
+                if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger container margin-top-20">
+                        <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        @Html.ValidationSummary(false, "Ошибки: ")
+                    </div>
+                }
 
-        @Html.HiddenFor(x => x.Printer.ID)
-        @Html.HiddenFor(x => x.Printer.OwnerUserID)
+                @Html.HiddenFor(x => x.Printer.ID)
+                @Html.HiddenFor(x => x.Printer.OwnerUserID)
 
-        <div class="form-group">
-            <div class="col-sm-2">
-                <label class="control-label text-left">Название</label>
-            </div>
-            <div class="col-sm-10 input-wrapper">
-                @Html.TextBoxFor(m => m.Printer.Name, new { @class = "form-control js-clearable", @type = "text", @placeholder = "Название принтера", @autofocus = true })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-2">
-                <label class="control-label text-left">Расположение</label>
-            </div>
-            <div class="col-sm-10 input-wrapper">
-                <div class="input-group">
-                    @Html.TextBoxFor(m => m.Printer.Location, new { @class = "form-control js-clearable", @type = "text", @placeholder = "Расположение", @id = "location" })
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" id="geolocation">
-                            <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>
-                        </button>
-                    </span>
+                <div class="edit">Основное</div>
+
+                <div class="tableName">Название:</div>
+                <label class="labelBox mgBottom input-wrapper">
+                    @Html.TextBoxFor(m => m.Printer.Name, new { @class = "input-def fullwidth js-clearable", @type = "text", @placeholder = "Название принтера", @autofocus = true })
+                </label>
+
+                <div class="tableName">Расположение:</div>
+                <label class="labelBox mgBottom input-wrapper">
+                    <div class="input-group fullwidth">
+                        @Html.TextBoxFor(m => m.Printer.Location, new { @class = "input-def fullwidth js-clearable", @type = "text", @placeholder = "Расположение", @id = "location" })
+                        <div class="dLabel input-group-btn" id="geolocation" title="Определить широту и долготу по сервисам Google"><img src="/Content/img/world_earth.png"></div>
+                    </div>
+                </label>
+
+                <div class="tableName">Широта:</div>
+                <label class="labelBox mgBottom input-wrapper">
+                    @Html.TextBoxFor(m => m.Printer.Latitude, new { @class = "input-def fullwidth js-clearable", @type = "text", @placeholder = "Широта", @id = "latitude" })
+                </label>
+
+                <div class="tableName">Долгота:</div>
+                <label class="labelBox mgBottom input-wrapper">
+                    @Html.TextBoxFor(m => m.Printer.Longtitude, new { @class = "input-def fullwidth js-clearable", @type = "text", @placeholder = "Долгота", @id = "longtitude" })
+                </label>
+
+                <div class="tableName">Телефон:</div>
+                <label class="labelBox mgBottom input-wrapper">
+                    @Html.TextBoxFor(m => m.Printer.Phone, new { @class = "input-def fullwidth js-clearable", @type = "phone", @placeholder = "Телефон" })
+                </label>
+
+                    <div class="tableName">Email:</div>
+                    <label class="labelBox mgBottom input-wrapper">
+                        @Html.TextBoxFor(m => m.Printer.Email, new { @class = "input-def fullwidth js-clearable", @type = "email", @placeholder = "Email" })
+                    </label>
+
+                    <div class="tableName">Оператор:</div>
+                    <label class="labelBox mgBottom input-wrapper">
+                        @Html.Lookup(LookupTypeEnum.User, "Printer.OperatorUserID", Model.Printer.OperatorUserID)
+                    </label>
+
+
+                    <div class="tableName">Включен:</div>
+                    <label for="isEnabled" class="labelBox mgBottom input-wrapper">
+                        @Html.CheckBoxFor(m => m.Printer.IsEnabled, new { @class = "js-switch-small", @name = "IsEnabled", @id = "isEnabled" })
+                    </label>
+
+                //--------------------------------------------List of time---------------------------------------------
+                <br />
+                <div class="edit">Расписание работы принтера</div>
+                <div class="input-wrapper">
+                    @Html.Hidden("PrinterScheduleArray")
                 </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-2">
-                <label class="control-label text-left">Широта</label>
-            </div>
-            <div class="col-sm-10 input-wrapper">
-                @Html.TextBoxFor(m => m.Printer.Latitude, new { @class = "form-control js-clearable", @type = "text", @placeholder = "Широта", @id = "latitude" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-2">
-                <label class="control-label text-left">Долгота</label>
-            </div>
-            <div class="col-sm-10 input-wrapper">
-                @Html.TextBoxFor(m => m.Printer.Longtitude, new { @class = "form-control js-clearable", @type = "text", @placeholder = "Долгота", @id = "longtitude" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-2">
-                <label class="control-label text-left">Телефон</label>
-            </div>
-            <div class="col-sm-10 input-wrapper">
-                @Html.TextBoxFor(m => m.Printer.Phone, new { @class = "form-control js-clearable", @type = "phone", @placeholder = "Телефон" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-2">
-                <label class="control-label text-left">Email</label>
-            </div>
-            <div class="col-sm-10 input-wrapper">
-                @Html.TextBoxFor(m => m.Printer.Email, new { @class = "form-control js-clearable", @type = "email", @placeholder = "Email" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-2">
-                <label class="control-label text-left">Оператор</label>
-            </div>
-            <div class="col-sm-10 input-wrapper">
-                @Html.Lookup(LookupTypeEnum.User, "Printer.OperatorUserID", Model.Printer.OperatorUserID)
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-2">
-                <label for="isEnabled" class="control-label text-left">Включен</label>
-            </div>
-            <div class="col-sm-10 input-wrapper">
-                @Html.CheckBoxFor(m => m.Printer.IsEnabled, new { @class = "js-switch-small", @name = "IsEnabled", @id = "isEnabled" })
-            </div>
-        </div>
+                <div class="lkInsetOverflow minusMargin">
+                    <div class="outerTable">
+                        <table class="defaultTable min-width-0" id="printerSchedules">
+                            <thead>
+                                <tr class="tableHead">
+                                    <th class="col-xs-1 col-sm-5">День</th>
+                                    <th class="hidden-xs col-md-1">Открыто</th>
+                                    <th class="visible-xs"></th>
+                                    <th class="col-xs-3 col-md-3">С</th>
+                                    <th class="col-xs-3 col-md-3">По</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    int index = -1;
+                                    PrinterSchedule schedule = null;
+                                }
+                                @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+                                {
+                                    {
+                                        index++;
+                                        schedule = Model.PrinterSchedule.FirstOrDefault(e => e.DayOfWeek == (int)day);
+                                    }
+                                    @Html.Hidden($"PrinterSchedule[{index}].ID", schedule?.ID ?? 0)
+                                    @Html.Hidden($"PrinterSchedule[{index}].DayOfWeek", (int)day)
+                                    @Html.Hidden($"PrinterSchedule[{index}].PrinterID", Model.Printer.ID)
+                                    <tr class="printer-schedule-row">
+                                        <td class="visible-xs col-xs-1" scope="row">@WeekUtility.ShortDayName(day)</td>
+                                        <td class="hidden-xs" scope="row">@WeekUtility.DayName(day)</td>
+                                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBox($"PrinterSchedule[{index}].IsOpened", schedule != null, new { @class = "is-printer-schedule-open js-switch-small" })</td>
+                                        <td class="col-xs-3 col-md-3 input-wrapper">
+                                            <label class="labelBox">
+                                                <div class="input-group fullwidth clockpicker" data-autoclose="true">
+                                                    @Html.TextBox($"PrinterSchedule[{index}].OpenTime", schedule?.OpenTime, new { @class = "input-def fullwidth printer-schedule-time printer-schedule-time-open" })
+                                                    <div class="dLabel input-group-btn" title="Задать время"><img src="/Content/img/clock.png"></div>
+                                                </div>
+                                            </label>
+                                        </td>
+                                        <td class="col-xs-3 col-md-3 input-wrapper">
+                                            <label class="labelBox">
+                                                <div class="input-group fullwidth clockpicker" data-autoclose="true">
+                                                    @Html.TextBox($"PrinterSchedule[{index}].CloseTime", schedule?.CloseTime, new { @class = "input-def fullwidth printer-schedule-time printer-schedule-time-close" })
+                                                    <div class="dLabel input-group-btn" title="Задать время"><img src="/Content/img/clock.png"></div>
+                                                </div>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-        //--------------------------------------------List of time---------------------------------------------
-        <br />
-        <div class="input-wrapper">
-            <h2>Расписание работы принтера</h2>
-            @Html.Hidden("PrinterScheduleArray")
-        </div>
-        <table class="table table-hover" id="printerSchedules">
-            <thead>
-                <tr>
-                    <th class="hidden-xs col-sm-6">День</th>
-                    <th class="visible-xs"></th>
-                    <th class="hidden-xs col-md-1">Открыто</th>
-                    <th class="visible-xs"></th>
-                    <th class="col-xs-3 col-md-3">С</th>
-                    <th class="col-xs-3 col-md-3">По</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int index = -1;
-                    PrinterSchedule schedule = null;
-                }
-                @foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
-                {
-                    {
-                        index++;
-                        schedule = Model.PrinterSchedule.FirstOrDefault(e => e.DayOfWeek == (int)day);
-                    }
-                    @Html.Hidden($"PrinterSchedule[{index}].ID", schedule?.ID ?? 0)
-                    @Html.Hidden($"PrinterSchedule[{index}].DayOfWeek", (int)day)
-                    @Html.Hidden($"PrinterSchedule[{index}].PrinterID", Model.Printer.ID)
-                    <tr class="printer-schedule-row">
-                        <td class="visible-xs" scope="row">@WeekUtility.ShortDayName(day)</td>
-                        <td class="hidden-xs" scope="row">@WeekUtility.DayName(day)</td>
-                        <td class="col-xs-1 col-md-1" scope="row">@Html.CheckBox($"PrinterSchedule[{index}].IsOpened", schedule != null, new { @class = "is-printer-schedule-open js-switch-small" })</td>
-                        <td class="col-xs-3 col-md-3 input-wrapper">
-                            <div class="input-group clockpicker" data-autoclose="true">
-                                @Html.TextBox($"PrinterSchedule[{index}].OpenTime", schedule?.OpenTime, new { @class = "form-control printer-schedule-time printer-schedule-time-open" })
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-time"></span>
-                                </span>
-                            </div>
-                        </td>
-                        <td class="col-xs-3 col-md-3 input-wrapper">
-                            <div class="input-group clockpicker" data-autoclose="true">
-                                @Html.TextBox($"PrinterSchedule[{index}].CloseTime", schedule?.CloseTime, new { @class = "form-control printer-schedule-time printer-schedule-time-close" })
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-time"></span>
-                                </span>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                //--------------------------------------------List of services---------------------------------------------
+                <br />
+                <div class="edit">Услуги и цены</div>
+                <div class="input-wrapper">
+                    @Html.Hidden("PrinterServicesArray")
+                </div>
+                <div class="lkInsetOverflow minusMargin">
+                    <div class="outerTable">
+                        <table class="defaultTable min-width-0" id="printerServices">
+                            <thead>
+                                <tr class="tableHead">
+                                    <th class="col-xs-1 col-md-1"></th>
+                                    <th class="visible-xs">Услуга</th>
+                                    <th class="hidden-xs col-md-3">Услуга</th>
+                                    <th class="hidden-xs col-md-3">Размер</th>
+                                    <th class="hidden-xs col-md-1">Цветная</th>
+                                    <th class="hidden-xs col-md-1">Двусторонняя</th>
+                                    <th class="col-xs-4 col-md-4">Стоимость</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    index = -1;
+                                    PrinterService printService = null;
+                                }
+                                @foreach (PrintServiceExtended service in AllServices)
+                                {
+                                    {
+                                        index++;
+                                        printService = Model.PrinterServices.FirstOrDefault(e => e.PrintServiceID == service.PrintService.ID);
+                                    }
+                                    @Html.Hidden($"PrinterServices[{index}].ID", printService?.ID ?? 0)
+                                    @Html.Hidden($"PrinterServices[{index}].PrintServiceID", service.PrintService.ID)
+                                    @Html.Hidden($"PrinterServices[{index}].PrinterID", Model.Printer.ID)
 
-        //--------------------------------------------List of services---------------------------------------------
-        <br />
-        <div class="input-wrapper">
-            <h2>Услуги и цены</h2>
-            @Html.Hidden("PrinterServicesArray")
-        </div>
-        <table class="table table-hover" id="printerServices">
-            <thead>
-                <tr>
-                    <th class="col-xs-1 col-md-1"></th>
-                    <th class="visible-xs">Услуга</th>
-                    <th class="hidden-xs col-md-3">Услуга</th>
-                    <th class="hidden-xs col-md-3">Размер</th>
-                    <th class="hidden-xs col-md-1">Цветная</th>
-                    <th class="hidden-xs col-md-1">Двусторонняя</th>
-                    <th class="col-xs-4 col-md-4">Стоимость</th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    index = -1;
-                    PrinterService printService = null;
-                }
-                @foreach (PrintServiceExtended service in AllServices)
-                {
-                    {
-                        index++;
-                        printService = Model.PrinterServices.FirstOrDefault(e => e.PrintServiceID == service.PrintService.ID);
-                    }
-                    @Html.Hidden($"PrinterServices[{index}].ID", printService?.ID ?? 0)
-                    @Html.Hidden($"PrinterServices[{index}].PrintServiceID", service.PrintService.ID)
-                    @Html.Hidden($"PrinterServices[{index}].PrinterID", Model.Printer.ID)
+                                    <tr class="printer-service-row">
+                                        <td scope="row">@Html.CheckBox($"PrinterServices[{index}].IsSupported", printService != null, new { @class = "is-printer-service-supported js-switch-small" })</td>
+                                        <td class="visible-xs" scope="row">@service.ToString()</td>
+                                        <td class="hidden-xs col-md-3" scope="row">@service.PrintType.Name</td>
+                                        <td class="hidden-xs col-md-3" scope="row">@service.PrintSize.Name</td>
+                                        <td class="hidden-xs col-md-1" scope="row">@Html.CheckBox($"PrinterServices[{index}].IsColored", service.PrintService.IsColored, new { @class = "js-switch-small", disabled = "true" })</td>
+                                        <td class="hidden-xs col-md-1" scope="row">@Html.CheckBox($"PrinterServices[{index}].IsTwoSided", service.PrintService.IsTwoSided, new { @class = "js-switch-small", disabled = "true" })</td>
+                                        <td class="col-xs-3 col-md-3 input-wrapper" scope="row">
+                                            <label class="labelBox">
+                                                <div class="input-group currency-input-group fullwidth">
+                                                    @Html.TextBox($"PrinterServices[{index}].PricePerPage", printService?.PricePerPageString, new { @class = "input-def fullwidth text-right printer-service-price currency-input" })
+                                                    <div class="dLabel">руб.</div>
+                                                </div>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-                    <tr class="printer-service-row">
-                        <td scope="row">@Html.CheckBox($"PrinterServices[{index}].IsSupported", printService != null, new { @class = "is-printer-service-supported js-switch-small" })</td>
-                        <td class="visible-xs" scope="row">@service.ToString()</td>
-                        <td class="hidden-xs col-md-3" scope="row">@service.PrintType.Name</td>
-                        <td class="hidden-xs col-md-3" scope="row">@service.PrintSize.Name</td>
-                        <td class="hidden-xs col-md-1" scope="row">@Html.CheckBox($"PrinterServices[{index}].IsColored", service.PrintService.IsColored, new { @class = "js-switch-small", disabled = "true" })</td>
-                        <td class="hidden-xs col-md-1" scope="row">@Html.CheckBox($"PrinterServices[{index}].IsTwoSided", service.PrintService.IsTwoSided, new { @class = "js-switch-small", disabled = "true" })</td>
-                        <td class="col-xs-3 col-md-3 input-wrapper" scope="row">
-                            <div class="input-group currency-input-group">
-                                @Html.TextBox($"PrinterServices[{index}].PricePerPage", printService?.PricePerPageString, new { @class = "form-control text-right printer-service-price currency-input" })
-                                <div class="input-group-addon">руб.</div>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <div class="form-group">
-            <div class="col-sm-12">
-                <button class="btn btn-default" type="submit">Сохранить</button>
-                @Html.ActionLink("Назад", "MyPrinters", "Printer", new { @class="btn btn-default" })
-            </div>
+                <div class="buttonsBox" align="center">
+                    <button class="defaultButton coloredBtn" type="submit">Сохранить</button>
+                    <a href=@Url.Action("MyPrinters", "Printer") class="defaultButton coloredBtn white-text">Отмена</a>
+                </div>
+            }
         </div>
-    }
+    </div>
 </div>

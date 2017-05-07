@@ -116,13 +116,14 @@ namespace GlobalPrint.ClientWeb.Helpers
         /// <returns></returns>
         public static MvcHtmlString Lookup(this HtmlHelper html, LookupTypeEnum lookupType, string name = "lookupValueId", long? value = null, object htmlAttributes = null)
         {
-			//< label class="labelBox">
-			//	<input type = "text" class="input-def order-code" style="width:100%">
-			//	<div class="dLabel"><img src = "~/Content/img/search.png" /></ div >
-			//</ label >
+            //< label class="labelBox input-group">
+            //	<input type = "text" class="input-def" style="width:100%">
+            //	<div class="dLabel"><img src = "~/Content/img/search.png" /></ div >
+            //</ label >
 
-			var inputGroup = new TagBuilder("label");
+            var inputGroup = new TagBuilder("label");
             inputGroup.AddCssClass("labelBox");
+			inputGroup.AddCssClass("input-group");
 			inputGroup.AddCssClass("lookup-input-group");
 			inputGroup.MergeAttribute("data-lookup-type", ((int)lookupType).ToString());
 			if (htmlAttributes != null)
@@ -135,7 +136,6 @@ namespace GlobalPrint.ClientWeb.Helpers
 
             var lookupValueId = new TagBuilder("input");
             lookupValueId.AddCssClass("hidden");
-            lookupValueId.AddCssClass("form-control");
             lookupValueId.AddCssClass("lookup-value-id");
             lookupValueId.MergeAttribute("type", "text");
             lookupValueId.MergeAttribute("name", name);
@@ -153,9 +153,7 @@ namespace GlobalPrint.ClientWeb.Helpers
 			lookupValueName.MergeAttribute("disabled", "disabled");
             lookupValueName.MergeAttribute("style", "width:100%");
 			lookupValueName.AddCssClass("lookup-value-name");
-            lookupValueName.AddCssClass("form-control");
             lookupValueName.AddCssClass("input-def");
-            lookupValueName.AddCssClass("order-code");
             inputGroup.InnerHtml += lookupValueName.ToString();
 
             var inputGroupBtn = new TagBuilder("div");
