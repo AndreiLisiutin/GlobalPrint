@@ -11,7 +11,7 @@
 
         <div class="menu">
             <div class="container">
-                <div class="col-md-4" align="center">
+                <div class="col-md-5" align="center">
                     <a href="/">
                         <img src="~/Content/img/logo.png" alt="" class="headLogo" />
                     </a>
@@ -19,7 +19,7 @@
                        @Html.ActionLink("О проекте", "About", "About", null, new { @class = "aboutLink" })
                     </div>
                 </div>
-                <div class="col-md-2" align="center">
+                <div class="col-md-1" align="center">
                     @{Html.RenderAction("UserRecievedPrintOrder", "UserPrintInfo");}
                 </div>
                 <div class="col-md-6">
@@ -39,12 +39,12 @@ else
 {
     <div class="menu">
 	    <div class="container">
-		    <div class="col-md-6 topLogo">
+		    <div class="col-md-5 topLogo">
 			    <a href="/">
                     <img src="~/Content/img/logo.png" alt="" class="headLogo"/>
 			    </a>
 		    </div>
-		    <div class="col-md-6">
+		    <div class="col-md-7">
 			    <div class="menuLine profLine">
 				    <div class="topProfile">
                         <a href=@Url.Action("Register", "Account") id = "registerLink">
