@@ -13,13 +13,11 @@
 
     var handleError = function (error) {
         var textfield = $('#fileupload').parents('.input-group').find(':text');
-        var errorLabel = $('#fileupload').parents('.input-group').find('#errorText');
         var progressBar = $('#fileupload').parents('.input-group').find('#progress .progress-bar');
+        var progressPercentText = $('#fileupload').parents('.input-group').find('#progressPercentText');
 
-        progressBar.css('width', 0 + '%');
-        progressBar.hide();
-        errorLabel.show();
-        errorLabel.text(error);
+        progressBar.css('width', 100 + '%');
+        progressPercentText.text(error);
     };
 
     FileUpload.initFileUpload = function () {
@@ -41,11 +39,9 @@
             var file = data.files[0];
             var fileName = file.name + ' (' + formatBytes(file.size) + ')';
             var textfield = $('#fileupload').parents('.input-group').find(':text');
-            var errorLabel = $('#fileupload').parents('.input-group').find('#errorText');
             var progressBar = $('#fileupload').parents('.input-group').find('#progress .progress-bar');
 
             progressBar.show();
-            errorLabel.hide();
             textfield.val(fileName);
 
             // File validation
