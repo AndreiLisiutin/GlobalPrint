@@ -1,9 +1,9 @@
 ﻿<div class="menuLine">
-    <a href="#" class="messages">
+    <a href="@Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList")" class="messages">
         <img src="~/Content/img/alarm.png" alt="" />
         <span>@ViewData["UserRecievedPrintOrdersCount"]</span>
 
-        <div class="outerDrop">
+        @*<div class="outerDrop">
             <div class="dropBox">
                 <div class="dropItem">
                     <div class="row">
@@ -22,12 +22,12 @@
                         </div>
                         <div class="col-md-10 col-xs-9 dropDesc">
                             Новое уведомление
-                            @*<button href="@Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList")">Новое уведомление</button>*@
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
+
     </a>
 </div>
 <div id="recievedOrdersSound"></div>
