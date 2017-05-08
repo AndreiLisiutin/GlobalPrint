@@ -8,35 +8,35 @@
 
 <div id="lookupWindow">
     <button type="button" class="close hidden-xs" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    @using (Html.BeginForm("fake", "fake", FormMethod.Get, new { @class = "form-horizontal", role = "form", id="searchForm" }))
-    {
-        <div class="form-inline gp-data-filter focus">
-            <div class="input-group">
-                @Html.TextBox("searchText", SearchText, new { @class = "form-control", @id = "searchText" })
-                @Html.Hidden("lookupType", (int)LookupType, new { @class = "form-control", @id = "lookupType" })
-                <span class="input-group-btn">
-                    <input type="button" id="searchTextSubmit" class="btn btn-default" value="Поиск" />
-                </span>
-            </div>
+
+    <label class="labelBox mgBottom input-wrapper form-inline gp-data-filter focus lookup-search">
+        <div class="input-group fullwidth">
+            @Html.TextBox("searchText", SearchText, new { @class = "input-def fullwidth js-clearable", @id = "searchText" })
+            @Html.Hidden("lookupType", (int)LookupType, new { @class = "", @id = "lookupType" })
+            <div class="dLabel input-group-btn" id="searchTextSubmit" title="Поиск"><img src="/Content/img/search.png"></div>
         </div>
-    }
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <tr>
-                <th class="col-xs-1"></th>
-                @foreach (LookupResultValue column in Model.Columns)
-                {
-                    <th class="col-xs-@column.Length @(column.IsIdentifier ? "hidden" : "")">
-                        @column.Name
-                    </th>
-                }
-            </tr>
-            <tbody>
+    </label>
+
+    <div class="lkInsetOverflow">
+        <div class="outerTable lookup-table-wrapper">
+            <table class="defaultTable table-hover offer-table" width="100%">
+                <tr class="tableHead">
+                    <th class="col-xs-1"></th>
+                    @foreach (LookupResultValue column in Model.Columns)
+                    {
+                        <th class="col-xs-@column.Length @(column.IsIdentifier ? "hidden" : "")">
+                            @column.Name
+                        </th>
+                    }
+                </tr>
                 @foreach (List<LookupResultValue> entity in Model.Values.Entities)
                 {
                     <tr class="lookup-row">
-                        <td class="vcenter">
-                            <input type="checkbox" class="lookup-row-is-selected" value="1" />
+                        <td class="vcenter checkbox-wrapper">
+                            <input type="checkbox" class="lookup-row-is-selected setClick" value="1" />
+                            <div class="loginCheckBox" onclick="$(this).closest('.checkbox-wrapper').find('.setClick').click();">
+                                <div class="checked"></div>
+                            </div>
                         </td>
                         @foreach (LookupResultValue property in entity)
                         {
@@ -49,32 +49,34 @@
                             }
                             else if (property?.IsText ?? false)
                             {
-                                <td class="lookup-row-text">
+                                <td align="left" class="lookup-row-text">
                                     @Html.Hidden("lookup-row-text-input", property.Value, new { @class = "lookup-row-text-input" })
                                     @property.Value
                                 </td>
                             }
                             else
                             {
-                                <td>
+                                <td align="left">
                                     @property.Value
                                 </td>
                             }
                         }
                     </tr>
                 }
-            </tbody>
-        </table>
+            </table>
+        </div>
     </div>
+
     @if (Model.Values.PagesCount > 1)
     {
         <div id="lookupPagination">
             @Html.Paging(Model.Values, page => Url.Action("Fake", "Fake", new { CurrentPage = page, ItemsPerPage = Model.Values.PagesCount, searchText = SearchText }))
         </div>
     }
-    <div class="btn-toolbar">
-        <button type="button" class="btn btn-default" data-dismiss="modal" id="lookupSelect">Выбрать</button>
-        <button type="button" class="btn btn-default pull-right" data-dismiss="modal" id="lookupClose">Отмена</button>
+
+    <div class="buttonsBox" align="center">
+        <button type="button" class="defaultButton coloredBtn" data-dismiss="modal" id="lookupSelect">Выбрать</button>
+        <button type="button" class="defaultButton coloredBtn" data-dismiss="modal" id="lookupClose">Отмена</button>
     </div>
 </div>
 
@@ -82,7 +84,8 @@
     $(document).ready(function () {
         //uncheck checked users on check current
         $('.lookup-row-is-selected').click(function () {
-            $('.lookup-row-is-selected').not(this).attr('checked', false);
+            $(this).attr('checked', true).closest('.checkbox-wrapper').find('.loginCheckBox').toggleClass('checked');
+            $('.lookup-row-is-selected').not(this).attr('checked', false).closest('.checkbox-wrapper').find('.loginCheckBox').removeClass('checked');
         });
         $('#lookupSelect').click(function () {
             var anySelected = $('.lookup-row-is-selected:checked')
@@ -126,10 +129,6 @@
             });
         };
 
-        $("#searchForm").submit(function (e) {
-            e.preventDefault();
-            updateLookup(1, null);
-        });
         $("#searchTextSubmit").click(function (e) {
             e.preventDefault();
             updateLookup(1, null);

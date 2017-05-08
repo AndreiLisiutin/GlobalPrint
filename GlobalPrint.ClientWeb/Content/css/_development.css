@@ -26,18 +26,6 @@
         background: #c11746 !important;
     }
 
-@media screen and (max-width:600px) {
-    .white-text {
-        margin-bottom: 10px;
-        width: 100%;
-    }
-
-    /*Кнопки в информации о принтере на главной форме*/
-    .printer-info-btn {
-        max-width: 200px;
-    }
-}
-
 .relative {
     position: relative;
 }
@@ -90,16 +78,6 @@
     margin: auto;
     background: #fff;
     padding: 25px 50px;
-}
-
-@media screen and (max-width:1000px) {
-    .offer-container {
-        width: 100%;
-    }
-
-    .offer-body {
-        padding: 0;
-    }
 }
 
 .offer-title {
@@ -157,9 +135,60 @@
     border-radius: 5px 0px 0px 5px;
 }
 
-.js-clearable + .add-clear-x { 
+.js-clearable + .add-clear-x {
     top: -2px !important;
 }
+
 .star-rating-field {
     color: #ff205c !important;
+}
+
+.lookup-table-wrapper {
+    max-height: 500px;
+    overflow: auto;
+}
+
+.modal-dialog {
+    max-width: 1000px !important;
+    width: 90% !important;
+}
+
+.pagination .active a {
+    background-color: #ff205c !important;
+    border-color: #ff205c !important;
+}
+
+.pagination :not(.active) a {
+    color: #ff205c !important;
+    border-color: #ff205c !important;
+}
+
+.lookup-search {
+    width: 50% !important;
+}
+
+@media screen and (max-width:1000px) {
+    .offer-container {
+        width: 100%;
+    }
+
+    .offer-body {
+        padding: 0;
+    }
+}
+
+@media screen and (max-width:600px) {
+    .white-text {
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    /*Кнопки в информации о принтере на главной форме*/
+    .printer-info-btn {
+        max-width: 200px;
+    }
+
+    .lookup-search {
+        width: 90% !important;
+    }
 }

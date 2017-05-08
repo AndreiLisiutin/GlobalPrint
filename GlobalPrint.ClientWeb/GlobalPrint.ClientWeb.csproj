@@ -228,6 +228,7 @@
     <Content Include="Content\css\_development.css" />
     <Content Include="Content\img\alarm.png" />
     <Content Include="Content\img\check.png" />
+    <Content Include="Content\img\clock.png" />
     <Content Include="Content\img\favicon.ico" />
     <Content Include="Content\img\ftLogo.png" />
     <Content Include="Content\img\idea-ico.png" />
@@ -262,6 +263,7 @@
     <Content Include="Content\img\sl-bg.png" />
     <Content Include="Content\img\testMap.png" />
     <Content Include="Content\img\whatsapp.png" />
+    <Content Include="Content\img\world_earth.png" />
     <Content Include="Content\js\bootstrap.min.js" />
     <Content Include="Content\js\info.js" />
     <Content Include="Content\js\jquery.js" />
