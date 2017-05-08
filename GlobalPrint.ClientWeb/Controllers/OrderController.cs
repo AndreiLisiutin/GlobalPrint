@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb
@@ -91,7 +92,7 @@ namespace GlobalPrint.ClientWeb
         {
             Argument.Positive(printOrderID, "printOrderID не может быть меньше 0.");
             int userID = GetCurrentUserID();
-            string app_data = HttpContext.Server.MapPath("~/App_Data");
+            string app_data = WebConfigurationManager.AppSettings["UserFilesFolder"];
             NewOrder newOrder = _printOrderUnit.FromExisting(printOrderID, userID);
             DocumentBusinessInfo document = _printOrderUnit.GetPrintOrderDocument(printOrderID, userID, app_data);
             _uploadedFilesRepo.Add(newOrder.FileToPrint, document);
@@ -198,7 +199,7 @@ namespace GlobalPrint.ClientWeb
                 return _ORDER_CONFIRM(newOrder);
             }
 
-            string app_data = HttpContext.Server.MapPath("~/App_Data");
+            string app_data = WebConfigurationManager.AppSettings["UserFilesFolder"];
             int userID = GetCurrentUserID();
             PrintOrder createdOrder = _printOrderUnit.Create(newOrder, userID, app_data, document);
 
@@ -256,7 +257,7 @@ namespace GlobalPrint.ClientWeb
         [HttpGet, Authorize]
         public ActionResult DownloadOrder(int printOrderID)
         {
-            string app_data = HttpContext.Server.MapPath("~/App_Data");
+            string app_data = WebConfigurationManager.AppSettings["UserFilesFolder"];
             int userID = this.GetCurrentUserID();
             DocumentBusinessInfo fileInfo = this._printOrderUnit.GetPrintOrderDocument(printOrderID, userID, app_data);
             return File(fileInfo.SerializedFile, System.Net.Mime.MediaTypeNames.Application.Octet, fileInfo.Name);
