@@ -171,6 +171,26 @@
     width: 50% !important;
 }
 
+.modal-question-buttons button {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.modal-question-content {
+    padding-left: 5%;
+    margin-right: 15px;
+}
+
+.modal-question-text {
+    margin-bottom: 10px;
+}
+
+.modal-question-buttons {
+    padding: 0px 5px;
+}
+
 @media screen and (max-width:1000px) {
     .offer-container {
         width: 100%;
