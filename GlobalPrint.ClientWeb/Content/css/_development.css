@@ -110,6 +110,10 @@
     border-radius: 0px 5px 5px 0px !important;
 }
 
+.dLeftLabel {
+    border-radius: 5px 0px 0px 5px !important;
+}
+
 .fullwidth {
     width: 100%;
 }
@@ -191,4 +195,33 @@
     .lookup-search {
         width: 90% !important;
     }
+}
+
+/* for progressbar in new order page */
+.progressbar-wrapper {
+    display: table-cell;
+    margin: 0;
+    padding: 0;
+    width: 40%;
+    text-align: center;
+    border-radius: 0px 5px 5px 0px !important;
+}
+
+.progressbar-bar {
+    display: table;
+    background-image: linear-gradient(to bottom,#e81d54 0,#F3547F 100%);
+}
+
+.progressbar-text {
+    display: table-cell;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+}
+
+.upload-text {
+    width: 100%;
+    border-radius: 0 !important;
+    border-right: 0 !important;
+    border-left: 0 !important;
 }

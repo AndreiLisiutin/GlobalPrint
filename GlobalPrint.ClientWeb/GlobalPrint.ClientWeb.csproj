@@ -227,6 +227,7 @@
     <Content Include="Content\css\owl.theme.default.css" />
     <Content Include="Content\css\_development.css" />
     <Content Include="Content\img\alarm.png" />
+    <Content Include="Content\img\attachment.png" />
     <Content Include="Content\img\check.png" />
     <Content Include="Content\img\clock.png" />
     <Content Include="Content\img\favicon.ico" />

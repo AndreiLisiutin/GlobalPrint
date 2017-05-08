@@ -36,21 +36,20 @@
                     </label>
 
                     <div class="tableName">Файл для печати:</div>
-                    <label class="labelBox mgBottom">
-                        <span class="input-group">
-                            <label class="input-group-btn">
-                                <span class="btn btn-default">
-                                    <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
-                                    <input type="file" id="fileupload" style="display: none;">
-                                </span>
-                            </label>
-                            <input type="text" class="form-control" readonly>
-                            <span id="progress" class="input-group-addon progress progressbar-wrapper">
-                                <span id="errorText" class="text-danger"></span>
+                    <label class="labelBox mgBottom input-wrapper">
+                        <span class="input-group fullwidth">
+
+                            <span class="input-group-btn dLabel dLeftLabel" title="Выбрать файл"><img src="/Content/img/attachment.png"></span>
+                            <input type="file" class="" id="fileupload" style="display: none;">
+                            
+                            <input type="text" class="input-def upload-text" readonly>
+
+                            <span id="progress" class="input-group-btn input-def progress progressbar-wrapper">
                                 <span class="progress-bar progress-bar-info progressbar-bar">
                                     <span id="progressPercentText" class="progressbarpercent progressbar-text"></span>
                                 </span>
                             </span>
+
                             @Html.HiddenFor(m => m.FileToPrint, new { @id = "fileId", @required = "required" })
                             @Html.Hidden("_Document", Document?.Name, new { @id = "fileName" })
                         </span>
