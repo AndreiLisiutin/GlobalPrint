@@ -24,7 +24,7 @@
         <div class="lkBoxCont">
             <div class="defaultTitle">Подтверждение заказа</div>
 
-            @using (Html.BeginForm("Create", "Order", FormMethod.Post, new { role = "form", @id = "createOrderForm" }))
+            @using (Html.BeginForm("Create", "Order", FormMethod.Post, new { @class = "smForm", @id = "createOrderForm" }))
             {
                 <div class="row regisRow">
                     <div class="hidden">

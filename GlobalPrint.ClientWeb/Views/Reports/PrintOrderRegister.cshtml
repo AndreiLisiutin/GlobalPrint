@@ -26,13 +26,10 @@
 
 <div class="col-md-8">
 	<div class="lkBox">
-
 		<div class="lkBoxCont">
-			<div class="defaultTitle">
-				Реестр заказов
-			</div>
+			<div class="defaultTitle">Реестр заказов</div>
 
-			@using (Html.BeginForm("GetPrintOrderRegister", "Reports", FormMethod.Get, new { @class = "form-horizontal" }))
+			@using (Html.BeginForm("GetPrintOrderRegister", "Reports", FormMethod.Get, new { }))
 			{
 				@Html.HiddenFor(e => e.OwnerUserID, new { @id = "OwnerUserID" })
 

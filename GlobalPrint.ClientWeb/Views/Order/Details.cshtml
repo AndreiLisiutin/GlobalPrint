@@ -10,7 +10,7 @@
         <div class="lkBoxCont">
             <div class="defaultTitle">Детали заказа № @Model.PrintOrder.ID</div>
 
-            @using (Html.BeginForm("Rate", "Order", FormMethod.Post, new { role = "form" }))
+            @using (Html.BeginForm("Rate", "Order", FormMethod.Post, new { @class = "smForm" }))
             {
                 <div class="row regisRow">
 

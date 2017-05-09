@@ -7,6 +7,9 @@
     ViewBag.Title = LoginViewResource.LoginFormTabTitle;
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
+@section Scripts{
+    <script src="~/Resources/Scripts/GlobalPrint/Account/Login.js"></script>
+}
 
 <div class="container verticalWrap">
     <div class="loginForm">
@@ -18,18 +21,18 @@
                                                "ForgotPassword", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, new { })
         </div>
 
-        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @id = "loginForm" }))
         {
             @Html.AntiForgeryToken()
 
-            <div class="loginFormLabel">
+            <div class="loginFormLabel input-wrapper">
                 <p>E-Mail</p>
-                @Html.TextBoxFor(m => m.Email, new { @class = "loginFormInput", @type = "email", @required = "true", @autofocus = true })
+                @Html.TextBoxFor(m => m.Email, new { @class = "loginFormInput", @type = "email", @autofocus = true })
             </div>
 
-            <div class="loginFormLabel">
+            <div class="loginFormLabel input-wrapper">
                 <p>Пароль</p>
-                @Html.TextBoxFor(m => m.Password, new { @class = "loginFormInput", @type = "password", @required = "true" })
+                @Html.TextBoxFor(m => m.Password, new { @class = "loginFormInput", @type = "password" })
             </div>
 
             <div class="row" style="margin-top:15px;">

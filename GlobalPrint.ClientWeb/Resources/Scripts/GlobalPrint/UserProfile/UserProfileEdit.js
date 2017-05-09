@@ -1,5 +1,19 @@
-﻿GlobalPrint.namespace('GlobalPrint.UserProfile.UserProfile');
-(function (UserProfile) {
+﻿GlobalPrint.namespace('GlobalPrint.UserProfile.UserProfileEdit');
+(function (UserProfileEdit) {
+
+    UserProfileEdit.defineValidation = function () {
+        $("#userProfileEditForm").validate({
+            rules: {
+                "UserName": {
+                    required: true
+                },
+                "Email": {
+                    required: true,
+                    email: true
+                }
+            }
+        });
+    };
    
     var getDataByBic = function (bic, callback) {
         $.ajax({
@@ -23,7 +37,7 @@
         });
     };
 
-    UserProfile.fillDataByBic = function () {
+    UserProfileEdit.fillDataByBic = function () {
         var bankBic = $('#bankBic');
         var bankName = $('#bankName');
         var bankCorrespondentAccount = $('#bankCorrespondentAccount');
@@ -45,7 +59,7 @@
         getDataByBic(bankBic.val(), bankInfoCallback)
     };
 
-    UserProfile.geolocateLatLong = function (cmp) {
+    UserProfileEdit.geolocateLatLong = function (cmp) {
         // Call Google geolocation service to find out Latitude, Longtitude 
         // of address string and format the address
         var location = $(cmp).val();
@@ -55,20 +69,22 @@
         });
     };
     
-})(GlobalPrint.UserProfile.UserProfile);
+})(GlobalPrint.UserProfile.UserProfileEdit);
 
 $(document).ready(function () {
+    GlobalPrint.UserProfile.UserProfileEdit.defineValidation();
+
     $("#autoFillBankData").click(function (e) {
         e.preventDefault();
-        GlobalPrint.UserProfile.UserProfile.fillDataByBic();
+        GlobalPrint.UserProfile.UserProfileEdit.fillDataByBic();
     });
     $('#legalGeolocation').click(function () {
         var legalAddress = $('#legalAddress');
-        GlobalPrint.UserProfile.UserProfile.geolocateLatLong(legalAddress);
+        GlobalPrint.UserProfile.UserProfileEdit.geolocateLatLong(legalAddress);
     });
     $('#postGeolocation').click(function () {
         var postAddress = $('#postAddress');
-        GlobalPrint.UserProfile.UserProfile.geolocateLatLong(postAddress);
+        GlobalPrint.UserProfile.UserProfileEdit.geolocateLatLong(postAddress);
     });
 });
 

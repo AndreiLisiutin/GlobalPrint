@@ -21,7 +21,7 @@
         <div class="lkBoxCont">
             <div class="defaultTitle">Редактирование принтера "@( Model?.Printer?.Name ?? "Новый" )"</div>
 
-            @using (Html.BeginForm("Save", "Printer", FormMethod.Post, new { @class = "form-horizontal", @role = "form", @id = "printerEditForm" }))
+            @using (Html.BeginForm("Save", "Printer", FormMethod.Post, new { @class = "smForm", @id = "printerEditForm" }))
             {
 
                 if (!ViewData.ModelState.IsValid)

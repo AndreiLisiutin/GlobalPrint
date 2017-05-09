@@ -3,7 +3,7 @@
     $(".focus :input:first").val($(".focus :input:first").val());
 
     var applyFilter = function () {
-        $('#userRecievedPrintOrderListForm').submit();
+        $('#recievedOrderListForm').submit();
     };
 
     // create debounced function

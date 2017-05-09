@@ -11,7 +11,10 @@ using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb
 {
-    public class UserRecievedPrintOrderListController : BaseController
+    /// <summary>
+    /// Контроллер входящих заказов.
+    /// </summary>
+    public class RecievedOrderController : BaseController
     {
         /// <summary>
         /// Get received print order by ID.
@@ -19,7 +22,7 @@ namespace GlobalPrint.ClientWeb
         /// <param name="printOrderID">Identifier of print order.</param>
         /// <returns>Print order view.</returns>
         [Authorize, HttpGet/*, ImportModelState*/]
-        public ActionResult UserRecievedPrintOrderList(string printOrderID)
+        public ActionResult RecievedOrderList(string printOrderID)
         {
             var printOrderList = _GetViewModel(printOrderID);
             return View(printOrderList);
@@ -28,7 +31,7 @@ namespace GlobalPrint.ClientWeb
         {
             PrintOrderUnit printOrderUnit = IoC.Instance.Resolve<PrintOrderUnit>();
             int userID = Request.RequestContext.HttpContext.User.Identity.GetUserId<int>();
-            return printOrderUnit.GetUserRecievedPrintOrderList(userID, printOrderID);
+            return printOrderUnit.GetRecievedOrderList(userID, printOrderID);
         }
 
         /// <summary>
@@ -45,11 +48,11 @@ namespace GlobalPrint.ClientWeb
 
             if (Request.IsAjaxRequest())
             {
-                return JavaScript("document.location.replace('" + Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList") + "');");
+                return JavaScript("document.location.replace('" + Url.Action("RecievedOrderList", "RecievedOrder") + "');");
             }
             else
             {
-                return RedirectToAction("UserRecievedPrintOrderList");
+                return RedirectToAction("RecievedOrderList");
             }
         }
 
@@ -67,11 +70,11 @@ namespace GlobalPrint.ClientWeb
 
             if (Request.IsAjaxRequest())
             {
-                return JavaScript("document.location.replace('" + Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList") + "');");
+                return JavaScript("document.location.replace('" + Url.Action("RecievedOrderList", "RecievedOrder") + "');");
             }
             else
             {
-                return RedirectToAction("UserRecievedPrintOrderList");
+                return RedirectToAction("RecievedOrderList");
             }
         }
 
@@ -95,7 +98,7 @@ namespace GlobalPrint.ClientWeb
             }
             int userID = this.GetCurrentUserID();
             printOrderUnit.UpdateStatus(printOrderID, PrintOrderStatusEnum.Printed, userID);
-            return RedirectToAction("UserRecievedPrintOrderList");
+            return RedirectToAction("RecievedOrderList");
         }
 
         /// <summary>

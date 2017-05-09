@@ -40,7 +40,7 @@
 				Входящие заказы
 			</div>
 
-			@using (Html.BeginForm("UserRecievedPrintOrderList", "UserRecievedPrintOrderList", FormMethod.Get, new { @class = "form-horizontal", @id = "userRecievedPrintOrderListForm" }))
+			@using (Html.BeginForm("RecievedOrderList", "RecievedOrder", FormMethod.Get, new { @class = "form-horizontal", @id = "recievedOrderListForm" }))
 			{
 				<div class="tableName">
 					Код заказа:
@@ -75,10 +75,10 @@
 								@if (printOrder.PrintOrder.PrintOrderStatusID == (int)PrintOrderStatusEnum.Waiting)
 								{
 									<td class="table-col-buttons" align="right">
-										@Ajax.ActionLink(" ", "AcceptOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID },
+										@Ajax.ActionLink(" ", "AcceptOrder", "RecievedOrder", new { printOrderID = printOrder.PrintOrder.ID },
 								new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-default glyphicon glyphicon-ok", @title = "Подтверждение от клиента для получения оплаты" })
 
-										@using (Html.BeginForm("RejectOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID }, FormMethod.Post, new { @class = "inline-block rejectOrder" }))
+										@using (Html.BeginForm("RejectOrder", "RecievedOrder", new { printOrderID = printOrder.PrintOrder.ID }, FormMethod.Post, new { @class = "inline-block rejectOrder" }))
 										{
 											<button type="submit" value="Отклонить" class="btn btn-default glyphicon glyphicon-remove"></button>
 										}
@@ -90,7 +90,7 @@
 										<a href="@Url.Action("DownloadOrder", "Order", new { printOrderID = printOrder.PrintOrder.ID })"
 										   title="Скачать" class="btn btn-default glyphicon glyphicon-download-alt"></a>
 
-										<a href="@Url.Action("ConfirmPrintOrder", "UserRecievedPrintOrderList", new { printOrderID = printOrder.PrintOrder.ID })"
+										<a href="@Url.Action("ConfirmPrintOrder", "RecievedOrder", new { printOrderID = printOrder.PrintOrder.ID })"
 										   title="Распечатать" class="btn btn-default glyphicon glyphicon glyphicon-usd"></a>
 									</td>
 								}

@@ -16,10 +16,9 @@
 	<div class="lkBox">
 
 		<div class="lkBoxCont">
-			<div class="defaultTitle">
-				Денежные переводы
-			</div>
-			@using (Html.BeginForm("ExecuteSendMoney", "UserProfile", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "sendModeyForm" }))
+			<div class="defaultTitle">Денежные переводы</div>
+
+			@using (Html.BeginForm("ExecuteSendMoney", "UserProfile", FormMethod.Post, new { @class = "smForm", @id = "sendModeyForm" }))
 			{
 				@Html.Hidden("UserAmountOfMoney", SenderUser.AmountOfMoney, new { @id = "userAmountOfMoney" })
 				@Html.Hidden("SenderUserId", Model.SenderUserId, new { @id = "senderUserId" })

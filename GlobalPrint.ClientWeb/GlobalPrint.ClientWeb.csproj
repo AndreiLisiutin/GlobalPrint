@@ -688,6 +688,11 @@
     <Content Include="Resources\Libraries\switchery\switchery.js" />
     <Content Include="Resources\Libraries\underscore.js\underscore.js" />
     <Content Include="Resources\Scripts\GlobalPrint.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Account\ForgotPassword.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Account\Login.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Account\Register.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Account\ResetPassword.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Feedback\Feedback.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Home\Index.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Order\Confirm.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Printer\MyPrinters.js" />
@@ -704,7 +709,7 @@
     <Content Include="Resources\Scripts\GlobalPrint\UserProfile\FillUpBalance.js" />
     <Content Include="Resources\Scripts\GlobalPrint\UserProfile\SendMoney.js" />
     <Content Include="Resources\Scripts\GlobalPrint\UserProfile\TransfersRegisters.js" />
-    <Content Include="Resources\Scripts\GlobalPrint\UserProfile\UserProfile.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\UserProfile\UserProfileEdit.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\CommonUtils.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\Enums.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\Services.js" />
@@ -733,6 +738,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\RecievedOrderController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\Utils\LookupControlller.cs" />
     <Compile Include="Filters\BaseErrorHandleAttribute.cs" />
@@ -742,7 +748,6 @@
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
     <Compile Include="Controllers\UserPrintInfoController.cs" />
-    <Compile Include="Controllers\UserRecievedPrintOrderListController.cs" />
     <Compile Include="Controllers\UserProfileController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -815,9 +820,7 @@
     <Content Include="Views\UserProfile\UserProfile.cshtml" />
     <Content Include="Views\Printer\MyPrinters.cshtml" />
     <Content Include="Views\Order\MyOrders.cshtml" />
-    <Content Include="Views\UserRecievedPrintOrderList\UserRecievedPrintOrderList.cshtml" />
     <Content Include="Views\UserProfile\FillUpBalance.cshtml" />
-    <Content Include="Views\UserRecievedPrintOrderList\ConfirmPrintOrder.cshtml" />
     <Content Include="Views\Printer\Edit.cshtml" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -883,6 +886,8 @@
     <None Include="Properties\PublishProfiles\Layout Deploy Package.pubxml" />
     <None Include="Properties\PublishProfiles\Layout.pubxml" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
+    <Content Include="Views\RecievedOrder\ConfirmPrintOrder.cshtml" />
+    <Content Include="Views\RecievedOrder\RecievedOrderList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -925,7 +930,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>1755</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

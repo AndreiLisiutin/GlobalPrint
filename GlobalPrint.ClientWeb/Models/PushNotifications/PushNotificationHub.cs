@@ -50,7 +50,7 @@ namespace GlobalPrint.ClientWeb.Models.PushNotifications
                 int printOrdersCount = new PrinterUnit().GetWaitingIncomingOrdersCount(clientUserID);
 
                 // notify by message
-                userToNotify.displayMessage(message, "/UserRecievedPrintOrderList/UserRecievedPrintOrderList");
+                userToNotify.displayMessage(message, "/RecievedOrder/RecievedOrderList");
                 userToNotify.updateIncomingOrdersCount(printOrdersCount);
                 userToNotify.setIncomingOrdersAlarm(printOrdersCount);
             }

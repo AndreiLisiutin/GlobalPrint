@@ -5,6 +5,9 @@
     ViewBag.Title = "Обратная связь";
     Layout = "~/Views/Shared/_NavigationLayout.cshtml";
 }
+@section Scripts{
+    <script src="~/Resources/Scripts/GlobalPrint/Feedback/FeedBack.js"></script>
+}
 
 <div class="container verticalWrap">
     <div class="loginForm">
@@ -12,26 +15,26 @@
             Обратная связь
         </div>
 
-        @using (Html.BeginForm("Feedback", "Feedback", FormMethod.Post, new { role = "form" }))
+        @using (Html.BeginForm("Feedback", "Feedback", FormMethod.Post, new { @id = "feedbackForm" }))
         {
-            <div class="loginFormLabel">
+            <div class="loginFormLabel input-wrapper">
                 <p>E-Mail</p>
-                @Html.TextBoxFor(m => m.Email, new { @class = "loginFormInput", @type = "email", @required = "true", @autofocus = true })
+                @Html.TextBoxFor(m => m.Email, new { @class = "loginFormInput", @type = "email", @autofocus = true })
             </div>
 
-            <div class="loginFormLabel">
+            <div class="loginFormLabel input-wrapper">
                 <p>Имя пользователя</p>
-                @Html.TextBoxFor(m => m.UserName, new { @class = "loginFormInput", @required = "true" })
+                @Html.TextBoxFor(m => m.UserName, new { @class = "loginFormInput" })
             </div>
 
-            <div class="loginFormLabel">
+            <div class="loginFormLabel input-wrapper">
                 <p>Тема</p>
-                @Html.TextBoxFor(m => m.Subject, new { @class = "loginFormInput", @required = "true" })
+                @Html.TextBoxFor(m => m.Subject, new { @class = "loginFormInput" })
             </div>
 
-            <div class="loginFormLabel">
+            <div class="loginFormLabel input-wrapper">
                 <p>Сообщение</p>
-                @Html.TextAreaFor(m => m.Message, 10, 55, new { @class = "loginFormInput feedback-message", @required = "true" })
+                @Html.TextAreaFor(m => m.Message, 10, 55, new { @class = "loginFormInput feedback-message" })
             </div>
 
             <div class="row" style="margin-top:15px;">

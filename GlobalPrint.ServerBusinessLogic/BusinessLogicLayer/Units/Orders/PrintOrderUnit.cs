@@ -111,7 +111,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             }
         }
 
-        public List<PrintOrderInfo> GetUserRecievedPrintOrderList(int userID, string printOrderID)
+        public List<PrintOrderInfo> GetRecievedOrderList(int userID, string printOrderID)
         {
             using (IDataContext context = this.Context())
             {

@@ -33,8 +33,8 @@
 				<a href=@Url.Action("MyOrders", "Order")>
 					<li class="@Html.IsSelected(actions: "MyOrders", controllers: "Order", cssClass: "active")">Мои заказы</li>
 				</a>
-				<a href=@Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList")>
-					<li class="@Html.IsSelected(actions: "UserRecievedPrintOrderList", controllers: "UserRecievedPrintOrderList", cssClass: "active")">Входящие заказы</li>
+				<a href=@Url.Action("RecievedOrderList", "RecievedOrder")>
+					<li class="@Html.IsSelected(actions: "RecievedOrderList", controllers: "RecievedOrder", cssClass: "active")">Входящие заказы</li>
 				</a>
 				<a href=@Url.Action("MyPrinters", "Printer")>
 					<li class="@Html.IsSelected(actions: "MyPrinters", controllers: "Printer", cssClass: "active")">Мои принтеры</li>

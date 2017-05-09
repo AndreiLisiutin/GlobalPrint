@@ -13,12 +13,10 @@
 
 <div class="col-md-8">
 	<div class="lkBox">
-
 		<div class="lkBoxCont">
-			<div class="defaultTitle">
-				Вывод средств
-			</div>
-			@using (Html.BeginForm("ExecuteRequestCash", "UserProfile", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "sendModeyForm" }))
+			<div class="defaultTitle">Вывод средств</div>
+
+			@using (Html.BeginForm("ExecuteRequestCash", "UserProfile", FormMethod.Post, new { @class = "smForm", @id = "sendModeyForm" }))
 			{
 				@Html.Hidden("UserAmountOfMoney", User.AmountOfMoney, new { @id = "userAmountOfMoney" })
 				@Html.Hidden("UserID", Model.UserID)

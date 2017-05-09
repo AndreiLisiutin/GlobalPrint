@@ -6,7 +6,7 @@
         if (bytes == 0) return '0 Byte';
         var k = 1000; // or 1024 for binary
         var dm = 2;
-        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        var sizes = ['Байт', 'Кб', 'Мб', 'Гб', 'Тб', 'Пб'];
         var i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
     };

@@ -224,7 +224,7 @@ namespace GlobalPrint.ClientWeb
             {
                 Body = notificationMessage,
                 Title = "Global Print - Новый заказ на печать",
-                Action = Url.Action("UserRecievedPrintOrderList", "UserRecievedPrintOrderList", null, Request.Url.Scheme),
+                Action = Url.Action("RecievedOrderList", "RecievedOrder", null, Request.Url.Scheme),
                 DestinationUserID = printerOperator.ID
             };
             new FirebaseNotificator().SendNotification(message);

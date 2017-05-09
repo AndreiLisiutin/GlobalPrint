@@ -9,6 +9,11 @@
     display: inline-block;
 }
 
+.nopadding {
+    margin: 0;
+    padding: 0;
+}
+
 .top,
 .infoBox {
     z-index: 100;
