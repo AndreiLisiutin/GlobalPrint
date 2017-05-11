@@ -1,8 +1,8 @@
 ﻿GlobalPrint.namespace('GlobalPrint.Home.Index');
 (function (HomeIndex) {
 	var PRINTER_ONLINE_ICON_URL = "/Content/img/marker.png";
-	var PRINTER_OFFLINE_ICON_URL = "/Content/img/marker.png";
-	var PRINTER_DEACTIVE_ICON_URL = "/Content/img/marker.png";
+	var PRINTER_OFFLINE_ICON_URL = "/Content/img/marker_light_pink.png";
+	var PRINTER_DEACTIVE_ICON_URL = "/Content/img/marker_light_gray.png";
 	var PRINTER_ONLINE_Z_INDEX = 10000;
 	var PRINTER_OFFLINE_Z_INDEX = 5000;
 	var PRINTER_DEACTIVE_Z_INDEX = 1000;

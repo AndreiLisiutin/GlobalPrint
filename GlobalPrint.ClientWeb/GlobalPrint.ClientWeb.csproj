@@ -252,6 +252,10 @@
     <Content Include="Content\img\mail.png" />
     <Content Include="Content\img\manager.png" />
     <Content Include="Content\img\marker.png" />
+    <Content Include="Content\img\marker_gray.png" />
+    <Content Include="Content\img\marker_light.png" />
+    <Content Include="Content\img\marker_light_gray.png" />
+    <Content Include="Content\img\marker_light_pink.png" />
     <Content Include="Content\img\maximka.png" />
     <Content Include="Content\img\networking.png" />
     <Content Include="Content\img\p-check.png" />
