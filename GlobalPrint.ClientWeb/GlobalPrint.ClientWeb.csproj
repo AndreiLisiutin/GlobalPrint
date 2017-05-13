@@ -225,6 +225,7 @@
     <Content Include="Content\css\media.css" />
     <Content Include="Content\css\owl.carousel.css" />
     <Content Include="Content\css\owl.theme.default.css" />
+    <Content Include="Content\css\toggle-button.css" />
     <Content Include="Content\css\_development.css" />
     <Content Include="Content\img\alarm.png" />
     <Content Include="Content\img\attachment.png" />
@@ -785,6 +786,7 @@
     <Compile Include="Models\Lookup\LookupResultValue.cs" />
     <Compile Include="Models\Lookup\LookupTypeEnum.cs" />
     <Compile Include="Models\Lookup\LookupViewModel.cs" />
+    <Compile Include="Models\MenuButton\MenuItem.cs" />
     <Compile Include="Models\OrderController\Order_RateViewModel.cs" />
     <Compile Include="Models\PrinterController\Printer_EditViewMoel.cs" />
     <Compile Include="Models\PrinterController\Printer_MyPrinters.cs" />
@@ -892,6 +894,7 @@
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Views\RecievedOrder\ConfirmPrintOrder.cshtml" />
     <Content Include="Views\RecievedOrder\RecievedOrderList.cshtml" />
+    <Content Include="Views\MenuButton\MenuButton.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -84,7 +84,7 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         /// </summary>
         [Column("created_on")]
         public DateTime CreatedOn { get; set; }
-
+        
         #region ILegalRequisites
 
         /// <summary>

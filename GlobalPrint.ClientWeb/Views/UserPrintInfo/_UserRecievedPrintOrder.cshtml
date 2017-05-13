@@ -1,6 +1,6 @@
 ﻿<div class="menuLine">
     @if (ViewData != null && ViewData.ContainsKey("UserRecievedPrintOrdersCount") && 
-        ViewData["UserRecievedPrintOrdersCount"] != null && (int)ViewData["UserRecievedPrintOrdersCount"] > 0)
+        ViewData["UserRecievedPrintOrdersCount"] != null && int.Parse(ViewData["UserRecievedPrintOrdersCount"].ToString()) > 0)
     {
         <a href="@Url.Action("RecievedOrderList", "RecievedOrder")" class="messages">
             <img src="~/Content/img/alarm.png" alt="" />
