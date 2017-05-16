@@ -1,24 +1,7 @@
-﻿@using GlobalPrint.ClientWeb.Models.MenuButton
-@model List<MenuItem>
+﻿GlobalPrint.namespace('GlobalPrint.Utils.MenuButton');
+(function (MenuButton) {
 
-@section Styles{
-    <link href="~/Content/css/toggle-button.css" rel="stylesheet" />
-}
-
-<a href="#menu" id="toggle"><span></span></a>
-<div id="menu">
-    <ul>
-        @foreach (var menuItem in Model)
-        {
-            <li><a href="@menuItem.Reference">@menuItem.Name</a></li>
-        }
-    </ul>
-</div>
-
-<script>
-    $(document).ready(function () {
-        var theToggle = document.getElementById('toggle');
-
+    MenuButton.Initialize = function (element) {
         // based on Todd Motto functions
         // http://toddmotto.com/labs/reusable-js/
 
@@ -55,10 +38,33 @@
             }
         }
 
-        theToggle.onclick = function () {
+        element.onclick = function () {
             toggleClass(this, 'on');
             return false;
         }
-    });
+    };
 
-</script>
+    MenuButton.InitializeAllMenus = function () {
+        var menus = Array.prototype.slice.call(document.querySelectorAll('.toggle-menu-button'));
+        menus.forEach(function (item) {
+            MenuButton.Initialize(item);
+        });
+
+        /**
+         * Закрыть меню при клике на другую область окна.
+         * @param {type} event
+         */
+        window.onclick = function (event) {
+            if (!event.target.matches(".toggle-menu-button") && !event.target.matches(".toggle-menu-button-span")) {
+                var dropdowns = Array.prototype.slice.call(document.querySelectorAll('.toggle-menu-button'));
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('on')) {
+                        openDropdown.click();
+                    }
+                }
+            }
+        }
+    };
+
+})(GlobalPrint.Utils.MenuButton);

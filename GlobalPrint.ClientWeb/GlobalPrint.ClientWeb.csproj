@@ -225,7 +225,7 @@
     <Content Include="Content\css\media.css" />
     <Content Include="Content\css\owl.carousel.css" />
     <Content Include="Content\css\owl.theme.default.css" />
-    <Content Include="Content\css\toggle-button.css" />
+    <Content Include="Content\css\toggle-menu-button.css" />
     <Content Include="Content\css\_development.css" />
     <Content Include="Content\img\alarm.png" />
     <Content Include="Content\img\attachment.png" />
@@ -717,6 +717,7 @@
     <Content Include="Resources\Scripts\GlobalPrint\UserProfile\UserProfileEdit.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\CommonUtils.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\Enums.js" />
+    <Content Include="Resources\Scripts\GlobalPrint\Utils\MenuButton.js" />
     <Content Include="Resources\Scripts\GlobalPrint\Utils\Services.js" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\css\jquery.fileupload.css" />
     <Content Include="Resources\Libraries\jQuery-File-Upload-9.12.5\js\jquery.fileupload-process.js" />
@@ -894,7 +895,6 @@
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Views\RecievedOrder\ConfirmPrintOrder.cshtml" />
     <Content Include="Views\RecievedOrder\RecievedOrderList.cshtml" />
-    <Content Include="Views\MenuButton\MenuButton.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

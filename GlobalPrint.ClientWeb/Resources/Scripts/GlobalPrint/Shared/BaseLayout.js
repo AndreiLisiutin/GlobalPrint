@@ -13,7 +13,6 @@
     // Initialize swithers like in iOS
     GlobalPrint.Utils.CommonUtils.initializeSwitchers();
 
-
     GlobalPrint.Utils.CommonUtils.makeProgressBar();
     GlobalPrint.Utils.CommonUtils.disabledCheckboxFix();
     GlobalPrint.Utils.CommonUtils.makeValidation();
@@ -24,6 +23,7 @@
         $('[data-toggle="tooltip"]').tooltip();
         GlobalPrint.Utils.CommonUtils.makeLookups();
         GlobalPrint.Utils.CommonUtils.makeClockPickers();
+        GlobalPrint.Utils.MenuButton.InitializeAllMenus();
     });
 
 })(GlobalPrint.Shared.BaseLayout, GlobalPrint);

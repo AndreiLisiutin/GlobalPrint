@@ -1,113 +1,112 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Orders
 @using GlobalPrint.ServerBusinessLogic.Models.Business.Orders
+@using GlobalPrint.ClientWeb.Helpers
+@using GlobalPrint.ClientWeb.Models.MenuButton
 @using System.Globalization
 @using GlobalPrint.ClientWeb
 
 @model List<PrintOrderInfo>
 @{
-	ViewBag.Title = "Принятые Заказы";
-	Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+    ViewBag.Title = "Принятые Заказы";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
 }
 
 @section Scripts {
-	<script src="~/Resources/Scripts/GlobalPrint/PrintOrder/RecievedPrintOrder.js"></script>
+    <script src="~/Resources/Scripts/GlobalPrint/PrintOrder/RecievedPrintOrder.js"></script>
 }
 
 <div class="col-md-8">
-	<div class="row">
-		<div class="col-md-6">
-			<a href=@Url.Action("FillUpBalance", "UserProfile")>
-				<button class="lkTopBBtn">
-					Пополнить счет
-				</button>
-			</a>
-		</div>
-		<div class="col-md-6">
-			<a href=@Url.Action("RequestCash", "UserProfile")>
-				<button class="lkTopBBtn">
-					Вывести средства
-				</button>
-			</a>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-md-6">
+            <a href=@Url.Action("FillUpBalance", "UserProfile")>
+                <button class="lkTopBBtn">
+                    Пополнить счет
+                </button>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a href=@Url.Action("RequestCash", "UserProfile")>
+                <button class="lkTopBBtn">
+                    Вывести средства
+                </button>
+            </a>
+        </div>
+    </div>
 </div>
 
 <div class="col-md-8">
-	<div class="lkBox">
+    <div class="lkBox">
 
-		<div class="lkBoxCont">
-			<div class="defaultTitle">
-				Входящие заказы
-			</div>
+        <div class="lkBoxCont">
+            <div class="defaultTitle">
+                Входящие заказы
+            </div>
 
-			@using (Html.BeginForm("RecievedOrderList", "RecievedOrder", FormMethod.Get, new { @class = "form-horizontal", @id = "recievedOrderListForm" }))
-			{
-				<div class="tableName">
-					Код заказа:
-					@Html.TextBox("printOrderID", "", htmlAttributes: new { @class = "input-def order-code", @id = "recievedPrintOrderIdFilter" })
-				</div>
-			}
+            @using (Html.BeginForm("RecievedOrderList", "RecievedOrder", FormMethod.Get, new { @class = "form-horizontal", @id = "recievedOrderListForm" }))
+            {
+                <div class="tableName">
+                    Код заказа:
+                    @Html.TextBox("printOrderID", "", htmlAttributes: new { @class = "input-def order-code", @id = "recievedPrintOrderIdFilter" })
+                </div>}
 
-			<div class="lkInsetOverflow minusMargin">
-				<div class="outerTable">
-					<table class="defaultTable" width="100%" cellspacing="0">
-						<tr class="tableHead">
-							<td>Код заказа</td>
-							<td>Принтер</td>
-							<td>Документ</td>
-							<td>Дата</td>
-							<td>Комментарий</td>
-							<td>Цена</td>
-							<td>Статус</td>
-							<td></td>
-						</tr>
+            <div class="lkInsetOverflow minusMargin">
+                <div class="outerTable">
+                    <table class="defaultTable" width="100%" cellspacing="0">
+                        <tr class="tableHead">
+                            <td>Код заказа</td>
+                            <td>Принтер</td>
+                            <td>Документ</td>
+                            <td>Дата</td>
+                            <td>Комментарий</td>
+                            <td>Цена</td>
+                            <td>Статус</td>
+                            <td></td>
+                        </tr>
 
-						@foreach (PrintOrderInfo printOrder in Model)
-						{
-							<tr>
-								<td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.ID)</td>
-								<td>@Html.DisplayFor(c => printOrder.Printer.Name)</td>
-								<td>@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>
-								<td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, String.Format("{{0: {0} }}", CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern))</td>
-								<td align="left">@Html.DisplayFor(c => printOrder.PrintOrder.Comment)</td>
-								<td align="right">@Html.DisplayFor(c => printOrder.PrintOrder.FullPrice, "{0:0.00}")</td>
-								<td align="center">@Html.DisplayFor(c => printOrder.Status.Status)</td>
-								@if (printOrder.PrintOrder.PrintOrderStatusID == (int)PrintOrderStatusEnum.Waiting)
-								{
-									<td class="table-col-buttons" align="right">
-										@Ajax.ActionLink(" ", "AcceptOrder", "RecievedOrder", new { printOrderID = printOrder.PrintOrder.ID },
-								new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-default glyphicon glyphicon-ok", @title = "Подтверждение от клиента для получения оплаты" })
+                        @foreach (PrintOrderInfo printOrder in Model)
+                        {
+                            <tr>
+                                <td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.ID)</td>
+                                <td>@Html.DisplayFor(c => printOrder.Printer.Name)</td>
+                                <td>@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>
+                                <td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, String.Format("{{0: {0} }}", CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern))</td>
+                                <td align="left">@Html.DisplayFor(c => printOrder.PrintOrder.Comment)</td>
+                                <td align="right">@Html.DisplayFor(c => printOrder.PrintOrder.FullPrice, "{0:0.00}")</td>
+                                <td align="center">@Html.DisplayFor(c => printOrder.Status.Status)</td>
+                                @if (printOrder.PrintOrder.PrintOrderStatusID == (int)PrintOrderStatusEnum.Waiting)
+                                {
+                                    <td align="right">
+                                        @Html.ButtonMenu(new List<MenuItem>() {
+                                            new MenuItem() { Name = "Подтвердить для получения оплаты", IsPostOperation = true,
+                                                Reference = @Url.Action("AcceptOrder", "RecievedOrder", new { printOrderID = printOrder.PrintOrder.ID }) },
+                                            new MenuItem() { Name = "Отклонить", IsPostOperation = true, Classes = new List<string> { "rejectOrder" },
+                                                Reference = @Url.Action("RejectOrder", "RecievedOrder", new { printOrderID = printOrder.PrintOrder.ID }) }
+                                        })
+                                    </td>
+                                }
+                                else if (printOrder.PrintOrder.PrintOrderStatusID == (int)PrintOrderStatusEnum.Accepted)
+                                {
+                                    <td align="right">
+                                        @Html.ButtonMenu(new List<MenuItem>() {
+                                            new MenuItem() { Name = "Скачать", Reference = @Url.Action("DownloadOrder", "Order", new { @printOrderID = printOrder.PrintOrder.ID }) },
+                                            new MenuItem() { Name = "Распечатать", Reference = @Url.Action("ConfirmPrintOrder", "RecievedOrder", new { @printOrderID = printOrder.PrintOrder.ID }) }
+                                        })
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="col-md-3"></td>
+                                }
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
 
-										@using (Html.BeginForm("RejectOrder", "RecievedOrder", new { printOrderID = printOrder.PrintOrder.ID }, FormMethod.Post, new { @class = "inline-block rejectOrder" }))
-										{
-											<button type="submit" value="Отклонить" class="btn btn-default glyphicon glyphicon-remove"></button>
-										}
-									</td>
-								}
-								else if (printOrder.PrintOrder.PrintOrderStatusID == (int)PrintOrderStatusEnum.Accepted)
-								{
-									<td class="table-col-buttons" align="right">
-										<a href="@Url.Action("DownloadOrder", "Order", new { printOrderID = printOrder.PrintOrder.ID })"
-										   title="Скачать" class="btn btn-default glyphicon glyphicon-download-alt"></a>
+            <div class="buttonsBox">
+                <a href="/" class="defaultButton coloredBtn white-text">На главную</a>
+            </div>
+        </div>
 
-										<a href="@Url.Action("ConfirmPrintOrder", "RecievedOrder", new { printOrderID = printOrder.PrintOrder.ID })"
-										   title="Распечатать" class="btn btn-default glyphicon glyphicon glyphicon-usd"></a>
-									</td>
-								}
-								else
-								{
-									<td class="col-md-3"></td>
-								}
-							</tr>
-						}
-					</table>
-				</div>
-			</div>
-
-			<div class="buttonsBox">
-				<a href="/" class="defaultButton coloredBtn white-text">На главную</a>
-			</div>
-		</div>
-
-	</div>
+    </div>
 </div>

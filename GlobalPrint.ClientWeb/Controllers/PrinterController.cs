@@ -113,6 +113,11 @@ namespace GlobalPrint.ClientWeb
             return this._PRINTER_EDIT(model);
         }
 
+        /// <summary>
+        /// Удалить принтер.
+        /// </summary>
+        /// <param name="PrinterID">Идентификатор принтера для удаления.</param>
+        /// <returns>Страница со списком принтеров.</returns>
         [Authorize, HttpPost, ExportModelState]
         public ActionResult Delete(int PrinterID)
         {

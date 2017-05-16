@@ -1,5 +1,7 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.Models.Business.Orders
 @using GlobalPrint.ClientWeb.Models.Lookup
+@using GlobalPrint.ClientWeb.Helpers
+@using GlobalPrint.ClientWeb.Models.MenuButton
 @using System.Globalization
 
 @model List<PrintOrderInfo>
@@ -68,11 +70,11 @@
 								<td align="right">@Html.DisplayFor(c => printOrder.PrintOrder.FullPrice, "{0:0.00}")</td>
 								<td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.SecretCode)</td>
 								<td align="center">@Html.DisplayFor(c => printOrder.Status.Status)</td>
-								<td align="center">
-									<div class="table-col-buttons">
-										<a href="@Url.Action("FromExisting", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title="Копировать заказ" class="btn btn-default glyphicon glyphicon-plus"></a>
-										<a href="@Url.Action("Details", "Order", new { @printOrderID = printOrder.PrintOrder.ID })" title="Детали заказа на печать" class="btn btn-default glyphicon glyphicon-pencil"></a>
-									</div>
+								<td align="right">
+                                    @Html.ButtonMenu(new List<MenuItem>() {
+                                        new MenuItem() { Name = "Копировать заказ", Reference = @Url.Action("FromExisting", "Order", new { @printOrderID = printOrder.PrintOrder.ID }) },
+                                        new MenuItem() { Name = "Детали заказа", Reference = @Url.Action("Details", "Order", new { @printOrderID = printOrder.PrintOrder.ID }) }
+                                    })
 								</td>
 							</tr>
 						}
