@@ -17,6 +17,7 @@
     GlobalPrint.Utils.CommonUtils.disabledCheckboxFix();
     GlobalPrint.Utils.CommonUtils.makeValidation();
     GlobalPrint.Utils.CommonUtils.initializeClearableInputs();
+    GlobalPrint.Utils.CommonUtils.initializeDoubleScroll();
 
     $(document).ready(function () {
         //usage of tooltip.js

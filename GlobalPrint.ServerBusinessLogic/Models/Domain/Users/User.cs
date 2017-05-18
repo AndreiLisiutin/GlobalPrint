@@ -73,13 +73,6 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         public DateTime LastActivityDate { get; set; }
 
         /// <summary>
-        /// Идентификатор браузера пользователя.
-        /// </summary>
-        [Column("device_id")]
-        [Obsolete("Используя FCM уже не актуален. Надо будет безопасно его убрать.")]
-        public string DeviceID { get; set; }
-
-        /// <summary>
         /// Дата создания.
         /// </summary>
         [Column("created_on")]

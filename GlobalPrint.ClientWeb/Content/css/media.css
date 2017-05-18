@@ -76,7 +76,7 @@
 	.defaultButton {margin-bottom:10px; width:100%;}
 	.outerTable {border:none; overflow-x:scroll;}
 	.defaultTable {min-width:700px;}
-	.lkInsetOverflow:after {content:''; display:block; width:64px; height:32px; background:url("../img/scroll.png") center no-repeat; margin:5px auto 0;}
+	.lkInsetOverflow:after,.lkInsetOverflow:before {content:''; display:block; width:64px; height:32px; background:url("../img/scroll.png") center no-repeat; margin:5px auto 0;}
 	.minusMargin {margin:0px -30px; width:calc(100% + 60px);}
 	.smForm {width:100%;}
 	.defaultTitle {font-size:16px; text-align:center;} 

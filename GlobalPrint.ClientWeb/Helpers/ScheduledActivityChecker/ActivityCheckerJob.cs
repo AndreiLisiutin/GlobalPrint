@@ -5,19 +5,10 @@ using GlobalPrint.Infrastructure.LogUtility;
 using GlobalPrint.Infrastructure.Notifications;
 using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Printers;
-using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
-using Ninject;
 using Quartz;
-using Quartz.Impl;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Configuration;
-using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
 {
@@ -25,7 +16,6 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
     {
         private readonly TimeSpan _threshold;
         private readonly TimeSpan _callInterval;
-        private readonly string _emailSubject = "Активность в GlobalPrint";
         private readonly string _globalPrintSiteUrl;
 
         private IUserUnit _userUnit;
@@ -69,6 +59,8 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
         /// <param name="item">User to notify and his printer.</param>
         private void NotifyUser(PrinterOperatorModel item)
         {
+            string emailSubject = "Активность в GlobalPrint";
+
             try
             {
                 MailAddress printerOperatorMail = new MailAddress(item.PrinterOperator.Email, item.PrinterOperator.UserName);
@@ -83,25 +75,22 @@ namespace GlobalPrint.ClientWeb.Helpers.ScheduledActivityChecker
                      _threshold.TotalMinutes
                  );
 
-                _emailUtility.Send(printerOperatorMail, _emailSubject, messageBody);
+                _emailUtility.Send(printerOperatorMail, emailSubject, messageBody);
 
                 // Simple push notification
                 PushNotificationHub pushNotificationHub = IoC.Instance.Resolve<PushNotificationHub>();
                 pushNotificationHub.UserActivityNotification(messageBody, item.PrinterOperator.ID);
 
                 // Browser push notification
-                if (!string.IsNullOrWhiteSpace(item.PrinterOperator.DeviceID))
+                NotificationMessage message = new NotificationMessage()
                 {
-                    NotificationMessage message = new NotificationMessage()
-                    {
-                        Body = messageBody,
-                        Title = _emailSubject,
-                        Action = _globalPrintSiteUrl,
-                        DestinationUserID = item.PrinterOperator.ID
-                    };
-                    FirebaseNotificator firebaseNotification = new FirebaseNotificator();
-                    firebaseNotification.SendNotification(message);
-                }
+                    Body = messageBody,
+                    Title = emailSubject,
+                    Action = _globalPrintSiteUrl,
+                    DestinationUserID = item.PrinterOperator.ID
+                };
+                FirebaseNotificator firebaseNotification = new FirebaseNotificator();
+                firebaseNotification.SendNotification(message);
             }
             catch (Exception e)
             {

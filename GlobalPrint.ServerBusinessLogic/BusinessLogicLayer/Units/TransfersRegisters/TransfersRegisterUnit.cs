@@ -1,5 +1,6 @@
 ﻿using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.Infrastructure.EmailUtility;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.TransfersRegisters;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Printers;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Business.TransfersRegisters;
@@ -14,13 +15,13 @@ using System.Threading.Tasks;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.TransfersRegisters
 {
-    public class TransfersRegisterUnit : BaseUnit
+    public class TransfersRegisterUnit : BaseUnit, ITransfersRegisterUnit
     {
         private Lazy<IEmailUtility> _emailUtility { get; set; }
 
         public TransfersRegisterUnit(Lazy<IEmailUtility> emailUtility)
         {
-            this._emailUtility = emailUtility;
+            _emailUtility = emailUtility;
         }
 
         /// <summary>

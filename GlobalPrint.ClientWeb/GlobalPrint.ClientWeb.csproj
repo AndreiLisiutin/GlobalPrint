@@ -679,6 +679,7 @@
     <Content Include="Resources\Libraries\jquery-validation\test\qunit\qunit.js" />
     <Content Include="Resources\Libraries\jquery-validation\test\rules.js" />
     <Content Include="Resources\Libraries\jquery-validation\test\test.js" />
+    <Content Include="Resources\Libraries\jqueryDoubleScroll\jquery.doubleScroll.js" />
     <Content Include="Resources\Libraries\jQuery\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Resources\Libraries\nprogress\.gitignore" />
     <Content Include="Resources\Libraries\nprogress\index.html" />

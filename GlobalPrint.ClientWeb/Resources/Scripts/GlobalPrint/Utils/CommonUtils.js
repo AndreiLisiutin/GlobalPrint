@@ -371,7 +371,19 @@
                 zindex: 1000
             });
         });
-    }
+    };
+
+    /**
+     * Инициализировать двойной скроллер у таблиц.
+     */
+    CommonUtils.initializeDoubleScroll = function () {
+        var doubleScrollElements = Array.prototype.slice.call(document.querySelectorAll('.double-scroll'));
+        doubleScrollElements.forEach(function (item) {
+            $(item).doubleScroll({
+                resetOnWindowResize: true
+            });
+        });
+    };
 
     /**
      * Запустить воспроизведение музыкальной дорожки.

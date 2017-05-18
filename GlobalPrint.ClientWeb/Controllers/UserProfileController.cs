@@ -1,15 +1,13 @@
 ﻿using GlobalPrint.ClientWeb.Filters;
-using GlobalPrint.Configuration.DI;
 using GlobalPrint.Infrastructure.BankUtility;
 using GlobalPrint.Infrastructure.BankUtility.BicInfo;
 using GlobalPrint.Infrastructure.CommonUtils;
 using GlobalPrint.Infrastructure.LogUtility;
 using GlobalPrint.Infrastructure.LogUtility.Robokassa;
 using GlobalPrint.Infrastructure.Notifications;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Payment;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.TransfersRegisters;
 using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.TransfersRegisters;
-using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Payments;
 using GlobalPrint.ServerBusinessLogic.Models.Business.TransfersRegisters;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Payment;
@@ -34,12 +32,12 @@ namespace GlobalPrint.ClientWeb
         /// <summary>
         /// Модуль бизнес логики для денежных операций пользователя.
         /// </summary>
-        private PaymentActionUnit _paymentActionUnit;
+        private IPaymentActionUnit _paymentActionUnit;
 
         /// <summary>
         /// Модуль бизнес логики для реестров перечислений.
         /// </summary>
-        private TransfersRegisterUnit _transfersRegisterUnit;
+        private ITransfersRegisterUnit _transfersRegisterUnit;
 
         /// <summary>
         /// Утилита для получения информации о банке по БИК.
@@ -50,15 +48,20 @@ namespace GlobalPrint.ClientWeb
         /// Утилита логирования ошибок.
         /// </summary>
         private Lazy<ILogger> _logUtility;
+        
+        public UserProfileController(
+            IUserUnit userUnit, 
+            IPaymentActionUnit paymentActionUnit,
+            ITransfersRegisterUnit transfersRegisterUnit,
+            IBankUtility bankUtility,
+            ILoggerFactory loggerFactory)
+        {
+            Argument.NotNull(userUnit, "Не задан модуль бизнес логики для пользователя.");
+            Argument.NotNull(paymentActionUnit, "Не задан модуль бизнес логики для денежных операций пользователя.");
+            Argument.NotNull(transfersRegisterUnit, "Не задан модуль бизнес логики для реестров перечислений.");
+            Argument.NotNull(bankUtility, "Не задана утилита для получения информации о банке по БИК.");
+            Argument.NotNull(loggerFactory, "Не задана утилита логирования ошибок.");
 
-        public UserProfileController()
-            : this(IoC.Instance.Resolve<IUserUnit>(), new PaymentActionUnit(),
-                  IoC.Instance.Resolve<IBankUtility>(), IoC.Instance.Resolve<ILoggerFactory>(), IoC.Instance.Resolve<TransfersRegisterUnit>())
-        {
-        }
-        public UserProfileController(IUserUnit userUnit, PaymentActionUnit paymentActionUnit,
-            IBankUtility bankUtility, ILoggerFactory loggerFactory, TransfersRegisterUnit transfersRegisterUnit)
-        {
             _userUnit = userUnit;
             _paymentActionUnit = paymentActionUnit;
             _transfersRegisterUnit = transfersRegisterUnit;
@@ -137,7 +140,7 @@ namespace GlobalPrint.ClientWeb
                     throw new Exception("Некорректно введена сумма пополнения", ex);
                 }
                 //create payment action in DB for filling up balance and redirect to robokassa
-                PaymentAction action = new PaymentActionUnit().InitializeFillUpBalance(userID, decimalUpSumm, null);
+                PaymentAction action = _paymentActionUnit.InitializeFillUpBalance(userID, decimalUpSumm, null);
                 string redirectUrl = Robokassa.GetRedirectUrl(decimalUpSumm, action.PaymentTransactionID);
                 return Redirect(redirectUrl);
             }
@@ -216,46 +219,6 @@ namespace GlobalPrint.ClientWeb
             }
 
             return Json(bankInfo, JsonRequestBehavior.AllowGet);
-        }
-
-        /// <summary>
-        /// Update шdentifier of user device for notifications system.
-        /// </summary>
-        /// <param name="deviceID">Identifier of user device for notifications system.</param>
-        /// <returns>Nothing in fact.</returns>
-        [HttpGet, Authorize]
-        public ActionResult UpdateDeviceID(string deviceID)
-        {
-            var userID = GetCurrentUserID();
-            if (User.Identity.IsAuthenticated)
-            {
-                Argument.NotNullOrWhiteSpace(deviceID, "При изменении идентификатора устройства произошла ошибка. Идентификатор устройства не может быть пустым.");
-                var user = _userUnit.UpdateDeviceID(userID, deviceID);
-                return Json(user, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(new { }, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        /// <summary>
-        /// Get device identifier of current user.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet, Authorize]
-        public ActionResult GetDeviceID()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                var userID = GetCurrentUserID();
-                var user = _userUnit.GetByID(GetCurrentUserID());
-                return Json(new { deviceID = user.DeviceID }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(new { deviceID = "" }, JsonRequestBehavior.AllowGet);
-            }
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using GlobalPrint.Infrastructure.CommonUtils;
+using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Payment;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Orders;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Payment;
@@ -18,7 +19,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
     /// <summary>
     /// Unit about payment actions and transactions. 
     /// </summary>
-    public class PaymentActionUnit : BaseUnit
+    public class PaymentActionUnit : BaseUnit, IPaymentActionUnit
     {
         [DebuggerStepThrough]
         public PaymentActionUnit()
@@ -27,12 +28,12 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
         }
 
         /// <summary>
-        /// Return list of user's successful payments.
+        /// Получить список успешных денежных операций пользователя.
         /// </summary>
-        /// <param name="userID"></param>
-        /// <param name="dateFrom">Date from for the payments.</param>
-        /// <param name="dateTo">Date to for the payments.</param>
-        /// <returns></returns>
+        /// <param name="userID">Идентификатор пользователя.</param>
+        /// <param name="dateFrom">Фильтр по дате операции - дата с.</param>
+        /// <param name="dateTo">Фильтр по дате операции - дата по.</param>
+        /// <returns>Список успешных денежных операций пользователя.</returns>
         public List<PaymentActionFullInfo> GetByUserID(int userID, DateTime? dateFrom = null, DateTime? dateTo = null)
         {
             dateTo = dateTo.HasValue ? dateTo.Value.AddDays(1) : dateTo;
@@ -65,7 +66,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
 
         #region Fill up user's account balance
 
-        /// <summary> Initialize action of filling up user's account balance.
+        /// <summary> 
+        /// Initialize action of filling up user's account balance.
         /// </summary>
         /// <param name="userID">Identifier of the user.</param>
         /// <param name="amountOfMoney">Amount of money that user will receive.</param>
@@ -119,7 +121,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
             }
         }
 
-        /// <summary> Confirm the action of filling up user's account balance.
+        /// <summary> 
+        /// Confirm the action of filling up user's account balance.
         /// </summary>
         /// <param name="paymentTransactionID">Identifier of payment transaction.</param>
         public void CommitFillUpBalance(int paymentTransactionID)
@@ -149,7 +152,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
             }
         }
 
-        /// <summary> Abort the action of filling up user's account balance.
+        /// <summary> 
+        /// Abort the action of filling up user's account balance.
         /// </summary>
         /// <param name="paymentTransactionID">Identifier of payment transaction.</param>
         public void RollbackFillUpBalance(int paymentTransactionID)
@@ -259,7 +263,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
             }
         }
 
-        /// <summary> Confirm action of printing the order.
+        /// <summary> 
+        /// Confirm action of printing the order.
         /// </summary>
         /// <param name="paymentTransactionID">Identifier of payment transaction.</param>
         public void CommitPrintOrder(int printOrderID)
@@ -328,7 +333,8 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Payment
             }
         }
 
-        /// <summary> Abort action of printing the order.
+        /// <summary> 
+        /// Abort action of printing the order.
         /// </summary>
         /// <param name="paymentTransactionID">Identifier of payment transaction.</param>
         public void RollbackPrintOrder(int printOrderID)
