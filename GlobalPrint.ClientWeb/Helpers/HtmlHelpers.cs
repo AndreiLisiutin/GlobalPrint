@@ -260,5 +260,34 @@ namespace GlobalPrint.ClientWeb.Helpers
 
             return new MvcHtmlString(outerDiv.ToString());
         }
-    }
+
+		/// <summary>
+		/// Отобразить картинку.
+		/// </summary>
+		/// <param name="html"></param>
+		/// <param name="src">Исходники картинки как массив байт.</param>
+		/// <param name="alternateSrc">Путь к альтрнативной картинке, если картинка пустая.</param>
+		/// <param name="alt">Текст, отображаемый, если картинки нет.</param>
+		/// <param name="htmlAttributes">Список дополнительных атрибутов.</param>
+		/// <returns>Картинка.</returns>
+		public static MvcHtmlString Image(this HtmlHelper html, byte[] src, string alternateSrc, string alt, object htmlAttributes = null)
+		{
+			var img = new TagBuilder("img");
+			img.MergeAttribute("src", src != null
+				? $"data:image/png;base64,{Convert.ToBase64String(src)}"
+				: alternateSrc != null
+					? new Uri(new Uri(HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority)), alternateSrc).AbsoluteUri
+					: "");
+			img.MergeAttribute("alt", alt);
+			if (htmlAttributes != null)
+			{
+				foreach (var property in htmlAttributes.GetType().GetProperties())
+				{
+					img.MergeAttribute(property.Name, (property.GetValue(htmlAttributes) ?? "").ToString());
+				}
+			}
+			
+			return new MvcHtmlString(img.ToString());
+		}
+	}
 }

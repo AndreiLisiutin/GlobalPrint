@@ -1,152 +1,151 @@
 ﻿@using GlobalPrint.ServerBusinessLogic.Models.Domain.Users
-
+@using GlobalPrint.ClientWeb.Helpers;
 @model User
 @{
-    ViewBag.Title = "Профиль пользователя";
-    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+	ViewBag.Title = "Профиль пользователя";
+	Layout = "~/Views/Shared/_ProfileLayout.cshtml";
 }
 
 @section Scripts {
-    <script src="~/Resources/Scripts/GlobalPrint/UserProfile/UserProfileEdit.js"></script>
+	<script src="~/Resources/Scripts/GlobalPrint/UserProfile/UserProfileEdit.js"></script>
 }
 
 <div class="col-md-8">
-    <div class="lkBox">
-        <div class="lkBoxCont">
-            <div class="defaultTitle">Редактирование профиля</div>
+	<div class="lkBox">
+		<div class="lkBoxCont">
+			<div class="defaultTitle">Редактирование профиля</div>
 
-            @using (Html.BeginForm("Save", "UserProfile", FormMethod.Post, new { @class = "smForm", @id = "userProfileEditForm" }))
-            {
-                <div class="row regisRow">
+			@using (Html.BeginForm("Save", "UserProfile", FormMethod.Post, new { @class = "smForm", @id = "userProfileEditForm" }))
+			{
+				<div class="row regisRow">
 
-                    @Html.HiddenFor(m => m.ID)
+					@Html.HiddenFor(m => m.ID)
 
-                    <div class="row">
-                        <div class="col-md-12" align="center">
-                            <div class="avatar">
-                                <div onclick="$('.getAvatar').click();" class="editAvatar">
-                                    <i class="fa fa-camera"></i>
-                                </div>
-                                <input type="file" style="display:none;" class="getAvatar">
-                                <img src="~/Content/img/maximka.png" alt="" />
-                            </div>
-                        </div>
-                    </div>
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<div class="avatar">
+								<div onclick="$('.getAvatar').click();" class="editAvatar">
+									<i class="fa fa-camera"></i>
+								</div>
+								@Html.TextBoxFor(m => m.Photo, new { @type = "file", @style = "display:none;", @class = "getAvatar", @id = "userPhotoFileupload" })
+								@Html.Image(Model.Photo, "/Content/img/no_avatar.png", "Нет аватара", new { @id = "userPhotoPreview", @style = "height: 130px;" })
+							</div>
+						</div>
+					</div>
+					<div class="edit">Основное</div>
 
-                    <div class="edit">Основное</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="tableName">Имя:</div>
+							<label class="labelBox mgBottom input-wrapper">
+								@Html.TextBoxFor(m => m.UserName, new { @class = "input-def fullwidth", @autofocus = true })
+							</label>
+						</div>
+						<div class="col-md-6">
+							<div class="tableName">E-Mail:</div>
+							<label class="labelBox mgBottom input-wrapper">
+								@Html.TextBoxFor(m => m.Email, new { @class = "input-def fullwidth", @readonly = "true", @type = "email" })
+							</label>
+						</div>
+					</div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="tableName">Имя:</div>
-                            <label class="labelBox mgBottom input-wrapper">
-                                @Html.TextBoxFor(m => m.UserName, new { @class = "input-def fullwidth", @autofocus = true })
-                            </label>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="tableName">E-Mail:</div>
-                            <label class="labelBox mgBottom input-wrapper">
-                                @Html.TextBoxFor(m => m.Email, new { @class = "input-def fullwidth", @readonly = "true", @type = "email" })
-                            </label>
-                        </div>
-                    </div>
+					<div class="tableName">Оферта:</div>
+					<label class="labelBox mgBottom input-wrapper">
+						<span class="input-group fullwidth">
+							@Html.TextBox("UserOfferTitle", $"Договор оферты пользователя № {Model.ID} от {Model.CreatedOn.ToString("dd.MM.yyyy")}",
+								new { @class = "input-def fullwidth", @readonly = "true" })
+							<span class="dLabel input-group-btn">
+								<a href="@Url.Action("Offer", "Offer")" target="_blank" title="Открыть договор оферты">
+									<img src="~/Content/img/search.png">
+								</a>
+							</span>
+						</span>
+					</label>
 
-                    <div class="tableName">Оферта:</div>
-                    <label class="labelBox mgBottom input-wrapper">
-                        <span class="input-group fullwidth">
-                            @Html.TextBox("UserOfferTitle", $"Договор оферты пользователя № {Model.ID} от {Model.CreatedOn.ToString("dd.MM.yyyy")}",
-                                new { @class = "input-def fullwidth", @readonly = "true" })
-                            <span class="dLabel input-group-btn">
-                                <a href="@Url.Action("Offer", "Offer")" target="_blank" title="Открыть договор оферты">
-                                    <img src="~/Content/img/search.png">
-                                </a>
-                            </span>
-                        </span>
-                    </label>
+					<div class="edit">Реквизиты</div>
 
-                    <div class="edit">Реквизиты</div>
+					<div class="tableName">Полное наименование:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.LegalFullName, new { @class = "input-def fullwidth" })
+					</label>
 
-                    <div class="tableName">Полное наименование:</div>
-                    <label class="labelBox mgBottom">
-                        @Html.TextBoxFor(m => m.LegalFullName, new { @class = "input-def fullwidth" })
-                    </label>
+					<div class="tableName">Краткое наименование:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.LegalShortName, new { @class = "input-def fullwidth" })
+					</label>
 
-                    <div class="tableName">Краткое наименование:</div>
-                    <label class="labelBox mgBottom">
-                        @Html.TextBoxFor(m => m.LegalShortName, new { @class = "input-def fullwidth" })
-                    </label>
+					<div class="tableName">Юридический адрес:</div>
+					<label class="labelBox mgBottom">
+						<span class="input-group fullwidth">
+							@Html.TextBoxFor(m => m.LegalAddress, new { @class = "input-def fullwidth", @id = "legalAddress" })
+							<span class="dLabel input-group-btn" id="legalGeolocation" title="Определить адрес по сервисам Google">
+								<img src="/Content/img/world_earth.png">
+							</span>
+						</span>
+					</label>
 
-                    <div class="tableName">Юридический адрес:</div>
-                    <label class="labelBox mgBottom">
-                        <span class="input-group fullwidth">
-                            @Html.TextBoxFor(m => m.LegalAddress, new { @class = "input-def fullwidth", @id = "legalAddress" })
-                            <span class="dLabel input-group-btn" id="legalGeolocation" title="Определить адрес по сервисам Google">
-                                <img src="/Content/img/world_earth.png">
-                            </span>
-                        </span>
-                    </label>
+					<div class="tableName">Почтовый адрес:</div>
+					<label class="labelBox mgBottom">
+						<span class="input-group fullwidth">
+							@Html.TextBoxFor(m => m.PostAddress, new { @class = "input-def fullwidth", @id = "postAddress" })
+							<span class="dLabel input-group-btn" id="postGeolocation" title="Определить адрес по сервисам Google">
+								<img src="/Content/img/world_earth.png">
+							</span>
+						</span>
+					</label>
 
-                    <div class="tableName">Почтовый адрес:</div>
-                    <label class="labelBox mgBottom">
-                        <span class="input-group fullwidth">
-                            @Html.TextBoxFor(m => m.PostAddress, new { @class = "input-def fullwidth", @id = "postAddress" })
-                            <span class="dLabel input-group-btn" id="postGeolocation" title="Определить адрес по сервисам Google">
-                                <img src="/Content/img/world_earth.png">
-                            </span>
-                        </span>
-                    </label>
+					<div class="tableName">Телефон:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.PhoneNumber, new { @class = "input-def fullwidth" })
+					</label>
 
-                    <div class="tableName">Телефон:</div>
-                    <label class="labelBox mgBottom">
-                        @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "input-def fullwidth" })
-                    </label>
+					<div class="tableName">ИНН:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.Inn, new { @class = "input-def fullwidth" })
+					</label>
 
-                    <div class="tableName">ИНН:</div>
-                    <label class="labelBox mgBottom">
-                        @Html.TextBoxFor(m => m.Inn, new { @class = "input-def fullwidth" })
-                    </label>
+					<div class="tableName">КПП:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.Kpp, new { @class = "input-def fullwidth" })
+					</label>
 
-                    <div class="tableName">КПП:</div>
-                    <label class="labelBox mgBottom">
-                        @Html.TextBoxFor(m => m.Kpp, new { @class = "input-def fullwidth" })
-                    </label>
+					<div class="tableName">ОГРН:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.Ogrn, new { @class = "input-def fullwidth" })
+					</label>
 
-                    <div class="tableName">ОГРН:</div>
-                    <label class="labelBox mgBottom">
-                        @Html.TextBoxFor(m => m.Ogrn, new { @class = "input-def fullwidth" })
-                    </label>
+					<div class="tableName">Расчетный счет:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.PaymentAccount, new { @class = "input-def fullwidth" })
+					</label>
 
-                    <div class="tableName">Расчетный счет:</div>
-                    <label class="labelBox mgBottom">
-                        @Html.TextBoxFor(m => m.PaymentAccount, new { @class = "input-def fullwidth" })
-                    </label>
+					<div class="tableName">БИК Банка:</div>
+					<label class="labelBox mgBottom">
+						<span class="input-group fullwidth">
+							@Html.TextBoxFor(m => m.BankBic, new { @class = "input-def fullwidth", @id = "bankBic" })
+							<span class="dLabel input-group-btn" id="autoFillBankData" title="Автозаполнение данных банка">
+								<img src="~/Content/img/search.png">
+							</span>
+						</span>
+					</label>
 
-                    <div class="tableName">БИК Банка:</div>
-                    <label class="labelBox mgBottom">
-                        <span class="input-group fullwidth">
-                            @Html.TextBoxFor(m => m.BankBic, new { @class = "input-def fullwidth", @id = "bankBic" })
-                            <span class="dLabel input-group-btn" id="autoFillBankData" title="Автозаполнение данных банка">
-                                <img src="~/Content/img/search.png">
-                            </span>
-                        </span>
-                    </label>
+					<div class="tableName">Наименование банка:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.BankName, new { @class = "input-def fullwidth", @id = "bankName" })
+					</label>
 
-                    <div class="tableName">Наименование банка:</div>
-                    <label class="labelBox mgBottom">
-                        @Html.TextBoxFor(m => m.BankName, new { @class = "input-def fullwidth", @id = "bankName" })
-                    </label>
+					<div class="tableName">Корр. счет банка:</div>
+					<label class="labelBox mgBottom">
+						@Html.TextBoxFor(m => m.BankCorrespondentAccount, new { @class = "input-def fullwidth", @id = "bankCorrespondentAccount" })
+					</label>
+				</div>
 
-                    <div class="tableName">Корр. счет банка:</div>
-                    <label class="labelBox mgBottom">
-                        @Html.TextBoxFor(m => m.BankCorrespondentAccount, new { @class = "input-def fullwidth", @id = "bankCorrespondentAccount" })
-                    </label>
-                </div>
+				<div class="buttonsBox" align="center">
+					<button class="defaultButton coloredBtn" type="submit" value="Save" name="action:Save">Сохранить</button>
+					<a href=@Url.Action("UserProfile", "UserProfile") class="defaultButton coloredBtn white-text">Отмена</a>
+				</div>
+			}
 
-                <div class="buttonsBox" align="center">
-                    <button class="defaultButton coloredBtn" type="submit" value="Save" name="action:Save">Сохранить</button>
-                    <a href=@Url.Action("UserProfile", "UserProfile") class="defaultButton coloredBtn white-text">Отмена</a>
-                </div>
-            }
-
-        </div>
-    </div>
+		</div>
+	</div>
 </div>

@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
 {
+	/// <summary>
+	/// Доменная модель пользователя.
+	/// </summary>
     [Table("user", Schema = "public")]
     public class User : IDomainModel, IUserProfile
     {
@@ -29,6 +32,12 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         [Column("email")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+
+		/// <summary>
+		/// Фото пользователя.
+		/// </summary>
+		[Column("photo")]
+		public byte[] Photo { get; set; }
 
         /// <summary>
         /// Объем денежных средств, доступных в системе пользователю.
