@@ -33,11 +33,11 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Domain.Users
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-		/// <summary>
-		/// Фото пользователя.
-		/// </summary>
-		[Column("photo")]
-		public byte[] Photo { get; set; }
+		///// <summary>
+		///// Фото пользователя.
+		///// </summary>
+		//[Column("photo")]
+		//public byte[] Photo { get; set; }
 
         /// <summary>
         /// Объем денежных средств, доступных в системе пользователю.
