@@ -94,8 +94,9 @@ $(document).ready(function () {
 	$('#userPhotoFileupload').fileupload({
 		acceptFileTypes: /(\.|\/)(jpe?g|png|gif)$/i,
 		maxFileSize: 1024 * 1024 * 10, // = 10Mb
-		autoUpload: false,
 		maxNumberOfFiles: 1,
+		url: '/UserProfile/UpdatePhoto',
+		autoUpload: false,
 		dataType: 'json',
 		messages: {
 			maxNumberOfFiles: 'Превышено максимально допустимое количество файлов для загрузки',
@@ -116,7 +117,11 @@ $(document).ready(function () {
 			GlobalPrint.Utils.CommonUtils.showCropWindow(
 				e.target.result,
 				function (croppedPhoto) {
-					$('#userPhotoPreview').attr('src', croppedPhoto);
+				    $('#userPhotoPreview').attr('src', croppedPhoto);
+				    data.formData = {
+				        base64File: croppedPhoto
+				    };
+				    data.submit();
 				}
 			);
 		};
@@ -127,7 +132,19 @@ $(document).ready(function () {
 		if (data.files[0].error) {
 			handleFileUploadError(data.files[0].error);
 		}
-	});
+	}).on('fileuploaddone', function (e, data) {
+	    if (data.result.result == "Redirect") {
+	        window.location.href = data.result.url;
+	    } else {
+	        if (data.files[0].error) {
+	            handleFileUploadError(data.files[0].error);
+	        }
+	    }
+	}).on('fileuploadfail', function (e, data) {
+	    if (data.files[0].error) {
+	        handleFileUploadError(data.files[0].error);
+	    }
+	});;
 
 });
 

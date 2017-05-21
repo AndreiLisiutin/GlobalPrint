@@ -120,8 +120,9 @@
     border-radius: 0px 5px 5px 0px !important;
     transition-duration: 0.2s;
 }
+
     .dLabel:hover {
-        background:#ff4779;
+        background: #ff4779;
     }
 
 .dLeftLabel {
@@ -272,12 +273,6 @@
     border-left: 0 !important;
 }
 
-.img-container {
-    width: 100%;
-    text-align: center;
-    min-height: 469px;
-}
-
 /* Стиль для нажатой кнопки */
 .goReg:active,
 .lkTopBBtn:active,
@@ -290,4 +285,51 @@
 
 .lookup-header {
     cursor: pointer;
+}
+
+/* Apply these styles only when #preview-pane has
+    been placed within the Jcrop widget */
+.jcrop-holder #preview-pane {
+    display: block;
+    position: absolute;
+    z-index: 2000;
+    top: 10px;
+    right: -280px;
+    padding: 6px;
+    border: 1px rgba(0,0,0,.4) solid;
+    background-color: white;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* The Javascript code will set the aspect ratio of the crop
+    area based on the size of the thumbnail preview,
+    specified here */
+#preview-pane .preview-container {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+}
+
+.crop-window {
+    text-align: center;
+    overflow-y: hidden !important;
+    min-width: 700px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.crop-container {
+    width: 100%;
+    text-align: center;
+    margin: 0 !important;
+}
+
+.crop-img-container {
+    margin: 0 auto;
+    display: inline-block;
 }

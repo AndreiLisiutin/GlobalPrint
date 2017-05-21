@@ -48,9 +48,9 @@ namespace GlobalPrint.ClientWeb
         /// Утилита логирования ошибок.
         /// </summary>
         private Lazy<ILogger> _logUtility;
-        
+
         public UserProfileController(
-            IUserUnit userUnit, 
+            IUserUnit userUnit,
             IPaymentActionUnit paymentActionUnit,
             ITransfersRegisterUnit transfersRegisterUnit,
             IBankUtility bankUtility,
@@ -120,6 +120,30 @@ namespace GlobalPrint.ClientWeb
         }
 
         /// <summary>
+        /// Загрузить фотку
+        /// </summary>
+        /// <param name="base64File">Сама фотка.</param>
+        /// <returns>Страница пользователя.</returns>
+        [HttpPost, Authorize]
+        public ActionResult UpdatePhoto(string base64File)
+        {
+            var userId = GetCurrentUserID();
+            Argument.NotNullOrWhiteSpace(base64File, "Не задано фото пользователя для обновления");
+
+            base64File = base64File
+                .Replace("data:image/png;base64,", string.Empty)
+                .Replace("data:image/jpeg;base64,", string.Empty)
+                .Replace("data:image/jpg;base64,", string.Empty)
+                .Replace("data:image/gif;base64,", string.Empty)
+                .TrimStart();
+            var photoBytes = Convert.FromBase64String(base64File);
+            _userUnit.UpdatePhoto(userId, photoBytes);
+
+            var user = _userUnit.GetByID(userId);
+            return Json(new { result = "Redirect", url = Url.Action("UserProfile", "UserProfile") });
+        }
+
+        /// <summary>
         /// Пополнить баланс текущего пользователя.
         /// </summary>
         /// <param name="amountOfMoney">Сумма пополнения баланса.</param>
@@ -158,7 +182,7 @@ namespace GlobalPrint.ClientWeb
         [HttpGet, Authorize]
         public ActionResult FillUpBalance()
         {
-			return View();
+            return View();
         }
 
         /// <summary>

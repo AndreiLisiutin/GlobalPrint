@@ -21,6 +21,13 @@ namespace GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users
         User DeleteUser(User user);
         List<PrinterOperatorModel> GetInactiveUsers(TimeSpan threshold, TimeSpan callInterval);
         User UpdateUserActivity(int userID, DateTime? lastActivityDate = null);
+
+        /// <summary>
+        /// Обновить фото польззователя.
+        /// </summary>
+        /// <param name="userID">Идентификатор пользователя.</param>
+        /// <param name="photo">Фото пользователя.</param>
+        void UpdatePhoto(int userID, byte[] photo);
     }
 
     //public interface IUserProfileUnit : IUserUnit

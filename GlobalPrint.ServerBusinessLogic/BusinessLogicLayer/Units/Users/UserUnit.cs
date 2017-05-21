@@ -37,7 +37,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                     .GetByID(userID);
             }
         }
-        
+
         /// <summary>
         /// Get single user by filter.
         /// </summary>
@@ -184,7 +184,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 }
             }
         }
-        
+
         /// <summary>
         /// Just insert new user.
         /// </summary>
@@ -219,7 +219,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                 return user;
             }
         }
-        
+
         /// <summary>
         /// Update last user activity date.
         /// </summary>
@@ -242,6 +242,31 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                     context.Save();
 
                     return originalUser;
+                }
+                else
+                {
+                    throw new Exception("Не найден пользователь [ID=" + userID + "]");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Обновить фото польззователя.
+        /// </summary>
+        /// <param name="userID">Идентификатор пользователя.</param>
+        /// <param name="photo">Фото пользователя.</param>
+        public void UpdatePhoto(int userID, byte[] photo)
+        {
+            using (IDataContext context = Context())
+            {
+                IUserRepository userRepo = Repository<IUserRepository>(context);
+                User originalUser = userRepo.GetByID(userID);
+
+                if (originalUser != null)
+                {
+                    originalUser.Photo = photo;
+                    userRepo.Update(originalUser);
+                    context.Save();
                 }
                 else
                 {
@@ -286,7 +311,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                         totalList.Add(new PrinterOperatorModel() { Printer = item.Printer, PrinterOperator = item.PrinterOperator });
                     }
                 }
-                
+
                 return totalList;
             }
         }
