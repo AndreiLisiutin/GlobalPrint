@@ -1,275 +1,289 @@
 ﻿.white-text {
-	text-decoration: none !important;
-	color: white !important;
-	display: inline-block;
-	text-align: center;
+    text-decoration: none !important;
+    color: white !important;
+    display: inline-block;
+    text-align: center;
 }
 
 .inline-block {
-	display: inline-block;
+    display: inline-block;
 }
 
 .nopadding {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .top,
 .infoBox {
-	z-index: 100;
+    z-index: 100;
 }
 
 /* Уменьшаем прозрачность подложки для описания принтера */
 .infoBox {
-	background: rgba(255,255,255,.9);
+    background: rgba(255,255,255,.9);
 }
 
 .modal-dialog {
-	z-index: 200;
+    z-index: 200;
 }
 
 .admin-button {
-	background: #a9143d !important;
+    background: #a9143d !important;
 }
 
-	.admin-button:hover {
-		background: #c11746 !important;
-	}
+    .admin-button:hover {
+        background: #c11746 !important;
+    }
 
 .relative {
-	position: relative;
+    position: relative;
 }
 
 .login-remember-me {
-	margin-top: 13px;
-	color: #667584;
-	text-transform: uppercase;
-	font-weight: 600;
+    margin-top: 13px;
+    color: #667584;
+    text-transform: uppercase;
+    font-weight: 600;
 }
 
 /*Стили для форм с коротким сообщением*/
 .confirmation-form {
-	width: 580px;
-	border-radius: 5px;
-	box-shadow: 0px 0px 5px rgba(0,0,0,.3);
-	margin: auto;
-	padding: 25px 30px 40px;
+    width: 580px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,.3);
+    margin: auto;
+    padding: 25px 30px 40px;
 }
 
 .confirmation-header {
-	font-size: 30px;
-	padding-bottom: 20px;
-	color: #667584;
+    font-size: 30px;
+    padding-bottom: 20px;
+    color: #667584;
 }
 
 .confirmation-text {
-	font-size: 16px;
-	color: #667584;
+    font-size: 16px;
+    color: #667584;
 }
 
-	.confirmation-text a,
-	.pink-link a {
-		color: #ec416f;
-	}
+    .confirmation-text a,
+    .pink-link a {
+        color: #ec416f;
+    }
 
 /*Стили для формы обратной связи*/
 .feedback-message {
-	height: 250px;
+    height: 250px;
 }
 
 /*Стили для страницы оферты*/
 .offer-body {
-	background: #f5f5f5;
-	padding: 60px 0px;
+    background: #f5f5f5;
+    padding: 60px 0px;
 }
 
 .offer-container {
-	width: 1050px;
-	margin: auto;
-	background: #fff;
-	padding: 25px 50px;
+    width: 1050px;
+    margin: auto;
+    background: #fff;
+    padding: 25px 50px;
 }
 
 .offer-title {
-	padding-bottom: 10px;
-	text-align: center;
-	font-size: 24px;
-	font-weight: 600;
-	letter-spacing: 1px;
-	line-height: 40px;
-	text-transform: uppercase;
-	color: #000;
+    padding-bottom: 10px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    line-height: 40px;
+    text-transform: uppercase;
+    color: #000;
 }
 
 .offer-table td {
-	text-align: left;
+    text-align: left;
 }
 
 /*Переопределение для форм, чтоб не сжимались в 400 пикселей*/
 .smForm {
-	width: 100% !important;
+    width: 100% !important;
 }
 /*Переопределение кнопки в лукапе, очень криво сверстано*/
 .dLabel {
-	cursor: pointer;
-	right: 0px !important;
-	height: 100% !important;
-	top: 0px !important;
-	display: table-cell !important;
-	position: inherit !important;
-	border-radius: 0px 5px 5px 0px !important;
+    cursor: pointer;
+    right: 0px !important;
+    height: 100% !important;
+    top: 0px !important;
+    display: table-cell !important;
+    position: inherit !important;
+    border-radius: 0px 5px 5px 0px !important;
+    transition-duration: 0.2s;
 }
+    .dLabel:hover {
+        background:#ff4779;
+    }
 
 .dLeftLabel {
-	border-radius: 5px 0px 0px 5px !important;
+    border-radius: 5px 0px 0px 5px !important;
 }
 
 .fullwidth {
-	width: 100%;
+    width: 100%;
 }
 
 .has-error input {
-	border-color: #a94442;
+    border-color: #a94442;
 }
 
 .clockpicker,
 .currency-input-group {
-	min-width: 130px;
+    min-width: 130px;
 }
 
 .min-width-0 {
-	min-width: 0px !important;
+    min-width: 0px !important;
 }
 
 .outerTable {
-	overflow-x: auto !important;
+    overflow-x: auto !important;
 }
 
 .input-group .input-def {
-	border-radius: 5px 0px 0px 5px;
+    border-radius: 5px 0px 0px 5px;
 }
 
 .js-clearable + .add-clear-x {
-	top: -2px !important;
+    top: -2px !important;
 }
 
 .star-rating-field {
-	color: #ff205c !important;
+    color: #ff205c !important;
 }
 
 .lookup-table-wrapper {
-	max-height: 500px;
-	overflow: auto;
+    max-height: 500px;
+    overflow: auto;
 }
 
 .modal-dialog {
-	max-width: 1000px !important;
-	width: 90% !important;
+    max-width: 1000px !important;
+    width: 90% !important;
 }
 
 @media (min-width: 768px) {
-	.modal-dialog {
-		width: 600px;
-		margin: 30px auto;
-	}
+    .modal-dialog {
+        width: 600px;
+        margin: 30px auto;
+    }
 }
 
 
 .pagination .active a {
-	background-color: #ff205c !important;
-	border-color: #ff205c !important;
+    background-color: #ff205c !important;
+    border-color: #ff205c !important;
 }
 
 .pagination :not(.active) a {
-	color: #ff205c !important;
-	border-color: #ff205c !important;
+    color: #ff205c !important;
+    border-color: #ff205c !important;
 }
 
 .lookup-search {
-	width: 50% !important;
+    width: 50% !important;
 }
 
 .modal-question-buttons button {
-	margin-top: 5px;
-	margin-bottom: 0px;
-	margin-left: 2px;
-	margin-right: 2px;
+    margin-top: 5px;
+    margin-bottom: 0px;
+    margin-left: 2px;
+    margin-right: 2px;
 }
 
 .modal-question-content {
-	padding-left: 5%;
-	margin-right: 15px;
+    padding-left: 5%;
+    margin-right: 15px;
 }
 
 .modal-question-text {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .modal-question-buttons {
-	padding: 0px 5px;
+    padding: 0px 5px;
 }
 
 @media screen and (max-width:1000px) {
-	.offer-container {
-		width: 100%;
-	}
+    .offer-container {
+        width: 100%;
+    }
 
-	.offer-body {
-		padding: 0;
-	}
+    .offer-body {
+        padding: 0;
+    }
 }
 
 @media screen and (max-width:600px) {
-	.white-text {
-		margin-bottom: 10px;
-		width: 100%;
-	}
+    .white-text {
+        margin-bottom: 10px;
+        width: 100%;
+    }
 
-	/*Кнопки в информации о принтере на главной форме*/
-	.printer-info-btn {
-		max-width: 200px;
-	}
+    /*Кнопки в информации о принтере на главной форме*/
+    .printer-info-btn {
+        max-width: 200px;
+    }
 
-	.lookup-search {
-		width: 90% !important;
-	}
+    .lookup-search {
+        width: 90% !important;
+    }
 
-	.loginTitle {
-		font-size: 23px;
-	}
+    .loginTitle {
+        font-size: 23px;
+    }
 }
 
 /* for progressbar in new order page */
 .progressbar-wrapper {
-	display: table-cell;
-	margin: 0;
-	padding: 0;
-	width: 40%;
-	text-align: center;
-	border-radius: 0px 5px 5px 0px !important;
+    display: table-cell;
+    margin: 0;
+    padding: 0;
+    width: 40%;
+    text-align: center;
+    border-radius: 0px 5px 5px 0px !important;
 }
 
 .progressbar-bar {
-	display: table;
-	background-image: linear-gradient(to bottom,#e81d54 0,#F3547F 100%);
+    display: table;
+    background-image: linear-gradient(to bottom,#e81d54 0,#F3547F 100%);
 }
 
 .progressbar-text {
-	display: table-cell;
-	vertical-align: middle;
-	margin: 0;
-	padding: 0;
+    display: table-cell;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
 }
 
 .upload-text {
-	width: 100%;
-	border-radius: 0 !important;
-	border-right: 0 !important;
-	border-left: 0 !important;
+    width: 100%;
+    border-radius: 0 !important;
+    border-right: 0 !important;
+    border-left: 0 !important;
 }
 
 .img-container {
-	width: 100%;
-	text-align: center;
-	min-height: 469px;
+    width: 100%;
+    text-align: center;
+    min-height: 469px;
+}
+
+/* Стиль для нажатой кнопки */
+.goReg:active,
+.lkTopBBtn:active,
+.lkMenu li:active,
+.coloredBtn:active {
+    background-color: white;
+    color: #ff4779 !important;
+    border: 1px solid #ff4779;
 }
