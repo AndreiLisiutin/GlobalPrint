@@ -30,14 +30,15 @@ namespace GlobalPrint.ClientWeb.Controllers.Utils
         /// <returns></returns>
         [HttpGet]
         [Authorize]
-        public ActionResult Lookup(LookupTypeEnum lookupType, string searchText, Paging paging)
+        public ActionResult Lookup(LookupTypeEnum lookupType, string searchText, Paging paging, string sortByIdentifier, SortByEnum? sortByDirection)
         {
             paging = paging ?? new Paging();
             
             ILookupManager lookupManager = this._lookupManagerFactory.CreateLookupManager(lookupType);
 
-            List<LookupResultValue> columns = lookupManager.GetColumns();
-            PagedList<List<LookupResultValue>> entities = lookupManager.GetEntitiesList(searchText, paging);
+            List<LookupResultValue> columns = lookupManager.GetColumns(sortByIdentifier, sortByDirection);
+
+            PagedList<List<LookupResultValue>> entities = lookupManager.GetEntitiesList(searchText, paging, sortByIdentifier, sortByDirection);
 
             ViewBag.SearchText = searchText;
             ViewBag.LookupType = lookupType;

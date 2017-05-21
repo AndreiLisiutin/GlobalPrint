@@ -17,7 +17,7 @@ namespace GlobalPrint.ClientWeb.Models.Lookup
         /// <param name="searchText">Search text parameter.</param>
         /// <param name="paging">Paging parameter.</param>
         /// <returns>List of entities matching search text and paging criteria.</returns>
-        PagedList<List<LookupResultValue>> GetEntitiesList(string searchText, Paging paging);
+        PagedList<List<LookupResultValue>> GetEntitiesList(string searchText, Paging paging, string sortByIdentidier, SortByEnum? sortByDirection);
 
         /// <summary>
         /// Get entity by its identifier field value.
@@ -30,6 +30,6 @@ namespace GlobalPrint.ClientWeb.Models.Lookup
         /// Get columns to define lookup entity properties.
         /// </summary>
         /// <returns>Columns of each entity.</returns>
-        List<LookupResultValue> GetColumns();
+        List<LookupResultValue> GetColumns(string sortByIdentidier, SortByEnum? sortByDirection);
     }
 }

@@ -5,6 +5,7 @@ using GlobalPrint.ServerBusinessLogic.Models.Domain.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 
 namespace GlobalPrint.ClientWeb.Models.Lookup.LookupManagers
@@ -30,9 +31,26 @@ namespace GlobalPrint.ClientWeb.Models.Lookup.LookupManagers
         /// <param name="searchText">Search text parameter.</param>
         /// <param name="paging">Pagination info.</param>
         /// <returns>List of matching entities.</returns>
-        public override List<User> GetEntities(string searchText, Paging paging)
+        public override List<User> GetEntities(string searchText, Paging paging, string sortBy, SortByEnum? sortByDirection)
         {
-            return this._userUnit.GetByFilter(searchText, paging);
+            var empty = this.GetEmptyEntity();
+            switch (sortBy)
+            {
+                case nameof(empty.ID):
+                    return this._userUnit.GetByFilter(searchText, paging, entity => entity.ID, sortByDirection == SortByEnum.Asc);
+                    break;
+                case nameof(empty.Email):
+                    return this._userUnit.GetByFilter(searchText, paging, entity => entity.Email, sortByDirection == SortByEnum.Asc);
+                    break;
+                case nameof(empty.UserName):
+                    return this._userUnit.GetByFilter(searchText, paging, entity => entity.UserName, sortByDirection == SortByEnum.Asc);
+                    break;
+                case nameof(empty.LastActivityDate):
+                    return this._userUnit.GetByFilter(searchText, paging, entity => entity.LastActivityDate, sortByDirection == SortByEnum.Asc);
+                    break;
+            }
+
+            return this._userUnit.GetByFilter<string>(searchText, paging, null);
         }
 
         /// <summary>
@@ -64,10 +82,10 @@ namespace GlobalPrint.ClientWeb.Models.Lookup.LookupManagers
         {
             return new List<LookupResultValue>()
             {
-                new LookupResultValue("ID", entity.ID.ToString(), 0, isIdentifier: true),
-                new LookupResultValue("Email", entity.Email, 5, isText: true),
-                new LookupResultValue("Логин", entity.UserName, 4),
-                new LookupResultValue("Дата последней активности", entity.LastActivityDate.ToString("dd.MM.yyyy HH:mm:ss"), 2),
+                new LookupResultValue("ID", entity.ID.ToString(), 0, nameof(entity.ID), isIdentifier: true),
+                new LookupResultValue("Email", entity.Email, 5, nameof(entity.Email), isText: true),
+                new LookupResultValue("Логин", entity.UserName, 4, nameof(entity.UserName)),
+                new LookupResultValue("Дата последней активности", entity.LastActivityDate.ToString("dd.MM.yyyy HH:mm:ss"), 2, nameof(entity.LastActivityDate)),
             };
         }
     }
