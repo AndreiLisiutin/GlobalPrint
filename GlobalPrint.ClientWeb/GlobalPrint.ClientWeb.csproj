@@ -930,6 +930,7 @@
     <Compile Include="Models\Lookup\LookupResultValue.cs" />
     <Compile Include="Models\Lookup\LookupTypeEnum.cs" />
     <Compile Include="Models\Lookup\LookupViewModel.cs" />
+    <Compile Include="Models\Lookup\SortByEnum.cs" />
     <Compile Include="Models\MenuButton\MenuItem.cs" />
     <Compile Include="Models\OrderController\Order_RateViewModel.cs" />
     <Compile Include="Models\PrinterController\Printer_EditViewMoel.cs" />

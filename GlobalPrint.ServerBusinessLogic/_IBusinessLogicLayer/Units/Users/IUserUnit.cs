@@ -14,7 +14,7 @@ namespace GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users
     {
         User GetByID(int userID);
         User GetByFilter(Expression<Func<User, bool>> filter);
-        List<User> GetByFilter(string filter, Paging paging = null);
+        List<User> GetByFilter<TSort>(string filter, Paging paging = null, Expression<Func<User, TSort>> sortBy = null, bool sortIsAsc = true);
         int CountByFilter(string filter);
         IUserProfile UpdateUserProfile(IUserProfile user);
         User InsertUser(User user);

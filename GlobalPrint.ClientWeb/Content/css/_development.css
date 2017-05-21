@@ -273,3 +273,7 @@
 	text-align: center;
 	min-height: 469px;
 }
+
+.lookup-header {
+    cursor: pointer;
+}

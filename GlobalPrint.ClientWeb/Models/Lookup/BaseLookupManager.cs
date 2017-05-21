@@ -18,7 +18,7 @@ namespace GlobalPrint.ClientWeb.Models.Lookup
         /// <param name="searchText">Search text parameter.</param>
         /// <param name="paging">Pagination info.</param>
         /// <returns>List of matching entities.</returns>
-        public abstract List<T> GetEntities(string searchText, Paging paging);
+        public abstract List<T> GetEntities(string searchText, Paging paging, string sortBy, SortByEnum? sortByDirection);
 
         /// <summary>
         /// Get entity by its identifier.
@@ -56,9 +56,9 @@ namespace GlobalPrint.ClientWeb.Models.Lookup
         /// <param name="searchText">Search text parameter.</param>
         /// <param name="paging">Paging parameter.</param>
         /// <returns>List of entities matching search text and paging criteria.</returns>
-        public virtual PagedList<List<LookupResultValue>> GetEntitiesList(string searchText, Paging paging)
+        public virtual PagedList<List<LookupResultValue>> GetEntitiesList(string searchText, Paging paging, string sortByIdentidier, SortByEnum? sortByDirection)
         {
-            List<T> entities = this.GetEntities(searchText, paging);
+            List<T> entities = this.GetEntities(searchText, paging, sortByIdentidier, sortByDirection);
             List<List<LookupResultValue>> lookupList = entities.Select(e => this.Convert(e)).ToList();
             int count = this.GetCount(searchText);
 
@@ -81,10 +81,15 @@ namespace GlobalPrint.ClientWeb.Models.Lookup
         /// Get columns to define lookup entity properties.
         /// </summary>
         /// <returns>Columns of each entity.</returns>
-        public virtual List<LookupResultValue> GetColumns()
+        public virtual List<LookupResultValue> GetColumns(string sortByIdentidier, SortByEnum? sortByDirection)
         {
             T entity = this.GetEmptyEntity();
             List<LookupResultValue> lookupEntity = this.Convert(entity);
+            foreach (var column in lookupEntity)
+            {
+                column.SortOrder = column.Identifier == sortByIdentidier ? sortByDirection : null;
+            }
+
             return lookupEntity;
         }
     }

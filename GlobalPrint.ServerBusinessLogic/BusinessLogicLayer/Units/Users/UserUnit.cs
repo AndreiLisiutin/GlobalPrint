@@ -59,7 +59,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
         /// <param name="filter">Filter to user.</param>
         /// <param name="paging">Pagination information.</param>
         /// <returns>Found users by filter criteria and paging.</returns>
-        public List<User> GetByFilter(string filter, Paging paging = null)
+        public List<User> GetByFilter<TSort>(string filter, Paging paging = null, Expression<Func<User, TSort>> sortBy = null, bool sortIsAsc = true)
         {
             int skip = paging?.Skip ?? 0;
             using (IDataContext context = this.Context())
@@ -73,8 +73,19 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
                     query = query
                         .Where(e => e.Email.ToLower().Contains(filter));
                 }
+                if (sortBy == null)
+                {
+                    query = query.OrderBy(e => e.Email);
+                }
+                else if (sortIsAsc)
+                {
+                    query = query.OrderBy(sortBy);
+                }
+                else
+                {
+                    query = query.OrderByDescending(sortBy);
+                }
 
-                query = query.OrderBy(e => e.Email);
                 if (paging != null)
                 {
                     query = query
