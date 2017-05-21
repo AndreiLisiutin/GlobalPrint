@@ -104,7 +104,7 @@ namespace GlobalPrint.ClientWeb
         {
             if (!ModelState.IsValid)
             {
-                return View("UserProfile", model);
+                return View("UserProfileEdit", model);
             }
 
             try
@@ -115,7 +115,7 @@ namespace GlobalPrint.ClientWeb
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
-                return View("UserProfile", model);
+                return View("UserProfileEdit", model);
             }
         }
 

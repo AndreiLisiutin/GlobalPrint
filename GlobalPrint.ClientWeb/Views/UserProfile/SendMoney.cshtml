@@ -12,14 +12,21 @@
     <script src="~/Resources/Scripts/GlobalPrint/UserProfile/SendMoney.js"></script>
 }
 
-<div class="col-md-8">
+<div class="col-md-9">
 	<div class="lkBox">
 
 		<div class="lkBoxCont">
 			<div class="defaultTitle">Денежные переводы</div>
 
 			@using (Html.BeginForm("ExecuteSendMoney", "UserProfile", FormMethod.Post, new { @class = "smForm", @id = "sendModeyForm" }))
-			{
+            {
+                if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+                {
+                    <div class="alert alert-error">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        @Html.ValidationSummary(true, "Ошибки: ")
+                    </div>
+                }
 				@Html.Hidden("UserAmountOfMoney", SenderUser.AmountOfMoney, new { @id = "userAmountOfMoney" })
 				@Html.Hidden("SenderUserId", Model.SenderUserId, new { @id = "senderUserId" })
 

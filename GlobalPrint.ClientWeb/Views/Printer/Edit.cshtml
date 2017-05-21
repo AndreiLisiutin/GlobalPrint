@@ -16,7 +16,7 @@
     <script src="~/Resources/Scripts/GlobalPrint/Printer/Edit.js"></script>
 }
 
-<div class="col-md-8">
+<div class="col-md-9">
     <div class="lkBox">
         <div class="lkBoxCont">
             <div class="defaultTitle">Редактирование принтера "@( Model?.Printer?.Name ?? "Новый" )"</div>
@@ -24,11 +24,11 @@
             @using (Html.BeginForm("Save", "Printer", FormMethod.Post, new { @class = "smForm", @id = "printerEditForm" }))
             {
 
-                if (!ViewData.ModelState.IsValid)
+                @if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
                 {
-                    <div class="alert alert-danger container margin-top-20">
-                        <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        @Html.ValidationSummary(false, "Ошибки: ")
+                    <div class="alert alert-error">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        @Html.ValidationSummary(true, "Ошибки: ")
                     </div>
                 }
 

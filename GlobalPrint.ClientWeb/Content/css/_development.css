@@ -137,6 +137,13 @@
     border-color: #a94442;
 }
 
+.alert-error {
+    border: solid 1px #a94442;
+    color: #a94442;
+    font-style: italic;
+    background-color: #ffe6e6;
+}
+
 .clockpicker,
 .currency-input-group {
     min-width: 130px;
@@ -305,6 +312,24 @@
     -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
     box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
 }
+.lkMenuBox {
+    padding: 20px 0px;
+}
+
+.lkMenu {
+    padding: 40px 13px;
+}
+
+.lkBoxCont {
+    padding: 0px;
+}
+
+@media screen and (max-width: 1000px) {
+    .lkBox {
+        padding: 20px 10px;
+    }
+}
+
 
 /* The Javascript code will set the aspect ratio of the crop
     area based on the size of the thumbnail preview,
@@ -314,6 +339,14 @@
     height: 150px;
     overflow: hidden;
 }
+@media screen and (min-width: 990px) {
+
+    .md-no-right-padding {
+        padding-right: 0px;
+        margin-right: 0px;
+    }
+}
+
 
 .crop-window {
     text-align: center;

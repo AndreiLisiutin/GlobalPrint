@@ -7,7 +7,7 @@
     Layout = "~/Views/Shared/_ProfileLayout.cshtml";
 }
 
-<div class="col-md-8">
+<div class="col-md-9">
     <div class="lkBox">
         <div class="lkBoxCont">
             <div class="defaultTitle">Ваш заказ отправлен в печать</div>
@@ -15,7 +15,13 @@
             @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { @class = "smForm" }))
             {
                 <div class="row regisRow">
-
+                    @if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+                    {
+                        <div class="alert alert-error">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            @Html.ValidationSummary(true, "Ошибки: ")
+                        </div>
+                    }
                     <div class="tableName">Номер заказа:</div>
                     <label class="labelBox mgBottom">
                         @Html.TextBoxFor(m => m.ID, new { @class = "input-def", @style = "width:100%", @readonly = "readonly" })
@@ -39,7 +45,6 @@
 
                     <div class="buttonsBox" align="center">
                         <a href=@Url.Action("MyOrders", "Order") class="defaultButton coloredBtn white-text">Мои заказы</a>
-                        <a href=@Url.Action("Index", "Home") class="defaultButton coloredBtn white-text">На главную</a>
                     </div>
                 </div>
             }
