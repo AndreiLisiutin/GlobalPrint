@@ -67,7 +67,11 @@ namespace GlobalPrint.ClientWeb
             }
 
             var registeredUser = _userUnit.GetByFilter(e => e.Email == model.Email);
-            Argument.Require(registeredUser == null, "Пользователь с таким email уже зарегистрирован в системе.");
+            if (registeredUser != null)
+            {
+                ModelState.AddModelError("", "Пользователь с таким email уже зарегистрирован в системе.");
+                return View("Register", model);
+            }
 
             var user = new ApplicationUser(model.UserName ?? model.Email, model.Email);
             var result = await UserManager.CreateAsync(user, model.Password);

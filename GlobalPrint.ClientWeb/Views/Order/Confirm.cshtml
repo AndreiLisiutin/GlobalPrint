@@ -27,6 +27,13 @@
             @using (Html.BeginForm("Create", "Order", FormMethod.Post, new { @class = "smForm", @id = "createOrderForm" }))
             {
                 <div class="row regisRow">
+                    @if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+                    {
+                        <div class="alert alert-error">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            @Html.ValidationSummary(true, "Ошибки: ")
+                        </div>
+                    }
                     <div class="hidden">
                         @Html.EditorForModel()
                         @Html.Hidden("IsOrderAvailable", IsOrderAvailable, new { @id = "isOrderAvailable" })
@@ -34,18 +41,18 @@
                     </div>
 
                     <div class="tableName">Количество страниц:</div>
-                    <label class="labelBox mgBottom">
+                    <label class="labelBox mgBottom input-wrapper">
                         @Html.TextBox("PagesCount", PagesCount, new { @class = "input-def", @style = "width:100%", @readonly = "readonly" })
                     </label>
 
                     <div class="tableName">Стоимость заказа:</div>
-                    <label class="labelBox mgBottom input-group">
+                    <label class="labelBox mgBottom input-group input-wrapper">
                         @Html.TextBox("PriceInCurrency", FullPriceFormatted, new { @class = "input-def", @style = "width:100%", @readonly = "readonly" })
                         <span class="dLabel">руб.</span>
                     </label>
 
                     <div class="tableName">Секретный код:</div>
-                    <label class="labelBox mgBottom">
+                    <label class="labelBox mgBottom input-wrapper">
                         @Html.TextBox("SecretCode", Model.SecretCode, new { @class = "input-def", @style = "width:100%", @readonly = "readonly" })
                     </label>
 

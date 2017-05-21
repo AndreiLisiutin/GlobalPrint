@@ -15,6 +15,13 @@
 
         @using (Html.BeginForm("Feedback", "Feedback", FormMethod.Post, new { @id = "feedbackForm" }))
         {
+            if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+            {
+                <div class="alert alert-error">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    @Html.ValidationSummary(true, "Ошибки: ")
+                </div>
+            }
             <div class="loginFormLabel input-wrapper">
                 <p>E-Mail</p>
                 @Html.TextBoxFor(m => m.Email, new { @class = "loginFormInput", @type = "email", @autofocus = true })

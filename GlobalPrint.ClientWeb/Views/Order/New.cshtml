@@ -21,7 +21,13 @@
             @using (Html.BeginForm("New", "Order", FormMethod.Post, new { @class = "smForm", @id = "newOrderForm" }))
             {
                 <div class="row regisRow">
-
+                    @if (ViewData.ModelState[""] != null && ViewData.ModelState[""].Errors.Count > 0)
+                    {
+                        <div class="alert alert-error">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            @Html.ValidationSummary(true, "Ошибки: ")
+                        </div>
+                    }
                     @Html.HiddenFor(m => m.PrinterID, new { @id = "PrinterID" })
                     @Html.HiddenFor(m => m.UserID, new { @id = "UserID" })
 
@@ -56,37 +62,37 @@
                     </label>
 
                     <div class="tableName">Секретный код:</div>
-                    <label class="labelBox mgBottom">
+                    <label class="labelBox mgBottom input-wrapper">
                         @Html.TextBoxFor(m => m.SecretCode, new { @class = "input-def", @style = "width:100%", @required = "required" })
                     </label>
 
                     <div class="tableName">Тип:</div>
-                    <label class="labelBox mgBottom">
+                    <label class="labelBox mgBottom input-wrapper">
                         @Html.DropDownListFor(m => m.PrintTypeID, new List<SelectListItem>(), new { @id = "printType", @class = "input-def", @style = "width:100%", @required = "required" })
                     </label>
 
                     <div class="tableName">Формат:</div>
-                    <label class="labelBox mgBottom">
+                    <label class="labelBox mgBottom input-wrapper">
                         @Html.DropDownListFor(m => m.PrintSizeID, new List<SelectListItem>(), new { @id = "printSize", @class = "input-def", @style = "width:100%", @required = "required" })
                     </label>
 
                     <div class="tableName">Цветная печать:</div>
-                    <label class="labelBox mgBottom">
+                    <label class="labelBox mgBottom input-wrapper">
                         @Html.CheckBoxFor(m => m.IsColored, new { @id = "IsColored", @class = "js-switch-small" })
                     </label>
 
                     <div class="tableName">Двусторонняя печать:</div>
-                    <label class="labelBox mgBottom">
+                    <label class="labelBox mgBottom input-wrapper">
                         @Html.CheckBoxFor(m => m.IsTwoSided, new { @id = "IsTwoSided", @class = "js-switch-small" })
                     </label>
 
                     <div class="tableName">Количество копий:</div>
-                    <label class="labelBox mgBottom">
+                    <label class="labelBox mgBottom input-wrapper">
                         @Html.TextBoxFor(m => m.CopiesCount, new { @type = "number", @class = "input-def", @style = "width:100%", @required = "required" })
                     </label>
 
                     <div class="tableName">Комментарий:</div>
-                    <label class="labelBox mgBottom">
+                    <label class="labelBox mgBottom input-wrapper">
                         @Html.TextBoxFor(m => m.Comment, new { @class = "input-def", @style = "width:100%" })
                     </label>
 

@@ -120,8 +120,9 @@
     border-radius: 0px 5px 5px 0px !important;
     transition-duration: 0.2s;
 }
+
     .dLabel:hover {
-        background:#ff4779;
+        background: #ff4779;
     }
 
 .dLeftLabel {
@@ -134,6 +135,13 @@
 
 .has-error input {
     border-color: #a94442;
+}
+
+.alert-error {
+    border: solid 1px #a94442;
+    color: #a94442;
+    font-style: italic;
+    background-color: #ffe6e6;
 }
 
 .clockpicker,
