@@ -15,7 +15,7 @@
     <script src="~/Resources/Scripts/GlobalPrint/PrintOrder/RecievedPrintOrder.js"></script>
 }
 
-<div class="col-md-8">
+<div class="col-md-9">
     <div class="row">
         <div class="col-md-6">
             <a href=@Url.Action("FillUpBalance", "UserProfile")>
@@ -34,7 +34,7 @@
     </div>
 </div>
 
-<div class="col-md-8">
+<div class="col-md-9">
     <div class="lkBox">
 
         <div class="lkBoxCont">
@@ -55,7 +55,6 @@
                         <tr class="tableHead">
                             <td>Код заказа</td>
                             <td>Принтер</td>
-                            <td>Документ</td>
                             <td>Дата</td>
                             <td>Комментарий</td>
                             <td>Цена</td>
@@ -68,7 +67,6 @@
                             <tr>
                                 <td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.ID)</td>
                                 <td>@Html.DisplayFor(c => printOrder.Printer.Name)</td>
-                                <td>@Html.DisplayFor(c => printOrder.PrintOrder.DocumentName)</td>
                                 <td align="center">@Html.DisplayFor(c => printOrder.PrintOrder.OrderedOn, String.Format("{{0: {0} }}", CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern))</td>
                                 <td align="left">@Html.DisplayFor(c => printOrder.PrintOrder.Comment)</td>
                                 <td align="right">@Html.DisplayFor(c => printOrder.PrintOrder.FullPrice, "{0:0.00}")</td>

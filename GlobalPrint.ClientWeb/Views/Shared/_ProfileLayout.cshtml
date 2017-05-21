@@ -20,7 +20,7 @@
 		</div>
 	</div>
 
-	<div class="col-md-4">
+	<div class="col-md-3 md-no-right-padding">
 		<div class="lkBox lkMenuBox">
 			<div class="menuLogo">
 				<img src="~/Content/img/lkLogo.png" alt="" />
@@ -51,10 +51,10 @@
 				@if (ViewContext.HttpContext.User.IsInRole(UserRolesEnum.Admin))
 				{
 					<a href=@Url.Action("TransfersRegisters", "UserProfile")>
-						<li class="@Html.IsSelected(actions: "TransfersRegisters", controllers: "UserProfile", cssClass: "active") admin-button">Реестр перечислений</li>
+						<li class="@Html.IsSelected(actions: "TransfersRegisters", controllers: "UserProfile", cssClass: "active") admin-button">Перечисления</li>
 					</a>
 					<a href=@Url.Action("CashRequests", "UserProfile")>
-						<li class="@Html.IsSelected(actions: "CashRequests", controllers: "UserProfile", cssClass: "active") admin-button">Запросы на вывод денег</li>
+						<li class="@Html.IsSelected(actions: "CashRequests", controllers: "UserProfile", cssClass: "active") admin-button">Запросы на вывод</li>
 					</a>
 				}
 			</ul>
