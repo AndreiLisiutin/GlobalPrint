@@ -167,9 +167,9 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
         /// <returns></returns>
         public User UpdateUser(User user)
         {
-            using (IDataContext context = this.Context())
+            using (IDataContext context = Context())
             {
-                IUserRepository userRepo = this.Repository<IUserRepository>(context);
+                IUserRepository userRepo = Repository<IUserRepository>(context);
                 User originalUser = userRepo.GetByID(user.ID);
 
                 if (originalUser != null)
@@ -192,16 +192,23 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users
         /// <returns>Inserted user with new ID.</returns>
         public User InsertUser(User user)
         {
-            using (IDataContext context = this.Context())
+            user.CreatedOn = DateTime.Now;
+            user.LastActivityDate = DateTime.Now;
+
+            using (IDataContext context = Context())
             {
-                IUserRepository userRepo = this.Repository<IUserRepository>(context);
-                user.CreatedOn = DateTime.Now;
+                IUserRepository userRepo = Repository<IUserRepository>(context);
                 userRepo.Insert(user);
                 context.Save();
                 return user;
             }
         }
 
+        /// <summary>
+        /// Удалить пользователя.
+        /// </summary>
+        /// <param name="user">Пользователь для удаления.</param>
+        /// <returns>Удаленный пользователь.</returns>
         public User DeleteUser(User user)
         {
             using (IDataContext context = this.Context())

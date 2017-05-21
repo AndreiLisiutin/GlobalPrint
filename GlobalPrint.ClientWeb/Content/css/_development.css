@@ -118,7 +118,11 @@
     display: table-cell !important;
     position: inherit !important;
     border-radius: 0px 5px 5px 0px !important;
+    transition-duration: 0.2s;
 }
+    .dLabel:hover {
+        background:#ff4779;
+    }
 
 .dLeftLabel {
     border-radius: 5px 0px 0px 5px !important;
@@ -272,6 +276,16 @@
     width: 100%;
     text-align: center;
     min-height: 469px;
+}
+
+/* Стиль для нажатой кнопки */
+.goReg:active,
+.lkTopBBtn:active,
+.lkMenu li:active,
+.coloredBtn:active {
+    background-color: white;
+    color: #ff4779 !important;
+    border: 1px solid #ff4779;
 }
 
 .lookup-header {
