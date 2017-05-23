@@ -209,12 +209,13 @@
 }
 
 .modal-question-content {
-    padding-left: 5%;
+    margin-left: 15px;
     margin-right: 15px;
 }
 
 .modal-question-text {
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .modal-question-buttons {
@@ -246,8 +247,9 @@
         width: 90% !important;
     }
 
-    .loginTitle {
-        font-size: 23px;
+    .loginTitle,
+    .confirmation-header {
+        font-size: 22px;
     }
 }
 

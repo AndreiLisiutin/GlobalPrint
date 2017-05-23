@@ -39,7 +39,7 @@ $(document).ready(function () {
                             }
                         }
                     ]
-                });
+                }, null, 'modal-fullscreen');
             } else {
                 GlobalPrint.Utils.CommonUtils.showModalQuestion({
                     question: 'Сформировать реестр перечислений по ' + data.CashRequestsTotalCount + ' заявкам на вывод ' + parseFloat(data.CashRequestsTotalAmountOfMoney).toFixed(2) + 
@@ -57,7 +57,7 @@ $(document).ready(function () {
                             }
                         }
                     ]
-                });
+                }, null, 'modal-fullscreen');
             }
         });
     });
