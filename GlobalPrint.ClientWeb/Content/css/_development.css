@@ -175,7 +175,7 @@
 }
 
 .modal-dialog {
-    max-width: 1000px !important;    
+    max-width: 1000px !important;
     width: 95% !important;
     margin: 5px auto;
 }
@@ -315,6 +315,7 @@
     -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
     box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
 }
+
 .lkMenuBox {
     padding: 20px 0px;
 }
@@ -342,6 +343,7 @@
     height: 150px;
     overflow: hidden;
 }
+
 @media screen and (min-width: 990px) {
 
     .md-no-right-padding {
@@ -371,4 +373,8 @@
 .crop-img-container {
     margin: 0 auto;
     display: inline-block;
+}
+
+.infoBox {
+    overflow-y: auto;
 }
