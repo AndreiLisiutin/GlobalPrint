@@ -382,3 +382,7 @@
 .infoBox {
     overflow-y: auto;
 }
+
+.headLogo {
+    height: 50px;
+}
