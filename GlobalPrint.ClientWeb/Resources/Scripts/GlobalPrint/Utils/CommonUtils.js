@@ -226,7 +226,7 @@
     };
 
     CommonUtils.CropImage = {
-        
+
     };
 
     /**
@@ -239,24 +239,24 @@
 
         var updatePreview = function (c) {
             if (parseInt(c.w) > 0) {
-                var context = canvas.getContext('2d'); 
+                var context = canvas.getContext('2d');
                 context.drawImage(image, c.x, c.y, c.w, c.h, 0, 0, canvas.width, canvas.height);
             }
         };
 
-        $(image).Jcrop({						        
-            aspectRatio: 1,						    
-            boxWidth: 550,                          
-            boxHeight: 550,					        
-            onChange: updatePreview,                
-            onSelect: updatePreview,                
-            setSelect: [ 100, 100, 200, 200 ],	    
+        $(image).Jcrop({
+            aspectRatio: 1,
+            boxWidth: 550,
+            boxHeight: 550,
+            onChange: updatePreview,
+            onSelect: updatePreview,
+            setSelect: [100, 100, 200, 200],
             minSize: [requiredImageSize, requiredImageSize],
-            allowResize: true,                      
-            allowSelect: false,                     
-        }, function() {                             
+            allowResize: true,
+            allowSelect: false,
+        }, function () {
             jcropApi = this;
-        });                                         
+        });
     };
 
     /**
@@ -267,7 +267,7 @@
         var modalWindowId = "modal_" + Math.floor(Math.random() * 100000000000);
         var image = base64String || "~/Content/img/maximka.png";
         var requiredImageSize = 150;
-        
+
         var script =
 			"<script type='text/javascript'>				        " +
 			"	$(document).ready(function () {				        " +
@@ -424,14 +424,9 @@
         /// <summary>
         /// Create loading mask on element by CSS selector of elementSelector.
         /// </summary>
-        /// <param name="elementSelector" type="type">Selector for loading mask base element.</param>
+        /// <param name="elementSelector" type="type">Selector for loading mask base element.</param>                                                                    ';
         var loadingHtml =
-           '<div class="loading">                                                          ' +
-           '   <img class="img-responsive img-centred" src="/Resources/Images/loading_pony.gif" />' +
-           '   <h2 class="text-center">Идет загрузка<span class="one">.</span><span class="two">.</span><span class="three">.</span> </h2>                                     ' +
-           '</div>                                                                                ';
-
-
+            '<div class="load load-full-screen"></div>';
         $(elementSelector).html(loadingHtml);
     };
 

@@ -347,6 +347,9 @@
     }
 }
 
+.load.load-full-screen {
+    height: 95vh;
+}
 
 .crop-window {
     text-align: center;
