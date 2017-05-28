@@ -175,8 +175,9 @@
 }
 
 .modal-dialog {
-    max-width: 1000px !important;
-    width: 90% !important;
+    max-width: 1000px !important;    
+    width: 95% !important;
+    margin: 5px auto;
 }
 
 @media (min-width: 768px) {
