@@ -231,6 +231,10 @@
     .offer-body {
         padding: 0;
     }
+
+    .aboutLink {
+        padding: 0px;
+    }
 }
 
 @media screen and (max-width:600px) {
