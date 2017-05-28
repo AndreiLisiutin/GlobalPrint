@@ -51,7 +51,7 @@ $(document).ready(function () {
                                 }
                             }
                         ]
-                    });
+                    }, null, 'modal-fullscreen');
                     break;
                 case GlobalPrint.Utils.Enums.PrintOrderAvailabilities.Available:
                     e.target.submit();

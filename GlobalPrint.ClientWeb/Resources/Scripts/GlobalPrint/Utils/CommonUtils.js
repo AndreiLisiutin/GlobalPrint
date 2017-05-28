@@ -225,10 +225,6 @@
         $('#' + lookupID).modal('toggle');
     };
 
-    CommonUtils.CropImage = {
-
-    };
-
     /**
      * Инициализировать компоненты кропалки.
      * @param {type} modalWindowId Идентификатор модального окна.

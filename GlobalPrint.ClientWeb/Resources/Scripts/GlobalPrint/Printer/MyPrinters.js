@@ -24,6 +24,6 @@ $(document).ready(function () {
                     }
                 }
             ]
-        });
+        }, null, 'modal-fullscreen');
     });
 });

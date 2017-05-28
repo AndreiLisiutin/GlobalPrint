@@ -31,6 +31,6 @@
                     }
                 }
             ]
-        });
+        }, null, 'modal-fullscreen');
     });
 });
