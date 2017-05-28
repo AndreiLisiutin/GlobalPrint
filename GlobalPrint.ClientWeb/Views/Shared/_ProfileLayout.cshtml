@@ -22,10 +22,6 @@
 
 	<div class="col-md-3 md-no-right-padding">
 		<div class="lkBox lkMenuBox">
-			<div class="menuLogo">
-				<img src="~/Content/img/lkLogo.png" alt="" />
-			</div>
-
 			<ul class="lkMenu">
 				<a href=@Url.Action("UserProfile", "UserProfile")>
 					<li class="@Html.IsSelected(actions: "UserProfile", controllers: "UserProfile", cssClass: "active")">Моя информация</li>
