@@ -324,6 +324,15 @@
     display: inline-block;
 }
 
+@media screen and (max-width: 700px) {
+    .crop-window {
+        min-width: 100%;
+        max-width: 100%;
+        min-height: 95vh;
+        max-width: 95vh;
+    }
+}
+
 .infoBox {
     overflow-y: auto;
 }

@@ -225,6 +225,35 @@
         $('#' + lookupID).modal('toggle');
     };
 
+    CommonUtils.getViewport = function () {
+        var viewPortWidth;
+        var viewPortHeight;
+
+        // the more standards compliant browsers (mozilla/netscape/opera/IE7) use window.innerWidth and window.innerHeight
+        if (typeof window.innerWidth != 'undefined') {
+            viewPortWidth = window.innerWidth,
+            viewPortHeight = window.innerHeight
+        }
+
+            // IE6 in standards compliant mode (i.e. with a valid doctype as the first line in the document)
+        else if (typeof document.documentElement != 'undefined'
+        && typeof document.documentElement.clientWidth !=
+        'undefined' && document.documentElement.clientWidth != 0) {
+            viewPortWidth = document.documentElement.clientWidth,
+            viewPortHeight = document.documentElement.clientHeight
+        }
+
+            // older versions of IE
+        else {
+            viewPortWidth = document.getElementsByTagName('body')[0].clientWidth,
+            viewPortHeight = document.getElementsByTagName('body')[0].clientHeight
+        }
+        return {
+            width: viewPortWidth,
+            height: viewPortHeight
+        };
+    }
+
     /**
      * Инициализировать компоненты кропалки.
      * @param {type} modalWindowId Идентификатор модального окна.
@@ -232,6 +261,12 @@
     CommonUtils.initializeCropComponents = function (modalWindowId, requiredImageSize) {
         var image = $("#" + modalWindowId + " .target-img")[0];
         var canvas = $("#" + modalWindowId + " canvas")[0];
+        var viewport = CommonUtils.getViewport();
+
+        var widthForLittleScreen = viewport.width - 80;
+        var heightForLittleScreen = viewport.height - 130;
+        var widthForLargeScreen = heightForLargeScreen = 550;
+        var isLitteScreen = widthForLittleScreen < widthForLargeScreen || heightForLittleScreen < heightForLargeScreen;
 
         var updatePreview = function (c) {
             if (parseInt(c.w) > 0) {
@@ -242,8 +277,8 @@
 
         $(image).Jcrop({
             aspectRatio: 1,
-            boxWidth: 550,
-            boxHeight: 550,
+            boxWidth: isLitteScreen ? widthForLittleScreen : widthForLargeScreen,
+            boxHeight: isLitteScreen ? heightForLittleScreen : heightForLargeScreen,
             onChange: updatePreview,
             onSelect: updatePreview,
             setSelect: [100, 100, 200, 200],

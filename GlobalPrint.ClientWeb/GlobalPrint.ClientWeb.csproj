@@ -250,6 +250,7 @@
     <Content Include="Content\img\login_google.png" />
     <Content Include="Content\img\login_vk.png" />
     <Content Include="Content\img\logo.png" />
+    <Content Include="Content\img\logo_2.png" />
     <Content Include="Content\img\mail.png" />
     <Content Include="Content\img\manager.png" />
     <Content Include="Content\img\marker.png" />

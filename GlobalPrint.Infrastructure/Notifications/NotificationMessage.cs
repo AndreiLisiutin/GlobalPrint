@@ -10,7 +10,7 @@ namespace GlobalPrint.Infrastructure.Notifications
         /// <summary>
         /// Default GlobalPrint logo.
         /// </summary>
-        private readonly string _defaultIcon = @"/Resources/Documents/Logo/logo_09_2016.png";
+        private readonly string _defaultIcon = @"/Content/img/ftLogo.png";
         private readonly string _defaultSound = @"/Resources/Sounds/notification.mp3";
 
         public NotificationMessage()
