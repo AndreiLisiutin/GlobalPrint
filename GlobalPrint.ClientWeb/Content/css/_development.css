@@ -180,13 +180,6 @@
     margin: 5px auto;
 }
 
-@media (min-width: 768px) {
-    .modal-dialog {
-        width: 600px;
-        margin: 30px auto;
-    }
-}
-
 
 .pagination .active a {
     background-color: #ff205c !important;
@@ -221,41 +214,6 @@
 
 .modal-question-buttons {
     padding: 0px 5px;
-}
-
-@media screen and (max-width:1000px) {
-    .offer-container {
-        width: 100%;
-    }
-
-    .offer-body {
-        padding: 0;
-    }
-
-    .aboutLink {
-        padding: 0px;
-    }
-}
-
-@media screen and (max-width:600px) {
-    .white-text {
-        margin-bottom: 10px;
-        width: 100%;
-    }
-
-    /*Кнопки в информации о принтере на главной форме*/
-    .printer-info-btn {
-        max-width: 200px;
-    }
-
-    .lookup-search {
-        width: 90% !important;
-    }
-
-    .loginTitle,
-    .confirmation-header {
-        font-size: 22px;
-    }
 }
 
 /* for progressbar in new order page */
@@ -332,11 +290,6 @@
     padding: 0px;
 }
 
-@media screen and (max-width: 1000px) {
-    .lkBox {
-        padding: 20px 10px;
-    }
-}
 
 
 /* The Javascript code will set the aspect ratio of the crop
@@ -346,14 +299,6 @@
     width: 150px;
     height: 150px;
     overflow: hidden;
-}
-
-@media screen and (min-width: 990px) {
-
-    .md-no-right-padding {
-        padding-right: 0px;
-        margin-right: 0px;
-    }
 }
 
 .load.load-full-screen {
@@ -385,4 +330,85 @@
 
 .headLogo {
     height: 50px;
+    margin-top: 10px;
+}
+
+.menu {
+    height: 70px;
+}
+
+.menuLine {
+    min-height: 70px;
+    line-height: 70px;
+}
+
+.topMargin {
+    height: 96px;
+}
+
+@media screen and (min-width: 990px) {
+
+    .md-no-right-padding {
+        padding-right: 0px;
+        margin-right: 0px;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .lkBox {
+        padding: 20px 10px;
+    }
+
+    .offer-container {
+        width: 100%;
+    }
+
+    .offer-body {
+        padding: 0;
+    }
+
+    .aboutLink {
+        padding: 0px;
+    }
+
+    .menuLine {
+        min-height: 30px;
+        line-height: 30px;
+    }
+
+    .topMargin {
+        height: 0;
+    }
+
+    .headLogo {
+        margin-top: 0px;
+    }
+}
+
+@media screen and (max-width:600px) {
+    .white-text {
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    /*Кнопки в информации о принтере на главной форме*/
+    .printer-info-btn {
+        max-width: 200px;
+    }
+
+    .lookup-search {
+        width: 90% !important;
+    }
+
+    .loginTitle,
+    .confirmation-header {
+        font-size: 22px;
+    }
+}
+
+@media (min-width: 768px) {
+    .modal-dialog {
+        width: 600px;
+        margin: 30px auto;
+    }
 }
