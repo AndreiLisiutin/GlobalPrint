@@ -918,6 +918,7 @@
     <Content Include="Views\UserProfile\UserProfileEdit.cshtml" />
     <None Include="Properties\PublishProfiles\Layout Deploy Package.pubxml" />
     <None Include="Properties\PublishProfiles\Layout.pubxml" />
+    <None Include="Properties\PublishProfiles\Release Deploy Package.pubxml" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Views\RecievedOrder\ConfirmPrintOrder.cshtml" />
     <Content Include="Views\RecievedOrder\RecievedOrderList.cshtml" />
