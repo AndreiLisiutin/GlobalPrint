@@ -1,42 +1,43 @@
-﻿<div class="menuLine">
-    @if (ViewData != null && ViewData.ContainsKey("UserRecievedPrintOrdersCount") && 
-        ViewData["UserRecievedPrintOrdersCount"] != null && int.Parse(ViewData["UserRecievedPrintOrdersCount"].ToString()) > 0)
-    {
-        <a href="@Url.Action("RecievedOrderList", "RecievedOrder")" class="messages">
-            <img src="~/Content/img/alarm.png" alt="" />
-            <span>@ViewData["UserRecievedPrintOrdersCount"]</span>
+﻿
+@if (ViewData != null && ViewData.ContainsKey("UserRecievedPrintOrdersCount") &&
+									ViewData["UserRecievedPrintOrdersCount"] != null && int.Parse(ViewData["UserRecievedPrintOrdersCount"].ToString()) > 0)
+{
+	<div class="menuLine">
+		<a href="@Url.Action("RecievedOrderList", "RecievedOrder")" class="messages">
+			<img src="~/Content/img/alarm.png" alt="" />
+			<span>@ViewData["UserRecievedPrintOrdersCount"]</span>
 
-            @*<div class="outerDrop">
-                    <div class="dropBox">
-                        <div class="dropItem">
-                            <div class="row">
-                                <div class="col-md-2 col-xs-1 dropIco">
-                                    <i class="fa fa-envelope"></i>
-                                </div>
-                                <div class="col-md-10 col-xs-9 dropDesc">
-                                    У вас новое сообщение!
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dropItem">
-                            <div class="row">
-                                <div class="col-md-2 col-xs-1 dropIco">
-                                    <i class="fa fa-info"></i>
-                                </div>
-                                <div class="col-md-10 col-xs-9 dropDesc">
-                                    Новое уведомление
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>*@
-        </a>
-    }    
-</div>
+			@*<div class="outerDrop">
+					<div class="dropBox">
+						<div class="dropItem">
+							<div class="row">
+								<div class="col-md-2 col-xs-1 dropIco">
+									<i class="fa fa-envelope"></i>
+								</div>
+								<div class="col-md-10 col-xs-9 dropDesc">
+									У вас новое сообщение!
+								</div>
+							</div>
+						</div>
+						<div class="dropItem">
+							<div class="row">
+								<div class="col-md-2 col-xs-1 dropIco">
+									<i class="fa fa-info"></i>
+								</div>
+								<div class="col-md-10 col-xs-9 dropDesc">
+									Новое уведомление
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>*@
+		</a>
+	</div>
+}
 <div id="recievedOrdersSound"></div>
 
-@if (ViewData != null && ViewData.ContainsKey("UserRecievedPrintOrdersCount") 
-    && ViewData["UserRecievedPrintOrdersCount"] != null)
+@if (ViewData != null && ViewData.ContainsKey("UserRecievedPrintOrdersCount")
+				&& ViewData["UserRecievedPrintOrdersCount"] != null)
 {
 	<script type="text/javascript">
 		(function () {

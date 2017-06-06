@@ -1,248 +1,248 @@
 ﻿.white-text {
-    text-decoration: none !important;
-    color: white !important;
-    display: inline-block;
-    text-align: center;
+	text-decoration: none !important;
+	color: white !important;
+	display: inline-block;
+	text-align: center;
 }
 
 .inline-block {
-    display: inline-block;
+	display: inline-block;
 }
 
 .nopadding {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 .top,
 .infoBox {
-    z-index: 100;
+	z-index: 100;
 }
 
 /* Уменьшаем прозрачность подложки для описания принтера */
 .infoBox {
-    background: rgba(255,255,255,.9);
+	background: rgba(255,255,255,.9);
 }
 
 .modal-dialog {
-    z-index: 200;
+	z-index: 200;
 }
 
 .admin-button {
-    background: #a9143d !important;
+	background: #a9143d !important;
 }
 
-    .admin-button:hover {
-        background: #c11746 !important;
-    }
+	.admin-button:hover {
+		background: #c11746 !important;
+	}
 
 .relative {
-    position: relative;
+	position: relative;
 }
 
 .login-remember-me {
-    margin-top: 13px;
-    color: #667584;
-    text-transform: uppercase;
-    font-weight: 600;
+	margin-top: 13px;
+	color: #667584;
+	text-transform: uppercase;
+	font-weight: 600;
 }
 
 /*Стили для форм с коротким сообщением*/
 .confirmation-form {
-    width: 580px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 5px rgba(0,0,0,.3);
-    margin: auto;
-    padding: 25px 30px 40px;
+	width: 580px;
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px rgba(0,0,0,.3);
+	margin: auto;
+	padding: 25px 30px 40px;
 }
 
 .confirmation-header {
-    font-size: 30px;
-    padding-bottom: 20px;
-    color: #667584;
+	font-size: 30px;
+	padding-bottom: 20px;
+	color: #667584;
 }
 
 .confirmation-text {
-    font-size: 16px;
-    color: #667584;
+	font-size: 16px;
+	color: #667584;
 }
 
-    .confirmation-text a,
-    .pink-link a {
-        color: #ec416f;
-    }
+	.confirmation-text a,
+	.pink-link a {
+		color: #ec416f;
+	}
 
 /*Стили для формы обратной связи*/
 .feedback-message {
-    height: 250px;
+	height: 250px;
 }
 
 /*Стили для страницы оферты*/
 .offer-body {
-    background: #f5f5f5;
-    padding: 60px 0px;
+	background: #f5f5f5;
+	padding: 60px 0px;
 }
 
 .offer-container {
-    width: 1050px;
-    margin: auto;
-    background: #fff;
-    padding: 25px 50px;
+	width: 1050px;
+	margin: auto;
+	background: #fff;
+	padding: 25px 50px;
 }
 
 .offer-title {
-    padding-bottom: 10px;
-    text-align: center;
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    line-height: 40px;
-    text-transform: uppercase;
-    color: #000;
+	padding-bottom: 10px;
+	text-align: center;
+	font-size: 24px;
+	font-weight: 600;
+	letter-spacing: 1px;
+	line-height: 40px;
+	text-transform: uppercase;
+	color: #000;
 }
 
 .offer-table td {
-    text-align: left;
+	text-align: left;
 }
 
 /*Переопределение для форм, чтоб не сжимались в 400 пикселей*/
 .smForm {
-    width: 100% !important;
+	width: 100% !important;
 }
 /*Переопределение кнопки в лукапе, очень криво сверстано*/
 .dLabel {
-    cursor: pointer;
-    right: 0px !important;
-    height: 100% !important;
-    top: 0px !important;
-    display: table-cell !important;
-    position: inherit !important;
-    border-radius: 0px 5px 5px 0px !important;
-    transition-duration: 0.2s;
+	cursor: pointer;
+	right: 0px !important;
+	height: 100% !important;
+	top: 0px !important;
+	display: table-cell !important;
+	position: inherit !important;
+	border-radius: 0px 5px 5px 0px !important;
+	transition-duration: 0.2s;
 }
 
-    .dLabel:hover {
-        background: #ff4779;
-    }
+	.dLabel:hover {
+		background: #ff4779;
+	}
 
 .dLeftLabel {
-    border-radius: 5px 0px 0px 5px !important;
+	border-radius: 5px 0px 0px 5px !important;
 }
 
 .fullwidth {
-    width: 100%;
+	width: 100%;
 }
 
 .has-error input {
-    border-color: #a94442;
+	border-color: #a94442;
 }
 
 .alert-error {
-    border: solid 1px #a94442;
-    color: #a94442;
-    font-style: italic;
-    background-color: #ffe6e6;
+	border: solid 1px #a94442;
+	color: #a94442;
+	font-style: italic;
+	background-color: #ffe6e6;
 }
 
 .clockpicker,
 .currency-input-group {
-    min-width: 130px;
+	min-width: 130px;
 }
 
 .min-width-0 {
-    min-width: 0px !important;
+	min-width: 0px !important;
 }
 
 .outerTable {
-    overflow-x: auto !important;
+	overflow-x: auto !important;
 }
 
 .input-group .input-def {
-    border-radius: 5px 0px 0px 5px;
+	border-radius: 5px 0px 0px 5px;
 }
 
 .js-clearable + .add-clear-x {
-    top: -2px !important;
+	top: -2px !important;
 }
 
 .star-rating-field {
-    color: #ff205c !important;
+	color: #ff205c !important;
 }
 
 .lookup-table-wrapper {
-    max-height: 500px;
-    overflow: auto;
+	max-height: 500px;
+	overflow: auto;
 }
 
 .modal-dialog {
-    max-width: 1000px !important;
-    width: 95% !important;
-    margin: 5px auto;
+	max-width: 1000px !important;
+	width: 95% !important;
+	margin: 5px auto;
 }
 
 
 .pagination .active a {
-    background-color: #ff205c !important;
-    border-color: #ff205c !important;
+	background-color: #ff205c !important;
+	border-color: #ff205c !important;
 }
 
 .pagination :not(.active) a {
-    color: #ff205c !important;
-    border-color: #ff205c !important;
+	color: #ff205c !important;
+	border-color: #ff205c !important;
 }
 
 .lookup-search {
-    width: 50% !important;
+	width: 50% !important;
 }
 
 .modal-question-buttons button {
-    margin-top: 5px;
-    margin-bottom: 0px;
-    margin-left: 2px;
-    margin-right: 2px;
+	margin-top: 5px;
+	margin-bottom: 0px;
+	margin-left: 2px;
+	margin-right: 2px;
 }
 
 .modal-question-content {
-    margin-left: 15px;
-    margin-right: 15px;
+	margin-left: 15px;
+	margin-right: 15px;
 }
 
 .modal-question-text {
-    margin-bottom: 10px;
-    text-align: center;
+	margin-bottom: 10px;
+	text-align: center;
 }
 
 .modal-question-buttons {
-    padding: 0px 5px;
+	padding: 0px 5px;
 }
 
 /* for progressbar in new order page */
 .progressbar-wrapper {
-    display: table-cell;
-    margin: 0;
-    padding: 0;
-    width: 40%;
-    text-align: center;
-    border-radius: 0px 5px 5px 0px !important;
+	display: table-cell;
+	margin: 0;
+	padding: 0;
+	width: 40%;
+	text-align: center;
+	border-radius: 0px 5px 5px 0px !important;
 }
 
 .progressbar-bar {
-    display: table;
-    background-image: linear-gradient(to bottom,#e81d54 0,#F3547F 100%);
+	display: table;
+	background-image: linear-gradient(to bottom,#e81d54 0,#F3547F 100%);
 }
 
 .progressbar-text {
-    display: table-cell;
-    vertical-align: middle;
-    margin: 0;
-    padding: 0;
+	display: table-cell;
+	vertical-align: middle;
+	margin: 0;
+	padding: 0;
 }
 
 .upload-text {
-    width: 100%;
-    border-radius: 0 !important;
-    border-right: 0 !important;
-    border-left: 0 !important;
+	width: 100%;
+	border-radius: 0 !important;
+	border-right: 0 !important;
+	border-left: 0 !important;
 }
 
 /* Стиль для нажатой кнопки */
@@ -250,174 +250,179 @@
 .lkTopBBtn:active,
 .lkMenu li:active,
 .coloredBtn:active {
-    background-color: white;
-    color: #ff4779 !important;
-    border: 1px solid #ff4779;
+	background-color: white;
+	color: #ff4779 !important;
+	border: 1px solid #ff4779;
 }
 
 .lookup-header {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 /* Apply these styles only when #preview-pane has
     been placed within the Jcrop widget */
 .jcrop-holder #preview-pane {
-    display: block;
-    position: absolute;
-    z-index: 2000;
-    top: 10px;
-    right: -280px;
-    padding: 6px;
-    border: 1px rgba(0,0,0,.4) solid;
-    background-color: white;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    -webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
-    box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+	display: block;
+	position: absolute;
+	z-index: 2000;
+	top: 10px;
+	right: -280px;
+	padding: 6px;
+	border: 1px rgba(0,0,0,.4) solid;
+	background-color: white;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	-webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+	box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
 }
 
 .lkMenuBox {
-    padding: 20px 0px;
+	padding: 20px 0px;
 }
 
 .lkMenu {
-    padding: 0px 13px;
+	padding: 0px 13px;
 }
 
 .lkBoxCont {
-    padding: 0px;
+	padding: 0px;
 }
 
-
+.menu.minimized .headLogo {
+	width: auto;
+	height: 35px;
+}
 
 /* The Javascript code will set the aspect ratio of the crop
     area based on the size of the thumbnail preview,
     specified here */
 #preview-pane .preview-container {
-    width: 150px;
-    height: 150px;
-    overflow: hidden;
+	width: 150px;
+	height: 150px;
+	overflow: hidden;
 }
 
 .load.load-full-screen {
-    height: 95vh;
+	height: 95vh;
 }
 
 .crop-window {
-    text-align: center;
-    overflow-y: hidden !important;
-    min-width: 700px;
-    max-width: 700px;
-    margin: 0 auto;
+	text-align: center;
+	overflow-y: hidden !important;
+	min-width: 700px;
+	max-width: 700px;
+	margin: 0 auto;
 }
 
 .crop-container {
-    width: 100%;
-    text-align: center;
-    margin: 0 !important;
+	width: 100%;
+	text-align: center;
+	margin: 0 !important;
 }
 
 .crop-img-container {
-    margin: 0 auto;
-    display: inline-block;
-}
-
-@media screen and (max-width: 700px) {
-    .crop-window {
-        min-width: 100%;
-        max-width: 100%;
-        min-height: 95vh;
-        max-width: 95vh;
-    }
+	margin: 0 auto;
+	display: inline-block;
 }
 
 .infoBox {
-    overflow-y: auto;
+	overflow-y: auto;
 }
 
 .headLogo {
-    height: 50px;
-    margin-top: 10px;
+	height: 35px;
+	margin-top: 5px;
 }
 
 .menu {
-    height: 70px;
+	height: 70px;
 }
 
 .menuLine {
-    min-height: 70px;
-    line-height: 70px;
+	min-height: 70px;
+	line-height: 70px;
 }
 
 .topMargin {
-    height: 96px;
+	height: 96px;
+}
+
+@media screen and (max-width: 700px) {
+	.crop-window {
+		min-width: 100%;
+		max-width: 100%;
+		min-height: 95vh;
+		max-width: 95vh;
+	}
 }
 
 @media screen and (min-width: 990px) {
 
-    .md-no-right-padding {
-        padding-right: 0px;
-        margin-right: 0px;
-    }
+	.md-no-right-padding {
+		padding-right: 0px;
+		margin-right: 0px;
+	}
 }
 
 @media screen and (max-width: 1000px) {
-    .lkBox {
-        padding: 20px 10px;
-    }
+	.lkBox {
+		padding: 20px 10px;
+	}
 
-    .offer-container {
-        width: 100%;
-    }
+	.offer-container {
+		width: 100%;
+	}
 
-    .offer-body {
-        padding: 0;
-    }
+	.headLogo {
+		margin: 5px auto;
+		height: 40px;
+	}
 
-    .aboutLink {
-        padding: 0px;
-    }
+	.offer-body {
+		padding: 0;
+	}
 
-    .menuLine {
-        min-height: 30px;
-        line-height: 30px;
-    }
+	.aboutLink {
+		padding: 0px;
+	}
 
-    .topMargin {
-        height: 0;
-    }
+	.menuLine {
+		min-height: 30px;
+		line-height: 30px;
+		text-align: center;
+	}
 
-    .headLogo {
-        margin-top: 0px;
-    }
+	.topMargin {
+		height: 0;
+	}
 }
 
 @media screen and (max-width:600px) {
-    .white-text {
-        margin-bottom: 10px;
-        width: 100%;
-    }
+	.white-text {
+		margin-bottom: 10px;
+		width: 100%;
+	}
 
-    /*Кнопки в информации о принтере на главной форме*/
-    .printer-info-btn {
-        max-width: 200px;
-    }
+	/*Кнопки в информации о принтере на главной форме*/
+	.printer-info-btn {
+		max-width: 200px;
+	}
 
-    .lookup-search {
-        width: 90% !important;
-    }
+	.lookup-search {
+		width: 90% !important;
+	}
 
-    .loginTitle,
-    .confirmation-header {
-        font-size: 22px;
-    }
+	.loginTitle,
+	.confirmation-header {
+		font-size: 22px;
+	}
 }
 
 @media (min-width: 768px) {
-    .modal-dialog {
-        width: 600px;
-        margin: 30px auto;
-    }
+	.modal-dialog {
+		width: 600px;
+		margin: 30px auto;
+	}
 }
