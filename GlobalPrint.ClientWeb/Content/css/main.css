@@ -1138,3 +1138,7 @@ label.labelBox {
 	font-size:18px;
 	color:#444;
 }
+
+.about__customers-row {
+    margin-top:40px;
+}
