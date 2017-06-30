@@ -268,6 +268,7 @@
 				averallServices += (averallServices ? '<br>' : '') + service;
 			});
 			$("#printerInfoPrices").html(averallServices);
+			$("#printerInfoEmail").html(printerInfo.Printer.Email);
 
 			if (!_currentPrinterID) {
 				_lastState = {
