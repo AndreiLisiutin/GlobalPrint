@@ -49,9 +49,17 @@
                 @if (ViewContext.HttpContext.User.IsInRole(UserRolesEnum.Admin))
                 {
                     <div class="infoAbout">
-                        <div class="aboutTitle">Контакты</div>
+                        <div class="aboutTitle">Контакты оператора</div>
                         <div class="aboutInput">
-                            <div class="aboutFInput" id="printerInfoEmail">
+                            <div class="aboutFInput" id="printerOperatorContacts">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="infoAbout">
+                        <div class="aboutTitle">Контакты владельца</div>
+                        <div class="aboutInput">
+                            <div class="aboutFInput" id="printerOwnerContacts">
                             </div>
                         </div>
                     </div>
@@ -59,7 +67,7 @@
             </form>
         </div>
 
-        <div align="center">
+        <div align="center" class="info-box__buttons">
             <button class="defaultButton coloredBtn white-text printer-info-btn" type="button" id="printerInfoPrint">Печать</button>
             <button class="defaultButton coloredBtn white-text printer-info-btn" id="printerInfoClose">Закрыть</button>
         </div>

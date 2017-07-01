@@ -75,6 +75,7 @@
 @media screen and (max-width:600px) {
 	.goReg, .loginForm, .verticalWrap .confirmation-form {width:100%;}
 	.loginForm, .verticalWrap .confirmation-form {padding: 25px 20px 40px;}
+    .verticalWrap {padding: 0;}
 	.goReg {margin-top:15px;}
 	.defaultButton {margin-bottom:10px; width:100%;}
 	.outerTable {border:none; overflow-x:scroll;}

@@ -255,13 +255,32 @@
 				$("#printerInfoPrint").addClass('hidden');
 			}
 
-			function toFixedInt2(n) {
-				return n > 9 ? "" + n : "0" + n;
-			}
-			var name = printerInfo.Printer.Name;
-			var location = printerInfo.Printer.Location;
-			$("#printerInfoLocation").html(name + '<br>' + location);
+		    /**
+			 * Добавить подстроку к общей строке. При необходимости, вставить перенос строки.
+			 * @param {type} commonString Общая строка.
+			 * @param {type} substring Подстрока для добавления.
+			 * @returns {type} Общая строка после добавления новой подстроки.
+			 */
+			var addSubstring = function (commonString, substring) {
+			    if (!commonString) {
+			        commonString = "";
+			    }
+			    if (substring) {
+			        if (commonString) {
+			            commonString += "<br>";
+			        }
+			        commonString += substring;
+			    }
+			    return commonString;
+			};
 
+		    // Блок "Оператор печати"
+			var printerInfoString = printerInfo.Printer.Name;
+			printerInfoString += (printerInfoString ? "<br>" : "") + (printerInfo.Printer.Location || "");
+			printerInfoString += (printerInfoString ? "<br>" : "") + "Телефон: " + (printerInfo.Printer.Phone || "--");
+			$("#printerInfoLocation").html(printerInfoString);
+
+            // Блок "Услуги и цены"
 			var averallServices = '';
 			$.each(marker.printerInfo.PrinterServices, function (index, item) {
 				var service = item.PrintService.FullName + ': ' + item.PrinterService.PricePerPage + ' руб.';
@@ -269,18 +288,15 @@
 			});
 			$("#printerInfoPrices").html(averallServices);
 
-		    // Контакты
-			var contacts = "";
-			if (printerInfo.Printer.Email) {
-			    contacts += "Email: " + printerInfo.Printer.Email;
-			}
-			if (printerInfo.Printer.Phone) {
-			    if (contacts) {
-			        contacts += '<br>';
-			    }
-			    contacts += "Телефон: " + printerInfo.Printer.Phone;
-			}
-			$("#printerInfoEmail").html(contacts);
+		    // Блок "Контакты владельца"
+			var ownerContactsString = "Email: " + (printerInfo.PrinterOwner.Email || "--") + "<br>";
+			ownerContactsString += "Телефон: " + (printerInfo.PrinterOwner.PhoneNumber || "--");
+			$("#printerOwnerContacts").html(ownerContactsString);
+
+		    // Блок "Контакты оператора"
+			var operatorContactsString = "Email: " + (printerInfo.Operator.Email || "--") + "<br>";
+			operatorContactsString += "Телефон: " + (printerInfo.Operator.PhoneNumber || "--");
+			$("#printerOperatorContacts").html(operatorContactsString);
 
 			if (!_currentPrinterID) {
 				_lastState = {

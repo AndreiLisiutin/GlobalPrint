@@ -73,16 +73,17 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             filter = filter ?? new PrinterSearchFilter();
             using (IDataContext context = this.Context())
             {
-                return this.GetFullByFilter(filter, context);
+                return GetFullByFilter(filter, context);
             }
         }
         public IEnumerable<PrinterFullInfoModel> GetFullByFilter(PrinterSearchFilter filter, IDataContext context)
         {
             Argument.NotNull(context, "Контекст подключения к базе данных не может быть пустым.");
+
             filter = filter ?? new PrinterSearchFilter();
-            IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
-            IPrinterScheduleRepository printerScheduleRepo = this.Repository<IPrinterScheduleRepository>(context);
-            IUserRepository userRepo = this.Repository<IUserRepository>(context);
+            var printerRepo = Repository<IPrinterRepository>(context);
+            var printerScheduleRepo = Repository<IPrinterScheduleRepository>(context);
+            var userRepo = Repository<IUserRepository>(context);
 
             var printers =
             (
@@ -92,30 +93,35 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                     (filter.IsDisabled == null || e.IsDisabled == filter.IsDisabled)
                 )
                 join @operator in userRepo.GetAll() on printer.OperatorUserID equals @operator.ID
-                select new { printer = printer, @operator = @operator }
+                join owner in userRepo.GetAll() on printer.OwnerUserID equals owner.ID
+                select new { printer = printer, @operator = @operator, owner = owner }
             )
                 .ToList();
+
             IEnumerable<int> printerIDs = printers.Select(p => p.printer.ID);
 
-            IEnumerable<PrinterSchedule> schedules = printerScheduleRepo
+            List<PrinterSchedule> schedules = printerScheduleRepo
                 .Get(s => printerIDs.Contains(s.PrinterID))
                 .ToList();
-            IEnumerable<PrinterServiceExtended> services = new PrintServicesUnit()
+            List<PrinterServiceExtended> services = new PrintServicesUnit()
                 .GetPrinterServices(s => printerIDs.Contains(s.PrinterService.PrinterID))
                 .ToList();
 
-            IEnumerable<PrinterFullInfoModel> models = printers
+            List<PrinterFullInfoModel> models = printers
                 .Select(p =>
-                new PrinterFullInfoModel(p.printer,
-                    p.@operator,
-                    schedules.Where(e => e.PrinterID == p.printer.ID).ToList(),
-                    services.Where(e => e.PrinterService.PrinterID == p.printer.ID)
-                        .OrderBy(e => e.PrintService.PrintType.Name)
-                        .ThenBy(e => e.PrintService.PrintSize.Name)
-                        .ThenBy(e => e.PrintService.PrintService.IsColored)
-                        .ThenBy(e => e.PrintService.PrintService.IsTwoSided)
-                        .ToList()
-                ))
+                    new PrinterFullInfoModel(
+                        p.printer,
+                        p.@operator,
+                        p.owner,
+                        schedules.Where(e => e.PrinterID == p.printer.ID).ToList(),
+                        services.Where(e => e.PrinterService.PrinterID == p.printer.ID)
+                            .OrderBy(e => e.PrintService.PrintType.Name)
+                            .ThenBy(e => e.PrintService.PrintSize.Name)
+                            .ThenBy(e => e.PrintService.PrintService.IsColored)
+                            .ThenBy(e => e.PrintService.PrintService.IsTwoSided)
+                            .ToList()
+                    )
+                )
                 .ToList();
 
             return models;
@@ -123,11 +129,14 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
         public PrinterFullInfoModel GetFullByID(int printerID, IDataContext context)
         {
             Argument.Require(printerID > 0, "Ключ принтера должен быть больше 0.");
+            Argument.NotNull(context, "Контекст подключения к базе данных не может быть пустым.");
+
             PrinterSearchFilter filter = new PrinterSearchFilter()
             {
                 PrinterID = printerID
             };
-            return this.GetFullByFilter(filter, context)
+
+            return GetFullByFilter(filter, context)
                 .FirstOrDefault();
         }
         public PrinterFullInfoModel GetFullByID(int printerID)
@@ -137,17 +146,23 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
             {
                 PrinterID = printerID
             };
-            return this.GetFullByFilter(filter)
+            return GetFullByFilter(filter)
                 .FirstOrDefault();
         }
 
+        /// <summary>
+        /// Получить ближайший принтер.
+        /// </summary>
+        /// <param name="latitude">Широта текущего местоположения.</param>
+        /// <param name="longtitude">Долгота текущего местоположения.</param>
+        /// <returns>Ближайший принтер.</returns>
         public PrinterFullInfoModel GetClosest(float latitude, float longtitude)
         {
             using (IDataContext context = this.Context())
             {
-                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
-                IPrinterScheduleRepository printerScheduleRepo = this.Repository<IPrinterScheduleRepository>(context);
-                IUserRepository userRepo = this.Repository<IUserRepository>(context);
+                var printerRepo = Repository<IPrinterRepository>(context);
+                var printerScheduleRepo = Repository<IPrinterScheduleRepository>(context);
+                var userRepo = Repository<IUserRepository>(context);
 
                 int today = (int)DateTime.Now.DayOfWeek;
                 TimeSpan now = DateTime.Now.TimeOfDay;
@@ -159,28 +174,36 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                     from printer in printerRepo.Get(e => !e.IsDisabled)
                     join schedule in printerScheduleRepo.Get(e => e.DayOfWeek == today && now >= e.OpenTime && now <= e.CloseTime)
                         on printer.ID equals schedule.PrinterID
-                    join @operator in userRepo.Get(o => o.LastActivityDate > activityOkDate) on printer.OperatorUserID equals @operator.ID
-                    select new { printer = printer, @operator = @operator, range = Math.Pow(printer.Latitude - latitude, 2) + Math.Pow(printer.Longtitude - longtitude, 2) }
+                    join @operator in userRepo.Get(o => o.LastActivityDate > activityOkDate) 
+                        on printer.OperatorUserID equals @operator.ID
+                    join owner in userRepo.GetAll() 
+                        on printer.OwnerUserID equals owner.ID
+                    select new
+                    {
+                        printer = printer,
+                        @operator = @operator,
+                        owner = owner,
+                        range = Math.Pow(printer.Latitude - latitude, 2) + Math.Pow(printer.Longtitude - longtitude, 2)
+                    }
                 );
 
-                var closest = printers.
-                    Where(e => e.range == printers.Min(x => x.range))
+                var closestPrinter = printers
+                    .Where(e => e.range == printers.Min(x => x.range))
                     .FirstOrDefault();
                 
-                if (closest == null)
+                if (closestPrinter == null)
                 {
                     return null;
                 }
                 
                 IEnumerable<PrinterSchedule> schedules = printerScheduleRepo
-                    .Get(s => s.PrinterID == closest.printer.ID)
+                    .Get(s => s.PrinterID == closestPrinter.printer.ID)
                     .ToList();
                 IEnumerable<PrinterServiceExtended> services = new PrintServicesUnit()
-                    .GetPrinterServices(s => s.PrinterService.PrinterID == closest.printer.ID)
+                    .GetPrinterServices(s => s.PrinterService.PrinterID == closestPrinter.printer.ID)
                     .ToList();
 
-                PrinterFullInfoModel model = new PrinterFullInfoModel(closest.printer, closest.@operator, schedules, services);
-                return model;
+                return new PrinterFullInfoModel(closestPrinter.printer, closestPrinter.@operator, closestPrinter.owner, schedules, services);
             }
         }
 

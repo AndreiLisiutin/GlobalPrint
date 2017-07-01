@@ -1,6 +1,5 @@
 ﻿using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers;
 using GlobalPrint.ServerBusinessLogic.Models.Business.Printers;
-using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace GlobalPrint.ClientWeb
@@ -14,7 +13,7 @@ namespace GlobalPrint.ClientWeb
         }
         public HomeController(PrinterUnit printerUnit)
         {
-            this._printerUnit = printerUnit;
+            _printerUnit = printerUnit;
         }
         
         /// <summary>
@@ -28,14 +27,25 @@ namespace GlobalPrint.ClientWeb
             return View();
         }
 
+        /// <summary>
+        /// Получить список принтеров по фильтру.
+        /// </summary>
+        /// <param name="filter">Фильтр для принтеров.</param>
+        /// <returns>Список найденных принтеров.</returns>
         [HttpGet]
         public ActionResult GetPrinters(PrinterSearchFilter filter)
         {
             filter = filter ?? new PrinterSearchFilter();
-            IEnumerable<PrinterFullInfoModel> printers = _printerUnit.GetFullByFilter(filter);
+            var printers = _printerUnit.GetFullByFilter(filter);
             return Json(printers);
         }
 
+        /// <summary>
+        /// Найти ближайший принтер.
+        /// </summary>
+        /// <param name="latitude">Широта текущего местоположения.</param>
+        /// <param name="longtitude">Долгота текущего местоположения.</param>
+        /// <returns>Ближайший принтер.</returns>
         [HttpGet]
         public ActionResult GetClosestPrinter(float latitude, float longtitude)
         {

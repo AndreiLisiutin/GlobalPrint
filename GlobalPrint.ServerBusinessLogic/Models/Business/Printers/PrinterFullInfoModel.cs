@@ -4,13 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Configuration;
 
 namespace GlobalPrint.ServerBusinessLogic.Models.Business.Printers
 {
-    /// <summary> Model for the Printer entity. 
+    /// <summary> 
+    /// Model for the Printer entity. 
     /// Contains schedules and services with alll the text values of any ID and internal entity.
     /// </summary>
     public class PrinterFullInfoModel
@@ -20,42 +19,69 @@ namespace GlobalPrint.ServerBusinessLogic.Models.Business.Printers
         {
         }
         [DebuggerStepThrough]
-        public PrinterFullInfoModel(Printer printer, User @operator, IEnumerable<PrinterSchedule> schedule, IEnumerable<PrinterServiceExtended> services)
+        public PrinterFullInfoModel(Printer printer, User @operator, User printerOwner, IEnumerable<PrinterSchedule> schedule, IEnumerable<PrinterServiceExtended> services)
         {
-            this.Printer = printer;
-            this.PrinterSchedule = schedule;
-            this.PrinterServices = services;
-            this.Operator = @operator;
+            Printer = printer;
+            PrinterSchedule = schedule;
+            PrinterServices = services;
+            PrinterOwner = printerOwner;
+            Operator = @operator;
         }
 
+        /// <summary>
+        /// Принтер.
+        /// </summary>
         public Printer Printer { get; set; }
+
+        /// <summary>
+        /// Оператор принтера.
+        /// </summary>
         public User Operator { get; set; }
+
+        /// <summary>
+        /// Владелец принтера.
+        /// </summary>
+        public User PrinterOwner { get; set; }
+
+        /// <summary>
+        /// Расписание работы принтера.
+        /// </summary>
         public IEnumerable<PrinterSchedule> PrinterSchedule { get; set; }
+
+        /// <summary>
+        /// Услуги и цены принтера.
+        /// </summary>
         public IEnumerable<PrinterServiceExtended> PrinterServices { get; set; }
 
+        /// <summary>
+        /// Активен (онлайн) ли оператор сейчас.
+        /// </summary>
         public bool IsOperatorAlive
         {
             get
             {
                 TimeSpan threshold = TimeSpan.FromMinutes(double.Parse(WebConfigurationManager.AppSettings["ActivityCheckerThreshold"]));
-                return this.Operator.LastActivityDate > DateTime.Now.Subtract(threshold);
-            } 
+                return Operator.LastActivityDate > DateTime.Now.Subtract(threshold);
+            }
         }
 
+        /// <summary>
+        /// Работает ли принтер сейчас.
+        /// </summary>
         public bool IsAvailableNow
         {
             get
             {
                 DateTime now = DateTime.Now;
-                if (this.Printer.IsDisabled)
+                if (Printer.IsDisabled)
                 {
                     //printer was marked as disabled by its owner.
                     return false;
                 }
 
-                bool isWorkingNow = this.PrinterSchedule.Any(s => 
-                    s.DayOfWeek == (int)now.DayOfWeek 
-                    && s.OpenTime <= now.TimeOfDay 
+                bool isWorkingNow = PrinterSchedule.Any(s =>
+                    s.DayOfWeek == (int)now.DayOfWeek
+                    && s.OpenTime <= now.TimeOfDay
                     && s.CloseTime >= now.TimeOfDay
                 );
 

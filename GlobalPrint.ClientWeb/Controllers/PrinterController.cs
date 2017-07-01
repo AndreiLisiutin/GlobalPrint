@@ -11,12 +11,16 @@ using GlobalPrint.ClientWeb.Filters;
 
 namespace GlobalPrint.ClientWeb
 {
+    /// <summary>
+    /// Контроллер принтеров.
+    /// </summary>
     public class PrinterController : BaseController
     {
         PrinterUnit _printerUnit = null;
+
         public PrinterController(PrinterUnit printerUnit)
         {
-            this._printerUnit = printerUnit;
+            _printerUnit = printerUnit;
         }
         public PrinterController()
             : this(new PrinterUnit())
@@ -37,7 +41,7 @@ namespace GlobalPrint.ClientWeb
         [Authorize, HttpGet, ImportModelState]
         public ActionResult MyPrinters()
         {
-            int userID = this.GetCurrentUserID();
+            int userID = GetCurrentUserID();
 
             List<Printer> printerList = this._printerUnit.GetUserPrinterList(userID);
             Printer_MyPrinters myPrinters = new Printer_MyPrinters()
@@ -123,7 +127,7 @@ namespace GlobalPrint.ClientWeb
         {
             try
             {
-                this._printerUnit.DeletePrinter(PrinterID);
+                _printerUnit.DeletePrinter(PrinterID);
             }
             catch (Exception ex)
             {

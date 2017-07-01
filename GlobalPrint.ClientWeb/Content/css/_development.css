@@ -24,6 +24,10 @@
 	background: rgba(255,255,255,.9);
 }
 
+.info-box__buttons {
+    margin-bottom: 10px;
+}
+
 .modal-dialog {
 	z-index: 200;
 }
