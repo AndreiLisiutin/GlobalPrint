@@ -84,4 +84,5 @@
 	.smForm {width:100%;}
 	.defaultTitle {font-size:16px; text-align:center;}
     .offer-container { padding: 25px 20px !important;}
+    .offer-title { font-size: 22px !important; letter-spacing: 0px !important; }
 }

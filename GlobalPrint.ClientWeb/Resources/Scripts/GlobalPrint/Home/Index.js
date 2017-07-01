@@ -268,7 +268,19 @@
 				averallServices += (averallServices ? '<br>' : '') + service;
 			});
 			$("#printerInfoPrices").html(averallServices);
-			$("#printerInfoEmail").html(printerInfo.Printer.Email);
+
+		    // Контакты
+			var contacts = "";
+			if (printerInfo.Printer.Email) {
+			    contacts += "Email: " + printerInfo.Printer.Email;
+			}
+			if (printerInfo.Printer.Phone) {
+			    if (contacts) {
+			        contacts += '<br>';
+			    }
+			    contacts += "Телефон: " + printerInfo.Printer.Phone;
+			}
+			$("#printerInfoEmail").html(contacts);
 
 			if (!_currentPrinterID) {
 				_lastState = {
