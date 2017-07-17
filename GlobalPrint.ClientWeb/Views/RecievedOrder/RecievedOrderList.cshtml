@@ -75,7 +75,7 @@
                                 {
                                     <td align="right">
                                         @Html.ButtonMenu(new List<MenuItem>() {
-                                            new MenuItem() { Name = "Подтвердить для получения оплаты", IsPostOperation = true,
+                                            new MenuItem() { Name = "Принять", IsPostOperation = true,
                                                 Reference = @Url.Action("AcceptOrder", "RecievedOrder", new { printOrderID = printOrder.PrintOrder.ID }) },
                                             new MenuItem() { Name = "Отклонить", IsPostOperation = true, Classes = new List<string> { "rejectOrder" },
                                                 Reference = @Url.Action("RejectOrder", "RecievedOrder", new { printOrderID = printOrder.PrintOrder.ID }) }
@@ -87,7 +87,7 @@
                                     <td align="right">
                                         @Html.ButtonMenu(new List<MenuItem>() {
                                             new MenuItem() { Name = "Скачать", Reference = @Url.Action("DownloadOrder", "Order", new { @printOrderID = printOrder.PrintOrder.ID }) },
-                                            new MenuItem() { Name = "Распечатать", Reference = @Url.Action("ConfirmPrintOrder", "RecievedOrder", new { @printOrderID = printOrder.PrintOrder.ID }) }
+                                            new MenuItem() { Name = "Подтвердить оплату", Reference = @Url.Action("ConfirmPrintOrder", "RecievedOrder", new { @printOrderID = printOrder.PrintOrder.ID }) }
                                         })
                                     </td>
                                 }
