@@ -1,5 +1,6 @@
 ﻿using GlobalPrint.ClientWeb.App_Start;
 using GlobalPrint.Infrastructure.CommonUtils;
+using GlobalPrint.Infrastructure.CommonUtils.ExtensionMethods;
 using GlobalPrint.Infrastructure.LogUtility;
 using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
 using Microsoft.AspNet.Identity;
@@ -66,7 +67,7 @@ namespace GlobalPrint.ClientWeb
                 return View("Register", model);
             }
 
-            var registeredUser = _userUnit.GetByFilter(e => e.Email == model.Email);
+            var registeredUser = _userUnit.GetByFilter(e => e.Email != null && model.Email.ToUpper() == e.Email.ToUpper());
             if (registeredUser != null)
             {
                 ModelState.AddModelError("", "Пользователь с таким email уже зарегистрирован в системе.");

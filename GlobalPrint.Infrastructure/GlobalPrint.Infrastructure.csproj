@@ -88,6 +88,7 @@
     <Compile Include="BankUtility\IBankInfo.cs" />
     <Compile Include="BankUtility\IBankUtility.cs" />
     <Compile Include="CommonUtils\Argument.cs" />
+    <Compile Include="CommonUtils\ExtensionMethods\StringExtensionMethods.cs" />
     <Compile Include="CommonUtils\IMimeTypeUtility.cs" />
     <Compile Include="CommonUtils\MimeTypeUtility.cs" />
     <Compile Include="CommonUtils\Pagination\IPagedCollection.cs" />
