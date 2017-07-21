@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using GlobalPrint.ServerBusinessLogic._IBusinessLogicLayer.Units.Users;
+using GlobalPrint.Infrastructure.CommonUtils.ExtensionMethods;
 
 namespace GlobalPrint.ClientWeb
 {
@@ -309,7 +310,7 @@ namespace GlobalPrint.ClientWeb
                 throw new ArgumentException("email");
             }
 
-            User result = this._userUnit.GetByFilter(x => x.Email == email);
+            User result = _userUnit.GetByFilter(x => x.Email != null && email.ToUpper() == x.Email.ToUpper());
             if (result != null)
             {
                 ApplicationUser appUser = new ApplicationUser(result);

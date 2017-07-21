@@ -33,24 +33,21 @@ namespace GlobalPrint.ClientWeb.Models.Lookup.LookupManagers
         /// <returns>List of matching entities.</returns>
         public override List<User> GetEntities(string searchText, Paging paging, string sortBy, SortByEnum? sortByDirection)
         {
-            var empty = this.GetEmptyEntity();
+            var empty = GetEmptyEntity();
+
             switch (sortBy)
             {
                 case nameof(empty.ID):
-                    return this._userUnit.GetByFilter(searchText, paging, entity => entity.ID, sortByDirection == SortByEnum.Asc);
-                    break;
+                    return _userUnit.GetByFilter(searchText, paging, entity => entity.ID, sortByDirection == SortByEnum.Asc);
                 case nameof(empty.Email):
-                    return this._userUnit.GetByFilter(searchText, paging, entity => entity.Email, sortByDirection == SortByEnum.Asc);
-                    break;
+                    return _userUnit.GetByFilter(searchText, paging, entity => entity.Email, sortByDirection == SortByEnum.Asc);
                 case nameof(empty.UserName):
-                    return this._userUnit.GetByFilter(searchText, paging, entity => entity.UserName, sortByDirection == SortByEnum.Asc);
-                    break;
+                    return _userUnit.GetByFilter(searchText, paging, entity => entity.UserName, sortByDirection == SortByEnum.Asc);
                 case nameof(empty.LastActivityDate):
-                    return this._userUnit.GetByFilter(searchText, paging, entity => entity.LastActivityDate, sortByDirection == SortByEnum.Asc);
-                    break;
+                    return _userUnit.GetByFilter(searchText, paging, entity => entity.LastActivityDate, sortByDirection == SortByEnum.Asc);
             }
 
-            return this._userUnit.GetByFilter<string>(searchText, paging, null);
+            return _userUnit.GetByFilter<string>(searchText, paging, null);
         }
 
         /// <summary>
