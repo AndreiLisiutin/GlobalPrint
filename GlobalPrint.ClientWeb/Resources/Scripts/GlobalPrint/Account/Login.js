@@ -20,5 +20,8 @@
 })(GlobalPrint.Account.Login);
 
 $(document).ready(function () {
-    GlobalPrint.Account.Login.defineValidation();
+	GlobalPrint.Account.Login.defineValidation();
+	if ($(".setClick").is(":checked")) {
+		$(".loginCheckBox").toggleClass('checked');
+	}
 });

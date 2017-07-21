@@ -67,7 +67,7 @@ namespace GlobalPrint.ClientWeb
                 return View("Register", model);
             }
 
-            var registeredUser = _userUnit.GetByFilter(e => e.Email != null && model.Email != null && model.Email.ToUpper() == e.Email.ToUpper());
+            var registeredUser = _userUnit.GetByFilter(e => e.Email != null && model.Email.ToUpper() == e.Email.ToUpper());
             if (registeredUser != null)
             {
                 ModelState.AddModelError("", "Пользователь с таким email уже зарегистрирован в системе.");
