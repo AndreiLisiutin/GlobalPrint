@@ -8,8 +8,8 @@
 	var PRINTER_DEACTIVE_Z_INDEX = 1000;
 
 	//select printer's icon by its state
-	var _getPrinterIcon = function (printerInfo) {
-		if (printerInfo.IsAvailableNow && printerInfo.IsOperatorAlive) {
+    var _getPrinterIcon = function (printerInfo) {
+		if (printerInfo.IsAvailableNow /* && printerInfo.IsOperatorAlive */) {
 			return PRINTER_ONLINE_ICON_URL;
 		}
 		if (printerInfo.Printer.IsDisabled) {
@@ -18,7 +18,7 @@
 		return PRINTER_OFFLINE_ICON_URL;
 	};
 	var _getPrinterZIndex = function (printerInfo) {
-		if (printerInfo.IsAvailableNow && printerInfo.IsOperatorAlive) {
+		if (printerInfo.IsAvailableNow /* && printerInfo.IsOperatorAlive */) {
 			return PRINTER_ONLINE_Z_INDEX;
 		}
 		if (printerInfo.Printer.IsDisabled) {
@@ -235,7 +235,7 @@
 
 		google.maps.event.addListener(marker, 'click', function () {
 			$("#printerInfoPrinterID").val(printerInfo.Printer.ID);
-			if (printerInfo.IsAvailableNow && printerInfo.IsOperatorAlive) {
+			if (printerInfo.IsAvailableNow /* && printerInfo.IsOperatorAlive */) {
 				$("#printerStatus").html('Сейчас доступен');
 				$(".infoStatusBox").addClass('available');
 				$(".infoStatusBox").removeClass('disabled');

@@ -448,30 +448,24 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             File.WriteAllBytes(_physicalPathToFile, printFile.SerializedFile);
 
             //perform main business logic
-            order = this._paymentUnit.Value.InitializePrintOrder(order);
+            order = _paymentUnit.Value.InitializePrintOrder(order);
 
             User client = IoC.Instance.Resolve<UserUnit>().GetByID(order.UserID);
             User printerOperator = printerUnit.GetPrinterOperator(order.PrinterID);
 
-            // send email to user about his new order
+            // Отправить email сообщение заказчику
             MailAddress userMail = new MailAddress(client.Email, client.UserName);
-            string userMessageBody = string.Format(
-                "Ваш новый заказ № {0} от {1} на принтер \"{2}\" ({3}) успешно зарегистрирован.",
-                order.ID,
-                order.OrderedOn.ToString("dd.MM.yyyy HH:mm"),
-                printer.Printer.Name,
-                printer.Printer.Location
-            );
+            string userMessageBody =
+                $"Ваш новый заказ № {order.ID} от {order.OrderedOn.ToString("dd.MM.yyyy HH:mm")} " +
+                $"на принтер \"{printer.Printer.Name}\" ({printer.Printer.Location}) успешно зарегистрирован. " +
+                $"Код заказа {order.SecretCode}.";
             _emailUtility.Value.Send(userMail, "Global Print - Новый заказ на печать", userMessageBody);
-            // send email to printer operator about new order
+
+            // Отправить email сообщение оператору принтера
             MailAddress userOperatorMail = new MailAddress(printerOperator.Email, printerOperator.UserName);
-            string userOperatorMessageBody = string.Format(
-                "На Ваш принтер \"{0}\" ({1}) поступил новый заказ № {2} от {3}.",
-                printer.Printer.Name,
-                printer.Printer.Location,
-                order.ID,
-                order.OrderedOn.ToString("dd.MM.yyyy HH:mm")
-            );
+            string userOperatorMessageBody =
+                $"На Ваш принтер \"{printer.Printer.Name}\" ({printer.Printer.Location}) " +
+                $"поступил новый заказ № {order.ID} от {order.OrderedOn.ToString("dd.MM.yyyy HH:mm")}.";
             _emailUtility.Value.Send(userOperatorMail, "Global Print - Входящий заказ на печать", userOperatorMessageBody);
 
             return order;

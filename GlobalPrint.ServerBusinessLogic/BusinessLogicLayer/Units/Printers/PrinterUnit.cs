@@ -1,4 +1,5 @@
 ﻿using GlobalPrint.Infrastructure.CommonUtils;
+using GlobalPrint.Infrastructure.CommonUtils.ExtensionMethods;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.DataContext;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository;
 using GlobalPrint.ServerBusinessLogic._IDataAccessLayer.Repository.Orders;
@@ -49,8 +50,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                 IPrinterServiceRepository printerServiceRepo = this.Repository<IPrinterServiceRepository>(context);
 
                 Printer printer = printerRepo.GetByID(printerID);
-                Argument.Require(userID == printer.OperatorUserID || userID ==  printer.OwnerUserID, 
-                    "Редактировать принтер может только хозяин или оператор.");
+                Argument.Require(userID.In(printer.OperatorUserID, printer.OwnerUserID), "Редактировать принтер может только хозяин или оператор.");
 
                 IEnumerable<PrinterSchedule> schedule = printerScheduleRepo
                     .Get(e => e.PrinterID == printerID)
@@ -174,7 +174,7 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Printers
                     from printer in printerRepo.Get(e => !e.IsDisabled)
                     join schedule in printerScheduleRepo.Get(e => e.DayOfWeek == today && now >= e.OpenTime && now <= e.CloseTime)
                         on printer.ID equals schedule.PrinterID
-                    join @operator in userRepo.Get(o => o.LastActivityDate > activityOkDate) 
+                    join @operator in userRepo.GetAll() //.Get(o => o.LastActivityDate > activityOkDate) 
                         on printer.OperatorUserID equals @operator.ID
                     join owner in userRepo.GetAll() 
                         on printer.OwnerUserID equals owner.ID
