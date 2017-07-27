@@ -27,9 +27,13 @@ using GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.Units.Users;
 using GlobalPrint.ServerBusinessLogic.DI;
 using GlobalPrint.ServerBusinessLogic.Models.Domain.Printers;
 using System.Configuration;
+using GlobalPrint.Infrastructure.CommonUtils.ExtensionMethods;
 
 namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 {
+    /// <summary>
+    /// Модуль бизнес-логики для работы с заказами на печать.
+    /// </summary>
     public class PrintOrderUnit : BaseUnit
     {
         private Lazy<IEmailUtility> _emailUtility { get; set; }
@@ -43,12 +47,12 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
         public PrintOrderUnit(Lazy<IEmailUtility> emailUtility)
             : base()
         {
-            this._emailUtility = emailUtility;
-            this._fileUtility = IoC.Instance.Resolve<Lazy<IFileUtility>>();
-            this._paymentUnit = new Lazy<PaymentActionUnit>(() => new PaymentActionUnit());
-            this._printServiceUnit = new Lazy<PrintServicesUnit>(() => new PrintServicesUnit());
-            this._printerUnit = new Lazy<PrinterUnit>(() => new PrinterUnit());
-            this._userUnit = new Lazy<UserUnit>(() => new UserUnit(_emailUtility));
+            _emailUtility = emailUtility;
+            _fileUtility = IoC.Instance.Resolve<Lazy<IFileUtility>>();
+            _paymentUnit = new Lazy<PaymentActionUnit>(() => new PaymentActionUnit());
+            _printServiceUnit = new Lazy<PrintServicesUnit>(() => new PrintServicesUnit());
+            _printerUnit = new Lazy<PrinterUnit>(() => new PrinterUnit());
+            _userUnit = new Lazy<UserUnit>(() => new UserUnit(_emailUtility));
         }
 
         /// <summary>
@@ -62,19 +66,19 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
             using (IDataContext context = this.Context())
             {
-                return this.Repository<IPrintOrderRepository>(context)
+                return Repository<IPrintOrderRepository>(context)
                     .GetByID(printOrderID);
             }
         }
 
         public List<PrintOrderInfo> GetUserPrintOrderList(int userID, string printOrderID)
         {
-            using (IDataContext context = this.Context())
+            using (IDataContext context = Context())
             {
-                IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
-                IUserRepository userRepo = this.Repository<IUserRepository>(context);
-                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
-                IPrintOrderStatusRepository statusRepo = this.Repository<IPrintOrderStatusRepository>(context);
+                IPrintOrderRepository orderRepo = Repository<IPrintOrderRepository>(context);
+                IUserRepository userRepo = Repository<IUserRepository>(context);
+                IPrinterRepository printerRepo = Repository<IPrinterRepository>(context);
+                IPrintOrderStatusRepository statusRepo = Repository<IPrintOrderStatusRepository>(context);
 
                 var printOrderList =
                     from PrintOrder in orderRepo.GetAll()
@@ -93,12 +97,12 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
 
         public PrintOrderInfo GetPrintOrderInfoByID(int printOrderID)
         {
-            using (IDataContext context = this.Context())
+            using (IDataContext context = Context())
             {
-                IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
-                IUserRepository userRepo = this.Repository<IUserRepository>(context);
-                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
-                IPrintOrderStatusRepository statusRepo = this.Repository<IPrintOrderStatusRepository>(context);
+                IPrintOrderRepository orderRepo = Repository<IPrintOrderRepository>(context);
+                IUserRepository userRepo = Repository<IUserRepository>(context);
+                IPrinterRepository printerRepo = Repository<IPrinterRepository>(context);
+                IPrintOrderStatusRepository statusRepo = Repository<IPrintOrderStatusRepository>(context);
 
                 var printOrderList =
                    from PrintOrder in orderRepo.GetAll()
@@ -111,20 +115,26 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             }
         }
 
+        /// <summary>
+        /// Получить список входящих заказов для принтеров, где пользователь - владелец или оператор.
+        /// </summary>
+        /// <param name="userID">Идентификатор пользователя.</param>
+        /// <param name="printOrderID">Фильтр по идентификатору заказа.</param>
+        /// <returns>Список входящих заказов.</returns>
         public List<PrintOrderInfo> GetRecievedOrderList(int userID, string printOrderID)
         {
-            using (IDataContext context = this.Context())
+            using (IDataContext context = Context())
             {
-                IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
-                IUserRepository userRepo = this.Repository<IUserRepository>(context);
-                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
-                IPrintOrderStatusRepository statusRepo = this.Repository<IPrintOrderStatusRepository>(context);
+                IPrintOrderRepository orderRepo = Repository<IPrintOrderRepository>(context);
+                IUserRepository userRepo = Repository<IUserRepository>(context);
+                IPrinterRepository printerRepo = Repository<IPrinterRepository>(context);
+                IPrintOrderStatusRepository statusRepo = Repository<IPrintOrderStatusRepository>(context);
 
                 var printOrderList =
                     from PrintOrder in orderRepo.GetAll()
                     join Printer in printerRepo.GetAll() on PrintOrder.PrinterID equals Printer.ID
                     join Status in statusRepo.GetAll() on PrintOrder.PrintOrderStatusID equals Status.PrintOrderStatusID
-                    where Printer.OwnerUserID == userID
+                    where Printer.OwnerUserID == userID || Printer.OperatorUserID == userID
                     orderby PrintOrder.OrderedOn descending
                     select new PrintOrderInfo() { PrintOrder = PrintOrder, Printer = Printer, Status = Status };
                 return printOrderList
@@ -135,47 +145,54 @@ namespace GlobalPrint.ServerBusinessLogic.BusinessLogicLayer.UnitsOfWork.Order
             }
         }
 
-        public void UpdateStatus(int printOrderID, PrintOrderStatusEnum statusID, int userID)
+        /// <summary>
+        /// Обновить статус заказа.
+        /// </summary>
+        /// <param name="printOrderID">Идентификатор заказа.</param>
+        /// <param name="status">Новый статус заказа.</param>
+        /// <param name="userID">Идентификатор пользователя.</param>
+        public void UpdateStatus(int printOrderID, PrintOrderStatusEnum status, int userID)
         {
+            Argument.Positive(printOrderID, "Не указан идентификатор заказа для измненения статуса заказа.");
+            Argument.Positive(userID, "Не указан идентификатор пользователя для измненения статуса заказа.");
+
             PrintOrderStatus newStatus = null;
             User client = null;
-            User printerOwner = null;
             PrintOrder order = null;
 
-            using (IDataContext context = this.Context())
+            using (IDataContext context = Context())
             {
-                IPrintOrderRepository orderRepo = this.Repository<IPrintOrderRepository>(context);
-                IUserRepository userRepo = this.Repository<IUserRepository>(context);
-                IPrinterRepository printerRepo = this.Repository<IPrinterRepository>(context);
-                IPrintOrderStatusRepository statusRepo = this.Repository<IPrintOrderStatusRepository>(context);
+                IPrintOrderRepository orderRepo = Repository<IPrintOrderRepository>(context);
+                IUserRepository userRepo = Repository<IUserRepository>(context);
+                IPrinterRepository printerRepo = Repository<IPrinterRepository>(context);
+                IPrintOrderStatusRepository statusRepo = Repository<IPrintOrderStatusRepository>(context);
 
                 order = orderRepo.GetByID(printOrderID);
                 client = userRepo.GetByID(order.UserID);
-                printerOwner = printerRepo.Get(e => e.ID == order.PrinterID)
-                    .Join(userRepo.GetAll(), e => e.OwnerUserID, e => e.ID, (p, u) => u)
-                    .First();
-                newStatus = statusRepo.GetByID((int)statusID);
+                var printer = printerRepo.GetByID(order.PrinterID);
 
-                if (order.PrintOrderStatusID == (int)statusID
+                newStatus = statusRepo.GetByID((int)status);
+
+                if (order.PrintOrderStatusID == (int)status
                     || order.PrintOrderStatusID == (int)PrintOrderStatusEnum.Printed
                     || order.PrintOrderStatusID == (int)PrintOrderStatusEnum.Rejected)
                 {
                     return;
                 }
 
-                if (statusID == PrintOrderStatusEnum.Printed && order.PrintedOn == null)
+                if (status == PrintOrderStatusEnum.Printed && order.PrintedOn == null)
                 {
-                    Argument.Require(printerOwner.ID == userID, "Выполнить заказ может только владелец принтера.");
-                    this._paymentUnit.Value.CommitPrintOrder(printOrderID);
+                    Argument.Require(userID.In(printer.OwnerUserID, printer.OperatorUserID), "Выполнить заказ может только владелец принтера или его оператор.");
+                    _paymentUnit.Value.CommitPrintOrder(printOrderID);
                 }
-                else if (statusID == PrintOrderStatusEnum.Rejected)
+                else if (status == PrintOrderStatusEnum.Rejected)
                 {
-                    Argument.Require(printerOwner.ID == userID, "Отменить заказ может только владелец принтера.");
-                    this._paymentUnit.Value.RollbackPrintOrder(printOrderID);
+                    Argument.Require(userID.In(printer.OwnerUserID, printer.OperatorUserID), "Отменить заказ может только владелец принтера или его оператор.");
+                    _paymentUnit.Value.RollbackPrintOrder(printOrderID);
                 }
-                else if (statusID == PrintOrderStatusEnum.Accepted)
+                else if (status == PrintOrderStatusEnum.Accepted)
                 {
-                    Argument.Require(printerOwner.ID == userID, "Принять заказ может только владелец принтера.");
+                    Argument.Require(userID.In(printer.OwnerUserID, printer.OperatorUserID), "Принять заказ может только владелец принтера или его оператор.");
                     order.PrintOrderStatusID = (int)PrintOrderStatusEnum.Accepted;
                     orderRepo.Update(order);
                     context.Save();
