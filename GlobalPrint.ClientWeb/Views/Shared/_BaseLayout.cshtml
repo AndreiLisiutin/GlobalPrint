@@ -5,110 +5,139 @@
 <!DOCTYPE html>
 <html lang="@LocalizationHelper.GetCurrentNeutralCultureString()" dir="@(LocalizationHelper.IsRighToLeft() ? "rtl" : "ltr")">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
-    <title>@ViewBag.Title</title>
+	<!-- Yandex.Metrika counter -->
+	<script type="text/javascript">
+		(function (d, w, c) {
+			(w[c] = w[c] || []).push(function () {
+				try {
+					w.yaCounter45535860 = new Ya.Metrika({
+						id: 45535860,
+						clickmap: true,
+						trackLinks: true,
+						accurateTrackBounce: true
+					});
+				} catch (e) { }
+			});
 
-    <link rel="manifest" href="~/Resources/Scripts/manifest.json">
+			var n = d.getElementsByTagName("script")[0],
+				s = d.createElement("script"),
+				f = function () { n.parentNode.insertBefore(s, n); };
+			s.type = "text/javascript";
+			s.async = true;
+			s.src = "https://mc.yandex.ru/metrika/watch.js";
 
-    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">*@
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-    <link rel="stylesheet" href="~/Resources/Libraries/nprogress/nprogress.css" />
-    <link rel="stylesheet" href="~/Resources/Libraries/clockpicker/dist/bootstrap-clockpicker.min.css" />
-    @*<link rel="stylesheet" href="~/Resources/Stylesheets/base.css">*@
-    <link rel="stylesheet" href="~/Resources/Libraries/jQuery-File-Upload-9.12.5/css/jquery.fileupload.css">
-    <link rel="stylesheet" href="~/Resources/Libraries/bootstrap-rating/bootstrap-rating.css" />
-    <link rel="stylesheet" href="~/Resources/Libraries/switchery/switchery.css" />
-    <link rel="stylesheet" href="~/Resources/Libraries/jcrop/css/jquery.Jcrop.min.css" />
+			if (w.opera == "[object Opera]") {
+				d.addEventListener("DOMContentLoaded", f, false);
+			} else { f(); }
+		})(document, window, "yandex_metrika_callbacks");
+	</script>
+	<noscript><div><img src="https://mc.yandex.ru/watch/45535860" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+	<!-- /Yandex.Metrika counter -->
 
-    <!--Новая верстка-->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,600i,700" rel="stylesheet">
-    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Content/css/bootstrap-theme.css" rel="stylesheet" />
-    <link href="~/Content/css/main.css" rel="stylesheet" />
-    <link href="~/Content/css/media.css" rel="stylesheet" />
-    <link href="~/Content/css/owl.carousel.css" rel="stylesheet" />
-    <link href="~/Content/css/owl.theme.default.css" rel="stylesheet" />
-    <link href="~/Content/css/animate.css" rel="stylesheet" />
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
+	<title>@ViewBag.Title</title>
+
+	<link rel="manifest" href="~/Resources/Scripts/manifest.json">
+
+	@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">*@
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+	<link rel="stylesheet" href="~/Resources/Libraries/nprogress/nprogress.css" />
+	<link rel="stylesheet" href="~/Resources/Libraries/clockpicker/dist/bootstrap-clockpicker.min.css" />
+	@*<link rel="stylesheet" href="~/Resources/Stylesheets/base.css">*@
+	<link rel="stylesheet" href="~/Resources/Libraries/jQuery-File-Upload-9.12.5/css/jquery.fileupload.css">
+	<link rel="stylesheet" href="~/Resources/Libraries/bootstrap-rating/bootstrap-rating.css" />
+	<link rel="stylesheet" href="~/Resources/Libraries/switchery/switchery.css" />
+	<link rel="stylesheet" href="~/Resources/Libraries/jcrop/css/jquery.Jcrop.min.css" />
+
+	<!--Новая верстка-->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,600i,700" rel="stylesheet">
+	<link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="~/Content/css/bootstrap-theme.css" rel="stylesheet" />
+	<link href="~/Content/css/main.css" rel="stylesheet" />
+	<link href="~/Content/css/media.css" rel="stylesheet" />
+	<link href="~/Content/css/owl.carousel.css" rel="stylesheet" />
+	<link href="~/Content/css/owl.theme.default.css" rel="stylesheet" />
+	<link href="~/Content/css/animate.css" rel="stylesheet" />
 	<link href="~/Content/css/_development.css" rel="stylesheet" />
-    <link href="~/Content/css/toggle-menu-button.css" rel="stylesheet" />
-    <link rel="shortcut icon" href="~/Content/img/favicon.ico" type="image/ico" />
+	<link href="~/Content/css/toggle-menu-button.css" rel="stylesheet" />
+	<link rel="shortcut icon" href="~/Content/img/favicon.ico" type="image/ico" />
 
-    @if (IsSectionDefined("Stylesheets"))
-    {
-        @RenderSection("Stylesheets")
-    }
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+	@if (IsSectionDefined("Stylesheets"))
+	{
+		@RenderSection("Stylesheets")
+	}
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
 </head>
 <body data-is-authenticated="@User.Identity.IsAuthenticated" data-user-id="@User.Identity.GetUserId()">
-    @RenderBody()
-    <div id="sound"></div>
+	@RenderBody()
+	<div id="sound"></div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
-    <script src="~/Resources/Libraries/jQuery/jquery.unobtrusive-ajax.min.js"></script>
-    <script src="~/Resources/Libraries/underscore.js/underscore.js"></script>
-    <script src="~/Resources/Libraries/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
-    <script src="~/Resources/Libraries/bootstrap-notify/bootstrap-notify.min.js"></script>
-    <script src="~/Resources/Libraries/signalR/jquery.signalR-2.2.1.min.js"></script>
-    <script src="~/Resources/Libraries/bootstrap.file-input/fileinput.js"></script>
-    <script src="~/Resources/Libraries/bootstrap-rating/bootstrap-rating.js"></script>
-    <script src="~/Resources/Libraries/jquery-validation/dist/jquery.validate.js"></script>
-    <script src="~/Resources/Libraries/nprogress/nprogress.js"></script>
-    <script src="~/Resources/Libraries/switchery/switchery.js"></script>
-    <script src="~/Resources/Libraries/bootstrap-add-clear/bootstrap-add-clear.js"></script>
-    <script src="~/Resources/Libraries/jqueryDoubleScroll/jquery.doubleScroll.js"></script>
-    <script src="~/Resources/Libraries/jcrop/js/jquery.Jcrop.js"></script>
+	<script src="~/Resources/Libraries/jQuery/jquery.unobtrusive-ajax.min.js"></script>
+	<script src="~/Resources/Libraries/underscore.js/underscore.js"></script>
+	<script src="~/Resources/Libraries/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
+	<script src="~/Resources/Libraries/bootstrap-notify/bootstrap-notify.min.js"></script>
+	<script src="~/Resources/Libraries/signalR/jquery.signalR-2.2.1.min.js"></script>
+	<script src="~/Resources/Libraries/bootstrap.file-input/fileinput.js"></script>
+	<script src="~/Resources/Libraries/bootstrap-rating/bootstrap-rating.js"></script>
+	<script src="~/Resources/Libraries/jquery-validation/dist/jquery.validate.js"></script>
+	<script src="~/Resources/Libraries/nprogress/nprogress.js"></script>
+	<script src="~/Resources/Libraries/switchery/switchery.js"></script>
+	<script src="~/Resources/Libraries/bootstrap-add-clear/bootstrap-add-clear.js"></script>
+	<script src="~/Resources/Libraries/jqueryDoubleScroll/jquery.doubleScroll.js"></script>
+	<script src="~/Resources/Libraries/jcrop/js/jquery.Jcrop.js"></script>
 
-    <!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
-    <script src="~/signalr/hubs"></script>
-    <script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.fileupload.js"></script>
-    <script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.iframe-transport.js"></script>
-    <script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.fileupload-process.js"></script>
-    <script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.fileupload-validate.js"></script>
+	<!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
+	<script src="~/signalr/hubs"></script>
+	<script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.fileupload.js"></script>
+	<script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.iframe-transport.js"></script>
+	<script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.fileupload-process.js"></script>
+	<script src="~/Resources/Libraries/jQuery-File-Upload-9.12.5/js/jquery.fileupload-validate.js"></script>
 
-    <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-messaging.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-messaging.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase-auth.js"></script>
 
-    <!--Новая верстка-->
-    <script src="https://use.fontawesome.com/36b364e3c1.js"></script>
-    <script src="~/Content/js/owl.carousel.min.js"></script>
-    <script src="~/Content/js/wow.js"></script>
-    <script src="~/Content/js/main.js"></script>
+	<!--Новая верстка-->
+	<script src="https://use.fontawesome.com/36b364e3c1.js"></script>
+	<script src="~/Content/js/owl.carousel.min.js"></script>
+	<script src="~/Content/js/wow.js"></script>
+	<script src="~/Content/js/main.js"></script>
 
-    <script src="~/Resources/Scripts/GlobalPrint.js"></script>
-    <script src="~/Resources/Scripts/GlobalPrint/Utils/CommonUtils.js"></script>
-    <script src="~/Resources/Scripts/GlobalPrint/Utils/Enums.js"></script>
-    <script src="~/Resources/Scripts/GlobalPrint/Utils/Services.js"></script>
-    <script src="~/Resources/Scripts/GlobalPrint/Utils/MenuButton.js"></script>
-    <script src="~/Resources/Scripts/GlobalPrint/Shared/PushNotifications.js"></script>
-    @if (User.Identity.IsAuthenticated)
-    {
-        <script src="~/Resources/Scripts/GlobalPrint/Shared/FirebaseNotifications.js"></script>
-    }
-    <script src="~/Resources/Scripts/GlobalPrint/Shared/FileUpload.js"></script>
-    <script src="~/Resources/Scripts/GlobalPrint/Shared/BaseLayout.js"></script>
+	<script src="~/Resources/Scripts/GlobalPrint.js"></script>
+	<script src="~/Resources/Scripts/GlobalPrint/Utils/CommonUtils.js"></script>
+	<script src="~/Resources/Scripts/GlobalPrint/Utils/Enums.js"></script>
+	<script src="~/Resources/Scripts/GlobalPrint/Utils/Services.js"></script>
+	<script src="~/Resources/Scripts/GlobalPrint/Utils/MenuButton.js"></script>
+	<script src="~/Resources/Scripts/GlobalPrint/Shared/PushNotifications.js"></script>
+	@if (User.Identity.IsAuthenticated)
+	{
+		<script src="~/Resources/Scripts/GlobalPrint/Shared/FirebaseNotifications.js"></script>
+	}
+	<script src="~/Resources/Scripts/GlobalPrint/Shared/FileUpload.js"></script>
+	<script src="~/Resources/Scripts/GlobalPrint/Shared/BaseLayout.js"></script>
 
-    <script>
-        $(function () {
-            new WOW().init();
-        })
-    </script>
+	<script>
+		$(function () {
+			new WOW().init();
+		})
+	</script>
 
-    @if (IsSectionDefined("Scripts"))
-    {
-        @RenderSection("Scripts")
-    }
+	@if (IsSectionDefined("Scripts"))
+	{
+		@RenderSection("Scripts")
+	}
 </body>
 </html>
